@@ -20,3 +20,4 @@ Purpose: let a new session get up to speed in minutes. Hub: [[00 - Project Conte
 6. **End of every session:** add an entry at the top of [[Session Log]] ([[Templates/Session Entry]]) and refresh "Current state" in the hub.
 7. Never delete a note others link to; mark it `status: superseded` and link the replacement.
 8. Follow [[Repo Rules]] (no assistant attribution or mentions).
+9. Any repo this project depends on or borrows from goes in [[Repo List]] (name, path, remote, role).

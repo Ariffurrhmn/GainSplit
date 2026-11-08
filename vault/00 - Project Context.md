@@ -17,7 +17,7 @@ Project **GainSplit** (Paper A): a controlled study of *where the gain comes fro
 | What we know | [[Deep Dive - Paper A]] (full literature dive), [[Literature Index]], [[Datasets Index]], [[Seed Paper - Irfan 2025]] |
 | What we don't know | [[Open Questions]] (incl. instructor questions), [[Risks]] |
 | Decisions and ideas | [[Decisions]], [[Research Ideas]], [[00 - Backlog]] |
-| Logistics | [[Audit - Venues]], [[Session Log]], [[Repo Rules]] |
+| Logistics | [[Audit - Venues]], [[Session Log]], [[Repo Rules]], [[Repo List]] |
 
 ## Research questions (short)
 - RQ1: GAN vs helper heads (trained on the unlabeled pool) vs both, per label budget.
