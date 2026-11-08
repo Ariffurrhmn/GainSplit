@@ -8,8 +8,8 @@ Target: IEEE QPAIN 2027 (status: draft proposal).
 
 | Path | Contents |
 |------|----------|
-| `docs/proposal/` | Proposal A (Markdown + PDF) |
-| `docs/research/` | Literature deep dives and notes |
+| `vault/` | Obsidian vault: project memory, proposal, literature, decisions (open as a vault in Obsidian) |
+| `docs/proposal/` | Proposal A PDF |
 | `src/` | Model and training code |
 | `experiments/` | Experiment configs and run scripts |
 | `data/` | Datasets (git-ignored) |
