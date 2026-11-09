@@ -1,9 +1,9 @@
 ---
 tags: [proposal, sarcasm, semi-supervised, multi-task]
 created: 2026-11-02
-updated: 2026-11-08
+updated: 2026-11-09
 target: IEEE QPAIN 2027
-status: draft proposal, not yet shown to the instructor
+status: accepted by the instructor (2026-11-09)
 ---
 
 # Proposal A: Where Does the Gain Come From? Separating Adversarial Training, Multi-Task Helper Heads and Helper-Label Quality in Semi-Supervised Sarcasm Detection

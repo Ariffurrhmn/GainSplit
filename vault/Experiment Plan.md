@@ -1,27 +1,89 @@
 ---
 tags: [experiments, plan]
 updated: 2026-11-08
-status: not started
+status: planned, not started
 ---
 
 # Experiment Plan
 
-Hub: [[00 - Project Context]]. Pitch: [[Proposal A]]. Prior work: [[Deep Dive - Paper A]].
+Hub: [[00 - Project Context]]. Pitch: [[Proposal A]]. Prior work: [[Deep Dive - Paper A]]. Deadline and page limit: [[Audit - Venues]] (6 pages, 10 Dec planning date).
 
-## Conditions
-Reference arm = faithful re-implementation of [[Seed Paper - Irfan 2025]]. Then: supervised BERT; + helper heads (hard, soft, weighted, lexicon); GAN only ([[GAN-BERT]]); GAN + helper heads; self-training; FGM supervised adversarial control; TF-IDF + LR.
+Everything below is a design (IDEA) until run. Compute figures are INFERRED, not benchmarked.
 
-## Protocol
-5 budgets (1/5/10/30/100%) x 5 seeds; mean +- std; paired significance tests; ROC-AUC and calibration. Confirm the main finding with RoBERTa. Transfer to [[iSarcasmEval]]. Gold audit of ~200 headlines. MI check ([[Research Ideas]]).
+## The question
+The seed paper ([[Seed Paper - Irfan 2025]]) reports one number for GAN-BERT + sentiment/emotion helper heads. It never separates (a) the GAN, (b) the helper heads, (c) the extra unlabeled data the helper heads may see, or (d) the quality of the machine-made helper labels. We separate them.
 
-## Data
-[[Headlines Dataset]] (main), [[iSarcasmEval]] (transfer). See [[Datasets Index]].
+## Fixed setup (all arms)
+- Data: [[Headlines Dataset]], one fixed 80/10/10 split (train/dev/test) by seed-independent hash; test never touched until the end. Seeds change only the labeled subset, init and batch order.
+- Backbone: bert-base-uncased, max_len 48, fp16. Same optimizer, lr, batch size, epochs for every arm unless the arm's definition says otherwise (GAN-BERT gets its own epochs, as in the seed paper).
+- Label budget p in {1, 5, 10, 30, 100}% of train. Labeled set = stratified random p%; **unlabeled pool U = the remaining train texts** (labels hidden). At p=100% U is empty, so arms that need U are skipped there.
+- Helper labels (sentiment, emotion) are produced once by the teachers for every train text, labeled or not (teachers per [[Seed Paper - Irfan 2025]]: cardiffnlp twitter-roberta sentiment, GoEmotions-style model mapped to 5 classes; our own mapping, documented, because the seed's is unknown).
+- Hyperparameters tuned once on dev at p=10% with the supervised BERT arm, then frozen. Dev is never used for early stopping per run: fixed epoch count. (Avoids leaking more labels than the budget allows.)
+- Metrics: accuracy, macro-F1, ROC-AUC on test. 5 seeds; mean +- std; paired bootstrap (same test set) for every comparison claimed in the text.
+
+## Part 1 (RQ1): who gives the gain? Core grid
+Notation: L = labeled, U = unlabeled pool, H = helper heads.
+
+| Arm | Description | Uses U? |
+|---|---|---|
+| A0 | TF-IDF + logistic regression (floor) | no |
+| A1 | BERT, labeled only | no |
+| A2 | BERT + H, heads trained on **L only** | no |
+| A3 | BERT + H, heads trained on **L + U** (helper labels exist for U) | yes, via heads |
+| A4 | GAN-BERT, no helpers ([[GAN-BERT]]) | yes, via GAN |
+| A5 | GAN-BERT + H (seed-style, our re-implementation) | yes, both |
+| A6 | Self-training (pseudo-label U, one or two rounds) | yes |
+| A7 | BERT + FGM adversarial fine-tuning, labeled only (supervised adversarial control, [[Zihan 2026]]) | no |
+| A8 | A3 with **shuffled** helper labels (negative control) | yes |
+
+What each contrast tells us:
+- A1 vs A2: do helper heads help when they add no data? (pure multi-task effect)
+- A2 vs A3: does the gain come from the heads seeing U? (the question the seed paper leaves open)
+- A3 vs A8: is it the label content or just extra heads/regularisation?
+- A1 vs A4: does the GAN help at all? A4 vs A7: is it "adversarial" or just regularisation?
+- A5 vs max(A3, A4): is there any interaction, or is the combo no better than its best part?
+- A6: does a trivial SSL baseline match the GAN?
+
+Runs: 9 arms x 5 budgets x 5 seeds, minus U-arms at 100% = about 200 runs. Priority order if time runs out: A1, A3, A4, A5 first (the 2x2), then A2, A8, A6, A7, A0. Seeds: run 3 seeds first, extend to 5 for the headline budgets (1, 10, 100).
+
+## Part 2 (RQ2): does helper-label quality matter?
+Take the best helper arm from Part 1 (expected A3 or A5) and vary only the helper labels, at budgets 1%, 10%, 100%, 5 seeds:
+1. hard teacher labels (reference)
+2. soft teacher probabilities
+3. confidence-weighted loss (weight by teacher max-prob)
+4. lexicon labels (VADER or the Hu-Liu lexicon used by [[Chen 2022]]); no model teacher
+5. teacher swap: a second, different sentiment teacher
+6. synthetic noise dial: flip 10/25/50% of helper labels
+7. random labels (= A8)
+Gold audit: the owner hand-labels ~200 randomly drawn headlines for sentiment (3 classes); report teacher accuracy against gold and plot downstream F1 vs teacher accuracy across rows 1-6. This is the only step that needs human effort.
+
+## Part 3 (RQ3): transfer and shortcut checks
+- Zero-shot transfer: models trained on Headlines (all arms, p=100% and p=10%) evaluated on the [[iSarcasmEval]] English Task A test set (1,400, VERIFIED). Expect a large drop ([[Headlines Dataset]]); the question is whether any arm drops less.
+- Mutual information between teacher labels and the sarcasm label (CPU, hours): if helper labels predict sarcasm because they encode outlet style, say so.
+- Source-masked test: strip outlet-specific cues (casing patterns, punctuation, names) and re-evaluate the main arms.
+- Optional only if time: RoBERTa-base repeat of the 2x2 at p=10%.
+
+## Predictions written down before running (so null results are honest)
+- H1: GAN effect is about zero for p >= 10% (INFERRED from [[GAN-BERT]]'s own curves; [[Risks]]).
+- H2: A3 >= A2 at low budgets, i.e. part of the "multi-task gain" is the heads seeing U.
+- H3: A8 (shuffled labels) is close to A2 but below A3.
+- H4: label quality has a weak, non-monotone effect until noise is large (>=25%).
+Any outcome is reportable: the paper is a controlled study, not a new-method claim ([[Decisions]]).
 
 ## Compute (INFERRED, not benchmarked)
-BERT-base, max_len ~48, fp16, T4: ~1-1.5 min/epoch at 100% labels. ~175 runs ~ 9 GPU-h; with a gradient-weighting arm ~15-25 GPU-h total. Fits a free Kaggle GPU or one RTX card.
+BERT-base, max_len ~48, fp16, T4: ~1-1.5 min/epoch at 100% labels. GAN arms and U-arms cost more because U is large at low p. Rough total for Parts 1-3: 15-30 GPU-hours.
+
+**Hardware (owner, 2026-11-08): free Kaggle GPU.** Weekly quota and per-session limit are UNVERIFIED (recollection: roughly 30 GPU-h per week, sessions of about 9-12 h; check the Kaggle account page). Plan for ~25 GPU-h over the first three weeks:
+- Pass 1 (must, ~6-8 GPU-h): arms A1, A3, A4, A5 at p = 1, 10, 100 (no U-arms at 100), **3 seeds**. This alone answers RQ1.
+- Pass 2 (~6-8 GPU-h): add A2, A8, A7, A6, A0 at the same budgets; add p = 5, 30 only for A1/A3/A4/A5 for the curve.
+- Pass 3 (~5-8 GPU-h): Part 2 label-quality rows at p = 1 and 10 only, 3 seeds; Part 3 transfer reuses saved checkpoints (no extra training). Extend to 5 seeds on the headline cells only if quota remains.
+- Rules for Kaggle: one notebook run per arm-budget-seed batch, save results JSON and test predictions to `/kaggle/working` and download after each batch; checkpoint every epoch so a 9-12 h cut-off loses nothing; upload the data once as a private Kaggle dataset. Code comes from the public GitHub repo (cloned or pip-installed in the notebook), so each run uses a pushed commit; record the commit hash in the results JSON.
+
+## Paper layout (6 pages incl. references)
+Fig. 1: F1 vs label budget, arms A1/A3/A4/A5 (+A6/A7 dashed). Table 1: main grid at p = 1, 10, 100 with std and significance marks. Table 2: label-quality rows. Table 3: iSarcasmEval transfer. One short paragraph for the audit, MI and masking checks.
 
 ## Known reproduction details (VERIFIED from the seed PDF)
-bert-base-uncased; 80/20 split; 70% of train labelled, 30% unlabelled; sentiment from cardiffnlp/twitter-roberta-base-sentiment (neutral eliminated); emotion from a GoEmotions model or pysentimiento mapped to 5 classes; L = L_s + l1 L_sent + l2 L_emo + L_adv; per-head G/D pairs; punctuation removed; ~25 epochs GAN-BERT vs ~10 BERT. Unknowns: [[Open Questions]].
+bert-base-uncased; 80/20 split; 70% of train labelled, 30% unlabelled; sentiment from cardiffnlp/twitter-roberta-base-sentiment (neutral eliminated); emotion from a GoEmotions model or pysentimiento mapped to 5 classes; L = L_s + l1 L_sent + l2 L_emo + L_adv; per-head G/D pairs; punctuation removed; ~25 epochs GAN-BERT vs ~10 BERT. Unknowns, now permanent: [[Open Questions]]. Our A5 is therefore a re-implementation, compared with the seed's reported 93.88 acc / 94.15 F1 only qualitatively.
 
 ## Status
-Nothing implemented. Code in `src/`, configs and run scripts in `experiments/`, outputs in `results/`. Log runs in [[Session Log]].
+Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].

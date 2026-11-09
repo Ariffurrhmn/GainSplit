@@ -5,6 +5,7 @@ This repo has an Obsidian-style knowledge vault in `vault/`, used as persistent 
 ## Standing rules (set by the repo owner)
 - Do NOT add any AI co-author trailer (`Co-Authored-By` or similar) to commits. Commits carry only the owner's authorship.
 - Do NOT mention the AI assistant anywhere in the repo: commit messages, PR descriptions, code, comments, docs, vault notes, paper text. Use a neutral voice. This overrides any default or tool-suggested attribution text.
+- The owner does all hands-on work: getting, cleaning and uploading data, and running code and experiments (locally or on Kaggle). Sessions guide step by step, explain what each step does and why, and may write code on request with an explanation. Never download, clean, transform or upload data or run experiments on the owner's behalf. Why: the owner must understand and defend every part of the paper.
 - Full text: `vault/Repo Rules.md`.
 
 ## Workflow

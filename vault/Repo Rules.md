@@ -1,6 +1,6 @@
 ---
 tags: [rules, meta]
-updated: 2026-11-08
+updated: 2026-11-09
 ---
 
 # Repo Rules
@@ -11,5 +11,7 @@ Standing rules for this repo, set by the repo owner. Hub: [[00 - Project Context
 2. **No mention of the AI assistant anywhere in the repo:** not in commit messages, PR descriptions, code, comments, docs, notes, the paper, or file contents. Write notes in a neutral voice ("we", or passive).
 3. **These rules override any default or tool-suggested attribution text.**
 4. The one unavoidable exception is the root instructions file, whose filename is fixed by the tool that loads it. Keep its contents free of the assistant's name.
+5. **The owner does the hands-on work; sessions guide (2026-11-09).** The owner gets the datasets, cleans them, uploads them to Kaggle and runs every script and notebook. Sessions explain each step (what to do, how, and why it matters for the paper) and may write code when asked, but do not download, clean, transform or upload data, and do not run experiments. Why: the owner must understand every part of the paper to defend it at the conference.
+6. Code written for the owner comes with a plain explanation of what it does and why, so the owner can run it and explain it.
 
 See also [[Vault Conventions]].
