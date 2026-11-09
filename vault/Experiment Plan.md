@@ -87,3 +87,5 @@ bert-base-uncased; 80/20 split; 70% of train labelled, 30% unlabelled; sentiment
 
 ## Status
 Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].
+
+- 2026-11-09: preprocessing rebuilt as one Kaggle notebook, `experiments/01_preprocess.ipynb` (owner runs it; GPU + internet on). Outputs: headlines train/dev/test, `budgets.json` (5 seeds x 5 budgets, nested), helper labels (hard + soft, plus raw 28 emotion scores), iSarcasmEval train/test, `manifest.json` with counts and hashes. Choices in [[Decisions]]. Not yet run; code cells syntax-checked and the cleaning and budget functions tested on synthetic data only.
