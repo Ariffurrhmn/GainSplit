@@ -7,6 +7,19 @@ updated: 2026-11-10
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-10 - Pass 2a and gold audit filed
+- Filed `results_pass2a.zip` (unpacked) in `results/pass2a/` and `gold_sentiment_audit.csv` in `results/gold_audit/`. Pass 2a: 104/104 runs, 5 seeds in every planned cell.
+- FGM epsilon 0.5 chosen by the pre-set tie rule (1.0 best mean, within 1 sd); `PASS2_FGM_EPSILON = 0.5`, notebook `PLAN = "pass2b"`; the plans test now resets the epsilon to None before checking the guard. 34 tests pass locally.
+- Pass 2a readings (INFERRED, seed-paired; [[Pass 2a Results]]): helper label content drives the 10% gain (A3 - A8 +0.57, 5/5); at 1% helpers help only on L (A2 +1.6, 5/5) and adding U removes it; self-training A6 beats A1 at 1% (+1.6) and 10% (+0.6) on every seed; GAN null at 5% and -0.55 at 30% (0/5); helper direction +0.2 to +0.4 at 5/10/30%.
+- Gold audit ([[Gold Audit Results]]): teacher accuracy 0.53, kappa 0.24 against the owner. Held provisional: the unsure flag rises to 100% in the last 50 items and agreement is lower on sure items. Question put to the owner.
+- Next (owner): run `pass2b` on Kaggle (10 runs, ~15 min); re-run `03_analysis.ipynb` locally with `RESULTS_DIRS` = pass1 + pass2a (+ pass2b when done); answer the unsure-flag question.
+
+## 2026-11-10 - Pass 1 bootstrap
+- Owner ran `experiments/03_analysis.ipynb` on `results/pass1`. A first Kaggle attempt failed with `KeyError: 'arm'`: on Kaggle `RESULTS_DIRS` is empty by default, so no runs were loaded. Re-run locally: 45 runs, 5 seeds per cell; output in `results/analysis/`.
+- Bootstrap ([[Pass 1 Results]]): GAN null at 1% and 10% (VERIFIED); helper gain at 10% is +0.42 points, 95% interval [-0.00, 0.85], p = 0.051, so **not significant at 5%**; A5 harm at 1% is -2.3 points, p < 0.0001, with a significant negative interaction. No arm transfers to iSarcasmEval. GAN curves: at 1% (200 steps) the fake-probability on generated vectors is still rising (INFERRED caveat).
+- Decisions logged ([[Decisions]], DELEGATED): report the 10% helper gain as not significant, no extra seeds; commit analysis outputs and the executed notebook.
+- Pending: `results_pass2a.zip` is not on this machine yet (owner ran `pass2a`; download from the Kaggle output tab). Then: file it in `results/pass2a`, pick the FGM epsilon from `fgm_tuning`, set `PASS2_FGM_EPSILON` and `PLAN = "pass2b"`, read A2/A8/A6 contrasts and A6 pseudo-label counts.
+
 ## 2026-11-10 - Pass 1 results
 - Owner ran `pass1` on Kaggle (commit c0a44a5): 45/45 runs, 114 GPU-min. Zip and unpacked files in `results/pass1/`. Numbers and reading in [[Pass 1 Results]].
 - Main reading (INFERRED until the paired bootstrap runs): the GAN gives no gain at 1% or 10%; the helper heads give +0.4 points at 10% (4/5 seeds) and nothing at 1%; GAN + helpers at 1% loses 2.3 points; no arm transfers to iSarcasmEval (ROC-AUC about 0.5 everywhere).

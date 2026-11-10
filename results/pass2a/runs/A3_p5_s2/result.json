@@ -1,0 +1,97 @@
+{
+  "run_id": "A3_p5_s2",
+  "config": {
+    "arm": "A3",
+    "budget": 5,
+    "seed": 2,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.3,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.0,
+    "tag": ""
+  },
+  "n_labeled": 1140,
+  "n_unlabeled": 21660,
+  "uses_u": true,
+  "steps": 360,
+  "minutes": 1.21,
+  "scores": {
+    "dev": {
+      "accuracy": 0.8550877192982456,
+      "macro_f1": 0.854195046533588,
+      "f1_sarcastic": 0.8427864484202512,
+      "roc_auc": 0.9285660689382813,
+      "n": 2850
+    },
+    "test": {
+      "accuracy": 0.8663626797614872,
+      "macro_f1": 0.8654406531801467,
+      "f1_sarcastic": 0.8543021032504781,
+      "roc_auc": 0.9398430254356018,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.7335714285714285,
+      "macro_f1": 0.5157097560093445,
+      "f1_sarcastic": 0.19088937093275488,
+      "roc_auc": 0.5510604166666666,
+      "n": 1400
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.31665,
+      "loss_sent": 0.84521,
+      "loss_emo": 0.72106,
+      "loss": 0.78653
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.01396,
+      "loss_sent": 0.43139,
+      "loss_emo": 0.388,
+      "loss": 0.25978
+    },
+    {
+      "step": 300,
+      "loss_sarc": 0.00426,
+      "loss_sent": 0.32204,
+      "loss_emo": 0.27723,
+      "loss": 0.18404
+    },
+    {
+      "step": 360,
+      "loss_sarc": 0.00296,
+      "loss_sent": 0.28963,
+      "loss_emo": 0.23644,
+      "loss": 0.16078
+    }
+  ],
+  "pseudo": null,
+  "commit": "bfe964df8f8bf804f4ea75eec806898cdbdec5b8",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

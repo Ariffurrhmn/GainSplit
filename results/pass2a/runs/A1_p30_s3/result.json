@@ -1,0 +1,179 @@
+{
+  "run_id": "A1_p30_s3",
+  "config": {
+    "arm": "A1",
+    "budget": 30,
+    "seed": 3,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.0,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.0,
+    "tag": ""
+  },
+  "n_labeled": 6840,
+  "n_unlabeled": 15960,
+  "uses_u": false,
+  "steps": 2140,
+  "minutes": 3.82,
+  "scores": {
+    "dev": {
+      "accuracy": 0.9031578947368422,
+      "macro_f1": 0.9028816469771326,
+      "f1_sarcastic": 0.8977020014825797,
+      "roc_auc": 0.9636688099322465,
+      "n": 2850
+    },
+    "test": {
+      "accuracy": 0.9109084531743248,
+      "macro_f1": 0.9106443394121746,
+      "f1_sarcastic": 0.905786350148368,
+      "roc_auc": 0.9665624938334946,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.7157142857142857,
+      "macro_f1": 0.49798002731738256,
+      "f1_sarcastic": 0.16736401673640167,
+      "roc_auc": 0.5103458333333333,
+      "n": 1400
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.55125,
+      "loss": 0.55125
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.33956,
+      "loss": 0.33956
+    },
+    {
+      "step": 300,
+      "loss_sarc": 0.23414,
+      "loss": 0.23414
+    },
+    {
+      "step": 400,
+      "loss_sarc": 0.2087,
+      "loss": 0.2087
+    },
+    {
+      "step": 500,
+      "loss_sarc": 0.10532,
+      "loss": 0.10532
+    },
+    {
+      "step": 600,
+      "loss_sarc": 0.06807,
+      "loss": 0.06807
+    },
+    {
+      "step": 700,
+      "loss_sarc": 0.04555,
+      "loss": 0.04555
+    },
+    {
+      "step": 800,
+      "loss_sarc": 0.03457,
+      "loss": 0.03457
+    },
+    {
+      "step": 900,
+      "loss_sarc": 0.02752,
+      "loss": 0.02752
+    },
+    {
+      "step": 1000,
+      "loss_sarc": 0.00985,
+      "loss": 0.00985
+    },
+    {
+      "step": 1100,
+      "loss_sarc": 0.01172,
+      "loss": 0.01172
+    },
+    {
+      "step": 1200,
+      "loss_sarc": 0.00406,
+      "loss": 0.00406
+    },
+    {
+      "step": 1300,
+      "loss_sarc": 0.00119,
+      "loss": 0.00119
+    },
+    {
+      "step": 1400,
+      "loss_sarc": 0.00226,
+      "loss": 0.00226
+    },
+    {
+      "step": 1500,
+      "loss_sarc": 0.00466,
+      "loss": 0.00466
+    },
+    {
+      "step": 1600,
+      "loss_sarc": 0.00753,
+      "loss": 0.00753
+    },
+    {
+      "step": 1700,
+      "loss_sarc": 0.00043,
+      "loss": 0.00043
+    },
+    {
+      "step": 1800,
+      "loss_sarc": 0.00248,
+      "loss": 0.00248
+    },
+    {
+      "step": 1900,
+      "loss_sarc": 0.00133,
+      "loss": 0.00133
+    },
+    {
+      "step": 2000,
+      "loss_sarc": 0.00034,
+      "loss": 0.00034
+    },
+    {
+      "step": 2100,
+      "loss_sarc": 0.00057,
+      "loss": 0.00057
+    },
+    {
+      "step": 2140,
+      "loss_sarc": 0.00145,
+      "loss": 0.00145
+    }
+  ],
+  "pseudo": null,
+  "commit": "bfe964df8f8bf804f4ea75eec806898cdbdec5b8",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

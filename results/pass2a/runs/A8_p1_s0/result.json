@@ -1,0 +1,83 @@
+{
+  "run_id": "A8_p1_s0",
+  "config": {
+    "arm": "A8",
+    "budget": 1,
+    "seed": 0,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.3,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.0,
+    "tag": ""
+  },
+  "n_labeled": 228,
+  "n_unlabeled": 22572,
+  "uses_u": true,
+  "steps": 200,
+  "minutes": 0.7,
+  "scores": {
+    "dev": {
+      "accuracy": 0.7807017543859649,
+      "macro_f1": 0.775617660807973,
+      "f1_sarcastic": 0.7418422139611731,
+      "roc_auc": 0.8645534314874921,
+      "n": 2850
+    },
+    "test": {
+      "accuracy": 0.7814801823921431,
+      "macro_f1": 0.7771369835392294,
+      "f1_sarcastic": 0.7460252751732572,
+      "roc_auc": 0.8729283008070723,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.7257142857142858,
+      "macro_f1": 0.5040151157298063,
+      "f1_sarcastic": 0.1724137931034483,
+      "roc_auc": 0.4915541666666666,
+      "n": 1400
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.12889,
+      "loss_sent": 0.86408,
+      "loss_emo": 0.7103,
+      "loss": 0.60121
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.00365,
+      "loss_sent": 0.58625,
+      "loss_emo": 0.43616,
+      "loss": 0.31037
+    }
+  ],
+  "pseudo": null,
+  "commit": "bfe964df8f8bf804f4ea75eec806898cdbdec5b8",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

@@ -93,6 +93,7 @@ def test_pass2a_helper_weight_and_long_runs_first():
 
 
 def test_pass2b_needs_epsilon_first(monkeypatch):
+    monkeypatch.setattr(plans, "PASS2_FGM_EPSILON", None)
     with pytest.raises(ValueError, match="PASS2_FGM_EPSILON"):
         plans.pass2b()
     monkeypatch.setattr(plans, "PASS2_FGM_EPSILON", 1.0)

@@ -1,0 +1,223 @@
+{
+  "run_id": "A3_p30_s1",
+  "config": {
+    "arm": "A3",
+    "budget": 30,
+    "seed": 1,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.3,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.0,
+    "tag": ""
+  },
+  "n_labeled": 6840,
+  "n_unlabeled": 15960,
+  "uses_u": true,
+  "steps": 2140,
+  "minutes": 6.21,
+  "scores": {
+    "dev": {
+      "accuracy": 0.8964912280701754,
+      "macro_f1": 0.8960532375568337,
+      "f1_sarcastic": 0.8893058161350844,
+      "roc_auc": 0.9586441891174765,
+      "n": 2850
+    },
+    "test": {
+      "accuracy": 0.9130129779024904,
+      "macro_f1": 0.9127346870263678,
+      "f1_sarcastic": 0.9078066914498141,
+      "roc_auc": 0.9614563806065868,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.7371428571428571,
+      "macro_f1": 0.49056879892101835,
+      "f1_sarcastic": 0.13615023474178403,
+      "roc_auc": 0.5442395833333333,
+      "n": 1400
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.52306,
+      "loss_sent": 1.00844,
+      "loss_emo": 0.87222,
+      "loss": 1.08726
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.3271,
+      "loss_sent": 0.70547,
+      "loss_emo": 0.60087,
+      "loss": 0.719
+    },
+    {
+      "step": 300,
+      "loss_sarc": 0.22722,
+      "loss_sent": 0.5119,
+      "loss_emo": 0.45981,
+      "loss": 0.51873
+    },
+    {
+      "step": 400,
+      "loss_sarc": 0.21369,
+      "loss_sent": 0.46139,
+      "loss_emo": 0.38192,
+      "loss": 0.46669
+    },
+    {
+      "step": 500,
+      "loss_sarc": 0.08354,
+      "loss_sent": 0.43109,
+      "loss_emo": 0.35699,
+      "loss": 0.31996
+    },
+    {
+      "step": 600,
+      "loss_sarc": 0.06255,
+      "loss_sent": 0.3565,
+      "loss_emo": 0.29837,
+      "loss": 0.25901
+    },
+    {
+      "step": 700,
+      "loss_sarc": 0.03528,
+      "loss_sent": 0.34577,
+      "loss_emo": 0.26625,
+      "loss": 0.21889
+    },
+    {
+      "step": 800,
+      "loss_sarc": 0.02443,
+      "loss_sent": 0.30708,
+      "loss_emo": 0.24418,
+      "loss": 0.18981
+    },
+    {
+      "step": 900,
+      "loss_sarc": 0.01359,
+      "loss_sent": 0.29207,
+      "loss_emo": 0.23103,
+      "loss": 0.17052
+    },
+    {
+      "step": 1000,
+      "loss_sarc": 0.01153,
+      "loss_sent": 0.26458,
+      "loss_emo": 0.20264,
+      "loss": 0.1517
+    },
+    {
+      "step": 1100,
+      "loss_sarc": 0.00668,
+      "loss_sent": 0.16515,
+      "loss_emo": 0.16397,
+      "loss": 0.10542
+    },
+    {
+      "step": 1200,
+      "loss_sarc": 0.0041,
+      "loss_sent": 0.14609,
+      "loss_emo": 0.14301,
+      "loss": 0.09083
+    },
+    {
+      "step": 1300,
+      "loss_sarc": 0.00379,
+      "loss_sent": 0.15439,
+      "loss_emo": 0.12274,
+      "loss": 0.08693
+    },
+    {
+      "step": 1400,
+      "loss_sarc": 0.00361,
+      "loss_sent": 0.13053,
+      "loss_emo": 0.11763,
+      "loss": 0.07805
+    },
+    {
+      "step": 1500,
+      "loss_sarc": 0.00156,
+      "loss_sent": 0.13635,
+      "loss_emo": 0.11845,
+      "loss": 0.078
+    },
+    {
+      "step": 1600,
+      "loss_sarc": 0.00145,
+      "loss_sent": 0.07643,
+      "loss_emo": 0.07699,
+      "loss": 0.04747
+    },
+    {
+      "step": 1700,
+      "loss_sarc": 0.00124,
+      "loss_sent": 0.07185,
+      "loss_emo": 0.07007,
+      "loss": 0.04382
+    },
+    {
+      "step": 1800,
+      "loss_sarc": 0.00125,
+      "loss_sent": 0.05844,
+      "loss_emo": 0.06437,
+      "loss": 0.03809
+    },
+    {
+      "step": 1900,
+      "loss_sarc": 0.00114,
+      "loss_sent": 0.05616,
+      "loss_emo": 0.0615,
+      "loss": 0.03644
+    },
+    {
+      "step": 2000,
+      "loss_sarc": 0.00153,
+      "loss_sent": 0.04937,
+      "loss_emo": 0.06291,
+      "loss": 0.03521
+    },
+    {
+      "step": 2100,
+      "loss_sarc": 0.00124,
+      "loss_sent": 0.03238,
+      "loss_emo": 0.03641,
+      "loss": 0.02188
+    },
+    {
+      "step": 2140,
+      "loss_sarc": 0.00104,
+      "loss_sent": 0.03537,
+      "loss_emo": 0.03822,
+      "loss": 0.02312
+    }
+  ],
+  "pseudo": null,
+  "commit": "bfe964df8f8bf804f4ea75eec806898cdbdec5b8",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

@@ -27,3 +27,6 @@ results/checkpoints/
 *.bbl
 *.blg
 *.synctex.gz
+
+# Gold-audit export holds headline text; kept local while the Headlines licence is unchecked
+results/gold_audit/*.csv

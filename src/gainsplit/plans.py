@@ -50,7 +50,7 @@ def pass1() -> list[RunConfig]:
 
 FGM_GRID = (0.5, 1.0, 2.0)
 PASS2_SEEDS = PASS1_SEEDS
-PASS2_FGM_EPSILON = None  # winner of fgm_tuning (dev); set it before building pass2b
+PASS2_FGM_EPSILON = 0.5  # from fgm_tuning (pass2a, dev): 1.0 had the best mean, 0.5 within 1 sd, tie -> smaller
 
 
 def fgm_tuning() -> list[RunConfig]:
