@@ -160,3 +160,16 @@ def test_save_tables_and_figures(tmp_path):
               "fig_gan_curves.pdf", "fig_gan_curves.png"):
         assert (out / f).exists(), f
     assert len(tables["isarc"]) == 2
+
+
+def test_dev_only_tuning_runs_are_left_out(tmp_path):
+    y = labels()
+    write_run(tmp_path, "A1", 10, 0, probs_with_accuracy(y, 0.8, 1))
+    d = tmp_path / "runs" / "A7_p10_s0_eps1"
+    d.mkdir(parents=True)
+    (d / "result.json").write_text(json.dumps({
+        "run_id": "A7_p10_s0_eps1", "config": {"arm": "A7", "budget": 10, "seed": 0, "tag": "eps1"},
+        "scores": {"dev": {"accuracy": 0.8, "macro_f1": 0.8, "f1_sarcastic": 0.8, "roc_auc": 0.9}},
+        "train_log": []}))
+    assert list(an.load_runs(tmp_path)["arm"]) == ["A1"]
+    assert len(an.load_runs(tmp_path, test_only=False)) == 2

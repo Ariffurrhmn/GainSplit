@@ -42,13 +42,15 @@ CONTRASTS = {
 
 # ---------------------------------------------------------------- loading
 
-def load_runs(*folders) -> pd.DataFrame:
+def load_runs(*folders, test_only: bool = True) -> pd.DataFrame:
     """One row per finished run, from one or more results folders.
 
     Columns: run_id, arm, budget, seed, tag, source, run_dir, then one column per
     score named `<split>_<metric>` (e.g. test_macro_f1), then the paths of the
     three prediction files (empty string if a file is missing).
     If the same (arm, budget, seed) appears in several folders, the last folder wins.
+    With test_only (default), tuning runs that were scored on dev only are left out,
+    so a tuning grid (several runs per arm, budget and seed) never mixes into the tables.
     """
     rows = []
     for folder in folders:
@@ -68,6 +70,9 @@ def load_runs(*folders) -> pd.DataFrame:
     runs = pd.DataFrame(rows)
     if runs.empty:
         return runs
+    if test_only and "test_macro_f1" in runs:
+        # tuning runs (lr, w, FGM epsilon) score dev only; they are not results
+        runs = runs[runs["test_macro_f1"].notna()]
     key = ["arm", "budget", "seed"]
     if runs.duplicated(key, keep="last").any():
         warnings.warn("Some (arm, budget, seed) runs appear more than once; keeping the last one loaded.")
