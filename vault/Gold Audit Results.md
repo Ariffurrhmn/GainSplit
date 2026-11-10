@@ -52,3 +52,14 @@ The teacher almost never says "positive" (21 of 200, owner 46) and calls many of
 The sentiment teacher agrees with a human on surface sentiment only about half the time (kappa 0.24, "fair"), and less on sarcastic headlines. So the helper labels in A3 are noisy, yet the label content still matters at 10% (A3 - A8 = +0.57, [[Pass 2a Results]]). This motivates the RQ2 rows (soft labels, teacher swap, synthetic noise) in Pass 3.
 - Second point for the paper: the human labeler was unsure on 48% of items, so a single hard sentiment label per headline is a weak target in itself. That supports testing soft labels in Pass 3 (RQ2).
 - Re-label of items 1-50: declined by the owner (2026-11-10, [[Decisions]]). The warm-up block is reported as a limitation.
+
+## Other sentiment sources vs the owner (2026-11-10, VERIFIED)
+From `helper_sent_alt.csv` (made by `01b_pass3_data`, commit 654de15).
+
+| Source | All 200: acc / macro-F1 / kappa | Sure (104): acc / macro-F1 / kappa |
+|---|---|---|
+| Teacher 1 (cardiffnlp, used in training) | 0.53 / 0.49 / 0.24 | 0.48 / 0.46 / 0.25 |
+| VADER lexicon | 0.51 / 0.50 / 0.26 | 0.59 / 0.57 / 0.37 |
+| Teacher 2 (j-hartmann RoBERTa-large) | 0.48 / 0.43 / 0.14 | 0.38 / 0.37 / 0.13 |
+
+Over all 28,501 headlines, teacher 2 agrees with teacher 1 on 76% and VADER on 55%. Teacher 2 is mostly neutral (66%, positive only 6%); VADER is near-balanced. Reading (INFERRED): the three sources give the RQ2 rows a spread in label quality (VADER best on the sure items, teacher 2 worst), which is what the label-quality figure needs.

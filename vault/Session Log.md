@@ -7,6 +7,12 @@ updated: 2026-11-10
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-10 - Pass 3 data files made
+- Owner checked the teacher-2 model card (3 classes) and ran `01b_pass3_data` on Kaggle (commit 654de15). Five files checked: hashes match `manifest_pass3.json`; masked tests keep ids, order and labels; 62% of test headlines have >= 1 cue word masked (1.6 words on average when hit); top cue words are outlet style (Onion: nation, onion, area, local, report; HuffPost: donald, huffpost, allegedly, why, the).
+- Gold accuracy of the new sources added to [[Gold Audit Results]]: VADER kappa 0.26 (0.37 on sure items), teacher 2 kappa 0.14.
+- Upload folder assembled on the owner's request: `data/gainsplit-processed-v2/` (14 files: the 9 original + 5 Pass 3; all hashes checked; git-ignored). Owner uploads it as a new version of `gainsplit-processed`, then runs `pass3`.
+- GAN fairness check decided ([[Decisions]], DELEGATED) and coded in a separate session: `gan_check` plan, 12 dev-only runs (A4 generator lr 1e-5 / 2e-4 at 10%; A4 and A1 with 3x steps at 1%). Reviewed, merged; 87 tests pass. Owner runs it alongside or right after `pass3` (`PLAN = "gan_check"`).
+
 ## 2026-11-10 - Pass 3 planned
 - Pass 2b and the full bootstrap committed and pushed (8847fd7).
 - Pass 3 designed and logged ([[Experiment Plan]] "Pass 3 plan", [[Decisions]] DELEGATED): 3a CPU analysis (helper-to-sarcasm MI and probe, iSarcasmEval AUC intervals, gold table per label source); 3b new files (VADER, second sentiment teacher, outlet-cue masked test + random-mask control); 3c Kaggle plan `pass3`, about 105 runs (7 label rows x {A3 10%, A2 1%}, A9 = A2 shuffled at 1%, masked-test re-runs of A1/A3/A4/A6/A7 at 10%, A1 trained on iSarcasmEval).
