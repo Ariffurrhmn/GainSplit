@@ -58,3 +58,35 @@ def fake_data(tmp_path) -> Path:
     outputs = {p.name: {"bytes": p.stat().st_size, "sha256": _sha(p)} for p in sorted(d.iterdir())}
     (d / "manifest.json").write_text(json.dumps({"outputs": outputs}))
     return d
+
+
+@pytest.fixture
+def pass3_data(fake_data) -> Path:
+    """fake_data plus the Pass 3 files: alternative sentiment labels, masked test sets,
+    an iSarcasmEval training set (70 non-sarcastic, 30 sarcastic) and manifest_pass3.json."""
+    d = fake_data
+    rng = np.random.default_rng(1)
+    helper = pd.read_csv(d / "helper_labels.csv")
+    names = ["negative", "neutral", "positive"]
+    alt = helper[["id", "split"]].copy()
+    for src in ("vader", "teacher2"):
+        alt[f"{src}_label"] = rng.choice(names, len(alt))
+    alt["vader_compound"] = rng.uniform(-1, 1, len(alt))
+    for c in names:
+        alt[f"teacher2_p_{c}"] = 1 / 3
+    alt.to_csv(d / "helper_sent_alt.csv", index=False)
+
+    test = pd.read_csv(d / "headlines_test.csv")
+    for name, k in (("cuemask", 0), ("randmask", 1)):  # mask the first / second word of every headline
+        masked = test.copy()
+        masked["text"] = [" ".join("[MASK]" if i == k else w for i, w in enumerate(t.split())) for t in test["text"]]
+        masked.to_csv(d / f"headlines_test_{name}.csv", index=False)
+
+    isarc = _frame(rng, 100, 1000)
+    isarc["label"] = [0] * 70 + [1] * 30
+    isarc.to_csv(d / "isarcasm_train.csv", index=False)
+
+    names_new = ["helper_sent_alt.csv", "headlines_test_cuemask.csv", "headlines_test_randmask.csv", "isarcasm_train.csv"]
+    outputs = {n: {"bytes": (d / n).stat().st_size, "sha256": _sha(d / n)} for n in names_new}
+    (d / "manifest_pass3.json").write_text(json.dumps({"outputs": outputs}))
+    return d

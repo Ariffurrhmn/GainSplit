@@ -63,7 +63,7 @@ def test_step_rule_is_the_same_for_every_arm():
 
 def test_unknown_arm_is_rejected():
     with pytest.raises(ValueError):
-        RunConfig("A9", 10, 0)
+        RunConfig("A10", 10, 0)
 
 
 def test_fixture_has_the_budgets_the_plans_use(fake_data):

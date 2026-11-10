@@ -23,8 +23,18 @@ ARMS = {
     "A6": {"gan": False, "helpers": False, "pseudo": True},   # self-training, one round
     "A7": {"gan": False, "helpers": False, "fgm": True},      # BERT + FGM on L
     "A8": {"gan": False, "helpers": True, "shuffle": True},   # A3 with shuffled helper labels
+    "A9": {"gan": False, "helpers": True, "l_only": True, "shuffle": True},  # A2 with shuffled helper labels
 }
 IMPLEMENTED_ARMS = set(ARMS)
+
+# Pass 3: what the helper heads are trained on (helper arms only; "" = the original hard teacher labels)
+#   soft     soft cross-entropy against the teacher probabilities
+#   flip25   25% of the hard labels changed to another class (flip50: 50%)
+#   vader    sentiment label from VADER instead of the sentiment teacher
+#   teacher2 sentiment label from a second sentiment model
+#   sentonly / emoonly  only that head is trained
+HELPER_VARIANTS = ("", "soft", "flip25", "flip50", "vader", "teacher2", "sentonly", "emoonly")
+TRAIN_DATA = ("headlines", "isarcasm")
 
 
 @dataclass
@@ -45,6 +55,9 @@ class RunConfig:
     eval_test: bool = False     # False while tuning: only dev is scored, test stays untouched
     fgm_epsilon: float = 0.0    # size of the FGM perturbation; must be > 0 for A7, 0 for every other arm
     tag: str = ""               # extra label for tuning runs, e.g. "lr3e-05"
+    helper_variant: str = ""    # Pass 3: how the helper labels are changed (see HELPER_VARIANTS)
+    eval_masked: bool = False   # Pass 3: also score the cue-masked and random-masked test sets (needs eval_test)
+    train_data: str = "headlines"  # "isarcasm": train on the iSarcasmEval training set (A1 only, budget 100)
 
     def __post_init__(self):
         if self.arm not in ARMS:
@@ -53,6 +66,14 @@ class RunConfig:
             raise ValueError(f"A7 needs fgm_epsilon > 0 (got {self.fgm_epsilon})")
         if self.arm != "A7" and self.fgm_epsilon != 0:
             raise ValueError(f"fgm_epsilon is only used by A7 (got {self.fgm_epsilon} for {self.arm})")
+        if self.helper_variant not in HELPER_VARIANTS:
+            raise ValueError(f"unknown helper_variant {self.helper_variant!r}; choose from {list(HELPER_VARIANTS)}")
+        if self.helper_variant and not ARMS[self.arm]["helpers"]:
+            raise ValueError(f"helper_variant {self.helper_variant!r} needs a helper arm (got {self.arm})")
+        if self.train_data not in TRAIN_DATA:
+            raise ValueError(f"unknown train_data {self.train_data!r}; choose from {list(TRAIN_DATA)}")
+        if self.train_data == "isarcasm" and (self.arm != "A1" or self.budget != 100):
+            raise ValueError(f"train_data='isarcasm' is only for A1 at budget 100 (got {self.arm} at {self.budget})")
 
     @property
     def run_id(self) -> str:

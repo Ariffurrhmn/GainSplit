@@ -27,7 +27,8 @@ import transformers
 from transformers import AutoTokenizer, get_linear_schedule_with_warmup
 
 from .config import IMPLEMENTED_ARMS, RunConfig
-from .data import find_data_dir, load_helper_labels, load_splits, permute_helper_labels, verify
+from .data import (EMO_P, SENT_P, apply_helper_variant, find_data_dir, helper_label_counts, load_helper_labels,
+                   load_isarcasm_splits, load_masked_tests, load_splits, permute_helper_labels, verify, verify_pass3)
 from .evaluate import predict, scores
 from .models import SarcasmClassifier
 from .tfidf import run_tfidf
@@ -63,7 +64,9 @@ class BatchStream:
         self.enc = enc
         self.n = enc["input_ids"].shape[0]
         self.labels = None if labels is None else torch.as_tensor(np.asarray(labels), dtype=torch.long)
-        self.extra = {k: torch.as_tensor(np.asarray(v), dtype=torch.long) for k, v in (extra or {}).items()}
+        # class indices stay integers; soft targets (teacher probabilities) are floats
+        self.extra = {k: torch.as_tensor(np.asarray(v), dtype=torch.float32 if np.asarray(v).dtype.kind == "f" else torch.long)
+                      for k, v in (extra or {}).items()}
         self.batch_size = min(batch_size, self.n)
         self.gen = torch.Generator().manual_seed(seed)
         self.order, self.pos = None, self.n
@@ -94,9 +97,22 @@ def make_optimizer(named_params, cfg: RunConfig, steps: int):
     return opt, sched
 
 
-def helper_losses(model, h, extra: dict):
-    """Cross-entropy of the sentiment and emotion heads against the teacher labels."""
-    return F.cross_entropy(model.sent_head(h), extra["sent"]), F.cross_entropy(model.emo_head(h), extra["emo"])
+def helper_losses(model, h, extra: dict, variant: str = "") -> dict:
+    """Cross-entropy of the sentiment and emotion heads against the teacher labels.
+
+    Returns {"loss_sent": ..., "loss_emo": ...}. Pass 3 variants: `soft` uses the teacher
+    probabilities as targets; `sentonly` / `emoonly` leave the other head out of the loss
+    (it gets no gradient, so it is not trained)."""
+    def ce(logits, hard, soft):
+        if variant == "soft":  # -sum_c p_c log q_c, averaged over rows
+            return -(extra[soft] * F.log_softmax(logits.float(), dim=-1)).sum(-1).mean()
+        return F.cross_entropy(logits, extra[hard])
+    losses = {}
+    if variant != "emoonly":
+        losses["loss_sent"] = ce(model.sent_head(h), "sent", "sent_soft")
+    if variant != "sentonly":
+        losses["loss_emo"] = ce(model.emo_head(h), "emo", "emo_soft")
+    return losses
 
 
 def plain_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device) -> dict:
@@ -108,9 +124,9 @@ def plain_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device) -> 
         loss = loss_sarc
         stats = {"loss_sarc": loss_sarc.item()}
         if model.helpers:
-            loss_sent, loss_emo = helper_losses(model, h, extra)  # helpers: every row has a teacher label
-            loss = loss_sarc + cfg.helper_weight * (loss_sent + loss_emo)
-            stats.update(loss_sent=loss_sent.item(), loss_emo=loss_emo.item())
+            hl = helper_losses(model, h, extra, cfg.helper_variant)  # helpers: every row has a teacher label
+            loss = loss_sarc + cfg.helper_weight * sum(hl.values())
+            stats.update({k: v.item() for k, v in hl.items()})
     scaler.scale(loss).backward()
     scaler.unscale_(opt)
     torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
@@ -191,9 +207,9 @@ def gan_step(model, cfg, opts, scheds, scaler, batch, n_l, use_fp16, device) -> 
              "loss_unsup_fake": loss_unsup_fake.item(),
              "p_fake_real": p_fake_real.mean().item(), "p_fake_fake": p_fake_fake.mean().item()}
     if model.helpers:  # A5: the same helper losses as A3, on the same real [CLS] vectors
-        loss_sent, loss_emo = helper_losses(model, model.dropout(real), extra)
-        loss_d = loss_d + cfg.helper_weight * (loss_sent + loss_emo)
-        stats.update(loss_sent=loss_sent.item(), loss_emo=loss_emo.item())
+        hl = helper_losses(model, model.dropout(real), extra, cfg.helper_variant)
+        loss_d = loss_d + cfg.helper_weight * sum(hl.values())
+        stats.update({k: v.item() for k, v in hl.items()})
     hid_real_mean = hid_real.detach().mean(0)  # feature-matching target; no gradient flows through it
 
     scaler.scale(loss_d).backward()
@@ -242,12 +258,18 @@ def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, he
         opt, sched = make_optimizer(model.named_parameters(), cfg, steps)
     scaler = torch.amp.GradScaler(device.type, enabled=use_fp16)
 
-    extra_l = {"sent": labeled["sent"], "emo": labeled["emo"]} if helpers else None
+    def helper_targets(df):  # hard class indices, plus the teacher probabilities for the `soft` variant
+        t = {"sent": df["sent"], "emo": df["emo"]}
+        if cfg.helper_variant == "soft":
+            t.update(sent_soft=df[SENT_P].to_numpy(), emo_soft=df[EMO_P].to_numpy())
+        return t
+
+    extra_l = helper_targets(labeled) if helpers else None
     stream_l = BatchStream(enc_l, labeled["label"], cfg.batch_size, cfg.seed, extra_l)
     stream_u = None
     if pool is not None:  # its own seeded stream, so the pool's batch order does not disturb L's
         enc_u = encode(tokenizer, pool["text"], cfg.max_len)
-        extra_u = {"sent": pool["sent"], "emo": pool["emo"]} if helpers else None
+        extra_u = helper_targets(pool) if helpers else None
         y_pool = pool["label"] if "label" in pool else None
         stream_u = BatchStream(enc_u, y_pool, cfg.batch_size, cfg.seed + 1000, extra_u)
 
@@ -319,14 +341,24 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
     t0 = time.time()
     data_dir = Path(data_dir)
     manifest = verify(data_dir)
-    splits = load_splits(data_dir, cfg.budget, cfg.seed)
+    # only runs that read the Pass 3 files check them, so older plans run without them
+    masked = cfg.eval_test and cfg.eval_masked
+    if masked or cfg.helper_variant in ("vader", "teacher2"):
+        manifest["outputs"].update(verify_pass3(data_dir)["outputs"])
+    if cfg.train_data == "isarcasm":
+        splits = load_isarcasm_splits(data_dir)
+    else:
+        splits = load_splits(data_dir, cfg.budget, cfg.seed)
     labeled, unlabeled = splits.labeled, splits.unlabeled
     # A3/A4/A5/A8 also read U (no sarcasm labels); A1, A2, A7 never do (A6 builds its own pool below)
     use_u = (gan or helpers) and not sw.get("l_only", False) and len(unlabeled) > 0
     if helpers:
         labeled, unlabeled = load_helper_labels(data_dir, labeled, unlabeled)
-    if sw.get("shuffle"):  # A8: break the link between each headline and its helper labels
+    if helpers:
+        labeled, unlabeled = apply_helper_variant(cfg.helper_variant, data_dir, labeled, unlabeled, cfg.seed)
+    if sw.get("shuffle"):  # A8 / A9: break the link between each headline and its helper labels
         labeled, unlabeled = permute_helper_labels(labeled, unlabeled, cfg.seed)
+    label_counts = helper_label_counts(labeled, unlabeled) if helpers else None
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     use_fp16 = cfg.fp16 and device.type == "cuda"
@@ -334,6 +366,8 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
     eval_sets = {"dev": splits.dev}
     if cfg.eval_test:
         eval_sets.update(test=splits.test, isarc_test=splits.isarc_test)
+        if cfg.eval_masked:  # Pass 3: the same test headlines with cue words / random words masked
+            eval_sets.update(load_masked_tests(data_dir))
 
     steps = cfg.steps(len(labeled))
     print(f"{cfg.run_id}: |L|={len(labeled)} |U|={len(unlabeled)} steps={steps} device={device}")
@@ -377,6 +411,7 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
         "scores": results,
         "train_log": train_log,
         "pseudo": pseudo_info,  # A6 only: pseudo-labels kept, with class counts
+        "helper_label_counts": label_counts,  # helper arms only: hard labels over L + U after flipping/replacing/shuffling
         "commit": git_commit(),
         "data_manifest_sha256": {k: v["sha256"] for k, v in manifest["outputs"].items()},
         "device": torch.cuda.get_device_name(0) if device.type == "cuda" else "cpu",

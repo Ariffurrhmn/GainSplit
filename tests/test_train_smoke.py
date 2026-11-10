@@ -5,6 +5,7 @@ It says nothing about real accuracy. Needs torch and transformers (Kaggle has bo
 """
 import json
 
+import pandas as pd
 import pytest
 
 torch = pytest.importorskip("torch")
@@ -305,3 +306,81 @@ def test_a6_falls_back_to_l_only_when_nothing_passes(fake_data, tiny_bert, tmp_p
     rec = train_run(_cfg(tiny_bert, arm="A6", min_steps=6), fake_data, tmp_path / "r")
     assert rec["pseudo"]["n_kept"] == 0 and rec["pseudo"]["fallback_l_only"] is True
     assert rec["uses_u"] is False and rec["steps"] == 6
+
+
+# ---- Pass 3 options ----------------------------------------------------------------
+def _p3(tiny_bert, **kw):
+    return _cfg(tiny_bert, arm="A3", helper_weight=0.3, min_steps=7, **kw)
+
+
+@pytest.mark.parametrize("variant", ["soft", "flip25", "flip50", "vader", "teacher2"])
+def test_helper_variants_run_and_record_label_counts(variant, pass3_data, tiny_bert, tmp_path):
+    rec = train_run(_p3(tiny_bert, helper_variant=variant, tag=variant, eval_test=True, eval_masked=True),
+                    pass3_data, tmp_path / "r")
+    assert rec["config"]["helper_variant"] == variant
+    assert set(rec["train_log"][0]) == LOSS_KEYS["A3"] | {"step"}
+    counts = rec["helper_label_counts"]
+    assert sum(counts["sent"].values()) == sum(counts["emo"].values()) == 200
+    assert set(rec["data_manifest_sha256"]) >= {"headlines_train.csv", "helper_sent_alt.csv"}  # Pass 3 files were checked
+
+
+@pytest.mark.parametrize("variant,kept,dropped", [("sentonly", "loss_sent", "loss_emo"), ("emoonly", "loss_emo", "loss_sent")])
+def test_single_head_variants_train_only_that_head(variant, kept, dropped, pass3_data, tiny_bert, tmp_path):
+    rec = train_run(_p3(tiny_bert, helper_variant=variant, tag=variant), pass3_data, tmp_path / "r")
+    assert set(rec["train_log"][0]) == {"loss_sarc", kept, "loss", "step"} and dropped not in rec["train_log"][0]
+
+
+def test_helper_losses_soft_matches_hard_for_one_hot_targets():
+    from types import SimpleNamespace
+    from gainsplit.train import helper_losses
+    torch.manual_seed(0)
+    model = SimpleNamespace(sent_head=torch.nn.Linear(4, 3), emo_head=torch.nn.Linear(4, 5))
+    h = torch.randn(6, 4)
+    sent, emo = torch.tensor([0, 1, 2, 0, 1, 2]), torch.tensor([0, 1, 2, 3, 4, 0])
+    extra = {"sent": sent, "emo": emo, "sent_soft": torch.nn.functional.one_hot(sent, 3).float(),
+             "emo_soft": torch.nn.functional.one_hot(emo, 5).float()}
+    hard, soft = helper_losses(model, h, extra), helper_losses(model, h, extra, "soft")
+    assert set(hard) == {"loss_sent", "loss_emo"}
+    for k in hard:
+        assert torch.allclose(hard[k], soft[k], atol=1e-6)
+    assert set(helper_losses(model, h, extra, "sentonly")) == {"loss_sent"}
+    assert set(helper_losses(model, h, extra, "emoonly")) == {"loss_emo"}
+
+
+def test_a9_is_a2_with_shuffled_labels(fake_data, tiny_bert, tmp_path, monkeypatch):
+    made = _count_streams(monkeypatch)
+    rec = train_run(_cfg(tiny_bert, arm="A9", budget=1, helper_weight=0.3, tag="shuf"), fake_data, tmp_path / "r")
+    assert len(made) == 1 and rec["uses_u"] is False and rec["n_unlabeled"] > 0   # L only, like A2
+    assert set(rec["train_log"][0]) == P2_KEYS["A2"] | {"step"}
+    assert sum(rec["helper_label_counts"]["sent"].values()) == 200
+
+
+def test_eval_masked_scores_and_saves_the_masked_test_sets(pass3_data, tiny_bert, tmp_path):
+    rec = train_run(_cfg(tiny_bert, eval_test=True, eval_masked=True, tag="mask"), pass3_data, tmp_path / "r")
+    assert set(rec["scores"]) == {"dev", "test", "isarc_test", "test_cuemask", "test_randmask"}
+    run_dir = tmp_path / "r" / "runs" / "A1_p10_s0_mask"
+    for split in ("test_cuemask", "test_randmask"):
+        assert len(pd.read_csv(run_dir / f"preds_{split}.csv")) == 40
+    # masked scoring changes nothing about the model: the unmasked scores equal those of an unmasked run
+    plain = train_run(_cfg(tiny_bert, eval_test=True), pass3_data, tmp_path / "r2")
+    assert plain["scores"]["test"] == rec["scores"]["test"]
+
+
+def test_eval_masked_is_ignored_when_test_is_not_scored(pass3_data, tiny_bert, tmp_path):
+    rec = train_run(_cfg(tiny_bert, eval_test=False, eval_masked=True), pass3_data, tmp_path / "r")
+    assert set(rec["scores"]) == {"dev"}
+
+
+def test_older_runs_need_no_pass3_files(fake_data, tiny_bert, tmp_path):
+    rec = train_run(_p3(tiny_bert, eval_test=True), fake_data, tmp_path / "r")   # fake_data has no manifest_pass3.json
+    assert "helper_sent_alt.csv" not in rec["data_manifest_sha256"] and rec["helper_label_counts"] is not None
+
+
+def test_a1_trained_on_isarcasm(pass3_data, tiny_bert, tmp_path):
+    cfg = _cfg(tiny_bert, budget=100, train_data="isarcasm", tag="isarctrain", eval_test=True, eval_masked=True)
+    rec = train_run(cfg, pass3_data, tmp_path / "r")
+    assert rec["n_labeled"] == 90 and rec["n_unlabeled"] == 0 and rec["uses_u"] is False
+    assert rec["steps"] == 12   # one pass over L: ceil(90 / 8) batches
+    assert set(rec["scores"]) == {"dev", "test", "isarc_test", "test_cuemask", "test_randmask"}
+    run_dir = tmp_path / "r" / "runs" / "A1_p100_s0_isarctrain"
+    assert len(pd.read_csv(run_dir / "preds_dev.csv")) == 10 and len(pd.read_csv(run_dir / "preds_isarc_test.csv")) == 30
