@@ -11,7 +11,7 @@ Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]]
 - Filed `results_pass2a.zip` (unpacked) in `results/pass2a/` and `gold_sentiment_audit.csv` in `results/gold_audit/`. Pass 2a: 104/104 runs, 5 seeds in every planned cell.
 - FGM epsilon 0.5 chosen by the pre-set tie rule (1.0 best mean, within 1 sd); `PASS2_FGM_EPSILON = 0.5`, notebook `PLAN = "pass2b"`; the plans test now resets the epsilon to None before checking the guard. 34 tests pass locally.
 - Pass 2a readings (INFERRED, seed-paired; [[Pass 2a Results]]): helper label content drives the 10% gain (A3 - A8 +0.57, 5/5); at 1% helpers help only on L (A2 +1.6, 5/5) and adding U removes it; self-training A6 beats A1 at 1% (+1.6) and 10% (+0.6) on every seed; GAN null at 5% and -0.55 at 30% (0/5); helper direction +0.2 to +0.4 at 5/10/30%.
-- Gold audit ([[Gold Audit Results]]): teacher accuracy 0.53, kappa 0.24 against the owner. Held provisional: the unsure flag rises to 100% in the last 50 items and agreement is lower on sure items. Question put to the owner.
+- Gold audit ([[Gold Audit Results]]): teacher accuracy 0.53, kappa 0.24 against the owner. Owner confirmed the unsure flag is literal; labels accepted (DELEGATED). First 50 items agree much less (0.30) than the rest (0.56-0.64): warm-up effect, reported as a limitation; owner declined a re-label of items 1-50. Teacher labels stay the helper training signal.
 - Next (owner): run `pass2b` on Kaggle (10 runs, ~15 min); re-run `03_analysis.ipynb` locally with `RESULTS_DIRS` = pass1 + pass2a (+ pass2b when done); answer the unsure-flag question.
 
 ## 2026-11-10 - Pass 1 bootstrap
