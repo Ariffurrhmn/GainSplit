@@ -7,6 +7,12 @@ updated: 2026-11-11
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-11 - Paper draft and Overleaf package
+- Done: QPAIN 2027 rules checked on the live site (deadline 20 Dec 2026, 4-6 pages, IEEE template, double-blind, similarity <= 20% / 4%). Full draft written in `paper/` (IEEEtran, anonymous), with a TikZ model diagram, three data figures and two tables generated from `results/analysis/`; compiles to 6 pages. `paper/gainsplit_overleaf.zip` built for Overleaf.
+- Vault changes: new [[Paper Draft]]; [[Audit - Venues]] (VERIFIED block), [[Decisions]] (2 DELEGATED), hub.
+- Findings: none new; numbers in the text re-checked against the CSVs.
+- Next: owner fills the seed-paper title and authors in `refs.bib`, uploads the zip to Overleaf (pdfLaTeX), reads the draft and sends it to the instructor; check the bibliography entries marked CHECK; run a similarity check before submission.
+
 ## 2026-11-11 - Pass 3 and GAN check filed
 - Done: owner ran `pass3` (twice by mistake; both runs identical in all 1,575 metric cells) and `gan_check` on Kaggle, and re-ran `03_analysis.ipynb` locally on 255 runs. Zips filed in `results/pass3/` and `results/gan_check/` (105 and 12 runs, paths checked). Mask re-runs 25/25 exact; helper-label counts as expected; `gan_check` scored dev only.
 - Vault changes: new [[Pass 3 Results]], [[GAN Check Results]]; updated [[Bootstrap - All Passes]], [[Risks]] (11, 13; new 14, 15), [[Decisions]] (5 DELEGATED entries), hub.

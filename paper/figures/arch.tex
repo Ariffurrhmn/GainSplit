@@ -1,0 +1,52 @@
+% Shared model with the switches that define the arms (Fig. 1).
+% Drawn in TikZ so fonts match the paper; colours follow the data figures.
+% Needs \usetikzlibrary{arrows.meta,positioning,calc}.
+\definecolor{cblue}{HTML}{2A78D6}
+\definecolor{corange}{HTML}{EB6834}
+\definecolor{caqua}{HTML}{1BAF7A}
+\definecolor{cink}{HTML}{52514E}
+\definecolor{cfill}{HTML}{F3F2EF}
+\begin{tikzpicture}[
+  font=\scriptsize,
+  >={Stealth[length=3.5pt,width=3pt]},
+  box/.style={draw=cink, fill=cfill, rounded corners=2pt, align=center, inner sep=2.2pt, minimum height=5mm, line width=0.5pt},
+  head/.style={box, fill=white, minimum width=23mm},
+  data/.style={box, fill=white, dashed},
+  arr/.style={->, draw=cink, line width=0.5pt},
+  tag/.style={font=\tiny\bfseries, inner sep=1pt},
+]
+% inputs, embeddings, encoder
+\node[data] (L) {labelled $L$\\{\tiny headline, label $y$}};
+\node[data, below=2.5mm of L.south west, anchor=north west, minimum width=0pt] (U) {unlabelled $U$\\{\tiny headline only}};
+\node[box, anchor=west] (emb) at ($(L.east |- U.east)!0.5!(L.east)+(7mm,0)$) {word\\embeddings};
+\node[box, right=4mm of emb, minimum height=12mm, fill=cink!12] (bert) {BERT\\encoder};
+\node[circle, draw=cink, fill=white, inner sep=0.8pt, line width=0.5pt, right=3mm of bert] (h) {$\mathbf{h}$};
+\draw[arr] (L.east) -- ++(2.5mm,0) |- ([yshift=1mm]emb.west);
+\draw[arr] (U.east) -- ++(2.5mm,0) |- ([yshift=-1mm]emb.west);
+\draw[arr] (emb) -- (bert);
+\draw[arr] (bert) -- (h);
+\node[tag, text=caqua, above=0.8mm of emb.north] {A7: $+\,\mathbf{r}_{\mathrm{adv}}$};
+
+% heads on the [CLS] vector h
+\path (h.east) ++(6mm, 1.45) node[head, anchor=west] (sar) {sarcasm head};
+\path (h.east) ++(6mm, 0.62) node[head, anchor=west] (sen) {sentiment head (3)};
+\path (h.east) ++(6mm,-0.05) node[head, anchor=west] (emo) {emotion head (5)};
+\path (h.east) ++(6mm,-0.95) node[head, anchor=west] (dis) {discriminator ($k{+}1$)};
+\foreach \t in {sar,sen,emo,dis} \draw[arr] (h.east) -- ++(3mm,0) |- (\t.west);
+
+% generator under the discriminator
+\node[box, fill=white, below=4.5mm of dis] (gen) {generator};
+\node[left=3mm of gen] (z) {$\mathbf{z}\sim\mathcal{N}(0,I)$};
+\draw[arr] (z) -- (gen);
+\draw[arr] (gen) -- node[right, font=\tiny] {$\tilde{\mathbf{h}}$} (dis);
+
+% targets
+\node[font=\tiny, right=1mm of sar] {$y$ on $L$};
+\node[box, fill=white, anchor=west] (teach) at ($(sen.east)!0.5!(emo.east)+(5mm,0)$) {frozen\\teachers};
+\draw[arr, dashed] (teach.west) -- ++(-2.5mm,0) |- (sen.east);
+\draw[arr, dashed] (teach.west) -- ++(-2.5mm,0) |- (emo.east);
+
+% arm tags
+\node[tag, text=cblue, below=0.8mm of teach] {A2, A3};
+\node[tag, text=corange, right=1.5mm of gen] {A4, A5};
+\end{tikzpicture}

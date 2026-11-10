@@ -1,6 +1,6 @@
 ---
 tags: [venues]
-updated: 2026-11-08
+updated: 2026-11-11
 ---
 
 # Audit - Venues
@@ -9,7 +9,16 @@ Hub: [[00 - Project Context]]. All dates and formats UNVERIFIED unless marked.
 
 **Primary:** IEEE QPAIN 2027 (stated by the owner, 2026-11-08). The seed paper appeared at QPAIN 2025 ([[Seed Paper - Irfan 2025]]).
 
-### QPAIN 2027 facts (2026-11-08)
+### QPAIN 2027: checked on the live site (2026-11-11, VERIFIED)
+Read from https://qpain.org/, /call-for-papers and /submission-guidelines on 2026-11-11:
+- 2027 IEEE 3rd Intl. Conf. on Quantum Photonics, Artificial Intelligence & Networking, Chattogram, Bangladesh, 31 Mar - 3 Apr 2027.
+- **Paper deadline 20 Dec 2026**; notification 5 Feb 2027; camera-ready and registration 20 Feb 2027. (The owner's planning date of 10 Dec stays as a buffer.)
+- **4-6 pages**, PDF, English, IEEE conference template; "extra pages may incur additional fees per IEEE policy". Whether references count is not stated.
+- **Double-blind:** "remove author names, affiliations, and any identifying information in the initial submission". Self-citation, acknowledgements and code links are not addressed, so the draft has no repo link.
+- Similarity <= 20% overall (references included), <= 4% from a single source.
+- No AI/LLM-tool policy on the guidelines page. Portal: PROCONF (myproconf.com, event qpain-2027).
+
+### QPAIN 2027 facts (2026-11-08, superseded by the check above)
 Source: the owner's venue-instructions notes (not included in this repo). Their facts were second-hand as of 2026-11-05 and never checked against the live site (https://qpain.org/). All **UNVERIFIED** until someone reads the live pages.
 - Name: 2027 IEEE 3rd Intl. Conf. on Quantum Photonics, AI and Networking, Chattogram, Bangladesh. Dates 31 Mar - 3 Apr 2027 (one page says 8-10 Apr: conflict).
 - **Deadline conflict:** owner says 10 Dec 2026; the repo says 20 Dec 2026 (notification 5 Feb, camera-ready 20 Feb 2027). **Decision 2026-11-08: owner plans to 10 Dec 2026.** Still check the live site; if 20 Dec is right it only adds slack.

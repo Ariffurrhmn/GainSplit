@@ -1,0 +1,15 @@
+\begin{tabular}{llccccc}
+\toprule
+ & Arm & 1\% (228) & 5\% (1,140) & 10\% (2,280) & 30\% (6,840) & 100\% (22,800) \\
+\midrule
+A0 & TF-IDF + logistic regression & 69.7{\scriptsize$\pm${0.7}} & 75.3{\scriptsize$\pm${0.6}} & 78.1{\scriptsize$\pm${0.6}} & 81.1{\scriptsize$\pm${0.4}} & 84.7 \\
+A1 & BERT (labelled only) & 80.4{\scriptsize$\pm${1.2}} & 86.6{\scriptsize$\pm${0.5}} & 88.2{\scriptsize$\pm${0.3}} & 90.8{\scriptsize$\pm${0.2}} & \textbf{93.3}{\scriptsize$\pm${0.4}} \\
+A2 & BERT + helper heads on $L$ & \textbf{82.1}{\scriptsize$\pm${0.6}} & -- & 88.4{\scriptsize$\pm${0.4}} & -- & -- \\
+A3 & BERT + helper heads on $L{+}U$$^{\dagger}$ & 80.3{\scriptsize$\pm${1.8}} & \textbf{86.8}{\scriptsize$\pm${0.7}} & 88.6{\scriptsize$\pm${0.5}} & \textbf{91.1}{\scriptsize$\pm${0.4}} & -- \\
+A4 & GAN-BERT$^{\dagger}$ & 80.5{\scriptsize$\pm${1.6}} & 86.5{\scriptsize$\pm${1.0}} & 88.1{\scriptsize$\pm${0.4}} & 90.3{\scriptsize$\pm${0.2}} & -- \\
+A5 & GAN-BERT + helper heads$^{\dagger}$ & 78.1{\scriptsize$\pm${2.7}} & 86.6{\scriptsize$\pm${0.5}} & 88.4{\scriptsize$\pm${0.3}} & 90.8{\scriptsize$\pm${0.2}} & -- \\
+A6 & Self-training$^{\dagger}$ & 82.0{\scriptsize$\pm${0.7}} & -- & 88.8{\scriptsize$\pm${0.3}} & -- & -- \\
+A7 & BERT + FGM & 82.0{\scriptsize$\pm${0.6}} & -- & \textbf{89.8}{\scriptsize$\pm${0.1}} & -- & -- \\
+A8 & A3, shuffled helper labels$^{\dagger}$ & 80.0{\scriptsize$\pm${1.7}} & -- & 88.1{\scriptsize$\pm${0.3}} & -- & -- \\
+\bottomrule
+\end{tabular}
