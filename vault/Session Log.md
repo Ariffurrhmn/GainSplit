@@ -7,6 +7,18 @@ updated: 2026-11-10
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-10 - Bootstrap on all passes
+- Owner re-ran `03_analysis.ipynb` locally on pass1 + pass2a + pass2b: 150 test-scored runs (the "184" given earlier was wrong; the 9 dev-only `fgm_tuning` runs are excluded). Pass 1 contrasts reproduce exactly.
+- VERIFIED ([[Bootstrap - All Passes]]): FGM +1.6 points over A1 at 1% and 10% (p < 0.0001, robust to Holm); GAN never helps (null at 1/5/10%, -0.55 at 30%); self-training +1.6 at 1% (robust), +0.6 at 10%; at 1% helpers help only on L (A2 +1.6; adding U -1.8); GAN + helpers at 1% -2.3; helpers on L + U not significant at any budget; A3 - A8 at 10% +0.57 (p 0.011, not robust to Holm).
+- Holm robustness column added (DELEGATED, [[Decisions]]).
+- Next: Pass 3 (RQ2 label-quality rows, RQ3 shortcut checks) and the paper draft (data, setup and RQ1 results can start now).
+
+## 2026-11-10 - Pass 2b filed
+- Owner committed the gold-audit vault edits (62d0020) and ran `pass2b` on Kaggle at that commit: 10/10 A7 runs, epsilon 0.5. Filed in `results/pass2b/`.
+- Result ([[Pass 2b Results]], INFERRED): FGM gains +1.55 points over A1 at 10% on every seed (sd 0.15) and +1.6 at 1%; it beats GAN-BERT by 1.5-1.7 points while using no unlabeled data. Largest method effect in the study. No transfer to iSarcasmEval.
+- The owner's analysis re-run used `RESULTS_DIRS = [pass2b]` only, so `results/analysis/` now holds A7-only tables and empty contrasts (A7 has nothing to compare with). The committed Pass 1 versions are in git. Not committed; to be replaced by a re-run on all three folders.
+- Next (owner): re-run `03_analysis.ipynb` with `RESULTS_DIRS` = pass1 + pass2a + pass2b. Then Pass 3 and the paper draft.
+
 ## 2026-11-10 - Pass 2a and gold audit filed
 - Filed `results_pass2a.zip` (unpacked) in `results/pass2a/` and `gold_sentiment_audit.csv` in `results/gold_audit/`. Pass 2a: 104/104 runs, 5 seeds in every planned cell.
 - FGM epsilon 0.5 chosen by the pre-set tie rule (1.0 best mean, within 1 sd); `PASS2_FGM_EPSILON = 0.5`, notebook `PLAN = "pass2b"`; the plans test now resets the epsilon to None before checking the guard. 34 tests pass locally.

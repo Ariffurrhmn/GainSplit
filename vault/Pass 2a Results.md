@@ -10,7 +10,7 @@ Hub: [[00 - Project Context]]. Plan: [[Experiment Plan]]. Choices: [[Decisions]]
 
 Run by the owner on Kaggle (GPU T4 x2, commit bfe964d), 104/104 runs. Raw files: `results/pass2a/` (summary.csv, per-run result.json, predictions). Same frozen settings as Pass 1 (lr 5e-5, w = 0.3, steps = max(200, 10 passes over L), batch 32, seeds 0-4).
 
-Status: means, sds and per-seed differences are VERIFIED as computed from `results/pass1/summary.csv` + `results/pass2a/summary.csv`. Every reading below is INFERRED from seed-paired differences only, until the owner re-runs `experiments/03_analysis.ipynb` with `results/pass2a` added (paired bootstrap for A2-A1, A3-A2, A3-A8, A6-A1, A4-A6 and the 5% / 30% 2x2 contrasts).
+**Bootstrap done 2026-11-10: significance, intervals and which readings are now VERIFIED are in [[Bootstrap - All Passes]].** Status: means, sds and per-seed differences are VERIFIED as computed from `results/pass1/summary.csv` + `results/pass2a/summary.csv`.
 
 ## Sanity checks (VERIFIED)
 - 104 runs; every planned (arm, budget) cell has 5 seeds; `fgm_tuning` has 9 dev-only runs.
@@ -54,7 +54,7 @@ A0 at 100% has sd 0 because the full training set is the same for every seed and
 | A6 - A1 self-training | **+1.62 (5/5)** | - | **+0.60 (5/5)** | - |
 | A0 - A1 | -10.71 (0/5) | - | -10.08 (0/5) | - |
 
-## Reading (all INFERRED until the bootstrap)
+## Reading (seed-level; see [[Bootstrap - All Passes]] for what the bootstrap confirms)
 - **Helper heads, budget curve:** small positive direction at 5%, 10% and 30% (+0.2 to +0.4, 4/5 seeds each), none at 1%. Consistent with the borderline 10% result in Pass 1, so "small but consistent" is the likely wording.
 - **What drives the helper gain at 10%: the label content.** Shuffled helper labels (A8) fall back to A1 and lose to A3 on every seed (+0.57). So it is not just an extra loss term or regulariser.
 - **At 1% the unlabeled rows hurt.** Helper heads trained on the 228 labeled headlines only (A2) gain +1.6 points on every seed; adding the unlabeled batch to the helper loss (A3) removes that gain on every seed. A2 and A3 differ in two ways (U rows in the helper loss, and a U batch in every step), so the two are not separated. Same pattern as the A5 harm at 1% ([[Pass 1 Results]]): when L is tiny, unlabeled-side losses pull the encoder away from the sarcasm task. This reframes RQ1: at 1% the helper heads help only without the unlabeled pool.
