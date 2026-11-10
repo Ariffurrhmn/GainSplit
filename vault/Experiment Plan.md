@@ -104,7 +104,7 @@ Owner runs everything on Kaggle; code is written on request. Steps in the same b
 3. **DONE 2026-11-10** (45/45 runs; [[Pass 1 Results]]). **Was: NEXT, ready** (`PLAN = "pass1"`, w = 0.3 set; measured timings give ~1.5-2 GPU-h, ~1 h on two GPUs). **Kaggle session 3:** Pass 1 with test scored: A1 at 1/10/100%, A3/A4/A5 at 1/10%, **5 seeds** (45 runs; DELEGATED, [[Decisions]]).
 4. **DONE 2026-11-10, owner to run** (`experiments/03_analysis.ipynb`, `src/gainsplit/analysis.py`). **Code:** analysis notebook: mean +- std tables, paired bootstrap per contrast, F1-vs-budget figure.
 5. **`pass2a` DONE 2026-11-10** (104/104, [[Pass 2a Results]]); epsilon 0.5; **`pass2b` DONE 2026-11-10** ([[Pass 2b Results]]). Pass 2 complete. **Pass 2** (specs and split into `pass2a` / `pass2b` in [[Decisions]] 2026-11-10): A2, A8, A6, A0, A7 (A7 spec approved, DELEGATED 2026-11-10), budgets 5/30 for the 2x2 arms.
-6. **Pass 3: PLANNED 2026-11-10** ("Pass 3 plan" below): CPU analysis (3a), new label and masked-test files (3b), Kaggle plan `pass3` (3c). Next: code sessions A, B, C.
+6. **Pass 3: PLANNED 2026-11-10** ("Pass 3 plan" below): CPU analysis (3a), new label and masked-test files (3b), Kaggle plan `pass3` (3c). Code written and merged 2026-11-10; **NEXT: owner runs `01b_pass3_data`, then `pass3`**.
 Side tracks, any time: gold audit (owner hand-labels 200 random training headlines in `experiments/gold_audit.html`; protocol in [[Decisions]]); check the QPAIN 2027 deadline and anonymity rule; draft the paper's data and setup sections (setup is now fixed); instructor feedback on the draft; submit.
 
 ## Pass 3 plan (2026-11-10, DELEGATED; replaces the Part 2 / Part 3 lists above where they differ)

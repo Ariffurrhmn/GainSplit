@@ -10,7 +10,8 @@ Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]]
 ## 2026-11-10 - Pass 3 planned
 - Pass 2b and the full bootstrap committed and pushed (8847fd7).
 - Pass 3 designed and logged ([[Experiment Plan]] "Pass 3 plan", [[Decisions]] DELEGATED): 3a CPU analysis (helper-to-sarcasm MI and probe, iSarcasmEval AUC intervals, gold table per label source); 3b new files (VADER, second sentiment teacher, outlet-cue masked test + random-mask control); 3c Kaggle plan `pass3`, about 105 runs (7 label rows x {A3 10%, A2 1%}, A9 = A2 shuffled at 1%, masked-test re-runs of A1/A3/A4/A6/A7 at 10%, A1 trained on iSarcasmEval).
-- Next: three code sessions (A data notebook + masking, B training switches + plan, C analysis), reviewed before merge; then the owner runs 01b, uploads the new dataset version, runs `pass3`.
+- Three code sessions wrote the Pass 3 code: `experiments/01b_pass3_data.ipynb` + `src/gainsplit/masking.py`; training variants, A9, masked-test scoring, iSarcasmEval training and the `pass3` plan (105 runs); analysis for tagged runs, mask-rerun check, shortcut gap, label-quality contrasts, transfer AUC intervals, helper/gold checks. Reviewed, merged into main with two small fixes ([[Decisions]]); 77 tests pass. Notebook default `PLAN = "pass3"`.
+- Next (owner): check the second teacher's model card, run `01b_pass3_data` on Kaggle, add its five files to `gainsplit-processed` as a new version, run `pass3` (~1.4 h), download `results_pass3.zip`.
 
 ## 2026-11-10 - Bootstrap on all passes
 - Owner re-ran `03_analysis.ipynb` locally on pass1 + pass2a + pass2b: 150 test-scored runs (the "184" given earlier was wrong; the 9 dev-only `fgm_tuning` runs are excluded). Pass 1 contrasts reproduce exactly.
