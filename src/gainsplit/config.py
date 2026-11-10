@@ -58,6 +58,8 @@ class RunConfig:
     helper_variant: str = ""    # Pass 3: how the helper labels are changed (see HELPER_VARIANTS)
     eval_masked: bool = False   # Pass 3: also score the cue-masked and random-masked test sets (needs eval_test)
     train_data: str = "headlines"  # "isarcasm": train on the iSarcasmEval training set (A1 only, budget 100)
+    gen_lr: float = 0.0         # GAN arms only: learning rate of the generator's optimizer (0 = same as lr)
+    step_mult: int = 1          # multiplies the step count from steps() (1 = the usual rule)
 
     def __post_init__(self):
         if self.arm not in ARMS:
@@ -75,6 +77,13 @@ class RunConfig:
         if self.train_data == "isarcasm" and (self.arm != "A1" or self.budget != 100):
             raise ValueError(f"train_data='isarcasm' is only for A1 at budget 100 (got {self.arm} at {self.budget})")
 
+        if self.gen_lr < 0:
+            raise ValueError(f"gen_lr must be >= 0 (got {self.gen_lr})")
+        if self.gen_lr > 0 and not ARMS[self.arm]["gan"]:
+            raise ValueError(f"gen_lr is only used by GAN arms (got {self.gen_lr} for {self.arm})")
+        if self.step_mult < 1:
+            raise ValueError(f"step_mult must be >= 1 (got {self.step_mult})")
+
     @property
     def run_id(self) -> str:
         base = f"{self.arm}_p{self.budget}_s{self.seed}"
@@ -86,7 +95,7 @@ class RunConfig:
 
     def steps(self, n_labeled: int) -> int:
         """Same rule for every arm (equal step budget, Decisions 2026-11-10)."""
-        return max(self.min_steps, self.passes * math.ceil(n_labeled / self.batch_size))
+        return self.step_mult * max(self.min_steps, self.passes * math.ceil(n_labeled / self.batch_size))
 
     def to_dict(self) -> dict:
         return asdict(self)
