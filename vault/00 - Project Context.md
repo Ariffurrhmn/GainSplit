@@ -1,6 +1,6 @@
 ---
 tags: [hub, context]
-updated: 2026-11-09
+updated: 2026-11-10
 ---
 
 # 00 - Project Context
@@ -29,6 +29,7 @@ Project **GainSplit** (Paper A): a controlled study of *where the gain comes fro
 - Proposal accepted (2026-11-09). Priority now: rebuild code and setup fast so runs can start. All three RQs in scope; no further papers awaited from the owner.
 - Next actions: top of [[Session Log]] and [[Open Questions]].
 - Data: raw Headlines and iSarcasmEval in `data/` (unedited, checked 2026-11-09); derived splits removed. Code skeleton rolled back 2026-11-09; no real runs yet.
+- Preprocessing: `experiments/01_preprocess.ipynb` ran 2026-11-10 (interactive Kaggle session). 28,501 headlines kept; split 22,800 / 2,850 / 2,851; outputs in `data/processed/` and uploaded by the owner as a private Kaggle dataset. Numbers in [[Headlines Dataset]] and [[iSarcasmEval]]. Punctuation removal and drop-duplicates both confirmed ([[Decisions]]).
 - Working mode (2026-11-09, [[Repo Rules]] rule 5): the owner does all data work and runs everything; sessions guide and explain, and write code on request.
 - Limitation named 2026-11-09: original setup of the seed paper unavailable (supervisor); Zihan 2026 also omits key details; own re-implementation ([[Risks]] item 8). [[Zihan 2026]] read in full.
 - Novelty check: [[Chen 2022]] read in full 2026-11-08; partial overlap only (see [[Risks]]). Strongest verified overlap: [[Dai 2021]].

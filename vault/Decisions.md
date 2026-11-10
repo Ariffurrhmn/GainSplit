@@ -1,6 +1,6 @@
 ---
 tags: [decisions]
-updated: 2026-11-09
+updated: 2026-11-10
 ---
 
 # Decisions
@@ -27,3 +27,5 @@ Hub: [[00 - Project Context]]. Append new entries at the bottom: date, decision,
 - **2026-11-09** Preprocessing notebook `experiments/01_preprocess.ipynb` written for Kaggle; the owner runs it. Defaults, PENDING owner confirmation (switches in the settings cell): keep punctuation (seed paper removed it; punctuation may be a sarcasm cue) and drop duplicate headlines (conflicting-label duplicates removed entirely). Why: avoid train/test leakage through duplicates; keep text close to what BERT was trained on.
 - **2026-11-09** Label budgets are stratified and nested per seed (1% inside 5% inside 10% ...), saved as id lists in `budgets.json`. Why: differences between budgets then reflect label amount, not a different random draw.
 - **2026-11-09** Emotion helper labels: GoEmotions sigmoid scores grouped into 5 classes (GoEmotions Ekman grouping; disgust merged into anger, surprise into neutral_other), class score = max over its labels, renormalised to sum 1. Why max: joy has 12 labels and would win under a sum. Raw 28 scores also saved for RQ2. Sentiment keeps neutral (seed paper dropped it).
+- **2026-11-09** CONFIRMED by owner: punctuation removed (`KEEP_PUNCTUATION = False`) for all main runs, before helper labels are made. Why: matches the seed paper, removes one outlet-style shortcut, and the literature shows small, task-dependent effects for transformers ([[Punctuation Evidence]]). Keep-punctuation is an optional robustness check (A3/A5 at 10%, 3 seeds). Supersedes the keep-punctuation default above. Drop-duplicates default still unconfirmed.
+- **2026-11-10** CONFIRMED by owner: drop duplicate headlines (`DROP_DUPLICATES = True`). The 2026-11-10 run removed 118 extra copies; no duplicates had conflicting labels. Why: a headline in both train and test would inflate test scores. Supersedes the "unconfirmed" note above.

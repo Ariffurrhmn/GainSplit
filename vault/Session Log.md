@@ -1,15 +1,24 @@
 ---
 tags: [log]
-updated: 2026-11-09
+updated: 2026-11-10
 ---
 
 # Session Log
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-10 - Preprocessing run finished
+- Owner re-ran `experiments/01_preprocess.ipynb` in an interactive Kaggle session (the commit run stalled on Kaggle's side 2026-11-09). It finished; `/kaggle/working/processed/` holds about 12 MB.
+- Interactive-session output is deleted when the session ends, so the owner downloads the 9 files to `data/processed/` and uploads them as a private Kaggle dataset for the training notebooks.
+- Owner downloaded the 9 files to `data/processed/` (sizes match the manifest). Manifest and sentiment spot-check reviewed: all checks pass. Numbers recorded in [[Headlines Dataset]] and [[iSarcasmEval]]; emotion-label skew added to [[Risks]] (item 11).
+- Owner uploaded the processed files as a private Kaggle dataset and confirmed drop-duplicates ([[Decisions]]). All 2026-11-09 and 2026-11-10 repo changes committed and pushed.
+- Next: plan the Pass 1 training code (A1, A3, A4, A5) with the owner before writing it.
+
 ## 2026-11-09 - Preprocessing notebook
 - Wrote `experiments/01_preprocess.ipynb` for Kaggle: verifies raw file hashes, drops `article_link`, light cleaning, empty/duplicate removal, token-length check, stratified 80/10/10 split, nested label budgets, teacher helper labels, iSarcasmEval cleaning, manifest. Each cell explains what and why.
 - Defaults pending owner confirmation: keep punctuation, drop duplicates ([[Decisions]]). Emotion mapping and max-aggregation recorded there too.
+- Punctuation: literature checked ([[Punctuation Evidence]]); owner chose removal, set in the repo notebook and on Kaggle. Owner started the first Kaggle commit run.
+- End of day: the Kaggle run stalled; Kaggle reports processing halted on its side (platform issue, being fixed). No output yet. Owner resumes 2026-11-10: check the run, re-run if needed, then review its output. Repo changes from today not yet committed or pushed.
 - Not run (owner runs it). Next: owner uploads the three raw files as a private Kaggle dataset, imports the notebook from GitHub, runs it, and copies the summary numbers into [[Headlines Dataset]] and [[iSarcasmEval]].
 
 ## 2026-11-09 - Proposal accepted, status corrected
