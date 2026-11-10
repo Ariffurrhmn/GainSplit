@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gold sentiment audit</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f6f7f9; --card: #ffffff; --fg: #1b1f24; --muted: #5d6570; --line: #d5dae0;
+    --accent: #2457c5; --accent-fg: #ffffff;
+    --neg: #b3261e; --neu: #55606e; --pos: #1d7a3a;
+    --warn-bg: #fff4d6; --warn-line: #e0b84a; --err-bg: #fde8e7; --err-line: #e08a85;
+    --ok-bg: #e3f4e8; --ok-line: #7fc093;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14171b; --card: #1d2227; --fg: #e8ebef; --muted: #9aa4af; --line: #343b43;
+      --accent: #6c97f0; --accent-fg: #0d1117;
+      --neg: #ff8a80; --neu: #aab4c0; --pos: #6fd38c;
+      --warn-bg: #3a3116; --warn-line: #7a6624; --err-bg: #3d1f1d; --err-line: #8a3f3a;
+      --ok-bg: #17331f; --ok-line: #2f6b44;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 820px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.15rem; margin: 0 0 12px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; margin-bottom: 14px; }
+  details.card summary { cursor: pointer; font-weight: 600; }
+  details.card p { margin: 10px 0 0; }
+  button, .btn { font: inherit; border: 1px solid var(--line); background: var(--card); color: var(--fg);
+    border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+  button:hover, .btn:hover { border-color: var(--accent); }
+  button:focus-visible, .btn:focus-within, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 600; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .muted { color: var(--muted); font-size: .9rem; }
+  .msg { border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; border: 1px solid; }
+  .msg.err { background: var(--err-bg); border-color: var(--err-line); }
+  .msg.warn { background: var(--warn-bg); border-color: var(--warn-line); }
+  .msg.ok { background: var(--ok-bg); border-color: var(--ok-line); }
+  .hidden { display: none !important; }
+  input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
+  .meta { font: .85rem ui-monospace, Consolas, monospace; color: var(--muted); word-break: break-all; }
+  .progress { height: 10px; background: var(--line); border-radius: 6px; overflow: hidden; margin: 6px 0 14px; }
+  .progress > div { height: 100%; width: 0; background: var(--accent); transition: width .15s; }
+  .topline { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  #count { font-weight: 600; font-variant-numeric: tabular-nums; }
+  #headline { font-size: clamp(1.5rem, 3.4vw, 2.2rem); line-height: 1.35; min-height: 7.5rem;
+    margin: 6px 0 14px; display: flex; align-items: center; overflow-wrap: anywhere; }
+  .choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .choices button { padding: 16px 8px; font-size: 1.1rem; font-weight: 600; border-width: 2px; }
+  .choices kbd { display: block; font: .8rem ui-monospace, Consolas, monospace; font-weight: 400; color: var(--muted); }
+  .choices button[data-g=negative] { color: var(--neg); }
+  .choices button[data-g=neutral]  { color: var(--neu); }
+  .choices button[data-g=positive] { color: var(--pos); }
+  .choices button.sel { background: currentColor; }
+  .choices button.sel span, .choices button.sel kbd { color: var(--card); }
+  .tools { margin-top: 14px; }
+  .badge { display: inline-block; border-radius: 12px; padding: 1px 10px; font-size: .85rem; border: 1px solid var(--warn-line); background: var(--warn-bg); }
+  .unsure-on { border-color: var(--warn-line); background: var(--warn-bg); }
+  .hint { margin-top: 12px; }
+  kbd { font: .85em ui-monospace, Consolas, monospace; border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; }
+  footer { margin-top: 18px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Gold sentiment audit</h1>
+
+  <details class="card" id="guide" open>
+    <summary>Labeling guidelines</summary>
+    <p>Label the sentiment the wording expresses on its surface, as a plain reading — ignore whether the headline is sarcastic or real news. Negative: the words describe something bad, or use negative or hostile language. Positive: the words describe something good, or use praising or happy language. Neutral: factual or no clear sentiment. If you hesitate between neutral and a sentiment, choose the sentiment only if the evaluative wording is clear; otherwise neutral. Mark Unsure (U) when you genuinely cannot decide.</p>
+    <p class="muted">Unsure items still need your best label; the flag is recorded alongside it.</p>
+  </details>
+
+  <div id="message" class="msg hidden" role="status"></div>
+
+  <!-- Start screen -->
+  <section id="start" class="card">
+    <p style="margin-top:0">Load the training file <code>headlines_train.csv</code> (columns <code>id</code>, <code>text</code>). The file stays on this computer; nothing is uploaded.</p>
+    <div class="row">
+      <label class="btn primary" tabindex="-1">Choose headlines_train.csv
+        <input type="file" id="csvFile" accept=".csv,text/csv">
+      </label>
+      <label class="btn">Import saved labels (CSV)
+        <input type="file" id="importFileStart" accept=".csv,text/csv">
+      </label>
+    </div>
+  </section>
+
+  <!-- Resume prompt -->
+  <section id="resume" class="card hidden">
+    <p style="margin-top:0"><strong>Saved progress found</strong> for this sample: <span id="resumeInfo"></span>.</p>
+    <div class="row">
+      <button class="primary" id="resumeYes">Resume</button>
+      <button id="resumeNo">Start over (discard saved labels)</button>
+    </div>
+  </section>
+
+  <!-- Label screen -->
+  <section id="work" class="hidden">
+    <div id="doneBox" class="msg ok hidden">
+      <strong>All labeled.</strong> Download your labels now.
+      <div class="row" style="margin-top:8px"><button class="primary" id="exportDone">Download gold_sentiment_audit.csv</button></div>
+    </div>
+    <div class="card">
+      <div class="topline"><span id="count">0 / 0</span><span id="status" class="muted"></span></div>
+      <div class="progress"><div id="bar"></div></div>
+      <div id="headline" aria-live="polite"></div>
+      <div class="choices" id="choices">
+        <button data-g="negative"><span>Negative</span><kbd>1</kbd></button>
+        <button data-g="neutral"><span>Neutral</span><kbd>2</kbd></button>
+        <button data-g="positive"><span>Positive</span><kbd>3</kbd></button>
+      </div>
+      <div class="row tools">
+        <button id="unsureBtn">Unsure <kbd>U</kbd></button>
+        <button id="backBtn">&larr; Back</button>
+        <button id="fwdBtn">Forward &rarr;</button>
+        <span style="flex:1"></span>
+        <button id="exportBtn">Export CSV</button>
+        <label class="btn">Import CSV<input type="file" id="importFile" accept=".csv,text/csv"></label>
+      </div>
+      <div class="hint muted"><kbd>1</kbd> negative &middot; <kbd>2</kbd> neutral &middot; <kbd>3</kbd> positive &middot; <kbd>U</kbd> unsure &middot; <kbd>Backspace</kbd>/<kbd>&larr;</kbd> back &middot; <kbd>&rarr;</kbd> forward (labeled items) &middot; <kbd>G</kbd> guidelines</div>
+    </div>
+  </section>
+
+  <footer class="meta" id="sampleMeta"></footer>
+</main>
+
+<script>
+"use strict";
+// ---- Constants ----
+const SEED = 20261110;
+const SAMPLE_SIZE = 200;
+const STORE_PREFIX = "gainsplit_gold_audit_v1_";
+const GUIDE_KEY = "gainsplit_gold_audit_guide_seen";
+const EXPORT_NAME = "gold_sentiment_audit.csv";
+const LABELS = ["negative", "neutral", "positive"];
+const KEY_TO_LABEL = { "1": "negative", "2": "neutral", "3": "positive" };
+
+// ---- State ----
+let items = [];      // [{id, text}] in sample order
+let fp = "";         // fingerprint of sampled ids
+let labels = [];     // [{g: string|null, u: 0|1}]
+let cur = 0;
+let pendingResume = null;
+let storageOK = true;
+
+const $ = (id) => document.getElementById(id);
+
+// ---- Storage (all access guarded) ----
+function storeGet(key) { try { return window.localStorage.getItem(key); } catch (e) { storageOK = false; return null; } }
+function storeSet(key, val) { try { window.localStorage.setItem(key, val); return true; } catch (e) { storageOK = false; return false; } }
+function storeDel(key) { try { window.localStorage.removeItem(key); } catch (e) { storageOK = false; } }
+
+// ---- CSV parsing / writing ----
+function parseCSV(text) {
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+  const rows = [];
+  let row = [], field = "", inQ = false, i = 0;
+  const n = text.length;
+  while (i < n) {
+    const c = text[i];
+    if (inQ) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i += 2; continue; }
+        inQ = false; i++; continue;
+      }
+      field += c; i++; continue;
+    }
+    if (c === '"' && field === "") { inQ = true; i++; continue; }
+    if (c === ",") { row.push(field); field = ""; i++; continue; }
+    if (c === "\r" || c === "\n") {
+      if (c === "\r" && text[i + 1] === "\n") i++;
+      row.push(field); field = ""; rows.push(row); row = []; i++; continue;
+    }
+    field += c; i++;
+  }
+  if (field !== "" || row.length) { row.push(field); rows.push(row); }
+  return rows.filter((r) => !(r.length === 1 && r[0] === ""));
+}
+function csvField(v) { return '"' + String(v).replace(/"/g, '""') + '"'; }
+
+// ---- Sampling ----
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function fingerprintOf(ids) {           // FNV-1a 32-bit over "id,id,..." in sample order
+  const s = ids.join(",");
+  let h = 0x811C9DC5;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+  return (h >>> 0).toString(16).padStart(8, "0");
+}
+function drawSample(rows) {
+  const sorted = rows.map((r, k) => ({ r, k, n: Number(r.id) }))
+    .sort((a, b) => (a.n - b.n) || (a.k - b.k))
+    .map((o) => o.r);
+  const rand = mulberry32(SEED);
+  for (let i = sorted.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    const tmp = sorted[i]; sorted[i] = sorted[j]; sorted[j] = tmp;
+  }
+  return sorted.slice(0, SAMPLE_SIZE);
+}
+
+// ---- UI helpers ----
+function show(id, on) { $(id).classList.toggle("hidden", !on); }
+function message(kind, text) {
+  const m = $("message");
+  if (!text) { m.className = "msg hidden"; m.textContent = ""; return; }
+  m.className = "msg " + kind; m.textContent = text;
+}
+function doneCount() { return labels.filter((l) => l.g !== null).length; }
+function firstUnlabeled() { const k = labels.findIndex((l) => l.g === null); return k < 0 ? items.length - 1 : k; }
+
+function render() {
+  const n = items.length, d = doneCount();
+  $("count").textContent = (cur + 1) + " / " + n + "   (" + d + " labeled)";
+  $("bar").style.width = (n ? (d / n) * 100 : 0) + "%";
+  $("headline").textContent = items[cur].text;
+  const l = labels[cur];
+  document.querySelectorAll("#choices button").forEach((b) => b.classList.toggle("sel", b.dataset.g === l.g));
+  $("unsureBtn").classList.toggle("unsure-on", l.u === 1);
+  $("unsureBtn").innerHTML = (l.u === 1 ? "Unsure: ON " : "Unsure ") + "<kbd>U</kbd>";
+  $("status").innerHTML = l.u === 1 ? '<span class="badge">unsure</span>' : "";
+  $("backBtn").disabled = cur === 0;
+  $("fwdBtn").disabled = !(cur < n - 1 && l.g !== null);
+  show("doneBox", d === n);
+  $("sampleMeta").textContent = "seed " + SEED + " | sample size " + n + " | sample fingerprint " + fp +
+    (storageOK ? "" : " | autosave unavailable: export regularly");
+}
+function save() {
+  const ok = storeSet(STORE_PREFIX + fp, JSON.stringify({ labels: labels, cur: cur }));
+  if (!ok) message("warn", "Autosave is unavailable in this browser. Use Export CSV regularly.");
+}
+
+// ---- Flow ----
+function startWork(stored) {
+  labels = items.map(() => ({ g: null, u: 0 }));
+  cur = 0;
+  if (stored) {
+    stored.labels.forEach((l, i) => { if (labels[i]) labels[i] = { g: LABELS.includes(l.g) ? l.g : null, u: l.u ? 1 : 0 }; });
+    cur = firstUnlabeled();
+  }
+  show("start", false); show("resume", false); show("work", true);
+  render(); save();
+}
+function setSample(list) {
+  items = list;
+  fp = fingerprintOf(items.map((x) => x.id));
+}
+function offerResumeOrStart() {
+  let stored = null;
+  const raw = storeGet(STORE_PREFIX + fp);
+  if (raw) {
+    try {
+      const s = JSON.parse(raw);
+      if (s && Array.isArray(s.labels) && s.labels.length === items.length &&
+          s.labels.some((l) => l && (l.g || l.u))) stored = s;
+    } catch (e) { stored = null; }
+  }
+  if (!stored) { startWork(null); return; }
+  pendingResume = stored;
+  const d = stored.labels.filter((l) => l && l.g).length;
+  $("resumeInfo").textContent = d + " of " + items.length + " labeled";
+  show("start", false); show("resume", true); show("work", false);
+  $("sampleMeta").textContent = "seed " + SEED + " | sample size " + items.length + " | sample fingerprint " + fp;
+  $("resumeYes").focus();
+}
+
+function readFile(file, cb) {
+  const fr = new FileReader();
+  fr.onerror = () => message("err", "Could not read the file.");
+  fr.onload = () => cb(String(fr.result));
+  fr.readAsText(file);
+}
+
+$("csvFile").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  e.target.value = "";
+  if (!file) return;
+  message("", "");
+  readFile(file, (text) => {
+    const rows = parseCSV(text);
+    if (!rows.length) { message("err", "The file is empty."); return; }
+    const header = rows[0].map((h) => h.trim().toLowerCase());
+    const iId = header.indexOf("id"), iText = header.indexOf("text");
+    if (iId < 0 || iText < 0) {
+      message("err", "Header must contain the columns 'id' and 'text'. Found: " + (rows[0].join(", ") || "(none)") + ".");
+      return;
+    }
+    const data = [];
+    for (let k = 1; k < rows.length; k++) {
+      const r = rows[k];
+      if (r.length <= Math.max(iId, iText)) { message("err", "Row " + (k + 1) + " has too few columns."); return; }
+      const idStr = r[iId].trim();
+      if (idStr === "" || !isFinite(Number(idStr))) {
+        message("err", "Row " + (k + 1) + ": id '" + idStr + "' is not numeric."); return;
+      }
+      data.push({ id: idStr, text: r[iText] });   // sarcasm label is never read
+    }
+    if (data.length < SAMPLE_SIZE) {
+      message("err", "Only " + data.length + " rows found; at least " + SAMPLE_SIZE + " are needed."); return;
+    }
+    const seen = new Set(data.map((x) => x.id));
+    if (seen.size !== data.length) message("warn", "Duplicate ids found in the file (" + (data.length - seen.size) + "). Sampling continues.");
+    setSample(drawSample(data));
+    offerResumeOrStart();
+  });
+});
+
+$("resumeYes").addEventListener("click", () => startWork(pendingResume));
+$("resumeNo").addEventListener("click", () => { storeDel(STORE_PREFIX + fp); startWork(null); });
+
+function label(g) {
+  labels[cur].g = g;
+  if (cur < items.length - 1) cur++;
+  render(); save();
+}
+function toggleUnsure() { labels[cur].u = labels[cur].u ? 0 : 1; render(); save(); }
+function back() { if (cur > 0) { cur--; render(); save(); } }
+function forward() { if (cur < items.length - 1 && labels[cur].g !== null) { cur++; render(); save(); } }
+
+document.querySelectorAll("#choices button").forEach((b) => b.addEventListener("click", () => label(b.dataset.g)));
+$("unsureBtn").addEventListener("click", toggleUnsure);
+$("backBtn").addEventListener("click", back);
+$("fwdBtn").addEventListener("click", forward);
+
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const k = e.key;
+  if ((k === "g" || k === "G") && !$("guide").contains(document.activeElement) ) { $("guide").open = !$("guide").open; return; }
+  if ($("work").classList.contains("hidden")) return;
+  if (k in KEY_TO_LABEL) { e.preventDefault(); label(KEY_TO_LABEL[k]); }
+  else if (k === "u" || k === "U") { e.preventDefault(); toggleUnsure(); }
+  else if (k === "Backspace" || k === "ArrowLeft") { e.preventDefault(); back(); }
+  else if (k === "ArrowRight") { e.preventDefault(); forward(); }
+});
+
+// ---- Export / import ----
+function buildCSV() {
+  const lines = ["order,id,text,gold_sentiment,unsure,seed,sample_fingerprint"];
+  items.forEach((it, i) => {
+    lines.push([i + 1, csvField(it.id), csvField(it.text), labels[i].g || "", labels[i].u, SEED, fp].join(","));
+  });
+  return lines.join("\r\n") + "\r\n";
+}
+function doExport() {
+  const blob = new Blob([buildCSV()], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = EXPORT_NAME;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  const d = doneCount();
+  message(d === items.length ? "ok" : "warn",
+    d === items.length ? "Exported all " + d + " labels." : "Exported partial file: " + d + " of " + items.length + " labeled.");
+}
+$("exportBtn").addEventListener("click", doExport);
+$("exportDone").addEventListener("click", doExport);
+
+function handleImport(e) {
+  const file = e.target.files[0];
+  e.target.value = "";
+  if (!file) return;
+  readFile(file, (text) => {
+    const rows = parseCSV(text);
+    const need = ["order", "id", "text", "gold_sentiment", "unsure", "seed", "sample_fingerprint"];
+    const header = rows.length ? rows[0].map((h) => h.trim().toLowerCase()) : [];
+    const idx = {};
+    for (const c of need) {
+      idx[c] = header.indexOf(c);
+      if (idx[c] < 0) { message("err", "Import failed: missing column '" + c + "'."); return; }
+    }
+    const recs = rows.slice(1).filter((r) => r.length >= need.length)
+      .map((r) => ({ order: Number(r[idx.order]), id: r[idx.id], text: r[idx.text], g: r[idx.gold_sentiment].trim(),
+        u: r[idx.unsure].trim() === "1" ? 1 : 0, seed: r[idx.seed].trim(), fp: r[idx.sample_fingerprint].trim() }))
+      .sort((a, b) => a.order - b.order);
+    if (!recs.length) { message("err", "Import failed: no data rows."); return; }
+    if (recs.some((r) => r.seed !== String(SEED))) { message("err", "Import failed: seed does not match " + SEED + "."); return; }
+    const statedFp = recs[0].fp;
+    if (recs.some((r) => r.fp !== statedFp)) { message("err", "Import failed: inconsistent fingerprints in file."); return; }
+    if (recs.length !== SAMPLE_SIZE) { message("err", "Import failed: expected " + SAMPLE_SIZE + " rows, found " + recs.length + "."); return; }
+    if (recs.some((r) => r.g !== "" && !LABELS.includes(r.g))) { message("err", "Import failed: unknown gold_sentiment value."); return; }
+    const fileFp = fingerprintOf(recs.map((r) => r.id));
+    if (fileFp !== statedFp) { message("err", "Import failed: ids do not match the stated fingerprint (" + statedFp + ")."); return; }
+    if (items.length && fp !== statedFp) {
+      message("err", "Import failed: fingerprint " + statedFp + " does not match the loaded sample (" + fp + ")."); return;
+    }
+    if (!items.length) setSample(recs.map((r) => ({ id: r.id, text: r.text })));
+    labels = recs.map((r) => ({ g: r.g || null, u: r.u }));
+    cur = firstUnlabeled();
+    show("start", false); show("resume", false); show("work", true);
+    message("ok", "Imported " + labels.filter((l) => l.g).length + " labels (fingerprint " + fp + ").");
+    render(); save();
+  });
+}
+$("importFile").addEventListener("change", handleImport);
+$("importFileStart").addEventListener("change", handleImport);
+
+// ---- Guidelines: open on first load, remember once seen ----
+(function () {
+  const seen = storeGet(GUIDE_KEY);
+  $("guide").open = !seen;
+  $("guide").addEventListener("toggle", () => { if (!$("guide").open) storeSet(GUIDE_KEY, "1"); });
+})();
+</script>
+</body>
+</html>

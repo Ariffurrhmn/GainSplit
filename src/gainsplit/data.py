@@ -70,6 +70,35 @@ def load_splits(data_dir: Path, budget: int, seed: int) -> Splits:
     if in_l.sum() != len(ids):
         raise ValueError("budgets.json lists ids that are not in headlines_train.csv")
     labeled = train[in_l].reset_index(drop=True)
-    unlabeled = train[~in_l].reset_index(drop=True)
+    # U keeps no sarcasm label at all, so no later code can read one by mistake.
+    unlabeled = train[~in_l].drop(columns=["label"]).reset_index(drop=True)
     return Splits(labeled, unlabeled, read("headlines_dev.csv"), read("headlines_test.csv"),
                   read("isarcasm_test.csv"))
+
+
+# Class order is fixed: the integer index of a class is its position in these lists.
+SENT_CLASSES = ["negative", "neutral", "positive"]
+EMO_CLASSES = ["joy", "sadness", "anger", "fear", "neutral_other"]
+
+
+def load_helper_labels(data_dir: Path, *frames: pd.DataFrame) -> list[pd.DataFrame]:
+    """Add helper teacher labels (integer class indices) to each frame, matched by id.
+
+    Adds columns `sent` (0-2) and `emo` (0-4). These are the hard labels from the
+    pretrained sentiment/emotion models, available for every headline, so they are
+    legal training targets for U as well as L.
+    """
+    h = pd.read_csv(Path(data_dir) / "helper_labels.csv", keep_default_na=False)
+    h = h.set_index("id")
+    sent = h["sent_label"].map({c: i for i, c in enumerate(SENT_CLASSES)})
+    emo = h["emo_label"].map({c: i for i, c in enumerate(EMO_CLASSES)})
+    out = []
+    for df in frames:
+        df = df.copy()
+        df["sent"] = df["id"].map(sent)
+        df["emo"] = df["id"].map(emo)
+        if df["sent"].isna().any() or df["emo"].isna().any():
+            raise ValueError("helper_labels.csv is missing ids or has an unknown class name")
+        df["sent"], df["emo"] = df["sent"].astype(int), df["emo"].astype(int)
+        out.append(df)
+    return out

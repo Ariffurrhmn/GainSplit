@@ -13,7 +13,7 @@ ARMS = {
     "A4": {"gan": True,  "helpers": False},  # GAN-BERT
     "A5": {"gan": True,  "helpers": True},   # GAN-BERT + the same helper heads as A3
 }
-IMPLEMENTED_ARMS = {"A1"}  # grows as A3, A4, A5 are added
+IMPLEMENTED_ARMS = {"A1", "A3", "A4", "A5"}
 
 
 @dataclass

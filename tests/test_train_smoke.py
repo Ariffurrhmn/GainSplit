@@ -71,9 +71,53 @@ def test_same_seed_gives_same_result(fake_data, tiny_bert, tmp_path):
     assert (pa["p_sarcastic"] - pb["p_sarcastic"]).abs().max() < 1e-4
 
 
-def test_unwritten_arm_fails_clearly(fake_data, tiny_bert, tmp_path):
+def test_unwritten_arm_fails_clearly(fake_data, tiny_bert, tmp_path, monkeypatch):
+    monkeypatch.setattr("gainsplit.train.IMPLEMENTED_ARMS", {"A1"})
     with pytest.raises(NotImplementedError):
         train_run(_cfg(tiny_bert, arm="A4"), fake_data, tmp_path / "r")
+
+
+# ---- A3 / A4 / A5 -----------------------------------------------------------------
+LOSS_KEYS = {
+    "A3": {"loss_sarc", "loss_sent", "loss_emo", "loss"},
+    "A4": {"loss_sarc", "loss_unsup_real", "loss_unsup_fake", "p_fake_real", "p_fake_fake",
+           "loss_g_unsup", "loss_g_fm", "loss_d", "loss_g", "loss"},
+}
+LOSS_KEYS["A5"] = LOSS_KEYS["A4"] | {"loss_sent", "loss_emo"}
+
+
+@pytest.mark.parametrize("arm", ["A3", "A4", "A5"])
+def test_new_arms_run_and_log_training_curve(arm, fake_data, tiny_bert, tmp_path):
+    cfg = _cfg(tiny_bert, arm=arm, helper_weight=0.3, min_steps=7, eval_test=True)
+    rec = train_run(cfg, fake_data, tmp_path / "r")
+    run_dir = tmp_path / "r" / "runs" / f"{arm}_p10_s0"
+    assert rec["steps"] == 7 and rec["n_unlabeled"] == 180
+    assert (run_dir / "preds_dev.csv").exists() and (run_dir / "result.json").exists()
+    log = rec["train_log"]
+    assert [pt["step"] for pt in log] == [7]  # 7 steps: one (partial) window
+    assert set(log[0]) == LOSS_KEYS[arm] | {"step"}
+
+
+@pytest.mark.parametrize("arm", ["A3", "A4", "A5"])
+def test_new_arms_same_seed_gives_same_result(arm, fake_data, tiny_bert, tmp_path):
+    import pandas as pd
+    for name in ("a", "b"):
+        train_run(_cfg(tiny_bert, arm=arm, helper_weight=0.3), fake_data, tmp_path / name)
+    pa, pb = (pd.read_csv(tmp_path / n / "runs" / f"{arm}_p10_s0" / "preds_dev.csv") for n in ("a", "b"))
+    assert (pa["p_sarcastic"] - pb["p_sarcastic"]).abs().max() < 1e-4
+
+
+@pytest.mark.parametrize("arm", ["A3", "A5"])
+def test_helper_arms_need_a_positive_helper_weight(arm, fake_data, tiny_bert, tmp_path):
+    with pytest.raises(ValueError):
+        train_run(_cfg(tiny_bert, arm=arm), fake_data, tmp_path / "r")  # helper_weight defaults to 0
+
+
+def test_u_arms_fall_back_to_l_only_when_u_is_empty(fake_data, tiny_bert, tmp_path):
+    # budget 100: every headline is labeled, so U is empty and the run uses L only
+    rec = train_run(_cfg(tiny_bert, arm="A5", budget=100, helper_weight=0.3, min_steps=3),
+                    fake_data, tmp_path / "r")
+    assert rec["n_unlabeled"] == 0 and rec["steps"] >= 3
 
 
 def test_runner_runs_a_list_and_collects_results(fake_data, tiny_bert, tmp_path):

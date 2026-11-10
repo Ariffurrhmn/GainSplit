@@ -18,7 +18,9 @@ Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]]
 - A1 code written on the owner's request: `src/gainsplit/`, `tests/`, `experiments/02_train.ipynb` ([[Experiment Plan]]). Implementation choices in [[Decisions]]. Data tests pass locally on made-up data; the training smoke tests run on Kaggle (no torch locally). Not committed yet.
 - Owner pushed the code (commit 29e4220) and ran `lr_tuning` interactively on GPU T4 x2: 9/9 runs done, 1.3 min each. Dev macro-F1 0.855-0.875; best mean lr 5e-5 (0.8673), confirmed by the owner and set as the code default ([[Decisions]]). Notebook's expected-score line corrected (0.85-0.88 at 10%, not 0.9).
 - Owner placed `results_lr_tuning.zip` and its unpacked files in `results/lr_tuning/` (all 28 files match the zip). The 9 `.log` files are git-ignored by the `*.log` rule; they stay inside the zip, which is tracked.
-- Roadmap to submission written into [[Experiment Plan]]. All changes committed and pushed.
+- Roadmap to submission written into [[Experiment Plan]]. All changes committed and pushed (96a2414).
+- Owner delegated decisions ([[Repo Rules]] rule 7). Taken and logged in [[Decisions]]: 5 seeds in Pass 1, A7 spec, A3/A4/A5 implementation, `session2` plan, gold-audit protocol. Two code sessions wrote A3/A4/A5 + plans and `experiments/gold_audit.html`; both reviewed (one fix: feature-matching loss averaged, [[Decisions]]). Local pandas tests pass (9); torch smoke tests run on Kaggle. Committed and pushed.
+- Next: owner runs `02_train.ipynb` with `PLAN = "session2"` (12 runs, dev only) and labels the 200 audit headlines in `experiments/gold_audit.html`; then set w and run Pass 1.
 - Next: write A3 (helper heads) and the helper-weight tuning plan.
 
 ## 2026-11-09 - Preprocessing notebook

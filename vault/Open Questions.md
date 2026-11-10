@@ -11,7 +11,7 @@ Hub: [[00 - Project Context]]. Risks: [[Risks]].
 - [x] Get full text of [[Chen 2022]]. Done 2026-11-08: lexicon-BoW soft target, LSTM, supervised only.
 - [x] Get full text of [[Zihan 2026]]. Done 2026-11-09: GAN-BERT numbers copied from Lora 2023; fractions 3/30/40/50/100%; no MTL arm; no FGM-off ablation.
 - [x] Supervisor meant the seed paper ([[Seed Paper - Irfan 2025]]) for the unavailable setup (owner, 2026-11-09). Zihan 2026 authorship still unknown.
-- [ ] Owner: approve the proposed A7 spec, Bengali arm out of scope, optional VAT arm ([[Decisions]]).
+- [x] A7 spec approved, Bengali arm out of scope, VAT optional (DELEGATED 2026-11-10, [[Decisions]]).
 - [ ] Confirm the QPAIN 2027 deadline against the live site ([[Audit - Venues]]). Planning date: 10 Dec 2026 (owner's choice; repo says 20 Dec). Page limit 6 (owner); format undecided.
 
 ## Instructor status (2026-11-09)

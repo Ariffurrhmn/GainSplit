@@ -41,6 +41,19 @@ def fake_data(tmp_path) -> Path:
                               "100": sorted(int(i) for i in order)}
     (d / "budgets.json").write_text(json.dumps(budgets))
 
+    # teacher labels for every headline of every split (same columns as the real file)
+    rows = pd.concat([train.assign(split="train"), dev.assign(split="dev"), test.assign(split="test")])[["id", "split"]]
+    sent_names, emo_names = ["negative", "neutral", "positive"], ["joy", "sadness", "anger", "fear", "neutral_other"]
+    sent_p, emo_p = rng.dirichlet(np.ones(3), len(rows)), rng.dirichlet(np.ones(5), len(rows))
+    helper = rows.reset_index(drop=True)
+    helper["sent_label"] = np.array(sent_names)[sent_p.argmax(1)]
+    for i, c in enumerate(sent_names):
+        helper[f"sent_p_{c}"] = sent_p[:, i]
+    helper["emo_label"] = np.array(emo_names)[emo_p.argmax(1)]
+    for i, c in enumerate(emo_names):
+        helper[f"emo_p_{c}"] = emo_p[:, i]
+    helper.to_csv(d / "helper_labels.csv", index=False)
+
     outputs = {p.name: {"bytes": p.stat().st_size, "sha256": _sha(p)} for p in sorted(d.iterdir())}
     (d / "manifest.json").write_text(json.dumps({"outputs": outputs}))
     return d
