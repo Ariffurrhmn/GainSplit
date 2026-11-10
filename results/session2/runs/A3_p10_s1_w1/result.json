@@ -1,0 +1,108 @@
+{
+  "run_id": "A3_p10_s1_w1",
+  "config": {
+    "arm": "A3",
+    "budget": 10,
+    "seed": 1,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 1.0,
+    "fp16": true,
+    "eval_test": false,
+    "tag": "w1"
+  },
+  "n_labeled": 2280,
+  "n_unlabeled": 20520,
+  "steps": 720,
+  "minutes": 2.0,
+  "scores": {
+    "dev": {
+      "accuracy": 0.8571929824561404,
+      "macro_f1": 0.8557092884556609,
+      "f1_sarcastic": 0.8410777040218664,
+      "roc_auc": 0.9390625578496588,
+      "n": 2850
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.48043,
+      "loss_sent": 0.82088,
+      "loss_emo": 0.73153,
+      "loss": 2.03284
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.18913,
+      "loss_sent": 0.44511,
+      "loss_emo": 0.39477,
+      "loss": 1.02901
+    },
+    {
+      "step": 300,
+      "loss_sarc": 0.04983,
+      "loss_sent": 0.34657,
+      "loss_emo": 0.29411,
+      "loss": 0.69052
+    },
+    {
+      "step": 400,
+      "loss_sarc": 0.01671,
+      "loss_sent": 0.29488,
+      "loss_emo": 0.24568,
+      "loss": 0.55727
+    },
+    {
+      "step": 500,
+      "loss_sarc": 0.00871,
+      "loss_sent": 0.26717,
+      "loss_emo": 0.20512,
+      "loss": 0.481
+    },
+    {
+      "step": 600,
+      "loss_sarc": 0.00738,
+      "loss_sent": 0.26066,
+      "loss_emo": 0.1816,
+      "loss": 0.44965
+    },
+    {
+      "step": 700,
+      "loss_sarc": 0.00635,
+      "loss_sent": 0.20322,
+      "loss_emo": 0.16891,
+      "loss": 0.37848
+    },
+    {
+      "step": 720,
+      "loss_sarc": 0.00719,
+      "loss_sent": 0.17371,
+      "loss_emo": 0.12113,
+      "loss": 0.30202
+    }
+  ],
+  "commit": "770f690aaaaab5bbc03a27b1cbcd033dfac7a44c",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

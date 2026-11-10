@@ -100,8 +100,8 @@ bert-base-uncased; 80/20 split; 70% of train labelled, 30% unlabelled; sentiment
 ## Roadmap to submission (2026-11-10, planning deadline 10 Dec)
 Owner runs everything on Kaggle; code is written on request. Steps in the same block can run side by side.
 1. **Code, one go:** A3 (helper heads on L + U), A4 (GAN-BERT), A5 (A4 + A3 heads), plus plans `w_tuning` and `gan_pilot`.
-2. **Kaggle session 2 (~30-40 min):** `w_tuning` (A3, p = 10%, w in {0.1, 0.3, 1.0}, seeds 0-2, dev only) and `gan_pilot` (A4, p = 10%, seeds 0-2, dev only: checks the GAN trains). Owner picks w.
-3. **Kaggle session 3 (~1.5-2.5 h):** Pass 1 with test scored: A1 at 1/10/100%, A3/A4/A5 at 1/10%, **5 seeds** (45 runs; DELEGATED, [[Decisions]]).
+2. **DONE 2026-11-10** (12/12 runs, ~2 min each; w = 0.3, GAN pilot passed, [[Decisions]]). **Kaggle session 2 (~30-40 min):** `w_tuning` (A3, p = 10%, w in {0.1, 0.3, 1.0}, seeds 0-2, dev only) and `gan_pilot` (A4, p = 10%, seeds 0-2, dev only: checks the GAN trains). Owner picks w.
+3. **NEXT, ready** (`PLAN = "pass1"`, w = 0.3 set; measured timings give ~1.5-2 GPU-h, ~1 h on two GPUs). **Kaggle session 3:** Pass 1 with test scored: A1 at 1/10/100%, A3/A4/A5 at 1/10%, **5 seeds** (45 runs; DELEGATED, [[Decisions]]).
 4. **Code:** analysis notebook: mean +- std tables, paired bootstrap per contrast, F1-vs-budget figure.
 5. **Pass 2:** A2, A8, A6, A0, A7 (A7 spec approved, DELEGATED 2026-11-10), budgets 5/30 for the 2x2 arms.
 6. **Pass 3:** RQ2 label-quality rows; RQ3 transfer (iSarcasmEval predictions already saved per run), helper-label vs sarcasm-label check, masking check.

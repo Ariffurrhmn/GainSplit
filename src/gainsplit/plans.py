@@ -15,7 +15,7 @@ def lr_tuning() -> list[RunConfig]:
 
 W_GRID = (0.1, 0.3, 1.0)
 PASS1_SEEDS = (0, 1, 2, 3, 4)
-PASS1_HELPER_WEIGHT = None  # set to the winning w from w_tuning before building pass1
+PASS1_HELPER_WEIGHT = 0.3  # winner of w_tuning (session2, dev), frozen 2026-11-10
 
 
 def w_tuning() -> list[RunConfig]:

@@ -21,7 +21,8 @@ Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]]
 - Roadmap to submission written into [[Experiment Plan]]. All changes committed and pushed (96a2414).
 - Owner delegated decisions ([[Repo Rules]] rule 7). Taken and logged in [[Decisions]]: 5 seeds in Pass 1, A7 spec, A3/A4/A5 implementation, `session2` plan, gold-audit protocol. Two code sessions wrote A3/A4/A5 + plans and `experiments/gold_audit.html`; both reviewed (one fix: feature-matching loss averaged, [[Decisions]]). Local pandas tests pass (9); torch smoke tests run on Kaggle. Committed and pushed.
 - Gold audit: owner labels alone (extra-annotator idea dropped, [[Decisions]], [[Risks]] item 12). App fix: Forward now looks disabled until the current headline has a label (it only steps over labeled items; choosing a label moves on).
-- Next: owner runs `02_train.ipynb` with `PLAN = "session2"` (12 runs, dev only) and labels the 200 audit headlines in `experiments/gold_audit.html`; then set w and run Pass 1.
+- `session2` ran (owner, commit 770f690): 12/12 runs, about 2 min each; results in `results/session2/`. w = 0.3 chosen (best on every seed); GAN pilot healthy (dev macro-F1 0.866 vs A1 0.867; p_fake 0.006 on real, ~0.6 on fake). Both DELEGATED, reasoning in [[Decisions]]. `PASS1_HELPER_WEIGHT = 0.3`, notebook default `PLAN = "pass1"`, summary now grouped by budget and shows test scores.
+- Next: owner runs `pass1` (45 runs, test scored, Save & Commit, ~1 h) and keeps labeling the gold audit.
 - Next: write A3 (helper heads) and the helper-weight tuning plan.
 
 ## 2026-11-09 - Preprocessing notebook
