@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 
+import numpy as np
 import pandas as pd
 
 MANIFEST = "manifest.json"
@@ -102,3 +103,20 @@ def load_helper_labels(data_dir: Path, *frames: pd.DataFrame) -> list[pd.DataFra
         df["sent"], df["emo"] = df["sent"].astype(int), df["emo"].astype(int)
         out.append(df)
     return out
+
+
+def permute_helper_labels(labeled: pd.DataFrame, unlabeled: pd.DataFrame, seed: int):
+    """A8 control: shuffle the helper labels across all L + U headlines.
+
+    Sentiment and emotion get separate random permutations. Class proportions stay
+    the same, but each label no longer belongs to its own headline. The permutation
+    depends only on `seed`, so a rerun gives the same shuffle.
+    """
+    rng = np.random.default_rng(seed + 2000)  # its own generator: does not touch torch's random state
+    n_l = len(labeled)
+    out = [labeled.copy(), unlabeled.copy()]
+    for col in ("sent", "emo"):
+        pooled = np.concatenate([labeled[col].to_numpy(), unlabeled[col].to_numpy()])
+        pooled = pooled[rng.permutation(len(pooled))]
+        out[0][col], out[1][col] = pooled[:n_l], pooled[n_l:]
+    return out[0], out[1]

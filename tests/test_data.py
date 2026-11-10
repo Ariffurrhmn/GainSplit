@@ -64,3 +64,69 @@ def test_step_rule_is_the_same_for_every_arm():
 def test_unknown_arm_is_rejected():
     with pytest.raises(ValueError):
         RunConfig("A9", 10, 0)
+
+
+def test_fixture_has_the_budgets_the_plans_use(fake_data):
+    # budgets 1/5/10/30/100 for seeds 0-4, nested inside each other (as in the real budgets.json)
+    import json
+    b = json.loads((fake_data / "budgets.json").read_text())
+    assert sorted(b) == ["0", "1", "2", "3", "4"]
+    for seed in b:
+        assert sorted(b[seed], key=int) == ["1", "5", "10", "30", "100"]
+        sets = [set(b[seed][k]) for k in ("1", "5", "10", "30", "100")]
+        assert all(a < c for a, c in zip(sets, sets[1:]))
+
+
+def _helper_frames(n_l=20, n_u=80):
+    # sentiment and emotion start equal (id % 3), so one shared permutation would keep them equal
+    ids = list(range(n_l + n_u))
+    df = pd.DataFrame({"id": ids, "text": ["x"] * len(ids), "sent": [i % 3 for i in ids], "emo": [i % 3 for i in ids]})
+    return df.iloc[:n_l].reset_index(drop=True), df.iloc[n_l:].reset_index(drop=True)
+
+
+def test_permute_helper_labels_keeps_proportions_but_breaks_the_link():
+    from gainsplit.data import permute_helper_labels
+    lab, unl = _helper_frames()
+    plab, punl = permute_helper_labels(lab, unl, seed=0)
+    for col in ("sent", "emo"):
+        before = list(lab[col]) + list(unl[col])
+        after = list(plab[col]) + list(punl[col])
+        assert sorted(before) == sorted(after)   # same class counts overall
+        assert before != after                   # but reordered
+    assert len(plab) == len(lab) and len(punl) == len(unl)
+    assert (plab["id"] == lab["id"]).all() and (punl["text"] == unl["text"]).all()  # headlines untouched
+
+
+def test_permute_helper_labels_is_seeded_and_independent_per_head():
+    from gainsplit.data import permute_helper_labels
+    lab, unl = _helper_frames()
+    a = permute_helper_labels(lab, unl, 0)
+    b = permute_helper_labels(lab, unl, 0)
+    c = permute_helper_labels(lab, unl, 1)
+    assert a[0].equals(b[0]) and a[1].equals(b[1])
+    assert not a[0].equals(c[0])
+    assert (a[0]["sent"] != a[0]["emo"]).any() or (a[1]["sent"] != a[1]["emo"]).any()
+
+
+def test_permute_helper_labels_works_when_u_is_empty():
+    from gainsplit.data import permute_helper_labels
+    lab, unl = _helper_frames(n_l=30, n_u=0)
+    plab, punl = permute_helper_labels(lab, unl, 0)
+    assert len(punl) == 0 and sorted(plab["sent"]) == sorted(lab["sent"])
+
+
+def test_fgm_epsilon_rules():
+    with pytest.raises(ValueError):
+        RunConfig("A7", 10, 0)                       # A7 needs epsilon > 0
+    with pytest.raises(ValueError):
+        RunConfig("A7", 10, 0, fgm_epsilon=-1.0)
+    with pytest.raises(ValueError):
+        RunConfig("A3", 10, 0, fgm_epsilon=1.0)      # other arms must not carry one
+    assert RunConfig("A7", 10, 0, fgm_epsilon=1.0, tag="eps1").run_id == "A7_p10_s0_eps1"
+
+
+def test_step_rule_is_the_same_for_the_new_arms():
+    for arm in ("A2", "A6", "A8"):
+        assert RunConfig(arm, 10, 0).steps(2280) == 720
+    assert RunConfig("A7", 10, 0, fgm_epsilon=1.0).steps(228) == 200
+    assert RunConfig("A0", 30, 0).steps(6840) == 2140

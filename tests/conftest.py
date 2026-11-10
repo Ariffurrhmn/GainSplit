@@ -35,10 +35,11 @@ def fake_data(tmp_path) -> Path:
         df.to_csv(d / name, index=False)
 
     budgets = {}
-    for seed in (0, 1):
+    # same layout as the real file: 5 seeds x 5 budgets, nested (first 4 of the order, first 10, ...)
+    sizes = {"1": 4, "5": 10, "10": 20, "30": 60, "100": 200}
+    for seed in range(5):
         order = np.random.default_rng(seed).permutation(train["id"].to_numpy())
-        budgets[str(seed)] = {"10": sorted(int(i) for i in order[:20]),
-                              "100": sorted(int(i) for i in order)}
+        budgets[str(seed)] = {b: sorted(int(i) for i in order[:n]) for b, n in sizes.items()}
     (d / "budgets.json").write_text(json.dumps(budgets))
 
     # teacher labels for every headline of every split (same columns as the real file)

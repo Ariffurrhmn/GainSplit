@@ -6,14 +6,25 @@ so any difference in results comes from those switches (see vault/Decisions.md).
 from dataclasses import dataclass, asdict
 import math
 
-# Pass 1 is a 2x2: GAN off/on crossed with helper heads off/on.
+# Pass 1 is a 2x2: GAN off/on crossed with helper heads off/on. Pass 2 adds controls.
+# `gan` and `helpers` are always present; the other keys are optional extra switches:
+#   l_only  helper losses use L rows only (no U batch)
+#   shuffle helper labels are permuted at random across L + U
+#   pseudo  one round of self-training (the A1 teacher labels U)
+#   fgm     adversarial step on the word embeddings
+#   tfidf   no neural network at all (scikit-learn, CPU)
 ARMS = {
-    "A1": {"gan": False, "helpers": False},  # plain BERT on L
-    "A3": {"gan": False, "helpers": True},   # BERT + sentiment/emotion heads on L + U
-    "A4": {"gan": True,  "helpers": False},  # GAN-BERT
-    "A5": {"gan": True,  "helpers": True},   # GAN-BERT + the same helper heads as A3
+    "A0": {"gan": False, "helpers": False, "tfidf": True},    # TF-IDF + logistic regression (floor)
+    "A1": {"gan": False, "helpers": False},                   # plain BERT on L
+    "A2": {"gan": False, "helpers": True, "l_only": True},    # A3 with the helper losses on L only
+    "A3": {"gan": False, "helpers": True},                    # BERT + sentiment/emotion heads on L + U
+    "A4": {"gan": True,  "helpers": False},                   # GAN-BERT
+    "A5": {"gan": True,  "helpers": True},                    # GAN-BERT + the same helper heads as A3
+    "A6": {"gan": False, "helpers": False, "pseudo": True},   # self-training, one round
+    "A7": {"gan": False, "helpers": False, "fgm": True},      # BERT + FGM on L
+    "A8": {"gan": False, "helpers": True, "shuffle": True},   # A3 with shuffled helper labels
 }
-IMPLEMENTED_ARMS = {"A1", "A3", "A4", "A5"}
+IMPLEMENTED_ARMS = set(ARMS)
 
 
 @dataclass
@@ -32,11 +43,16 @@ class RunConfig:
     helper_weight: float = 0.0  # w for the helper losses; set once tuned (A3/A5 only)
     fp16: bool = True           # half precision on GPU: faster, same results in practice
     eval_test: bool = False     # False while tuning: only dev is scored, test stays untouched
+    fgm_epsilon: float = 0.0    # size of the FGM perturbation; must be > 0 for A7, 0 for every other arm
     tag: str = ""               # extra label for tuning runs, e.g. "lr3e-05"
 
     def __post_init__(self):
         if self.arm not in ARMS:
             raise ValueError(f"unknown arm {self.arm!r}; choose from {sorted(ARMS)}")
+        if self.arm == "A7" and not self.fgm_epsilon > 0:
+            raise ValueError(f"A7 needs fgm_epsilon > 0 (got {self.fgm_epsilon})")
+        if self.arm != "A7" and self.fgm_epsilon != 0:
+            raise ValueError(f"fgm_epsilon is only used by A7 (got {self.fgm_epsilon} for {self.arm})")
 
     @property
     def run_id(self) -> str:

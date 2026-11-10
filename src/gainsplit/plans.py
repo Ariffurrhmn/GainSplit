@@ -48,5 +48,48 @@ def pass1() -> list[RunConfig]:
     return runs
 
 
+FGM_GRID = (0.5, 1.0, 2.0)
+PASS2_SEEDS = PASS1_SEEDS
+PASS2_FGM_EPSILON = None  # winner of fgm_tuning (dev); set it before building pass2b
+
+
+def fgm_tuning() -> list[RunConfig]:
+    """A7 at 10% labels, three epsilons x three seeds, dev only (9 runs).
+    Pick the epsilon with the best mean dev macro-F1 (tie within ~1 std: the smaller epsilon)."""
+    return [RunConfig("A7", 10, seed, fgm_epsilon=eps, eval_test=False, tag=f"eps{eps:g}")
+            for eps in FGM_GRID for seed in TUNING_SEEDS]
+
+
+def _runs(arms, budgets, seeds=PASS2_SEEDS) -> list[RunConfig]:
+    """Test-scored runs; helper arms get the frozen helper weight."""
+    return [RunConfig(arm, b, s, helper_weight=PASS1_HELPER_WEIGHT if ARMS[arm]["helpers"] else 0.0, eval_test=True)
+            for b in budgets for arm in arms for s in seeds]
+
+
+def pass2a() -> list[RunConfig]:
+    """Everything in Pass 2 that does not need the chosen epsilon (104 runs, 79 on GPU, 25 A0 on CPU).
+
+    Longest runs first, so the two GPUs stay busy to the end: 30% budget (A4/A5 slowest),
+    then the 10% controls, then 5%, then 1%, then fgm_tuning. A0 comes last; the runner
+    runs it on the CPU alongside the GPU runs, so it never holds a GPU slot."""
+    if PASS1_HELPER_WEIGHT is None:
+        raise ValueError("set PASS1_HELPER_WEIGHT in plans.py before building pass2a")
+    return (_runs(("A4", "A5", "A3", "A1"), (30,))            # 20 runs: the 2x2 at 30%
+            + _runs(("A6", "A8", "A2"), (10,))                # 15 runs: controls at 10%
+            + _runs(("A4", "A5", "A3", "A1"), (5,))           # 20 runs: the 2x2 at 5%
+            + _runs(("A6", "A8", "A2"), (1,))                 # 15 runs: controls at 1%
+            + fgm_tuning()                                    # 9 runs, dev only
+            + _runs(("A0",), (1, 5, 10, 30, 100)))            # 25 runs, CPU
+
+
+def pass2b() -> list[RunConfig]:
+    """A7 at 1% and 10%, seeds 0-4, test scored (10 runs), with the epsilon chosen by fgm_tuning."""
+    if PASS2_FGM_EPSILON is None:
+        raise ValueError("set PASS2_FGM_EPSILON in plans.py (the winning epsilon from fgm_tuning) before building pass2b")
+    return [RunConfig("A7", b, s, fgm_epsilon=PASS2_FGM_EPSILON, eval_test=True)
+            for b in (1, 10) for s in PASS2_SEEDS]
+
+
 PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
-         "session2": session2, "pass1": pass1}
+         "session2": session2, "pass1": pass1, "fgm_tuning": fgm_tuning,
+         "pass2a": pass2a, "pass2b": pass2b}
