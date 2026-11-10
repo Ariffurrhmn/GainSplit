@@ -33,6 +33,7 @@
   button, .btn { font: inherit; border: 1px solid var(--line); background: var(--card); color: var(--fg);
     border-radius: 8px; padding: 8px 14px; cursor: pointer; }
   button:hover, .btn:hover { border-color: var(--accent); }
+  button:disabled, button:disabled:hover { opacity: 0.4; cursor: not-allowed; border-color: var(--line); }
   button:focus-visible, .btn:focus-within, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
   button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 600; }
   .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
@@ -123,7 +124,7 @@
         <button id="exportBtn">Export CSV</button>
         <label class="btn">Import CSV<input type="file" id="importFile" accept=".csv,text/csv"></label>
       </div>
-      <div class="hint muted"><kbd>1</kbd> negative &middot; <kbd>2</kbd> neutral &middot; <kbd>3</kbd> positive &middot; <kbd>U</kbd> unsure &middot; <kbd>Backspace</kbd>/<kbd>&larr;</kbd> back &middot; <kbd>&rarr;</kbd> forward (labeled items) &middot; <kbd>G</kbd> guidelines</div>
+      <div class="hint muted"><kbd>1</kbd> negative &middot; <kbd>2</kbd> neutral &middot; <kbd>3</kbd> positive &middot; <kbd>U</kbd> unsure &middot; <kbd>Backspace</kbd>/<kbd>&larr;</kbd> back &middot; <kbd>&rarr;</kbd> forward (only over items already labeled; choosing a label moves on) &middot; <kbd>G</kbd> guidelines</div>
     </div>
   </section>
 
