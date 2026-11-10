@@ -8,14 +8,14 @@ Writes to <out>/runs/<run_id>/:
     preds_<split>.csv  id, true label, probability of sarcastic (for paired significance tests)
 A run whose result.json already exists is skipped, so an interrupted batch can be restarted.
 
-One training loop serves every arm. The two switches (gan, helpers) in config.ARMS decide
-which loss terms and which networks are used; nothing else differs between arms.
+One training loop serves every arm. The switches in config.ARMS decide which loss terms,
+networks and data are used; nothing else differs between arms. (A0 is not neural: it is
+handed to tfidf.py.)
 """
 import argparse
 import json
 import platform
 import random
-import subprocess
 import time
 from pathlib import Path
 
@@ -27,10 +27,13 @@ import transformers
 from transformers import AutoTokenizer, get_linear_schedule_with_warmup
 
 from .config import IMPLEMENTED_ARMS, RunConfig
-from .data import find_data_dir, load_helper_labels, load_splits, verify
+from .data import find_data_dir, load_helper_labels, load_splits, permute_helper_labels, verify
 from .evaluate import predict, scores
 from .models import SarcasmClassifier
+from .tfidf import run_tfidf
+from .util import git_commit
 
+PSEUDO_THRESHOLD = 0.9  # A6 keeps U items the teacher is at least this sure about
 EPS = 1e-8          # keeps log() finite when a probability reaches 0 or 1
 LOG_EVERY = 100     # the training curve in result.json has one point per 100 steps
 
@@ -40,15 +43,6 @@ def set_seed(seed: int) -> None:
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
-
-
-def git_commit() -> str:
-    """Commit of the code that produced this run, so every result can be traced."""
-    try:
-        repo = Path(__file__).resolve().parents[2]
-        return subprocess.check_output(["git", "-C", str(repo), "rev-parse", "HEAD"], text=True).strip()
-    except Exception:
-        return "unknown"
 
 
 def encode(tokenizer, texts, max_len: int) -> dict:
@@ -128,6 +122,43 @@ def plain_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device) -> 
     return stats
 
 
+def fgm_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device) -> dict:
+    """A7: plain BERT on L + one FGM (fast gradient method) step on the word embeddings.
+
+    1. Clean loss, backward: the word-embedding matrix now has a gradient g.
+    2. Push the embeddings by r = epsilon * g / ||g||  (L2-normalised gradient).
+    3. Adversarial loss on the pushed embeddings, backward: its gradients add to the clean ones.
+    4. Put the embeddings back, then take one optimizer step on (clean + adversarial) loss.
+    """
+    ids, mask, y, _ = batch
+    emb = model.encoder.embeddings.word_embeddings.weight
+
+    def sarcasm_loss():
+        with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=use_fp16):
+            return F.cross_entropy(model.head(model.dropout(model.encode(ids, mask))), y[:n_l])
+
+    loss_clean = sarcasm_loss()
+    scaler.scale(loss_clean).backward()
+    g = emb.grad
+    norm = g.norm() if g is not None else None
+    loss_adv = loss_clean.detach()  # stand-in if the gradient is unusable (zero, or overflowed in fp16)
+    if norm is not None and torch.isfinite(norm) and norm > 0:
+        r = cfg.fgm_epsilon * g / norm  # computed before the next backward changes g
+        backup = emb.data.clone()
+        emb.data.add_(r)
+        loss_adv = sarcasm_loss()
+        scaler.scale(loss_adv).backward()
+        emb.data.copy_(backup)
+    scaler.unscale_(opt)
+    torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+    scaler.step(opt)
+    scaler.update()
+    sched.step()
+    opt.zero_grad(set_to_none=True)
+    return {"loss_sarc": loss_clean.item(), "loss_adv": loss_adv.item(),
+            "loss": loss_clean.item() + loss_adv.item()}
+
+
 def gan_step(model, cfg, opts, scheds, scaler, batch, n_l, use_fp16, device) -> dict:
     """A4 / A5 (GAN-BERT): one discriminator + encoder update, then one generator update.
 
@@ -192,38 +223,16 @@ def gan_step(model, cfg, opts, scheds, scaler, batch, n_l, use_fp16, device) -> 
     return stats
 
 
-def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
-    out_dir = Path(out_root) / "runs" / cfg.run_id
-    if (out_dir / "result.json").exists():
-        print(f"{cfg.run_id}: already done, skipped")
-        return json.loads((out_dir / "result.json").read_text())
-    if cfg.arm not in IMPLEMENTED_ARMS:
-        raise NotImplementedError(f"{cfg.arm} is not written yet (implemented: {sorted(IMPLEMENTED_ARMS)})")
-    gan, helpers = cfg.switches["gan"], cfg.switches["helpers"]
-    if helpers and not cfg.helper_weight > 0:
-        raise ValueError(f"{cfg.arm} uses helper heads, so helper_weight must be > 0 (got {cfg.helper_weight})")
+def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, helpers=False, fgm=False):
+    """Train a fresh model for `steps` steps; return (model, training curve).
 
-    t0 = time.time()
-    data_dir = Path(data_dir)
-    manifest = verify(data_dir)
-    splits = load_splits(data_dir, cfg.budget, cfg.seed)
-    labeled, unlabeled = splits.labeled, splits.unlabeled
-    use_u = (gan or helpers) and len(unlabeled) > 0  # A3/A4/A5 also read U (no sarcasm labels); A1 never does
-    if helpers:
-        labeled, unlabeled = load_helper_labels(data_dir, labeled, unlabeled)
-
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    use_fp16 = cfg.fp16 and device.type == "cuda"
+    `labeled` is L (with sent/emo columns if `helpers`). `pool` is None or a frame of
+    extra rows that join every step as a second batch: U for A3/A4/A5/A8, or the
+    pseudo-labeled rows for A6 (those carry a `label` column, U does not).
+    """
     set_seed(cfg.seed)
-
-    tokenizer = AutoTokenizer.from_pretrained(cfg.model_name)
     enc_l = encode(tokenizer, labeled["text"], cfg.max_len)
-    eval_sets = {"dev": splits.dev}
-    if cfg.eval_test:
-        eval_sets.update(test=splits.test, isarc_test=splits.isarc_test)
-
     model = SarcasmClassifier(cfg.model_name, gan=gan, helpers=helpers).to(device)
-    steps = cfg.steps(len(labeled))
     if gan:
         # one optimizer for BERT + discriminator (+ helper heads), a separate one for the generator
         opt_d, sched_d = make_optimizer(((n, p) for n, p in model.named_parameters()
@@ -236,24 +245,28 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
     extra_l = {"sent": labeled["sent"], "emo": labeled["emo"]} if helpers else None
     stream_l = BatchStream(enc_l, labeled["label"], cfg.batch_size, cfg.seed, extra_l)
     stream_u = None
-    if use_u:  # its own seeded stream, so U's batch order does not disturb L's
-        enc_u = encode(tokenizer, unlabeled["text"], cfg.max_len)
-        extra_u = {"sent": unlabeled["sent"], "emo": unlabeled["emo"]} if helpers else None
-        stream_u = BatchStream(enc_u, None, cfg.batch_size, cfg.seed + 1000, extra_u)
+    if pool is not None:  # its own seeded stream, so the pool's batch order does not disturb L's
+        enc_u = encode(tokenizer, pool["text"], cfg.max_len)
+        extra_u = {"sent": pool["sent"], "emo": pool["emo"]} if helpers else None
+        y_pool = pool["label"] if "label" in pool else None
+        stream_u = BatchStream(enc_u, y_pool, cfg.batch_size, cfg.seed + 1000, extra_u)
 
-    print(f"{cfg.run_id}: |L|={len(labeled)} |U|={len(unlabeled)} steps={steps} device={device}")
     model.train()
     window, train_log = {}, []
     for step in range(1, steps + 1):
         ids, mask, y, extra = next(stream_l)
-        n_l = ids.shape[0]
-        if stream_u is not None:  # append one U batch of the same size after the L batch
-            ids_u, mask_u, _, extra_u = next(stream_u)
+        if stream_u is not None:  # append one pool batch of the same size after the L batch
+            ids_u, mask_u, y_u, extra_u = next(stream_u)
             ids, mask = torch.cat([ids, ids_u]), torch.cat([mask, mask_u])
             extra = {k: torch.cat([v, extra_u[k]]) for k, v in extra.items()}
+            if y_u is not None:  # pseudo-labels are used like labels: one loss over L + pseudo rows
+                y = torch.cat([y, y_u])
+        n_l = y.shape[0]  # rows that have a sarcasm label (L rows, plus the pseudo-labeled rows for A6)
         batch = (ids.to(device), mask.to(device), y.to(device), {k: v.to(device) for k, v in extra.items()})
         if gan:
             stats = gan_step(model, cfg, (opt_d, opt_g), (sched_d, sched_g), scaler, batch, n_l, use_fp16, device)
+        elif fgm:
+            stats = fgm_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device)
         else:
             stats = plain_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device)
         for k, v in stats.items():
@@ -263,6 +276,87 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
             train_log.append(point)
             print("  " + "  ".join(f"{k} {v:.4g}" if k != "step" else f"step {v}/{steps}" for k, v in point.items()))
             window = {}
+    return model, train_log
+
+
+def pick_pseudo_labels(p_sarc, threshold: float = PSEUDO_THRESHOLD):
+    """A6: from the teacher's P(sarcastic) on U, keep items with confidence >= threshold,
+    then take the same number from each class (the most confident items first).
+    Returns (indices into U, their labels, a summary of what was kept)."""
+    p_sarc = np.asarray(p_sarc)
+    pred = (p_sarc >= 0.5).astype(int)
+    conf = np.maximum(p_sarc, 1 - p_sarc)
+    sure = conf >= threshold
+    counts = {c: int((sure & (pred == c)).sum()) for c in (0, 1)}
+    n_per_class = min(counts.values())
+    idx, labels = [], []
+    for c in (0, 1):
+        cand = np.where(sure & (pred == c))[0]
+        cand = cand[np.argsort(-conf[cand], kind="stable")][:n_per_class]
+        idx.extend(cand.tolist())
+        labels.extend([c] * len(cand))
+    info = {"threshold": threshold, "n_unlabeled": int(len(p_sarc)),
+            "n_confident": int(sure.sum()), "confident_class_counts": {str(c): v for c, v in counts.items()},
+            "n_kept": len(idx), "kept_class_counts": {str(c): n_per_class for c in (0, 1)},
+            "fallback_l_only": len(idx) == 0}
+    return np.array(idx, dtype=int), np.array(labels, dtype=int), info
+
+
+def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
+    out_dir = Path(out_root) / "runs" / cfg.run_id
+    if (out_dir / "result.json").exists():
+        print(f"{cfg.run_id}: already done, skipped")
+        return json.loads((out_dir / "result.json").read_text())
+    if cfg.arm == "A0":  # TF-IDF floor: no neural network
+        return run_tfidf(cfg, data_dir, out_root)
+    if cfg.arm not in IMPLEMENTED_ARMS:
+        raise NotImplementedError(f"{cfg.arm} is not written yet (implemented: {sorted(IMPLEMENTED_ARMS)})")
+    sw = cfg.switches
+    gan, helpers = sw["gan"], sw["helpers"]
+    if helpers and not cfg.helper_weight > 0:
+        raise ValueError(f"{cfg.arm} uses helper heads, so helper_weight must be > 0 (got {cfg.helper_weight})")
+
+    t0 = time.time()
+    data_dir = Path(data_dir)
+    manifest = verify(data_dir)
+    splits = load_splits(data_dir, cfg.budget, cfg.seed)
+    labeled, unlabeled = splits.labeled, splits.unlabeled
+    # A3/A4/A5/A8 also read U (no sarcasm labels); A1, A2, A7 never do (A6 builds its own pool below)
+    use_u = (gan or helpers) and not sw.get("l_only", False) and len(unlabeled) > 0
+    if helpers:
+        labeled, unlabeled = load_helper_labels(data_dir, labeled, unlabeled)
+    if sw.get("shuffle"):  # A8: break the link between each headline and its helper labels
+        labeled, unlabeled = permute_helper_labels(labeled, unlabeled, cfg.seed)
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    use_fp16 = cfg.fp16 and device.type == "cuda"
+    tokenizer = AutoTokenizer.from_pretrained(cfg.model_name)
+    eval_sets = {"dev": splits.dev}
+    if cfg.eval_test:
+        eval_sets.update(test=splits.test, isarc_test=splits.isarc_test)
+
+    steps = cfg.steps(len(labeled))
+    print(f"{cfg.run_id}: |L|={len(labeled)} |U|={len(unlabeled)} steps={steps} device={device}")
+    pool, pseudo_info = (unlabeled if use_u else None), None
+    if sw.get("pseudo"):
+        # A6: the teacher is an A1 model (same seed, same steps). It labels U; the student trains on L + pseudo-labels.
+        print("  A6 teacher (plain A1 training):")
+        teacher, _ = fit(cfg, tokenizer, labeled, None, steps, device, use_fp16)
+        p_u = (predict(teacher, encode(tokenizer, unlabeled["text"], cfg.max_len), device, fp16=use_fp16)
+               if len(unlabeled) > 0 else np.zeros(0))
+        p_dev = predict(teacher, encode(tokenizer, splits.dev["text"], cfg.max_len), device, fp16=use_fp16)
+        del teacher
+        idx, y_pseudo, pseudo_info = pick_pseudo_labels(p_u)
+        pseudo_info["teacher_dev_macro_f1"] = round(scores(splits.dev["label"], p_dev)["macro_f1"], 4)
+        print(f"  A6 pseudo-labels kept: {pseudo_info['n_kept']} of {len(unlabeled)} "
+              f"(confident {pseudo_info['n_confident']}, per class {pseudo_info['confident_class_counts']})"
+              + ("; none kept, the student uses L only" if pseudo_info["fallback_l_only"] else ""))
+        if len(idx) > 0:
+            pool = unlabeled.iloc[idx].reset_index(drop=True)
+            pool["label"] = y_pseudo
+        print("  A6 student (fresh BERT):")
+    model, train_log = fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16,
+                           gan=gan, helpers=helpers, fgm=bool(sw.get("fgm")))
 
     out_dir.mkdir(parents=True, exist_ok=True)
     results = {}
@@ -277,10 +371,12 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
         "config": cfg.to_dict(),
         "n_labeled": len(labeled),
         "n_unlabeled": len(unlabeled),
+        "uses_u": pool is not None,
         "steps": steps,
         "minutes": round((time.time() - t0) / 60, 2),
         "scores": results,
         "train_log": train_log,
+        "pseudo": pseudo_info,  # A6 only: pseudo-labels kept, with class counts
         "commit": git_commit(),
         "data_manifest_sha256": {k: v["sha256"] for k, v in manifest["outputs"].items()},
         "device": torch.cuda.get_device_name(0) if device.type == "cuda" else "cpu",
