@@ -81,9 +81,9 @@ class BatchStream:
                 {k: v[idx] for k, v in self.extra.items()})
 
 
-def make_optimizer(named_params, cfg: RunConfig, steps: int):
+def make_optimizer(named_params, cfg: RunConfig, steps: int, lr: float = 0.0):
     """AdamW with the usual BERT recipe: no weight decay on biases and LayerNorm,
-    linear warm-up then linear decay to zero."""
+    linear warm-up then linear decay to zero. `lr` overrides cfg.lr when > 0."""
     named_params = list(named_params)
     no_decay = ("bias", "LayerNorm.weight")
     groups = [
@@ -92,7 +92,7 @@ def make_optimizer(named_params, cfg: RunConfig, steps: int):
         {"params": [p for n, p in named_params if any(k in n for k in no_decay)],
          "weight_decay": 0.0},
     ]
-    opt = torch.optim.AdamW(groups, lr=cfg.lr)
+    opt = torch.optim.AdamW(groups, lr=lr if lr > 0 else cfg.lr)
     sched = get_linear_schedule_with_warmup(opt, int(cfg.warmup_ratio * steps), steps)
     return opt, sched
 
@@ -253,7 +253,7 @@ def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, he
         # one optimizer for BERT + discriminator (+ helper heads), a separate one for the generator
         opt_d, sched_d = make_optimizer(((n, p) for n, p in model.named_parameters()
                                          if not n.startswith("generator.")), cfg, steps)
-        opt_g, sched_g = make_optimizer(model.generator.named_parameters(), cfg, steps)
+        opt_g, sched_g = make_optimizer(model.generator.named_parameters(), cfg, steps, lr=cfg.gen_lr)
     else:
         opt, sched = make_optimizer(model.named_parameters(), cfg, steps)
     scaler = torch.amp.GradScaler(device.type, enabled=use_fp16)

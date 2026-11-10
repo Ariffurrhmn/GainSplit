@@ -124,6 +124,23 @@ def pass3() -> list[RunConfig]:
             + _p3("A9", 1, "shuf"))                                        # 5
 
 
+GEN_LR_GRID = (1e-5, 2e-4)
+
+
+def gan_check() -> list[RunConfig]:
+    """Dev-only check that the GAN's loss to BERT is not a tuning artefact (12 runs, no test scoring).
+
+    - A4 at 10% with the generator's lr changed (1e-5 and 2e-4; the default is 5e-5): 6 runs
+    - A4 and A1 at 1% with 3x the training steps: 6 runs
+    Longest runs first (10% before 1%, so the two GPUs stay busy to the end)."""
+    glr = [RunConfig("A4", 10, s, gen_lr=g, eval_test=False, tag=f"glr{g:g}")
+           for g in GEN_LR_GRID for s in TUNING_SEEDS]
+    long = [RunConfig(arm, 1, s, step_mult=3, eval_test=False, tag="steps3x")
+            for arm in ("A4", "A1") for s in TUNING_SEEDS]
+    return glr + long
+
+
 PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "session2": session2, "pass1": pass1, "fgm_tuning": fgm_tuning,
-         "pass2a": pass2a, "pass2b": pass2b, "pass3": pass3}
+         "pass2a": pass2a, "pass2b": pass2b, "pass3": pass3,
+         "gan_check": gan_check}
