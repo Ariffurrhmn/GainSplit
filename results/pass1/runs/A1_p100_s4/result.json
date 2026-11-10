@@ -1,0 +1,426 @@
+{
+  "run_id": "A1_p100_s4",
+  "config": {
+    "arm": "A1",
+    "budget": 100,
+    "seed": 4,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.0,
+    "fp16": true,
+    "eval_test": true,
+    "tag": ""
+  },
+  "n_labeled": 22800,
+  "n_unlabeled": 0,
+  "steps": 7130,
+  "minutes": 12.73,
+  "scores": {
+    "dev": {
+      "accuracy": 0.9319298245614035,
+      "macro_f1": 0.9316809911285376,
+      "f1_sarcastic": 0.9275578790141897,
+      "roc_auc": 0.9797995779288897,
+      "n": 2850
+    },
+    "test": {
+      "accuracy": 0.9309014380918976,
+      "macro_f1": 0.930683122617046,
+      "f1_sarcastic": 0.9267930137495355,
+      "roc_auc": 0.9824059731239023,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.7335714285714285,
+      "macro_f1": 0.5190532108401833,
+      "f1_sarcastic": 0.1978494623655914,
+      "roc_auc": 0.5406229166666666,
+      "n": 1400
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.65946,
+      "loss": 0.65946
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.42217,
+      "loss": 0.42217
+    },
+    {
+      "step": 300,
+      "loss_sarc": 0.3149,
+      "loss": 0.3149
+    },
+    {
+      "step": 400,
+      "loss_sarc": 0.29831,
+      "loss": 0.29831
+    },
+    {
+      "step": 500,
+      "loss_sarc": 0.27304,
+      "loss": 0.27304
+    },
+    {
+      "step": 600,
+      "loss_sarc": 0.2748,
+      "loss": 0.2748
+    },
+    {
+      "step": 700,
+      "loss_sarc": 0.24517,
+      "loss": 0.24517
+    },
+    {
+      "step": 800,
+      "loss_sarc": 0.17826,
+      "loss": 0.17826
+    },
+    {
+      "step": 900,
+      "loss_sarc": 0.16835,
+      "loss": 0.16835
+    },
+    {
+      "step": 1000,
+      "loss_sarc": 0.18627,
+      "loss": 0.18627
+    },
+    {
+      "step": 1100,
+      "loss_sarc": 0.17474,
+      "loss": 0.17474
+    },
+    {
+      "step": 1200,
+      "loss_sarc": 0.15592,
+      "loss": 0.15592
+    },
+    {
+      "step": 1300,
+      "loss_sarc": 0.16812,
+      "loss": 0.16812
+    },
+    {
+      "step": 1400,
+      "loss_sarc": 0.1682,
+      "loss": 0.1682
+    },
+    {
+      "step": 1500,
+      "loss_sarc": 0.07646,
+      "loss": 0.07646
+    },
+    {
+      "step": 1600,
+      "loss_sarc": 0.06488,
+      "loss": 0.06488
+    },
+    {
+      "step": 1700,
+      "loss_sarc": 0.0702,
+      "loss": 0.0702
+    },
+    {
+      "step": 1800,
+      "loss_sarc": 0.05303,
+      "loss": 0.05303
+    },
+    {
+      "step": 1900,
+      "loss_sarc": 0.07124,
+      "loss": 0.07124
+    },
+    {
+      "step": 2000,
+      "loss_sarc": 0.06351,
+      "loss": 0.06351
+    },
+    {
+      "step": 2100,
+      "loss_sarc": 0.10627,
+      "loss": 0.10627
+    },
+    {
+      "step": 2200,
+      "loss_sarc": 0.03957,
+      "loss": 0.03957
+    },
+    {
+      "step": 2300,
+      "loss_sarc": 0.02429,
+      "loss": 0.02429
+    },
+    {
+      "step": 2400,
+      "loss_sarc": 0.03382,
+      "loss": 0.03382
+    },
+    {
+      "step": 2500,
+      "loss_sarc": 0.02595,
+      "loss": 0.02595
+    },
+    {
+      "step": 2600,
+      "loss_sarc": 0.03349,
+      "loss": 0.03349
+    },
+    {
+      "step": 2700,
+      "loss_sarc": 0.03129,
+      "loss": 0.03129
+    },
+    {
+      "step": 2800,
+      "loss_sarc": 0.03771,
+      "loss": 0.03771
+    },
+    {
+      "step": 2900,
+      "loss_sarc": 0.02548,
+      "loss": 0.02548
+    },
+    {
+      "step": 3000,
+      "loss_sarc": 0.00772,
+      "loss": 0.00772
+    },
+    {
+      "step": 3100,
+      "loss_sarc": 0.01861,
+      "loss": 0.01861
+    },
+    {
+      "step": 3200,
+      "loss_sarc": 0.02294,
+      "loss": 0.02294
+    },
+    {
+      "step": 3300,
+      "loss_sarc": 0.01553,
+      "loss": 0.01553
+    },
+    {
+      "step": 3400,
+      "loss_sarc": 0.0101,
+      "loss": 0.0101
+    },
+    {
+      "step": 3500,
+      "loss_sarc": 0.00817,
+      "loss": 0.00817
+    },
+    {
+      "step": 3600,
+      "loss_sarc": 0.00854,
+      "loss": 0.00854
+    },
+    {
+      "step": 3700,
+      "loss_sarc": 0.01045,
+      "loss": 0.01045
+    },
+    {
+      "step": 3800,
+      "loss_sarc": 0.00792,
+      "loss": 0.00792
+    },
+    {
+      "step": 3900,
+      "loss_sarc": 0.00995,
+      "loss": 0.00995
+    },
+    {
+      "step": 4000,
+      "loss_sarc": 0.01054,
+      "loss": 0.01054
+    },
+    {
+      "step": 4100,
+      "loss_sarc": 0.00948,
+      "loss": 0.00948
+    },
+    {
+      "step": 4200,
+      "loss_sarc": 0.00949,
+      "loss": 0.00949
+    },
+    {
+      "step": 4300,
+      "loss_sarc": 0.00955,
+      "loss": 0.00955
+    },
+    {
+      "step": 4400,
+      "loss_sarc": 0.00484,
+      "loss": 0.00484
+    },
+    {
+      "step": 4500,
+      "loss_sarc": 0.0058,
+      "loss": 0.0058
+    },
+    {
+      "step": 4600,
+      "loss_sarc": 0.02046,
+      "loss": 0.02046
+    },
+    {
+      "step": 4700,
+      "loss_sarc": 0.00883,
+      "loss": 0.00883
+    },
+    {
+      "step": 4800,
+      "loss_sarc": 0.0063,
+      "loss": 0.0063
+    },
+    {
+      "step": 4900,
+      "loss_sarc": 0.00645,
+      "loss": 0.00645
+    },
+    {
+      "step": 5000,
+      "loss_sarc": 0.00707,
+      "loss": 0.00707
+    },
+    {
+      "step": 5100,
+      "loss_sarc": 0.00285,
+      "loss": 0.00285
+    },
+    {
+      "step": 5200,
+      "loss_sarc": 0.00143,
+      "loss": 0.00143
+    },
+    {
+      "step": 5300,
+      "loss_sarc": 0.00405,
+      "loss": 0.00405
+    },
+    {
+      "step": 5400,
+      "loss_sarc": 0.00639,
+      "loss": 0.00639
+    },
+    {
+      "step": 5500,
+      "loss_sarc": 0.00567,
+      "loss": 0.00567
+    },
+    {
+      "step": 5600,
+      "loss_sarc": 0.00262,
+      "loss": 0.00262
+    },
+    {
+      "step": 5700,
+      "loss_sarc": 0.00083,
+      "loss": 0.00083
+    },
+    {
+      "step": 5800,
+      "loss_sarc": 4e-05,
+      "loss": 4e-05
+    },
+    {
+      "step": 5900,
+      "loss_sarc": 0.00323,
+      "loss": 0.00323
+    },
+    {
+      "step": 6000,
+      "loss_sarc": 0.00017,
+      "loss": 0.00017
+    },
+    {
+      "step": 6100,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 6200,
+      "loss_sarc": 0.00052,
+      "loss": 0.00052
+    },
+    {
+      "step": 6300,
+      "loss_sarc": 5e-05,
+      "loss": 5e-05
+    },
+    {
+      "step": 6400,
+      "loss_sarc": 0.00158,
+      "loss": 0.00158
+    },
+    {
+      "step": 6500,
+      "loss_sarc": 0.00167,
+      "loss": 0.00167
+    },
+    {
+      "step": 6600,
+      "loss_sarc": 5e-05,
+      "loss": 5e-05
+    },
+    {
+      "step": 6700,
+      "loss_sarc": 0.00064,
+      "loss": 0.00064
+    },
+    {
+      "step": 6800,
+      "loss_sarc": 0.00019,
+      "loss": 0.00019
+    },
+    {
+      "step": 6900,
+      "loss_sarc": 3e-05,
+      "loss": 3e-05
+    },
+    {
+      "step": 7000,
+      "loss_sarc": 0.00057,
+      "loss": 0.00057
+    },
+    {
+      "step": 7100,
+      "loss_sarc": 2e-05,
+      "loss": 2e-05
+    },
+    {
+      "step": 7130,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    }
+  ],
+  "commit": "c0a44a5f55eac875f353e428750048e497ec4cd8",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

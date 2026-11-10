@@ -7,6 +7,12 @@ updated: 2026-11-10
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-10 - Pass 1 results
+- Owner ran `pass1` on Kaggle (commit c0a44a5): 45/45 runs, 114 GPU-min. Zip and unpacked files in `results/pass1/`. Numbers and reading in [[Pass 1 Results]].
+- Main reading (INFERRED until the paired bootstrap runs): the GAN gives no gain at 1% or 10%; the helper heads give +0.4 points at 10% (4/5 seeds) and nothing at 1%; GAN + helpers at 1% loses 2.3 points; no arm transfers to iSarcasmEval (ROC-AUC about 0.5 everywhere).
+- Decisions logged ([[Decisions]], DELEGATED): Pass 1 accepted, no reruns; Pass 2 split into `pass2a` and `pass2b`; Pass 2 priority (A2 and A8 first); arm specs for A2, A8, A6, A0; analysis notebook scope.
+- Next: code sessions write the analysis notebook and the Pass 2 arms; owner then runs the analysis and `pass2a`. Gold audit labeling continues.
+
 ## 2026-11-10 - Preprocessing run finished
 - Owner re-ran `experiments/01_preprocess.ipynb` in an interactive Kaggle session (the commit run stalled on Kaggle's side 2026-11-09). It finished; `/kaggle/working/processed/` holds about 12 MB.
 - Interactive-session output is deleted when the session ends, so the owner downloads the 9 files to `data/processed/` and uploads them as a private Kaggle dataset for the training notebooks.
