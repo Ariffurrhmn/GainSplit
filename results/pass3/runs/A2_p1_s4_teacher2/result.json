@@ -1,0 +1,120 @@
+{
+  "run_id": "A2_p1_s4_teacher2",
+  "config": {
+    "arm": "A2",
+    "budget": 1,
+    "seed": 4,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.3,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.0,
+    "tag": "teacher2",
+    "helper_variant": "teacher2",
+    "eval_masked": true,
+    "train_data": "headlines",
+    "gen_lr": 0.0,
+    "step_mult": 1
+  },
+  "n_labeled": 228,
+  "n_unlabeled": 22572,
+  "uses_u": false,
+  "steps": 200,
+  "minutes": 0.54,
+  "scores": {
+    "dev": {
+      "accuracy": 0.8063157894736842,
+      "macro_f1": 0.8056564690256041,
+      "f1_sarcastic": 0.7943368107302533,
+      "roc_auc": 0.8902141208703056,
+      "n": 2850
+    },
+    "test": {
+      "accuracy": 0.8288319887758682,
+      "macro_f1": 0.8282843841486593,
+      "f1_sarcastic": 0.8185873605947955,
+      "roc_auc": 0.9048991653018135,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.5678571428571428,
+      "macro_f1": 0.45943220596973205,
+      "f1_sarcastic": 0.21733505821474774,
+      "roc_auc": 0.488425,
+      "n": 1400
+    },
+    "test_cuemask": {
+      "accuracy": 0.7814801823921431,
+      "macro_f1": 0.7801711948103672,
+      "f1_sarcastic": 0.7632079057392627,
+      "roc_auc": 0.8629126625490854,
+      "n": 2851
+    },
+    "test_randmask": {
+      "accuracy": 0.8035776920378814,
+      "macro_f1": 0.8024542512870615,
+      "f1_sarcastic": 0.787556904400607,
+      "roc_auc": 0.8843151232314461,
+      "n": 2851
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.15556,
+      "loss_sent": 0.38497,
+      "loss_emo": 0.42907,
+      "loss": 0.39977
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.00243,
+      "loss_sent": 0.01294,
+      "loss_emo": 0.01746,
+      "loss": 0.01155
+    }
+  ],
+  "pseudo": null,
+  "helper_label_counts": {
+    "sent": {
+      "negative": 6383,
+      "neutral": 14966,
+      "positive": 1451
+    },
+    "emo": {
+      "joy": 1941,
+      "sadness": 1081,
+      "anger": 658,
+      "fear": 276,
+      "neutral_other": 18844
+    }
+  },
+  "commit": "3e431d2eb93b5f69e11d5343cd0f5850765b36e5",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351",
+    "helper_sent_alt.csv": "51fe4d278fe0580deeb9a742f3e1b94fb88e5c4dc69b7b2cc996725259709cd7",
+    "cue_words.json": "79d355bb2c288b59385113de31a2d5227c0c189be8a14a288fe1a9f754f91fb6",
+    "headlines_test_cuemask.csv": "7502bb2ec444c83fb87d4ab020d89a7823c28d51978203ef280464f6b1b787bc",
+    "headlines_test_randmask.csv": "dc4396f80d655aa9b3657edc1e9701964718f0f393b8f05531ef77c41a58982b"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

@@ -1,11 +1,17 @@
 ---
 tags: [log]
-updated: 2026-11-10
+updated: 2026-11-11
 ---
 
 # Session Log
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
+
+## 2026-11-11 - Pass 3 and GAN check filed
+- Done: owner ran `pass3` (twice by mistake; both runs identical in all 1,575 metric cells) and `gan_check` on Kaggle, and re-ran `03_analysis.ipynb` locally on 255 runs. Zips filed in `results/pass3/` and `results/gan_check/` (105 and 12 runs, paths checked). Mask re-runs 25/25 exact; helper-label counts as expected; `gan_check` scored dev only.
+- Vault changes: new [[Pass 3 Results]], [[GAN Check Results]]; updated [[Bootstrap - All Passes]], [[Risks]] (11, 13; new 14, 15), [[Decisions]] (5 DELEGATED entries), hub.
+- Findings: shuffled helper labels at 1% still +1.17 over A1 (robust); at 10% only heavy label damage hurts; gold kappa does not order the label sources; outlet-cue gap ~3 points in every arm; in-domain iSarcasmEval AUC 65.8; GAN check failed the pre-set rule (no robustness run). Prediction files round probabilities (AUC source fixed in [[Decisions]]).
+- Next: commit results + vault (owner approval); paper: check QPAIN 2027 rules ([[Audit - Venues]]), IEEE template in `paper/`, draft Data, Setup, RQ1; code session for the label-quality figure and paper tables.
 
 ## 2026-11-10 - Pass 3 data files made
 - Owner checked the teacher-2 model card (3 classes) and ran `01b_pass3_data` on Kaggle (commit 654de15). Five files checked: hashes match `manifest_pass3.json`; masked tests keep ids, order and labels; 62% of test headlines have >= 1 cue word masked (1.6 words on average when hit); top cue words are outlet style (Onion: nation, onion, area, local, report; HuffPost: donald, huffpost, allegedly, why, the).

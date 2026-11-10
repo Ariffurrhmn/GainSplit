@@ -1,0 +1,4 @@
+check,n,nmi,cramers_v,auc
+sent_label vs sarcasm,22800,0.004346854490375568,0.08349249006547634,
+emo_label vs sarcasm,22800,0.0024903275893640954,0.05809551647648335,
+"probe: logistic regression on 8 teacher probabilities, 5-fold CV",22800,,,0.5460936439422923

@@ -1,7 +1,7 @@
 ---
 tags: [results]
 created: 2026-11-10
-updated: 2026-11-10
+updated: 2026-11-11
 ---
 
 # Bootstrap - All Passes
@@ -49,4 +49,7 @@ Not significant anywhere: A3 - A1 at 1/5/30% (p 0.22-0.65), A4 - A1 at 1/5/10% (
 - Report the pre-set test (all contrasts, no correction) as the main analysis and the Holm column as a robustness check; say which results survive it.
 
 ## RQ3 (iSarcasmEval, `results/analysis/isarc_test.md`, VERIFIED numbers)
-All arms near chance (ROC-AUC 47-58). TF-IDF A0 is below chance at every budget (43.9-45.7). The highest is A5 at 30% (57.6 ± 2.7) and A3 at 30% (55.0 ± 0.6). No bootstrap on iSarcasmEval yet (the notebook tests Headlines contrasts only); a transfer contrast is a Pass 3 item (IDEA).
+All arms near chance (ROC-AUC 47-58). TF-IDF A0 is below chance at every budget (43.9-45.7). The highest is A5 at 30% (57.6 ± 2.7) and A3 at 30% (55.0 ± 0.6). Superseded 2026-11-11 by bootstrap AUC intervals and the in-domain reference (65.8) in [[Pass 3 Results]]; the AUCs here are seed means of the in-training AUC, the Pass 3 table recomputes them from the rounded prediction files (up to 1.3 points apart per seed, see [[Decisions]]).
+
+## Pass 3 update (2026-11-11)
+The 2026-11-11 re-run on all 255 runs reproduces every contrast above unchanged. Pass 3 adds: at 1%, shuffled helper labels on L still beat A1 by +1.17 (robust), so most of the A2 gain is not label content; at 10%, only heavy label damage (50% flips -0.85, VADER -0.63, both robust) hurts A3; every Headlines-trained arm relies on outlet words about equally (cue-mask gap ~3 points). Details: [[Pass 3 Results]]. GAN sweep and 3x training: no improvement on dev ([[GAN Check Results]]).

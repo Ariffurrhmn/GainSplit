@@ -1,0 +1,143 @@
+{
+  "run_id": "A1_p100_s0_isarctrain",
+  "config": {
+    "arm": "A1",
+    "budget": 100,
+    "seed": 0,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.0,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.0,
+    "tag": "isarctrain",
+    "helper_variant": "",
+    "eval_masked": true,
+    "train_data": "isarcasm",
+    "gen_lr": 0.0,
+    "step_mult": 1
+  },
+  "n_labeled": 3120,
+  "n_unlabeled": 0,
+  "uses_u": false,
+  "steps": 980,
+  "minutes": 1.94,
+  "scores": {
+    "dev": {
+      "accuracy": 0.7780979827089337,
+      "macro_f1": 0.6643552540669556,
+      "f1_sarcastic": 0.4689655172413793,
+      "roc_auc": 0.7181697612732096,
+      "n": 347
+    },
+    "test": {
+      "accuracy": 0.5078919677306208,
+      "macro_f1": 0.42108407622386074,
+      "f1_sarcastic": 0.19690898683457356,
+      "roc_auc": 0.5181319928172544,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.805,
+      "macro_f1": 0.6339609884011029,
+      "f1_sarcastic": 0.3837471783295711,
+      "roc_auc": 0.6759354166666667,
+      "n": 1400
+    },
+    "test_cuemask": {
+      "accuracy": 0.4893019992984918,
+      "macro_f1": 0.4148424733771719,
+      "f1_sarcastic": 0.20610687022900764,
+      "roc_auc": 0.45513669909426363,
+      "n": 2851
+    },
+    "test_randmask": {
+      "accuracy": 0.4952648193616275,
+      "macro_f1": 0.4251005264017118,
+      "f1_sarcastic": 0.2242587601078167,
+      "roc_auc": 0.4575431162065631,
+      "n": 2851
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.58507,
+      "loss": 0.58507
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.48906,
+      "loss": 0.48906
+    },
+    {
+      "step": 300,
+      "loss_sarc": 0.25008,
+      "loss": 0.25008
+    },
+    {
+      "step": 400,
+      "loss_sarc": 0.0881,
+      "loss": 0.0881
+    },
+    {
+      "step": 500,
+      "loss_sarc": 0.0461,
+      "loss": 0.0461
+    },
+    {
+      "step": 600,
+      "loss_sarc": 0.02395,
+      "loss": 0.02395
+    },
+    {
+      "step": 700,
+      "loss_sarc": 0.01364,
+      "loss": 0.01364
+    },
+    {
+      "step": 800,
+      "loss_sarc": 0.00828,
+      "loss": 0.00828
+    },
+    {
+      "step": 900,
+      "loss_sarc": 0.00392,
+      "loss": 0.00392
+    },
+    {
+      "step": 980,
+      "loss_sarc": 0.00411,
+      "loss": 0.00411
+    }
+  ],
+  "pseudo": null,
+  "helper_label_counts": null,
+  "commit": "3e431d2eb93b5f69e11d5343cd0f5850765b36e5",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351",
+    "helper_sent_alt.csv": "51fe4d278fe0580deeb9a742f3e1b94fb88e5c4dc69b7b2cc996725259709cd7",
+    "cue_words.json": "79d355bb2c288b59385113de31a2d5227c0c189be8a14a288fe1a9f754f91fb6",
+    "headlines_test_cuemask.csv": "7502bb2ec444c83fb87d4ab020d89a7823c28d51978203ef280464f6b1b787bc",
+    "headlines_test_randmask.csv": "dc4396f80d655aa9b3657edc1e9701964718f0f393b8f05531ef77c41a58982b"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}
