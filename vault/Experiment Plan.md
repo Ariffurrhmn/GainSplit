@@ -104,8 +104,31 @@ Owner runs everything on Kaggle; code is written on request. Steps in the same b
 3. **DONE 2026-11-10** (45/45 runs; [[Pass 1 Results]]). **Was: NEXT, ready** (`PLAN = "pass1"`, w = 0.3 set; measured timings give ~1.5-2 GPU-h, ~1 h on two GPUs). **Kaggle session 3:** Pass 1 with test scored: A1 at 1/10/100%, A3/A4/A5 at 1/10%, **5 seeds** (45 runs; DELEGATED, [[Decisions]]).
 4. **DONE 2026-11-10, owner to run** (`experiments/03_analysis.ipynb`, `src/gainsplit/analysis.py`). **Code:** analysis notebook: mean +- std tables, paired bootstrap per contrast, F1-vs-budget figure.
 5. **`pass2a` DONE 2026-11-10** (104/104, [[Pass 2a Results]]); epsilon 0.5; **`pass2b` DONE 2026-11-10** ([[Pass 2b Results]]). Pass 2 complete. **Pass 2** (specs and split into `pass2a` / `pass2b` in [[Decisions]] 2026-11-10): A2, A8, A6, A0, A7 (A7 spec approved, DELEGATED 2026-11-10), budgets 5/30 for the 2x2 arms.
-6. **Pass 3:** RQ2 label-quality rows; RQ3 transfer (iSarcasmEval predictions already saved per run), helper-label vs sarcasm-label check, masking check.
+6. **Pass 3: PLANNED 2026-11-10** ("Pass 3 plan" below): CPU analysis (3a), new label and masked-test files (3b), Kaggle plan `pass3` (3c). Next: code sessions A, B, C.
 Side tracks, any time: gold audit (owner hand-labels 200 random training headlines in `experiments/gold_audit.html`; protocol in [[Decisions]]); check the QPAIN 2027 deadline and anonymity rule; draft the paper's data and setup sections (setup is now fixed); instructor feedback on the draft; submit.
+
+## Pass 3 plan (2026-11-10, DELEGATED; replaces the Part 2 / Part 3 lists above where they differ)
+Revised after Passes 1-2 ([[Bootstrap - All Passes]]): helpers on L + U give no significant gain, helpers on L only help at 1%, label content matters against shuffling at 10%, every arm is at chance on iSarcasmEval. Reasons per item in [[Decisions]].
+
+**Step 3a: CPU analysis, no training (owner runs locally).** New cells in `03_analysis.ipynb`:
+1. *Helper labels vs sarcasm (RQ3 shortcut):* normalised mutual information and Cramer's V between teacher sentiment / emotion labels and the sarcasm label on the training set; a probe (logistic regression on the 8 teacher probabilities, 5-fold CV ROC-AUC) predicting sarcasm from helper labels alone. Same probe on the 200 gold items with the owner's labels vs the teacher's labels: if the teacher's labels predict sarcasm and the owner's do not, the teacher encodes style, not surface sentiment.
+2. *Transfer with intervals:* bootstrap 95% interval of iSarcasmEval ROC-AUC per arm and budget (is anything above 0.5?), and A3 - A1, A5 - A1 at 30% on iSarcasmEval.
+3. *Gold table:* teacher accuracy, macro-F1, kappa against the owner's labels for every helper-label source (rows R1-R5 below, computed once the labels exist).
+
+**Step 3b: new label and test files (owner runs `experiments/01b_pass3_data.ipynb` on Kaggle, then adds them to `gainsplit-processed` as a new version).**
+1. VADER sentiment for every headline (compound >= 0.05 positive, <= -0.05 negative, else neutral; standard thresholds).
+2. Second sentiment teacher, 3 classes, trained on different data from the cardiffnlp tweet model. Candidate `j-hartmann/sentiment-roberta-large-english-3-classes` (UNVERIFIED: the owner checks the model card for 3 classes and training data before running; fallback `finiteautomata/bertweet-base-sentiment-analysis`, UNVERIFIED).
+3. Outlet-cue masked test: train a word-unigram logistic regression (as A0) on the full training set; take the 100 words with the most positive and the 100 with the most negative weights (200 words, fixed before any masked score is seen); replace them with `[MASK]` in the test headlines. Control: in each test headline mask the same number of randomly chosen words (seeded). Report the share of test headlines touched.
+
+**Step 3c: Kaggle plan `pass3` (one session, about 105 runs, ~1.5-2 h on two GPUs; INFERRED from Pass 2 timings).** Every run also scores the masked and random-masked test sets.
+- RQ2 label rows, each at A3 / 10% and A2 / 1%, seeds 0-4 (70 runs): R1 soft teacher probabilities (both heads); R2 25% and R3 50% of helper labels flipped to another class at random (both heads, seeded); R4 VADER sentiment; R5 second sentiment teacher; R6 sentiment head only; R7 emotion head only. R4/R5 change only the sentiment labels; the emotion head keeps its teacher labels. Reference rows already exist: hard labels (A3, A2) and shuffled (A8; A2-shuffled below).
+- A9 = A2 with shuffled helper labels at 1% (5 runs): is A2's +1.6 at 1% the label content or the extra heads?
+- Masked-test re-runs: A1, A3, A4, A6, A7 at 10%, seeds 0-4 (25 runs). Training is deterministic, so these rebuild the Pass 1-2 models; their plain test scores must match the earlier runs exactly (built-in check).
+- iSarcasmEval in-domain reference: A1 trained on iSarcasmEval train (3,467), tested on iSarcasmEval test, seeds 0-4 (5 runs). Shows how far the Headlines models are from what the task allows, so "chance level" reads as a transfer failure, not an impossible test set.
+
+**Dropped from the old Part 2 list:** confidence-weighted loss (close to soft labels; one fewer row), budgets 100% (no U), RoBERTa repeat. **Optional, only if time:** GAN at 1% with more steps; a small GAN hyperparameter check on dev ([[Risks]] item 13).
+
+**Code (three sessions in parallel, disjoint files):** (A) `experiments/01b_pass3_data.ipynb` + `src/gainsplit/masking.py`; (B) training switches R1-R7, A9, extra eval splits, iSarcasmEval-train arm, `pass3` plan, tests (`config.py`, `data.py`, `train.py`, `evaluate.py`, `plans.py`); (C) step 3a analysis (`analysis.py`, `03_analysis.ipynb`, tests). File formats shared by A and B are fixed in the briefs.
 
 ## Status
 Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].

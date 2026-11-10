@@ -7,6 +7,11 @@ updated: 2026-11-10
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-10 - Pass 3 planned
+- Pass 2b and the full bootstrap committed and pushed (8847fd7).
+- Pass 3 designed and logged ([[Experiment Plan]] "Pass 3 plan", [[Decisions]] DELEGATED): 3a CPU analysis (helper-to-sarcasm MI and probe, iSarcasmEval AUC intervals, gold table per label source); 3b new files (VADER, second sentiment teacher, outlet-cue masked test + random-mask control); 3c Kaggle plan `pass3`, about 105 runs (7 label rows x {A3 10%, A2 1%}, A9 = A2 shuffled at 1%, masked-test re-runs of A1/A3/A4/A6/A7 at 10%, A1 trained on iSarcasmEval).
+- Next: three code sessions (A data notebook + masking, B training switches + plan, C analysis), reviewed before merge; then the owner runs 01b, uploads the new dataset version, runs `pass3`.
+
 ## 2026-11-10 - Bootstrap on all passes
 - Owner re-ran `03_analysis.ipynb` locally on pass1 + pass2a + pass2b: 150 test-scored runs (the "184" given earlier was wrong; the 9 dev-only `fgm_tuning` runs are excluded). Pass 1 contrasts reproduce exactly.
 - VERIFIED ([[Bootstrap - All Passes]]): FGM +1.6 points over A1 at 1% and 10% (p < 0.0001, robust to Holm); GAN never helps (null at 1/5/10%, -0.55 at 30%); self-training +1.6 at 1% (robust), +0.6 at 10%; at 1% helpers help only on L (A2 +1.6; adding U -1.8); GAN + helpers at 1% -2.3; helpers on L + U not significant at any budget; A3 - A8 at 10% +0.57 (p 0.011, not robust to Holm).
