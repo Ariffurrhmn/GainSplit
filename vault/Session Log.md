@@ -12,7 +12,11 @@ Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]]
 - Interactive-session output is deleted when the session ends, so the owner downloads the 9 files to `data/processed/` and uploads them as a private Kaggle dataset for the training notebooks.
 - Owner downloaded the 9 files to `data/processed/` (sizes match the manifest). Manifest and sentiment spot-check reviewed: all checks pass. Numbers recorded in [[Headlines Dataset]] and [[iSarcasmEval]]; emotion-label skew added to [[Risks]] (item 11).
 - Owner uploaded the processed files as a private Kaggle dataset and confirmed drop-duplicates ([[Decisions]]). All 2026-11-09 and 2026-11-10 repo changes committed and pushed.
-- Next: plan the Pass 1 training code (A1, A3, A4, A5) with the owner before writing it.
+- Pass 1 training-code plan explained to the owner and written to [[Experiment Plan]] (PROPOSED). Open: A5 helper design, equal steps vs GAN x2.5, helper loss weights, processed dataset name on Kaggle.
+- Processed dataset on Kaggle is `gainsplit-processed`. Draft 2x2 figure of the Pass 1 arms added at `paper/figures/pass1_design.svg`. Decisions (a)-(c) explained in plain terms; owner confirmed all three recommendations ([[Decisions]]): shared helper heads in A5, equal steps for every arm, helper weight tuned once on dev.
+- Owner chose one Kaggle session on GPU T4 x2, two runs at a time, over separate sessions ([[Decisions]]). Quota rate for T4 x2 still to check.
+- A1 code written on the owner's request: `src/gainsplit/`, `tests/`, `experiments/02_train.ipynb` ([[Experiment Plan]]). Implementation choices in [[Decisions]]. Data tests pass locally on made-up data; the training smoke tests run on Kaggle (no torch locally). Not committed yet.
+- Next: owner commits and pushes, runs `02_train.ipynb` with plan `lr_tuning` on GPU T4 x2, and shares the step-2 test output and the lr table.
 
 ## 2026-11-09 - Preprocessing notebook
 - Wrote `experiments/01_preprocess.ipynb` for Kaggle: verifies raw file hashes, drops `article_link`, light cleaning, empty/duplicate removal, token-length check, stratified 80/10/10 split, nested label budgets, teacher helper labels, iSarcasmEval cleaning, manifest. Each cell explains what and why.

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 570" width="800" height="570" font-family="Helvetica, Arial, sans-serif" fill="#222">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#444"/>
+    </marker>
+  </defs>
+  <rect width="800" height="570" fill="#ffffff"/>
+
+  <!-- column header: helper heads -->
+  <text x="455" y="26" text-anchor="middle" font-size="16" font-weight="700">Helper heads (sentiment + emotion)</text>
+  <text x="265" y="60" text-anchor="middle" font-size="14" fill="#555">off</text>
+  <text x="645" y="60" text-anchor="middle" font-size="14" fill="#555">on</text>
+  <line x1="140" y1="36" x2="770" y2="36" stroke="#bbb" stroke-width="1"/>
+
+  <!-- row header: GAN -->
+  <text transform="translate(34,265) rotate(-90)" text-anchor="middle" font-size="16" font-weight="700">Adversarial training (GAN)</text>
+  <line x1="50" y1="80" x2="50" y2="450" stroke="#bbb" stroke-width="1"/>
+  <text x="105" y="160" text-anchor="middle" font-size="14" fill="#555">off</text>
+  <text x="105" y="380" text-anchor="middle" font-size="14" fill="#555">on</text>
+
+  <!-- A1 -->
+  <rect x="140" y="80" width="250" height="150" rx="10" fill="#f2f2f2" stroke="#333" stroke-width="1.5"/>
+  <text x="265" y="114" text-anchor="middle" font-size="24" font-weight="700">A1</text>
+  <text x="265" y="142" text-anchor="middle" font-size="15" font-weight="600">BERT</text>
+  <text x="265" y="166" text-anchor="middle" font-size="13" fill="#444">sarcasm head only</text>
+  <text x="265" y="204" text-anchor="middle" font-size="12.5" fill="#444">data: L</text>
+
+  <!-- A3 -->
+  <rect x="520" y="80" width="250" height="150" rx="10" fill="#e1ecf8" stroke="#333" stroke-width="1.5"/>
+  <text x="645" y="114" text-anchor="middle" font-size="24" font-weight="700">A3</text>
+  <text x="645" y="142" text-anchor="middle" font-size="15" font-weight="600">BERT + helper heads</text>
+  <text x="645" y="166" text-anchor="middle" font-size="13" fill="#444">sarcasm + sentiment + emotion</text>
+  <text x="645" y="204" text-anchor="middle" font-size="12.5" fill="#444">data: L (sarcasm), L + U (helpers)</text>
+
+  <!-- A4 -->
+  <rect x="140" y="300" width="250" height="150" rx="10" fill="#fbe7d7" stroke="#333" stroke-width="1.5"/>
+  <text x="265" y="334" text-anchor="middle" font-size="24" font-weight="700">A4</text>
+  <text x="265" y="362" text-anchor="middle" font-size="15" font-weight="600">GAN-BERT</text>
+  <text x="265" y="386" text-anchor="middle" font-size="13" fill="#444">generator + discriminator</text>
+  <text x="265" y="404" text-anchor="middle" font-size="13" fill="#444">(real classes + "fake")</text>
+  <text x="265" y="430" text-anchor="middle" font-size="12.5" fill="#444">data: L + U</text>
+
+  <!-- A5 -->
+  <rect x="520" y="300" width="250" height="150" rx="10" fill="#ebe3f4" stroke="#333" stroke-width="1.5"/>
+  <text x="645" y="334" text-anchor="middle" font-size="24" font-weight="700">A5</text>
+  <text x="645" y="362" text-anchor="middle" font-size="15" font-weight="600">GAN-BERT + helper heads</text>
+  <text x="645" y="386" text-anchor="middle" font-size="13" fill="#444">GAN + sentiment + emotion</text>
+  <text x="645" y="404" text-anchor="middle" font-size="13" fill="#444">(closest to the seed model)</text>
+  <text x="645" y="430" text-anchor="middle" font-size="12.5" fill="#444">data: L + U</text>
+
+  <!-- horizontal arrows: add helper heads -->
+  <line x1="396" y1="155" x2="514" y2="155" stroke="#444" stroke-width="1.6" marker-end="url(#arr)"/>
+  <text x="455" y="146" text-anchor="middle" font-size="12.5" fill="#333">+ helpers</text>
+  <line x1="396" y1="375" x2="514" y2="375" stroke="#444" stroke-width="1.6" marker-end="url(#arr)"/>
+  <text x="455" y="366" text-anchor="middle" font-size="12.5" fill="#333">+ helpers</text>
+
+  <!-- vertical arrows: add GAN -->
+  <line x1="265" y1="236" x2="265" y2="294" stroke="#444" stroke-width="1.6" marker-end="url(#arr)"/>
+  <text x="275" y="270" font-size="12.5" fill="#333">+ GAN</text>
+  <line x1="645" y1="236" x2="645" y2="294" stroke="#444" stroke-width="1.6" marker-end="url(#arr)"/>
+  <text x="655" y="270" font-size="12.5" fill="#333">+ GAN</text>
+
+  <!-- footer: contrasts and notation -->
+  <line x1="50" y1="474" x2="770" y2="474" stroke="#bbb" stroke-width="1"/>
+  <text x="50" y="498" font-size="13"><tspan font-weight="700">Helper effect:</tspan> A3 − A1, A5 − A4  ·  <tspan font-weight="700">GAN effect:</tspan> A4 − A1, A5 − A3  ·  <tspan font-weight="700">Interaction:</tspan> A5 vs max(A3, A4)</text>
+  <text x="50" y="524" font-size="12.5" fill="#555">L = labeled subset at budget p; U = rest of the training set, with sarcasm labels hidden.</text>
+  <text x="50" y="544" font-size="12.5" fill="#555">All arms share data, backbone, optimizer and number of training steps.</text>
+</svg>

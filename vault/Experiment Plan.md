@@ -1,6 +1,6 @@
 ---
 tags: [experiments, plan]
-updated: 2026-11-08
+updated: 2026-11-10
 status: planned, not started
 ---
 
@@ -84,6 +84,18 @@ Fig. 1: F1 vs label budget, arms A1/A3/A4/A5 (+A6/A7 dashed). Table 1: main grid
 
 ## Known reproduction details (VERIFIED from the seed PDF)
 bert-base-uncased; 80/20 split; 70% of train labelled, 30% unlabelled; sentiment from cardiffnlp/twitter-roberta-base-sentiment (neutral eliminated); emotion from a GoEmotions model or pysentimiento mapped to 5 classes; L = L_s + l1 L_sent + l2 L_emo + L_adv; per-head G/D pairs; punctuation removed; ~25 epochs GAN-BERT vs ~10 BERT. Unknowns, now permanent: [[Open Questions]]. Our A5 is therefore a re-implementation, compared with the seed's reported 93.88 acc / 94.15 F1 only qualitatively.
+
+## Pass 1 implementation plan (2026-11-10; A1 written, A3/A4/A5 not yet)
+- Arms as a 2x2 of switches in one shared training loop: A1 (neither), A3 (helper heads on L+U), A4 (GAN, no helpers), A5 (GAN + the same helper heads). Arms differ only in these switches; data, backbone, optimizer, batch, steps and seeds are shared.
+- Runs: A1 at 1/10/100%, A3/A4/A5 at 1/10% (U empty at 100%), 3 seeds = 27 runs.
+- Files (to write on request): `src/gainsplit/data.py` (load `processed/`, build L/U/dev/test from `budgets.json`), `models.py` (BERT encoder, sarcasm head, helper heads, generator/discriminator), `train.py` (one loop with the switches, fixed step count, fp16, resume from checkpoint), `evaluate.py` (accuracy, macro-F1, ROC-AUC, saved predictions), a CPU smoke test on a tiny BERT, and `experiments/02_train.ipynb` (clones the repo at a pushed commit, attaches the processed dataset, runs a batch of runs, writes results JSON + test and iSarcasmEval predictions).
+- Save predictions, not model weights (27 x ~440 MB would not fit); RQ3 transfer predictions on iSarcasmEval test are made at the end of each p = 10/100 run.
+- Build order: A1 first; owner runs one A1 seed at 10% to time it and sanity-check F1; tune lr once on dev at 10% with A1; then A3, then A4/A5; then the batch runner.
+- Data on Kaggle: private dataset `gainsplit-processed`. Pretrained models are public on the Hugging Face Hub, so no HF token is needed (Internet on).
+- Written 2026-11-10: `src/gainsplit/` (`config.py` arms and step rule, `data.py` find/verify/split, `models.py`, `train.py`, `evaluate.py`, `runner.py` two-GPU queue, `plans.py` run lists), `tests/` (data tests pass locally on made-up data; training smoke tests need torch and run in the notebook), `experiments/02_train.ipynb`. Only A1 is implemented; other arms raise a clear error. First plan: `lr_tuning` (9 runs). Not yet run on Kaggle.
+- Runner: one Kaggle notebook on GPU T4 x2, a list of runs, two at a time (one per GPU) ([[Decisions]] 2026-11-10).
+- Figure: `paper/figures/pass1_design.svg` (2x2 of arms with the contrasts; draft for the paper).
+- DECIDED 2026-11-10 ([[Decisions]]): (a) shared helper heads; (b) equal steps for every arm; (c) w tuned once from {0.1, 0.3, 1.0}. Original options for the record: (a) A5 helper design: shared helper heads on the encoder (recommended; cleanly A3 + A4) vs the seed paper's per-head generator/discriminator pairs; (b) step budget: same steps for every arm (recommended) vs GAN arms x2.5 as logged 2026-11-09, which gives GAN arms more training and re-adds the confound the fixed budget was meant to remove; (c) helper loss weights: fixed 0.5/0.5 or tuned once on dev with A3 at 10%.
 
 ## Status
 Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].
