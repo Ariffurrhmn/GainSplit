@@ -92,10 +92,20 @@ bert-base-uncased; 80/20 split; 70% of train labelled, 30% unlabelled; sentiment
 - Save predictions, not model weights (27 x ~440 MB would not fit); RQ3 transfer predictions on iSarcasmEval test are made at the end of each p = 10/100 run.
 - Build order: A1 first; owner runs one A1 seed at 10% to time it and sanity-check F1; tune lr once on dev at 10% with A1; then A3, then A4/A5; then the batch runner.
 - Data on Kaggle: private dataset `gainsplit-processed`. Pretrained models are public on the Hugging Face Hub, so no HF token is needed (Internet on).
-- Written 2026-11-10: `src/gainsplit/` (`config.py` arms and step rule, `data.py` find/verify/split, `models.py`, `train.py`, `evaluate.py`, `runner.py` two-GPU queue, `plans.py` run lists), `tests/` (data tests pass locally on made-up data; training smoke tests need torch and run in the notebook), `experiments/02_train.ipynb`. Only A1 is implemented; other arms raise a clear error. First plan: `lr_tuning` (9 runs). Not yet run on Kaggle.
+- Written 2026-11-10: `src/gainsplit/` (`config.py` arms and step rule, `data.py` find/verify/split, `models.py`, `train.py`, `evaluate.py`, `runner.py` two-GPU queue, `plans.py` run lists), `tests/` (data tests pass locally on made-up data; training smoke tests need torch and run in the notebook), `experiments/02_train.ipynb`. Only A1 is implemented; other arms raise a clear error. First plan: `lr_tuning` (9 runs), run 2026-11-10 on Kaggle (owner, interactive, GPU T4 x2, commit 29e4220): all 9 finished, 1.3-1.4 min each, dev only. Scores in [[Decisions]]; lr 5e-5 confirmed by the owner and frozen. Measured cost: 720 steps = about 1.3 min on a T4 incl. model loading, so Pass 1 (27 runs) is roughly 1-1.5 GPU-h (INFERRED from this timing; U-arms assumed about 2x per step), far below the 6-8 GPU-h budgeted.
 - Runner: one Kaggle notebook on GPU T4 x2, a list of runs, two at a time (one per GPU) ([[Decisions]] 2026-11-10).
 - Figure: `paper/figures/pass1_design.svg` (2x2 of arms with the contrasts; draft for the paper).
 - DECIDED 2026-11-10 ([[Decisions]]): (a) shared helper heads; (b) equal steps for every arm; (c) w tuned once from {0.1, 0.3, 1.0}. Original options for the record: (a) A5 helper design: shared helper heads on the encoder (recommended; cleanly A3 + A4) vs the seed paper's per-head generator/discriminator pairs; (b) step budget: same steps for every arm (recommended) vs GAN arms x2.5 as logged 2026-11-09, which gives GAN arms more training and re-adds the confound the fixed budget was meant to remove; (c) helper loss weights: fixed 0.5/0.5 or tuned once on dev with A3 at 10%.
+
+## Roadmap to submission (2026-11-10, planning deadline 10 Dec)
+Owner runs everything on Kaggle; code is written on request. Steps in the same block can run side by side.
+1. **Code, one go:** A3 (helper heads on L + U), A4 (GAN-BERT), A5 (A4 + A3 heads), plus plans `w_tuning` and `gan_pilot`.
+2. **Kaggle session 2 (~30-40 min):** `w_tuning` (A3, p = 10%, w in {0.1, 0.3, 1.0}, seeds 0-2, dev only) and `gan_pilot` (A4, p = 10%, seeds 0-2, dev only: checks the GAN trains). Owner picks w.
+3. **Kaggle session 3 (~1-2 h):** Pass 1 with test scored: A1 at 1/10/100%, A3/A4/A5 at 1/10%. Seeds: 3 as planned, or 5 now that runs are cheap (owner to decide).
+4. **Code:** analysis notebook: mean +- std tables, paired bootstrap per contrast, F1-vs-budget figure.
+5. **Pass 2:** A2, A8, A6, A0, A7 (A7 spec still awaits owner approval), budgets 5/30 for the 2x2 arms.
+6. **Pass 3:** RQ2 label-quality rows; RQ3 transfer (iSarcasmEval predictions already saved per run), helper-label vs sarcasm-label check, masking check.
+Side tracks, any time: gold audit (owner hand-labels ~200 random headlines for sentiment; sample drawn by a small notebook cell); check the QPAIN 2027 deadline and anonymity rule; draft the paper's data and setup sections (setup is now fixed); instructor feedback on the draft; submit.
 
 ## Status
 Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].

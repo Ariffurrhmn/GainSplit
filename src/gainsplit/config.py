@@ -21,7 +21,7 @@ class RunConfig:
     arm: str
     budget: int                 # % of train that keeps its label: 1, 5, 10, 30 or 100
     seed: int                   # picks the labeled subset, head initialisation and batch order
-    lr: float = 2e-5            # tuned once with A1 at 10% on dev, then frozen
+    lr: float = 5e-5            # chosen by lr_tuning (A1, 10%, dev), frozen 2026-11-10
     batch_size: int = 32
     passes: int = 10            # training length = 10 passes over L ...
     min_steps: int = 200        # ... but never fewer than 200 steps (matters at 1%)

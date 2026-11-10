@@ -30,7 +30,7 @@ Project **GainSplit** (Paper A): a controlled study of *where the gain comes fro
 - Next actions: top of [[Session Log]] and [[Open Questions]].
 - Data: raw Headlines and iSarcasmEval in `data/` (unedited, checked 2026-11-09); derived splits removed. Code skeleton rolled back 2026-11-09; no real runs yet.
 - Preprocessing: `experiments/01_preprocess.ipynb` ran 2026-11-10 (interactive Kaggle session). 28,501 headlines kept; split 22,800 / 2,850 / 2,851; outputs in `data/processed/` and uploaded by the owner as a private Kaggle dataset. Numbers in [[Headlines Dataset]] and [[iSarcasmEval]]. Punctuation removal and drop-duplicates both confirmed ([[Decisions]]).
-- Training code: A1 written 2026-11-10 (`src/gainsplit/`, `experiments/02_train.ipynb`); Pass 1 design settled ([[Experiment Plan]]). Next run: `lr_tuning` on Kaggle (owner). A3, A4, A5 still to write.
+- Training code: A1 written 2026-11-10 (`src/gainsplit/`, `experiments/02_train.ipynb`); Pass 1 design settled ([[Experiment Plan]]). `lr_tuning` ran 2026-11-10 (9/9 runs; lr 5e-5 confirmed and frozen). A3, A4, A5 still to write.
 - Working mode (2026-11-09, [[Repo Rules]] rule 5): the owner does all data work and runs everything; sessions guide and explain, and write code on request.
 - Limitation named 2026-11-09: original setup of the seed paper unavailable (supervisor); Zihan 2026 also omits key details; own re-implementation ([[Risks]] item 8). [[Zihan 2026]] read in full.
 - Novelty check: [[Chen 2022]] read in full 2026-11-08; partial overlap only (see [[Risks]]). Strongest verified overlap: [[Dai 2021]].
