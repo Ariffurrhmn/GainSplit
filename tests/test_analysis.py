@@ -173,3 +173,167 @@ def test_dev_only_tuning_runs_are_left_out(tmp_path):
         "train_log": []}))
     assert list(an.load_runs(tmp_path)["arm"]) == ["A1"]
     assert len(an.load_runs(tmp_path, test_only=False)) == 2
+
+
+# ---------------------------------------------------------------- Pass 3
+
+def write_run3(root, arm, budget, seed, tag, p_by_split):
+    """Run folder with a tag and any set of splits (dict split -> probabilities, same items)."""
+    from sklearn.metrics import f1_score
+    run_id = f"{arm}_p{budget}_s{seed}" + (f"_{tag}" if tag else "")
+    d = Path(root) / "runs" / run_id
+    d.mkdir(parents=True)
+    y = labels()
+    sc = {}
+    for split, p in p_by_split.items():
+        pd.DataFrame({"id": np.arange(N_ITEMS), "label": y, "p_sarcastic": p}).to_csv(d / f"preds_{split}.csv", index=False)
+        pred = (p >= 0.5).astype(int)
+        sc[split] = {"accuracy": 0.8, "macro_f1": float(f1_score(y, pred, average="macro")),
+                     "f1_sarcastic": 0.8, "roc_auc": 0.9}
+    (d / "result.json").write_text(json.dumps({
+        "run_id": run_id, "config": {"arm": arm, "budget": budget, "seed": seed, "tag": tag},
+        "scores": sc, "train_log": []}))
+
+
+def test_tagged_and_untagged_do_not_collide(tmp_path):
+    y = labels()
+    write_run3(tmp_path, "A3", 10, 0, "", {"test": probs_with_accuracy(y, 0.8, 1)})
+    write_run3(tmp_path, "A3", 10, 0, "soft", {"test": probs_with_accuracy(y, 0.9, 2)})
+    runs = an.load_runs(tmp_path)
+    assert len(runs) == 2 and set(runs["tag"]) == {"", "soft"}
+    assert len(an.untagged(runs)) == 1
+    # main tables ignore the tagged run
+    assert an.summary_table(runs)["n_seeds"].tolist() == [1]
+
+
+def test_untagged_outputs_unchanged_by_tagged_runs(tmp_path):
+    y = labels()
+    for arm, acc in (("A1", 0.7), ("A3", 0.8)):
+        for s in range(2):
+            write_run3(tmp_path, arm, 10, s, "", {"test": probs_with_accuracy(y, acc, s + ord(arm[1]))})
+    before = an.contrast_table(an.load_runs(tmp_path), n=300)
+    for s in range(2):
+        write_run3(tmp_path, "A3", 10, s, "soft", {"test": probs_with_accuracy(y, 0.95, 90 + s)})
+    after_runs = an.load_runs(tmp_path)
+    after = an.contrast_table(after_runs, n=300)
+    pd.testing.assert_frame_equal(before, after)
+    assert an.summary_table(after_runs)["n_seeds"].tolist() == [2, 2]
+
+
+def test_load_runs_error_names_folders(tmp_path):
+    with pytest.raises(FileNotFoundError, match="nothing_here"):
+        an.load_runs(tmp_path / "nothing_here")
+
+
+def test_mask_rerun_check_flags_planted_mismatch(tmp_path):
+    y = labels()
+    for s in range(2):
+        p = probs_with_accuracy(y, 0.8, s)
+        write_run3(tmp_path, "A1", 10, s, "", {"test": p})
+        write_run3(tmp_path, "A1", 10, s, "mask", {"test": p, "test_cuemask": p, "test_randmask": p})
+    chk = an.check_mask_reruns(an.load_runs(tmp_path))
+    assert chk["ok"].all() and (chk["pred_diff"] == 0).all()
+    # plant a difference in one mask run
+    f = tmp_path / "runs" / "A1_p10_s1_mask" / "preds_test.csv"
+    df = pd.read_csv(f)
+    df.loc[0, "p_sarcastic"] = 1 - df.loc[0, "p_sarcastic"]
+    df.to_csv(f, index=False)
+    with pytest.warns(UserWarning):
+        chk = an.check_mask_reruns(an.load_runs(tmp_path))
+    assert chk["ok"].tolist() == [True, False]
+    assert chk["pred_diff"].max() > 0.5
+
+
+def test_shortcut_gap_sign(tmp_path):
+    """Cue masking hurts a lot more than random masking -> positive gap with an interval above 0."""
+    y = labels()
+    for s in range(3):
+        write_run3(tmp_path, "A1", 10, s, "mask", {
+            "test": probs_with_accuracy(y, 0.90, s),
+            "test_cuemask": probs_with_accuracy(y, 0.70, 10 + s),
+            "test_randmask": probs_with_accuracy(y, 0.88, 20 + s)})
+    t = an.masked_table(an.load_runs(tmp_path), n=500)
+    r = t.iloc[0]
+    assert r["drop_cue"] > r["drop_rand"] and r["shortcut_gap"] > 5
+    assert r["gap_ci_low"] > 0 and r["drop_cue_ci_low"] > 0
+    assert r["gap_p"] < 0.01
+
+
+def test_auc_interval_contains_true_auc(tmp_path):
+    from sklearn.metrics import roc_auc_score
+    rng = np.random.default_rng(0)
+    n = 500
+    y = rng.integers(0, 2, n)
+    p = np.round(rng.normal(y * 1.0, 1.0), 1)        # rounding creates ties
+    # on the full data the rank-based AUC equals sklearn (ties included)
+    assert an._boot_auc(np.ones((1, n)), y, p)[0] == pytest.approx(roc_auc_score(y, p))
+    # a resample with known draw counts equals sklearn on the expanded sample
+    idx = rng.integers(0, n, n)
+    counts = np.bincount(idx, minlength=n)[None, :].astype(float)
+    assert an._boot_auc(counts, y, p)[0] == pytest.approx(roc_auc_score(y[idx], p[idx]))
+    f = tmp_path / "preds_isarc_test.csv"
+    pd.DataFrame({"id": np.arange(n), "label": y, "p_sarcastic": p}).to_csv(f, index=False)
+    res = an.auc_interval(pd.DataFrame({"preds_isarc_test": [str(f)]}), n=500)
+    true_auc = roc_auc_score(y, p)
+    assert res["ci_low"] < true_auc < res["ci_high"]
+    assert res["auc"] == pytest.approx(true_auc)
+
+
+def test_transfer_table_excludes_chance(tmp_path):
+    y = labels()
+    rng = np.random.default_rng(5)
+    good = np.clip(0.5 + (y - 0.5) * 0.4 + rng.normal(0, 0.2, N_ITEMS), 0, 1)
+    chance = rng.random(N_ITEMS)
+    for s in range(2):
+        write_run3(tmp_path, "A1", 10, s, "", {"test": good, "isarc_test": chance})
+        write_run3(tmp_path, "A1", 100, s, "isarctrain", {"test": good, "isarc_test": good})
+    t = an.transfer_table(an.load_runs(tmp_path), n=300)
+    chance_row = t[t["tag"] == ""].iloc[0]
+    ref = t[t["tag"] == "isarctrain"].iloc[0]
+    assert not chance_row["excludes_50"] and ref["excludes_50"] and ref["in_domain_reference"]
+
+
+def test_label_quality_table_names_tag_pairs(tmp_path):
+    y = labels()
+    for s in range(2):
+        write_run3(tmp_path, "A2", 1, s, "", {"test": probs_with_accuracy(y, 0.85, s)})
+        write_run3(tmp_path, "A2", 1, s, "flip50", {"test": probs_with_accuracy(y, 0.65, 5 + s)})
+        write_run3(tmp_path, "A9", 1, s, "shuf", {"test": probs_with_accuracy(y, 0.65, 8 + s)})
+        write_run3(tmp_path, "A1", 1, s, "", {"test": probs_with_accuracy(y, 0.75, 11 + s)})
+    t = an.label_quality_table(an.load_runs(tmp_path), n=300)
+    assert set(t["contrast"]) == {"A2[flip50]-A2", "A9[shuf]-A2", "A9[shuf]-A1"}
+    assert (t["ci_high"] < 0).all()
+
+
+def test_mutual_information():
+    rng = np.random.default_rng(0)
+    x = rng.integers(0, 3, 5000)
+    y_ind = rng.integers(0, 2, 5000)
+    nmi, v = an.association(x, y_ind)
+    assert nmi < 0.01 and v < 0.05
+    nmi, v = an.association(x, (x == 0).astype(int))
+    assert nmi > 0.3 and v > 0.9
+    assert an.association(x, x)[0] == pytest.approx(1.0)
+
+
+def test_helper_and_gold_tables():
+    rng = np.random.default_rng(1)
+    n = 200
+    lab = rng.integers(0, 2, n)
+    names = ["negative", "neutral", "positive"]
+    gold_s = rng.choice(names, n)
+    teacher = np.where(rng.random(n) < 0.7, gold_s, rng.choice(names, n))
+    train = pd.DataFrame({"id": np.arange(n), "text": "x", "label": lab})
+    probs = rng.dirichlet(np.ones(3), n)
+    helper = pd.DataFrame({"id": np.arange(n), "split": "train", "sent_label": teacher,
+                           "emo_label": rng.integers(0, 5, n),
+                           **{f"sent_p_{i}": probs[:, i] for i in range(3)},
+                           **{f"emo_p_{i}": rng.random(n) for i in range(5)}})
+    t = an.helper_shortcut_table(helper, train)
+    assert len(t) == 3 and t["auc"].iloc[-1] < 0.65     # independent labels -> probe near chance
+    gold = pd.DataFrame({"id": np.arange(n), "gold_sentiment": gold_s, "unsure": rng.integers(0, 2, n),
+                         "label": lab, "sent_label": teacher})
+    g = an.gold_table(gold)
+    assert set(g["subset"]) == {"all", "unsure == 0"} and (g["accuracy"] > 60).all()
+    s = an.gold_shortcut_table(gold, n_perm=20)
+    assert len(s) == 3 and 0 < s["p_perm"].iloc[-1] <= 1

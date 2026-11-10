@@ -90,6 +90,40 @@ def pass2b() -> list[RunConfig]:
             for b in (1, 10) for s in PASS2_SEEDS]
 
 
+PASS3_VARIANTS = ("soft", "flip25", "flip50", "vader", "teacher2", "sentonly", "emoonly")
+
+
+def _p3(arm, budget, tag, **kw) -> list[RunConfig]:
+    """Pass 3 runs for one arm and budget, seeds 0-4: test scored, masked test sets scored, tagged."""
+    w = PASS1_HELPER_WEIGHT if ARMS[arm]["helpers"] else 0.0
+    return [RunConfig(arm, budget, s, helper_weight=w, eval_test=True, eval_masked=True, tag=tag, **kw)
+            for s in PASS2_SEEDS]
+
+
+def pass3() -> list[RunConfig]:
+    """Helper-label quality (RQ2) and outlet-style shortcuts (RQ3): 105 runs, all on GPU.
+
+    - 7 helper-label variants x (A3 at 10%, A2 at 1%): 70 runs
+    - A9 (A2 with shuffled helper labels) at 1%: 5 runs
+    - A1, A3, A4, A6, A7 at 10% with no change except the masked test sets: 25 runs
+      (the tag "mask" only keeps the run ids apart from Pass 1/2; they reproduce the earlier scores)
+    - A1 trained on iSarcasmEval: 5 runs
+    Longest runs first (A6, A7, A4, A3, A1, then the 1% runs), so the two GPUs stay busy to the end.
+    """
+    if PASS2_FGM_EPSILON is None:
+        raise ValueError("set PASS2_FGM_EPSILON in plans.py before building pass3")
+    a3_variants = [r for v in PASS3_VARIANTS for r in _p3("A3", 10, v, helper_variant=v)]
+    a2_variants = [r for v in PASS3_VARIANTS for r in _p3("A2", 1, v, helper_variant=v)]
+    return (_p3("A6", 10, "mask")                                          # 5 runs
+            + _p3("A7", 10, "mask", fgm_epsilon=PASS2_FGM_EPSILON)         # 5
+            + _p3("A4", 10, "mask")                                        # 5
+            + a3_variants + _p3("A3", 10, "mask")                          # 35 + 5
+            + _p3("A1", 10, "mask")                                        # 5
+            + _p3("A1", 100, "isarctrain", train_data="isarcasm")          # 5
+            + a2_variants                                                  # 35
+            + _p3("A9", 1, "shuf"))                                        # 5
+
+
 PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "session2": session2, "pass1": pass1, "fgm_tuning": fgm_tuning,
-         "pass2a": pass2a, "pass2b": pass2b}
+         "pass2a": pass2a, "pass2b": pass2b, "pass3": pass3}
