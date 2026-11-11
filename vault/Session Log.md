@@ -7,6 +7,12 @@ updated: 2026-11-11
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-11 - Research diary and playbook
+- Done: wrote up the whole research process from the vault history, for reuse on the next paper.
+- Vault changes: new [[Research Diary]] (stages, mistakes and fixes, planning numbers) and [[Research Playbook]] (roles, setup, vault habits, protocol, Kaggle code pattern, delegated code sessions, paper checklist, starting brief); linked from the hub and [[Repo List]].
+- Findings: none new.
+- Next: unchanged (seed-paper reference, Overleaf compile, instructor review). For a new paper: paste the starting brief in [[Research Playbook]] section 9 into its first session.
+
 ## 2026-11-11 - Paper draft and Overleaf package
 - Done: QPAIN 2027 rules checked on the live site (deadline 20 Dec 2026, 4-6 pages, IEEE template, double-blind, similarity <= 20% / 4%). Full draft written in `paper/` (IEEEtran, anonymous), with a TikZ model diagram, three data figures and two tables generated from `results/analysis/`; compiles to 6 pages. `paper/gainsplit_overleaf.zip` built for Overleaf.
 - Vault changes: new [[Paper Draft]]; [[Audit - Venues]] (VERIFIED block), [[Decisions]] (2 DELEGATED), hub.
