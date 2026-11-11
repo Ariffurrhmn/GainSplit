@@ -7,6 +7,10 @@ updated: 2026-11-11
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-11 - Full run made one-click
+- Owner asked for a single unattended run. `05_pairgen_full.ipynb` now runs in one commit: judge contest on 400 real train headlines first (SmolLM3-3B vs cross-voting; reused if a previous run saved it), then generation of all 22,800 seeds, then judging with the winner only, then the frozen `pairs_train.csv` + `manifest_pairs.json` (scores, counts, cue rates, 8 example pairs, SHA-256). Generation stops itself after 9.5 h so output is kept; a second commit with the first output as input finishes the job. No settings to change. Dry-run on made-up data (stop-and-resume path and finish path).
+- Next (owner): Save & Run All (Commit); download `pairgen.zip`; send `manifest_pairs.json`.
+
 ## 2026-11-11 - Judge contest and sarcasm prompt v2
 - Owner declined any human labelling ([[Decisions]]) and proposed SmolLM3-3B (HuggingFaceTB, Apache 2.0, not gated) as judge.
 - Done: `pairgen.py` prompt version 2 (asks for obvious satire; four sharper invented examples) and judge-contest helpers (balanced accuracy with unclear = wrong, cross verdict, pick with threshold); 18 tests pass. `05_pairgen_full.ipynb` finalize now runs a judge contest on 400 real train headlines (200 per class): SmolLM3-3B vs cross-voting by the two generators that did not write the pair; best balanced accuracy >= 0.75 becomes the filter, otherwise no judge filter (all checked pairs kept). Blind audit sheet removed. Thinking mode turned off in chat templates (`enable_thinking=False`). Both paths dry-run on made-up data; GPU cells not run.
