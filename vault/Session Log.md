@@ -7,6 +7,12 @@ updated: 2026-11-11
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-11 - Full pair-generation notebook written (pilot skipped by the owner)
+- Owner chose to go straight to production (session usage limits). Written: `experiments/05_pairgen_full.ipynb` (whole train split by default, 3 generators, chunks of 500 saved per model, resumable across Kaggle sessions via earlier outputs added as input, seed-plan fingerprint check, finalize stage with checks, outlet-cue table, Phi judge on all generated headlines + 400 real train headlines, frozen `pairs_train.csv` + `manifest_pairs.json` with SHA-256, 200-item blind audit sheet). Helpers added to `src/gainsplit/pairgen.py`; 14 tests pass. Dry-run on made-up data across three simulated sessions; GPU cells not run.
+- The notebook recommends a 200-seed trial in the same notebook (`N_SEEDS = 200`) before the full run.
+- Time per model unknown until measured; printed per chunk.
+- Next (owner): trial run, then one model per committed session, then finalize; send tables from steps 6-7 and the manifest.
+
 ## 2026-11-11 - Pass 4 direction approved; pair-generation pilot written
 - Instructor approved the paired-generation direction (owner, 2026-11-11). Generators: Qwen2.5-7B-Instruct, Gemma-2-9B-it, Mistral-7B-Instruct-v0.3 (open weights, Kaggle); judge: Microsoft Phi-3.5-mini-instruct (open, not gated, a family not used for generation). Claude Haiku was first planned as judge but dropped: the owner has no Anthropic API key, only a chat subscription. Hugging Face check: only Gemma is gated.
 - Done: `src/gainsplit/pairgen.py` (seed picking, model assignment, prompt with invented few-shot examples, parsing, refusal and quality checks, outlet-cue rate, judge prompt, blind audit sheet) + `tests/test_pairgen.py` (10 tests pass locally); `experiments/04_pairgen_pilot.ipynb` (200 train seeds, 3 models, checks, Phi judge with greedy decoding, incl. judge accuracy on the real seeds, blind audit sheet, time estimate). Non-GPU cells dry-run on made-up data end to end; GPU cells not run.

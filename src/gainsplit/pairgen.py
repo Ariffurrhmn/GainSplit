@@ -209,3 +209,52 @@ def blind_audit(items: pd.DataFrame, n: int, seed: int):
     sheet = sample[["audit_no", "text"]].assign(your_label="")
     key = sample[["audit_no", "item_id", "seed_id", "model", "intended"]]
     return sheet, key
+
+
+# ---------------------------------------------------------------- production run
+
+def plan_seeds(train: pd.DataFrame, models: list[str], seed: int, n: int | None = None) -> pd.DataFrame:
+    """Seeds for the production run, each with its model. n=None uses the whole training split.
+
+    Deterministic for a given train file, model list and seed, so every Kaggle
+    session rebuilds exactly the same plan.
+    """
+    if n is None or n >= len(train):
+        s = train.sample(frac=1, random_state=seed).reset_index(drop=True)
+        s = s[["id", "text", "label"]].rename(columns={"id": "seed_id", "text": "seed_text", "label": "seed_label"})
+    else:
+        s = pick_seeds(train, n, seed)
+    s["model"] = assign_models(len(s), models, seed)
+    return s
+
+
+def model_chunks(plan: pd.DataFrame, model: str, size: int) -> list[pd.DataFrame]:
+    """The seeds of one model, in fixed chunks of `size` (the last one may be shorter)."""
+    part = plan[plan["model"] == model].reset_index(drop=True)
+    return [part.iloc[i:i + size].reset_index(drop=True) for i in range(0, len(part), size)]
+
+
+def chunk_name(k: int) -> str:
+    return f"chunk_{k:04d}.csv"
+
+
+def find_chunks(root) -> list:
+    """All saved chunk files under `root` (any depth), as raw_chunks/<model>/chunk_XXXX.csv."""
+    from pathlib import Path
+    root = Path(root)
+    return sorted(p for p in root.rglob("chunk_*.csv") if p.parent.parent.name == "raw_chunks")
+
+
+def collect_raw(paths) -> pd.DataFrame:
+    """Read chunk files into one table; a seed saved twice keeps its first copy."""
+    frames = [pd.read_csv(p, keep_default_na=False) for p in paths]
+    if not frames:
+        return pd.DataFrame(columns=["seed_id", "seed_text", "seed_label", "model", "raw"])
+    return pd.concat(frames, ignore_index=True).drop_duplicates("seed_id", keep="first").reset_index(drop=True)
+
+
+def training_rows(pairs: pd.DataFrame) -> pd.DataFrame:
+    """Kept pairs as training rows: id, seed_id, model, text, label (1 sarcastic, 0 serious)."""
+    kept = pairs[pairs["kept"]]
+    items = long_items(kept)
+    return items.rename(columns={"item_id": "id", "intended": "label"})[["id", "seed_id", "model", "text", "label"]]

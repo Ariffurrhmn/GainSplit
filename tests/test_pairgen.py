@@ -86,3 +86,42 @@ def test_blind_audit_hides_labels():
     assert list(sheet.columns) == ["audit_no", "text", "your_label"]
     assert "intended" in key.columns and len(key) == 3
     assert list(sheet["audit_no"]) == list(key["audit_no"])
+
+
+def test_plan_seeds_whole_split_and_subset():
+    tr = _train(30)
+    full = pg.plan_seeds(tr, ["a", "b"], seed=3)
+    assert len(full) == 60 and set(full["seed_id"]) == set(tr["id"])
+    assert full.equals(pg.plan_seeds(tr, ["a", "b"], seed=3))
+    sub = pg.plan_seeds(tr, ["a", "b"], seed=3, n=10)
+    assert len(sub) == 10 and sub["model"].value_counts().to_dict() == {"a": 5, "b": 5}
+
+
+def test_model_chunks_cover_each_seed_once():
+    plan = pg.plan_seeds(_train(30), ["a", "b", "c"], seed=0)
+    for m in "abc":
+        parts = pg.model_chunks(plan, m, size=7)
+        ids = pd.concat(parts)["seed_id"]
+        assert ids.is_unique and len(ids) == (plan["model"] == m).sum()
+        assert all(len(p) <= 7 for p in parts)
+
+
+def test_find_and_collect_chunks(tmp_path):
+    d = tmp_path / "x" / "raw_chunks" / "a"
+    d.mkdir(parents=True)
+    pd.DataFrame({"seed_id": [1, 2], "seed_text": ["t1", "t2"], "seed_label": [0, 1], "model": "a", "raw": ["r1", "r2"]}).to_csv(d / pg.chunk_name(0), index=False)
+    pd.DataFrame({"seed_id": [2, 3], "seed_text": ["t2", "t3"], "seed_label": [1, 0], "model": "a", "raw": ["r2b", "r3"]}).to_csv(d / pg.chunk_name(1), index=False)
+    (tmp_path / "other.csv").write_text("x")
+    paths = pg.find_chunks(tmp_path)
+    assert [p.name for p in paths] == ["chunk_0000.csv", "chunk_0001.csv"]
+    raw = pg.collect_raw(paths)
+    assert list(raw["seed_id"]) == [1, 2, 3] and raw.loc[raw["seed_id"] == 2, "raw"].item() == "r2"
+    assert pg.collect_raw([]).empty
+
+
+def test_training_rows_only_kept_pairs():
+    pairs = pd.DataFrame({"seed_id": [1, 2], "model": ["a", "b"], "sarcastic": ["s1", "s2"],
+                          "serious": ["n1", "n2"], "kept": [True, False]})
+    rows = pg.training_rows(pairs)
+    assert list(rows.columns) == ["id", "seed_id", "model", "text", "label"]
+    assert set(rows["id"]) == {"1_s", "1_n"} and set(rows["label"]) == {0, 1}
