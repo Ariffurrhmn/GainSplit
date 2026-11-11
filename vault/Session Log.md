@@ -7,6 +7,28 @@ updated: 2026-11-11
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-11 - Pass 4 direction approved; pair-generation pilot written
+- Instructor approved the paired-generation direction (owner, 2026-11-11). Generators: Qwen2.5-7B-Instruct, Gemma-2-9B-it, Mistral-7B-Instruct-v0.3 (open weights, Kaggle); judge: Claude Haiku via the owner's API key. Hugging Face check: only Gemma is gated.
+- Done: `src/gainsplit/pairgen.py` (seed picking, model assignment, prompt with invented few-shot examples, parsing, refusal and quality checks, outlet-cue rate, judge prompt, blind audit sheet) + `tests/test_pairgen.py` (10 tests pass locally); `experiments/04_pairgen_pilot.ipynb` (200 train seeds, 3 models, checks, Haiku judge incl. judge accuracy on the real seeds, blind audit sheet, time estimate). Non-GPU cells dry-run on made-up data end to end; GPU and API cells not run.
+- Open risk: Gemma 2 in float16 on T4 may give poor output (bf16 not supported on T4).
+- Next (owner): commit and push (Kaggle clones the repo), attach secrets `HF_TOKEN` and `ANTHROPIC_API_KEY`, run the pilot (GPU T4 x2, internet on, input `gainsplit-processed`), download `pairgen_pilot.zip`, fill the blind audit sheet.
+
+## 2026-11-11 - Instructor feedback: impact
+- Instructor feedback on the draft: showing that the analysed model is weak is not enough; what new method gives more gain, and why should it be published?
+- Done: reviewed results for positive directions. Proposed (IDEA, [[Research Ideas]] "Pass 4 candidates"): (1) stack FGM + self-training + helper heads on L; (2) VAT on U + FGM on L as the replacement for the GAN; (3) cue-dropout training against the outlet shortcut, tested on iSarcasmEval.
+- Vault changes: [[Research Ideas]], hub.
+- Follow-up request from the instructor: use generative AI (variants of GAN/BERT) and make the detector generalise to other datasets. Options logged in [[Research Ideas]] "Generative AI and generalisation".
+- Novelty check of LLM counterfactual augmentation: [[Novelty Check - LLM Counterfactuals]]. Technique exists for sarcasm (Jia 2024 multimodal, Hong 2025 dialogues) and for headline humor (Horvitz 2024); gap left is the outlet-shortcut, low-label, cross-dataset angle. Unfun.me (human Onion-to-serious edits) found as a possible counterfactual test set.
+- Second novelty search: Horvitz 2024 (ACL, full PDF read) pre-empts the Headlines counterfactual-test angle. Surviving candidate: label-free paired generation (LLM writes sarcastic + serious version of each unlabeled headline) as the SSL signal replacing the GAN generator. Details and risks in [[Novelty Check - LLM Counterfactuals]].
+- Next (owner): pick a direction with the instructor; then Pass 4 plan, code, runs. Deadline 20 Dec 2026.
+
+## 2026-11-11 - Engineering Research Express rules checked
+- Done: read the IOP publishing-support pages for Engineering Research Express (author guidelines, About, ethical policy, data policy); compared them with the current draft.
+- Vault changes: [[Audit - Venues]] (new VERIFIED block).
+- Findings: scope note excludes AI/ML work without a clear engineering application (main risk); no page limit (the 9 pages are the instructor's rule); single- or double-anonymous by choice; AI disclosure, data availability statement and checked references required; no colour in tables; cannot be under review at QPAIN at the same time.
+- Decision (owner): QPAIN first, ERX later as an extended version ([[Decisions]]).
+- Next (owner): QPAIN submission as planned; later, agree an engineering framing for the ERX version with the instructor and decide on the disclosure statement.
+
 ## 2026-11-11 - Research diary and playbook
 - Done: wrote up the whole research process from the vault history, for reuse on the next paper.
 - Vault changes: new [[Research Diary]] (stages, mistakes and fixes, planning numbers) and [[Research Playbook]] (roles, setup, vault habits, protocol, Kaggle code pattern, delegated code sessions, paper checklist, starting brief); linked from the hub and [[Repo List]].
