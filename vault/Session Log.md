@@ -8,10 +8,10 @@ updated: 2026-11-11
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
 ## 2026-11-11 - Pass 4 direction approved; pair-generation pilot written
-- Instructor approved the paired-generation direction (owner, 2026-11-11). Generators: Qwen2.5-7B-Instruct, Gemma-2-9B-it, Mistral-7B-Instruct-v0.3 (open weights, Kaggle); judge: Claude Haiku via the owner's API key. Hugging Face check: only Gemma is gated.
-- Done: `src/gainsplit/pairgen.py` (seed picking, model assignment, prompt with invented few-shot examples, parsing, refusal and quality checks, outlet-cue rate, judge prompt, blind audit sheet) + `tests/test_pairgen.py` (10 tests pass locally); `experiments/04_pairgen_pilot.ipynb` (200 train seeds, 3 models, checks, Haiku judge incl. judge accuracy on the real seeds, blind audit sheet, time estimate). Non-GPU cells dry-run on made-up data end to end; GPU and API cells not run.
+- Instructor approved the paired-generation direction (owner, 2026-11-11). Generators: Qwen2.5-7B-Instruct, Gemma-2-9B-it, Mistral-7B-Instruct-v0.3 (open weights, Kaggle); judge: Microsoft Phi-3.5-mini-instruct (open, not gated, a family not used for generation). Claude Haiku was first planned as judge but dropped: the owner has no Anthropic API key, only a chat subscription. Hugging Face check: only Gemma is gated.
+- Done: `src/gainsplit/pairgen.py` (seed picking, model assignment, prompt with invented few-shot examples, parsing, refusal and quality checks, outlet-cue rate, judge prompt, blind audit sheet) + `tests/test_pairgen.py` (10 tests pass locally); `experiments/04_pairgen_pilot.ipynb` (200 train seeds, 3 models, checks, Phi judge with greedy decoding, incl. judge accuracy on the real seeds, blind audit sheet, time estimate). Non-GPU cells dry-run on made-up data end to end; GPU cells not run.
 - Open risk: Gemma 2 in float16 on T4 may give poor output (bf16 not supported on T4).
-- Next (owner): commit and push (Kaggle clones the repo), attach secrets `HF_TOKEN` and `ANTHROPIC_API_KEY`, run the pilot (GPU T4 x2, internet on, input `gainsplit-processed`), download `pairgen_pilot.zip`, fill the blind audit sheet.
+- Next (owner): commit and push (Kaggle clones the repo), attach secret `HF_TOKEN`, run the pilot (GPU T4 x2, internet on, input `gainsplit-processed`), download `pairgen_pilot.zip`, fill the blind audit sheet.
 
 ## 2026-11-11 - Instructor feedback: impact
 - Instructor feedback on the draft: showing that the analysed model is weak is not enough; what new method gives more gain, and why should it be published?

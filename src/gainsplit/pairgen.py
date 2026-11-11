@@ -8,7 +8,7 @@ writing style of one model can predict the label.
 This file holds the parts that need no GPU and no network: picking seeds,
 assigning models, building prompts, parsing and checking outputs, the judge
 prompt and the blind audit table. Pandas and numpy only, so it is tested on any
-machine (tests/test_pairgen.py). Model loading and API calls live in the
+machine (tests/test_pairgen.py). Model loading and generation live in the
 notebook `experiments/04_pairgen_pilot.ipynb`.
 """
 import html
