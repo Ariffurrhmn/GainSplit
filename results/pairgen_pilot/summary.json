@@ -1,0 +1,63 @@
+{
+  "commit": "11ee9aeb3c707985e530f03316c30e6e5a6e3751",
+  "n_seeds": 200,
+  "seed": 2026,
+  "models": {
+    "qwen": {
+      "id": "Qwen/Qwen2.5-7B-Instruct",
+      "extra": {}
+    },
+    "gemma": {
+      "id": "google/gemma-2-9b-it",
+      "extra": {
+        "attn_implementation": "eager"
+      }
+    },
+    "mistral": {
+      "id": "mistralai/Mistral-7B-Instruct-v0.3",
+      "extra": {}
+    }
+  },
+  "gen": {
+    "max_new_tokens": 120,
+    "temperature": 0.8,
+    "top_p": 0.95,
+    "batch_size": 16
+  },
+  "judge_model": "microsoft/Phi-3.5-mini-instruct",
+  "timing": {
+    "qwen": {
+      "model_id": "Qwen/Qwen2.5-7B-Instruct",
+      "load_s": 113.4,
+      "gen_s": 40.7,
+      "seeds": 67,
+      "gen_s_per_seed": 0.607
+    },
+    "gemma": {
+      "model_id": "google/gemma-2-9b-it",
+      "load_s": 151.6,
+      "gen_s": 53.8,
+      "seeds": 67,
+      "gen_s_per_seed": 0.802
+    },
+    "mistral": {
+      "model_id": "mistralai/Mistral-7B-Instruct-v0.3",
+      "load_s": 131.3,
+      "gen_s": 82.0,
+      "seeds": 66,
+      "gen_s_per_seed": 1.242
+    }
+  },
+  "checks_ok_by_model": {
+    "gemma": 1.0,
+    "mistral": 1.0,
+    "qwen": 0.97
+  },
+  "kept_by_model": {
+    "gemma": 0.299,
+    "mistral": 0.258,
+    "qwen": 0.328
+  },
+  "judge_accuracy_on_real": 0.635,
+  "judge_unclear": 8
+}

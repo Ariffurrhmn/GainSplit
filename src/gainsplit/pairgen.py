@@ -63,25 +63,34 @@ def assign_models(n: int, models: list[str], seed: int) -> list[str]:
 
 # Invented examples (not taken from any dataset). Lowercase, no punctuation,
 # like the processed headlines.
+# Version 1 was used in the pilot (results/pairgen_pilot); version 2 asks for
+# clearer sarcasm after the pilot showed many mild sarcastic sides.
+PROMPT_VERSION = 2
+
 FEW_SHOT = [
     ("local school adds extra week to summer break after heat wave",
      "local school extends summer break after admitting nobody learns anything in august anyway",
      "local school extends summer break by one week after record heat wave"),
     ("man spends whole weekend building furniture he will throw out next year",
-     "man spends whole weekend building bookshelf destined for curb by next spring",
+     "man proudly spends entire weekend building bookshelf that will collapse by tuesday",
      "man spends whole weekend building furniture for new apartment"),
     ("study finds regular exercise lowers risk of heart disease",
-     "study finds regular exercise lowers risk of heart disease for 400th consecutive year",
+     "scientists stunned to learn exercise still good for you after 400th identical study",
      "large study confirms regular exercise lowers risk of heart disease"),
+    ("airline adds new fee for carry on bags",
+     "airline generously lets passengers pay extra for privilege of bringing their own clothes",
+     "airline introduces new fee for carry on bags"),
 ]
 
 TASK = (
     "You write news headlines for a research dataset on sarcasm detection.\n"
     "Given a headline, write two new headlines about the same topic:\n"
-    "1. \"sarcastic\": a satirical, sarcastic headline in the style of a satire news site.\n"
-    "2. \"serious\": a plain, factual headline a regular news site could publish.\n"
+    "1. \"sarcastic\": a clearly sarcastic headline in the style of a satire news site. It must be obvious "
+    "satire: say the opposite of what is meant, praise something bad, treat something absurd as normal, "
+    "or exaggerate wildly. A mildly opinionated headline is not enough.\n"
+    "2. \"serious\": a plain, neutral, factual headline a regular news site could publish, with no irony or jokes.\n"
     "Rules:\n"
-    "- Keep the same topic, and reuse as many words as possible, so the two headlines differ mainly in tone.\n"
+    "- Keep the same topic and reuse words from the given headline where you can.\n"
     "- Do not copy the given headline unchanged into either answer.\n"
     "- One headline each, under 20 words, lowercase, no punctuation.\n"
     "- Answer with JSON only: {\"sarcastic\": \"...\", \"serious\": \"...\"}"
@@ -258,3 +267,39 @@ def training_rows(pairs: pd.DataFrame) -> pd.DataFrame:
     kept = pairs[pairs["kept"]]
     items = long_items(kept)
     return items.rename(columns={"item_id": "id", "intended": "label"})[["id", "seed_id", "model", "text", "label"]]
+
+
+# ---------------------------------------------------------------- judge contest
+
+def _pred(v):
+    """A judge vote as 0, 1 or None (missing, NaN or unclear)."""
+    if v is None or (isinstance(v, float) and np.isnan(v)):
+        return None
+    return int(v)
+
+
+def balanced_accuracy(y_true, y_pred) -> float:
+    """Mean of the per-class accuracies; an unclear vote (None/NaN) counts as wrong."""
+    y_true = [int(t) for t in y_true]
+    y_pred = [_pred(p) for p in y_pred]
+    accs = []
+    for c in sorted(set(y_true)):
+        idx = [i for i, t in enumerate(y_true) if t == c]
+        accs.append(sum(y_pred[i] == c for i in idx) / len(idx))
+    return float(np.mean(accs)) if accs else 0.0
+
+
+def cross_verdict(votes) -> int | None:
+    """Verdict of several judges: their shared answer if all give the same clear answer, else None."""
+    vs = [_pred(v) for v in votes]
+    if not vs or any(v is None for v in vs) or len(set(vs)) != 1:
+        return None
+    return vs[0]
+
+
+def pick_judge(scores: dict, min_score: float):
+    """The candidate with the highest score, or None if no candidate reaches `min_score`."""
+    if not scores:
+        return None
+    best = max(scores, key=scores.get)
+    return best if scores[best] >= min_score else None

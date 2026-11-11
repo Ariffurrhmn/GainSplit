@@ -7,6 +7,16 @@ updated: 2026-11-11
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-11 - Judge contest and sarcasm prompt v2
+- Owner declined any human labelling ([[Decisions]]) and proposed SmolLM3-3B (HuggingFaceTB, Apache 2.0, not gated) as judge.
+- Done: `pairgen.py` prompt version 2 (asks for obvious satire; four sharper invented examples) and judge-contest helpers (balanced accuracy with unclear = wrong, cross verdict, pick with threshold); 18 tests pass. `05_pairgen_full.ipynb` finalize now runs a judge contest on 400 real train headlines (200 per class): SmolLM3-3B vs cross-voting by the two generators that did not write the pair; best balanced accuracy >= 0.75 becomes the filter, otherwise no judge filter (all checked pairs kept). Blind audit sheet removed. Thinking mode turned off in chat templates (`enable_thinking=False`). Both paths dry-run on made-up data; GPU cells not run.
+- Next (owner): trial (`N_SEEDS = 200`, generate then finalize), send the contest scores and tables; then the full run.
+
+## 2026-11-11 - Pair-generation pilot results
+- Owner ran the pilot (commit 11ee9ae); filed in `results/pairgen_pilot/`, read in [[Pairgen Pilot Results]].
+- Generation works for all three models (no refusals, about 1-2.6 h per model for the full split); outlet-cue gap disappears in generated pairs. Phi judge is too weak (0.635 on real headlines, says SERIOUS by default); kept 26-33% mostly because of it. Sarcastic sides are mixed in strength.
+- Next: owner fills the blind audit sheet; replace the judge and strengthen the sarcasm prompt before the full run.
+
 ## 2026-11-11 - Full pair-generation notebook written (pilot skipped by the owner)
 - Owner chose to go straight to production (session usage limits). Written: `experiments/05_pairgen_full.ipynb` (whole train split by default, 3 generators, chunks of 500 saved per model, resumable across Kaggle sessions via earlier outputs added as input, seed-plan fingerprint check, finalize stage with checks, outlet-cue table, Phi judge on all generated headlines + 400 real train headlines, frozen `pairs_train.csv` + `manifest_pairs.json` with SHA-256, 200-item blind audit sheet). Helpers added to `src/gainsplit/pairgen.py`; 14 tests pass. Dry-run on made-up data across three simulated sessions; GPU cells not run.
 - The notebook recommends a 200-seed trial in the same notebook (`N_SEEDS = 200`) before the full run.

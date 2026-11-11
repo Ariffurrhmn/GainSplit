@@ -125,3 +125,28 @@ def test_training_rows_only_kept_pairs():
     rows = pg.training_rows(pairs)
     assert list(rows.columns) == ["id", "seed_id", "model", "text", "label"]
     assert set(rows["id"]) == {"1_s", "1_n"} and set(rows["label"]) == {0, 1}
+
+
+def test_prompt_version_and_examples():
+    assert pg.PROMPT_VERSION == 2
+    assert len(pg.FEW_SHOT) == 4 and "obvious" in pg.build_prompt("x")
+
+
+def test_balanced_accuracy_counts_unclear_as_wrong():
+    assert pg.balanced_accuracy([1, 1, 0, 0], [1, 1, 0, 0]) == 1.0
+    assert pg.balanced_accuracy([1, 1, 0, 0], [1, None, 0, float("nan")]) == 0.5
+    assert pg.balanced_accuracy([1, 0, 0, 0], [1, 1, 1, 1]) == 0.5
+
+
+def test_cross_verdict_needs_agreement():
+    assert pg.cross_verdict([1, 1]) == 1
+    assert pg.cross_verdict([0, 0.0]) == 0
+    assert pg.cross_verdict([1, 0]) is None
+    assert pg.cross_verdict([1, None]) is None
+    assert pg.cross_verdict([float("nan"), 1]) is None
+
+
+def test_pick_judge_threshold():
+    assert pg.pick_judge({"a": 0.7, "b": 0.8}, 0.75) == "b"
+    assert pg.pick_judge({"a": 0.7}, 0.75) is None
+    assert pg.pick_judge({}, 0.75) is None
