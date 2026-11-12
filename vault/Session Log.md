@@ -1,11 +1,33 @@
 ---
 tags: [log]
-updated: 2026-11-11
+updated: 2026-11-13
 ---
 
 # Session Log
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
+
+## 2026-11-13 - Judge contest v2 written
+- Owner asked for a better judge. Written: `src/gainsplit/judge.py`, `tests/test_judge.py` (24 tests pass with pairgen) and `experiments/06_judge_v2.ipynb`: score-based judges (log-probability of SARCASTIC minus SERIOUS) with a threshold set on 400 real train headlines and pass/fail on 400 others, prompt v2 with a format note and 3 + 3 real examples, plus an off-the-shelf irony classifier. Details in [[Pairgen Full Run Results]].
+- Dry run on made-up data passes both paths; GPU cell not run.
+- Next (owner): run notebook 06 on Kaggle (inputs `gainsplit-processed` + the notebook 05 finalize output; T4 x2, Internet, `HF_TOKEN`; Save & Run All (Commit); about 1-4 h); send `judge_v2.zip` and the log. Push the code first (Kaggle clones the repo).
+
+## 2026-11-12 - Explainability added to Pass 4
+- Owner asked for explainable models and confirmed the proposal: Integrated Gradients attributions for A1 and the main Pass 4 model; main number is the share of attribution on outlet cue words ([[Experiment Plan]] "Pass 4 plan", [[Decisions]]). Not written or run yet; it needs the Pass 4 models.
+
+## 2026-11-12 - Pair dataset finalized
+- Owner ran finalize (2.9 h) and sent the zip and log. Read in [[Pairgen Full Run Results]].
+- No judge reached 0.75 on real headlines (best SmolLM3 0.507); all judges say SARCASTIC to almost everything. By the rule set before the run, no judge filter: `pairs_train.csv` has all 22,417 checked pairs (44,834 rows). Hashes, balance and no-leak checks pass.
+- Judges still separate generated sides in the intended direction (Mistral: 0.88 vs 0.17 SARCASTIC rate), more clearly than real headlines (0.79 vs 0.45).
+- Next (owner): file the zip in `results/pairgen/`, add `pairs_train.csv` + `manifest_pairs.json` to a new `gainsplit-processed` version; then Pass 4 training plan and code.
+
+## 2026-11-12 - Full pair-generation output inspected
+- Owner sent `pairgen.zip` from the full run. Read in [[Pairgen Full Run Results]].
+- Generation complete: 22,800 / 22,800 seeds, 98% pass the automatic checks (22,417 pairs), no refusals; about 6.4 h of generation.
+- Judge contest and finalize left no output (no `judge_contest.json`, `pairs_train.csv`, `manifest_pairs.json`); the zip also has a `timing.csv` the repo notebook does not write, so the Kaggle copy was probably edited.
+- Owner explained: the run used an edited two-stage notebook (memory fix for Gemma) with `STAGE = "generate"`, so finalize had not run yet. Notebook read and compared with the repo version in [[Pairgen Full Run Results]]: same seed plan, prompt and checks; Gemma batch 16 and out-of-memory splitting; finalize collects votes from all four judges.
+- Owner asked: the notebook that ran replaced `experiments/05_pairgen_full.ipynb` (same content; one-click version kept in git history at 7893def).
+- Next (owner): same notebook, generation output added as input, `STAGE = "finalize"`, Save & Run All (Commit); send `pairgen.zip`. Leave `pairgen.py` unchanged until then.
 
 ## 2026-11-11 - Full run made one-click
 - Owner asked for a single unattended run. `05_pairgen_full.ipynb` now runs in one commit: judge contest on 400 real train headlines first (SmolLM3-3B vs cross-voting; reused if a previous run saved it), then generation of all 22,800 seeds, then judging with the winner only, then the frozen `pairs_train.csv` + `manifest_pairs.json` (scores, counts, cue rates, 8 example pairs, SHA-256). Generation stops itself after 9.5 h so output is kept; a second commit with the first output as input finishes the job. No settings to change. Dry-run on made-up data (stop-and-resume path and finish path).

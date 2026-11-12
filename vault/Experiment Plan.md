@@ -130,6 +130,17 @@ Revised after Passes 1-2 ([[Bootstrap - All Passes]]): helpers on L + U give no 
 
 **Code (three sessions in parallel, disjoint files):** (A) `experiments/01b_pass3_data.ipynb` + `src/gainsplit/masking.py`; (B) training switches R1-R7, A9, extra eval splits, iSarcasmEval-train arm, `pass3` plan, tests (`config.py`, `data.py`, `train.py`, `evaluate.py`, `plans.py`); (C) step 3a analysis (`analysis.py`, `03_analysis.ipynb`, tests). File formats shared by A and B are fixed in the briefs.
 
+## Pass 4 plan (started 2026-11-12; training arms not planned yet)
+Data: `pairs_train.csv` from [[Pairgen Full Run Results]] (unfiltered main set; a judge-filtered set only if the v2 judge contest passes).
+
+**Fixed step: explainability check (CONFIRMED by owner 2026-11-12).** After Pass 4 training, on Kaggle:
+- Method: Integrated Gradients token attributions (Captum) for the predicted class, all-padding baseline, on a fixed, seeded, class-balanced sample of the Headlines test set (size set with the training plan).
+- Models: A1 (baseline) and the main Pass 4 model, same budget and seeds 0-4; others if time allows.
+- Main number per model: share of absolute attribution on the top-100 outlet cue words (`cue_words.json`), averaged over headlines and seeds, with a bootstrap interval for the difference from A1.
+- Prediction written down before running (IDEA): the pair-trained model puts a smaller share on cue words than A1, in line with a smaller cue-mask gap ([[Pass 3 Results]]).
+- Paper: the cue-share number in the results table, plus 2-3 highlighted example headlines (same headlines for both models).
+- Not used: attention weights as explanations; LIME/SHAP (slower, noisier on short text). Background: [[Research Ideas]] "Explainability".
+
 ## Status
 Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].
 
