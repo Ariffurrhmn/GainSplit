@@ -42,7 +42,8 @@ def test_runner_routes_a0_without_a_gpu_and_collect_reads_it(fake_data, tmp_path
     cfgs = [RunConfig("A0", b, s, eval_test=True) for b in (10, 30) for s in (0, 1)]
     table = run_all(cfgs, fake_data, tmp_path / "r", n_gpus=0)  # no subprocess, no torch
     assert sorted(table["run_id"]) == ["A0_p10_s0", "A0_p10_s1", "A0_p30_s0", "A0_p30_s1"]
-    assert {"test_macro_f1", "fgm_epsilon", "minutes", "steps"} <= set(table.columns)
+    assert {"test_macro_f1", "fgm_epsilon", "pair_weight", "cleaned_drop_pct", "minutes", "steps"} <= set(table.columns)
+    assert (table["pair_weight"] == 1.0).all() and (table["cleaned_drop_pct"] == 0.0).all()  # A0 uses no pairs
     run_all(cfgs, fake_data, tmp_path / "r", n_gpus=0)  # second call: everything already done
     assert len(collect(tmp_path / "r")) == 4
 

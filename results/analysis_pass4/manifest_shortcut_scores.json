@@ -1,0 +1,7 @@
+{
+  "input_pairs_train_sha256": "6412c1facfb2cb743acc190223660d0f085bd72d165c57447d6ac39cdfe43f34",
+  "cv_auc": 0.9511,
+  "sha256": {
+    "pair_shortcut_scores.csv": "78b443e8c2aca38a723a18ef62089a1307fb967bf8e1a9a9a90fa2240c8bddcb"
+  }
+}

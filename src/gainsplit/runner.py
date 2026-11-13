@@ -91,6 +91,8 @@ def collect(out_root) -> pd.DataFrame:
         row = {"run_id": r["run_id"], "arm": c["arm"], "budget": c["budget"], "seed": c["seed"],
                "tag": c.get("tag", ""), "lr": c["lr"], "helper_weight": c["helper_weight"],
                "fgm_epsilon": c.get("fgm_epsilon", 0.0),  # older result.json files have no such field
+               "pair_weight": c.get("pair_weight", 1.0),           # Pass 5: older files have no such field
+               "cleaned_drop_pct": c.get("cleaned_drop_pct", 0.0),  # Pass 5: older files have no such field
                "steps": r["steps"], "minutes": r["minutes"]}
         for split, s in r["scores"].items():
             for k in ("accuracy", "macro_f1", "f1_sarcastic", "roc_auc"):

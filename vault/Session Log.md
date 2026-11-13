@@ -7,6 +7,17 @@ updated: 2026-11-13
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-14 - Pass 5 tuning notebook written
+- Written `experiments/10_pass5_tuning.ipynb` (GPU, two stages: `pair_weight_tuning` then `cleaned_drop_tuning` once the first winner is frozen and pushed; interactive, no commit needed, 9+9 runs). Reuses `02_train.ipynb`'s dev-only summary pattern, not `08_pass4.ipynb`'s (which assumes test scoring and would error on a dev-only plan). Logged in [[Experiment Plan]] "Pass 5 plan".
+- Checked: the data-check cell runs correctly against the real local `gainsplit-processed` folder (loads `unfiltered` pairs; the shortcut-score file is not yet re-added locally, and the cell's try/except handles that as designed). Plan listing and grouping cells checked against the real plan output.
+- Next: owner adds `pair_shortcut_scores.csv` + `manifest_shortcut_scores.json` to a new `gainsplit-processed` version, runs notebook 10 stage 1 (`pair_weight_tuning`), reports the winning weight.
+
+## 2026-11-14 - Shortcut-pattern hunting committed as a result
+- Owner ran notebook 09 again (CPU, same inputs) and sent the new `analysis_pass4.zip` and log. Read in [[Pass 4 Results]] "Shortcut-pattern hunting in the generated pairs". The 330-run re-run reproduces every previously committed table byte-identical.
+- Result: whole-model cv_auc 0.9511, well above length (0.785) or cue words (0.626) alone; top words match the earlier local check exactly (finally, groundbreaking, praises vs. criticizes, expresses, discusses). A1 (real data only) still reads real headlines with these words correctly 88-100% of the time, so the tics are a risk only for a model trained on the pairs.
+- New data artifact `pair_shortcut_scores.csv` + `manifest_shortcut_scores.json` (22,417 seeds) is in `results/analysis_pass4/`; owner adds it to a new `gainsplit-processed` version so [[Experiment Plan]] "Pass 5 plan" can use it.
+- Next: owner runs `pair_weight_tuning` and `cleaned_drop_tuning` (dev only); notebook cells for these to be added to notebook 08.
+
 ## 2026-11-14 - Pass 5 plan and code written
 - Owner's idea (after the Pass 4 shortcut-pattern findings): clean the generated pairs of the found shortcut words, and/or trust them less during training, to recover Pass 4's in-domain loss without losing the transfer gain. Design and code written and logged in [[Experiment Plan]] "Pass 5 plan".
 - Two new config knobs: `pair_weight` (down-weights the pair rows' share of the sarcasm loss) and a new pair set `"cleaned"` (drops the worst-scoring seeds by `pair_checks.shortcut_scores`, a precomputed per-seed score file, same workflow as `cue_words.json`). New arms A16 (A10 + cleaning), A17 (A11 + cleaning).
