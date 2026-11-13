@@ -216,6 +216,43 @@ def explain_contrast_table(expl, n=10000, rng_seed=0, specs=EXPLAIN_SPECS) -> pd
     return pd.DataFrame(rows)
 
 
+# ---------------------------------------------------------------- iSarcasmEval length shortcut
+
+def isarc_length_auc(isarc_test: pd.DataFrame, runs: pd.DataFrame, n: int = 10000, rng_seed: int = 0) -> dict:
+    """Bootstrap AUC of word count alone on the iSarcasmEval test labels (plain units, 0.5 = chance).
+
+    One number, not per-arm: the test set and its labels are the same file for every run
+    (`load_isarcasm_splits`), so this is computed once and placed next to `transfer_table`'s
+    per-arm AUCs for comparison. Uses the ids of a Pass 4 run's `preds_isarc_test.csv` (any run
+    with that column) to confirm the item order and labels match what the models were scored on.
+    """
+    col = "preds_isarc_test"
+    paths = [x for x in runs[col] if x]
+    if not paths:
+        ids = isarc_test["id"].to_numpy()
+        y = isarc_test["label"].to_numpy().astype(int)
+    else:
+        ids, y, _ = an._read_probs(paths[0])
+        ref = isarc_test.set_index("id").loc[ids]
+        if not np.array_equal(ref["label"].to_numpy().astype(int), y):
+            raise ValueError("isarc_test labels do not match the run's preds_isarc_test.csv")
+    text = isarc_test.set_index("id").loc[ids, "text"]
+    length = text.str.split().str.len().to_numpy(float)
+    observed = float(an._boot_auc(np.ones((1, len(y))), y, length)[0])
+    rng = np.random.default_rng(rng_seed)
+    out, done, chunk = [], 0, 500
+    while done < n:
+        k = min(chunk, n - done)
+        idx = rng.integers(0, len(y), size=(k, len(y)))
+        counts = np.bincount((idx + len(y) * np.arange(k)[:, None]).ravel(),
+                             minlength=k * len(y)).reshape(k, len(y)).astype(float)
+        out.append(an._boot_auc(counts, y, length))
+        done += k
+    d = np.concatenate(out)
+    lo, hi = np.nanpercentile(d, [2.5, 97.5])
+    return {"auc": observed * 100, "ci_low": float(lo) * 100, "ci_high": float(hi) * 100, "n_items": len(y)}
+
+
 # ---------------------------------------------------------------- re-run check
 
 def check_reruns(runs, tags=("mask", "explain"), tol=1e-6) -> pd.DataFrame:
@@ -229,8 +266,12 @@ def check_reruns(runs, tags=("mask", "explain"), tol=1e-6) -> pd.DataFrame:
     return pd.concat(out, ignore_index=True)
 
 
-def run_all(results_dirs, out_dir="results/analysis_pass4", n=10000, rng_seed=0) -> dict:
-    """Write every Pass 4 table to out_dir (CSV + Markdown) and return them."""
+def run_all(results_dirs, out_dir="results/analysis_pass4", n=10000, rng_seed=0, isarc_test=None) -> dict:
+    """Write every Pass 4 table to out_dir (CSV + Markdown) and return them.
+
+    `isarc_test` (optional): the iSarcasmEval test DataFrame (id, text, label), to add the
+    length-shortcut table (`isarc_length_shortcut`). Skipped if not given.
+    """
     runs = an.load_runs(*results_dirs)
     expl = load_explain(runs)
     tables = {
@@ -244,6 +285,9 @@ def run_all(results_dirs, out_dir="results/analysis_pass4", n=10000, rng_seed=0)
         "explain": explain_table(expl),
         "explain_contrasts": explain_contrast_table(expl, n, rng_seed),
     }
+    if isarc_test is not None:
+        shortcut = isarc_length_auc(isarc_test, runs, n, rng_seed)
+        tables["isarc_length_shortcut"] = pd.DataFrame([{"set": "isarc test (length only)", **shortcut}])
     for name, t in tables.items():
         if len(t):
             an.save_table(t, out_dir, name, default_decimals=3)

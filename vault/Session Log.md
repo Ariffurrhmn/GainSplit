@@ -7,6 +7,19 @@ updated: 2026-11-13
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-13 - iSarcasmEval length-shortcut check written
+- Owner asked to write the length check flagged as open in [[Pass 4 Results]]. Written: `pair_checks.isarc_length_shortcut` (descriptive AUC of word count vs the real iSarcasmEval test labels) and `analysis_pass4.isarc_length_auc` (bootstrap 95% CI over the exact items a run was scored on), wired into notebook 09 (section A prints the descriptive table, section E's `run_all` writes `isarc_length_shortcut.csv/.md`). Logged in [[Pass 4 Results]] "iSarcasmEval length-shortcut check".
+- 9 new/extended tests; full suite 137 passed, 2 skipped (torch, as before), locally.
+- Not run: needs the owner to push and re-run notebook 09 (CPU only, no new data, same inputs as the Pass 4 analysis run).
+
+## 2026-11-13 - Pass 4 results read
+- Owner ran notebook 08 (commit 51fea9b, GPU T4 x2, 75/75 runs, 76.2 min, 193 tests passed, re-run check PASS) and notebook 09 (Kaggle CPU, 330 runs) and sent `results_pass4.zip`, `analysis_pass4.zip` and both logs. Read in [[Pass 4 Results]].
+- Pairs as extra labeled rows: -16.5 F1 at 1%, -14.8 at 10% (A10 vs A1); FGM + pairs likewise. Pairing adds nothing; judge filter +0.8 / +1.2 (significant after Holm). H4.1, H4.4, H4.5, H4.6 rejected.
+- iSarcasmEval AUC: every pair arm 72-74 vs about 50 for A1/A7; pairs-only A15 76.2, above the in-domain reference 65.75. Possible length shortcut (generated sarcastic sides longer, length-only AUC 0.785 in the pairs): check before claiming.
+- IG completeness gap 0.37-0.54 (32 steps too few); cue share A10 0.095 vs A1 0.115, approximate.
+- Zips and logs moved from Downloads into `results/pass4/` and `results/analysis_pass4/` at the owner's request and unpacked; every file matches its zip. The two `download*.txt` files were exact copies of the logs and stay in Downloads.
+- Next: length check on iSarcasmEval test (CPU); choose the next step ([[Research Ideas]] "After Pass 4").
+
 ## 2026-11-13 - Kaggle upload folder prepared
 - Owner asked to run everything on Kaggle and to get only the files for the input and the notebooks to import. Owner's request, so the files were assembled in this session (copy only, no content changed).
 - `data/kaggle_upload/gainsplit-processed/` (git-ignored, 20 files, 22 MB): the 16 files of `data/processed/` plus `pairs_train.csv` + `manifest_pairs.json` (from the finalize zip, `pairs_train.csv` SHA-256 6412c1fa..., same as judge v2 checked) and `pairs_train_filtered.csv` + `manifest_judge_v2.json` (from `judge_v2.zip`). All files pass `verify`, `verify_pass3` and the Pass 4 pre-flight (unfiltered 44,834 rows; filtered and matched 34,630 with Gemma 7,533 / Mistral 4,986 / Qwen 4,796; unpaired 22,417).

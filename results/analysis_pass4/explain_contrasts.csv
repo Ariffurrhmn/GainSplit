@@ -1,0 +1,2 @@
+contrast,budget,mean_diff,ci_low,ci_high,p,n_seeds,n_items
+cue share A10 - A1,10,-0.0205264856,-0.02761909969,-0.013711126160000009,0.0,5,500

@@ -1,0 +1,146 @@
+{
+  "run_id": "A1_p10_s0_explain",
+  "config": {
+    "arm": "A1",
+    "budget": 10,
+    "seed": 0,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.0,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.0,
+    "tag": "explain",
+    "helper_variant": "",
+    "eval_masked": true,
+    "train_data": "headlines",
+    "gen_lr": 0.0,
+    "step_mult": 1,
+    "pair_batch": 32,
+    "explain": true
+  },
+  "n_labeled": 2280,
+  "n_unlabeled": 20520,
+  "uses_u": false,
+  "pairs": null,
+  "explain": {
+    "n": 500,
+    "ig_steps": 32,
+    "sample_seed": 2027,
+    "mean_cue_share": 0.09965,
+    "mean_cue_share_with_cue": 0.16445,
+    "share_with_cue_word": 0.606,
+    "median_rel_completeness_gap": 0.6868,
+    "minutes": 1.56
+  },
+  "steps": 720,
+  "minutes": 3.04,
+  "scores": {
+    "dev": {
+      "accuracy": 0.8652631578947368,
+      "macro_f1": 0.864470185422223,
+      "f1_sarcastic": 0.8541033434650456,
+      "roc_auc": 0.934277357489294,
+      "n": 2850
+    },
+    "test": {
+      "accuracy": 0.8775868116450368,
+      "macro_f1": 0.8769691904576962,
+      "f1_sarcastic": 0.8682521706304266,
+      "roc_auc": 0.9449659115575112,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.6935714285714286,
+      "macro_f1": 0.523117979468506,
+      "f1_sarcastic": 0.23801065719360567,
+      "roc_auc": 0.5402104166666667,
+      "n": 1400
+    },
+    "test_cuemask": {
+      "accuracy": 0.8249736934408979,
+      "macro_f1": 0.8234133035234076,
+      "f1_sarcastic": 0.8068137824235385,
+      "roc_auc": 0.8985543244469878,
+      "n": 2851
+    },
+    "test_randmask": {
+      "accuracy": 0.8558400561206594,
+      "macro_f1": 0.8548790823118613,
+      "f1_sarcastic": 0.843069873997709,
+      "roc_auc": 0.9198707007123548,
+      "n": 2851
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.45107,
+      "loss": 0.45107
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.15202,
+      "loss": 0.15202
+    },
+    {
+      "step": 300,
+      "loss_sarc": 0.04507,
+      "loss": 0.04507
+    },
+    {
+      "step": 400,
+      "loss_sarc": 0.00929,
+      "loss": 0.00929
+    },
+    {
+      "step": 500,
+      "loss_sarc": 0.00016,
+      "loss": 0.00016
+    },
+    {
+      "step": 600,
+      "loss_sarc": 0.00046,
+      "loss": 0.00046
+    },
+    {
+      "step": 700,
+      "loss_sarc": 7e-05,
+      "loss": 7e-05
+    },
+    {
+      "step": 720,
+      "loss_sarc": 7e-05,
+      "loss": 7e-05
+    }
+  ],
+  "pseudo": null,
+  "helper_label_counts": null,
+  "commit": "51fea9b3b35b6a266ba4ed1cce3cad496145d9ac",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351",
+    "helper_sent_alt.csv": "51fe4d278fe0580deeb9a742f3e1b94fb88e5c4dc69b7b2cc996725259709cd7",
+    "cue_words.json": "79d355bb2c288b59385113de31a2d5227c0c189be8a14a288fe1a9f754f91fb6",
+    "headlines_test_cuemask.csv": "7502bb2ec444c83fb87d4ab020d89a7823c28d51978203ef280464f6b1b787bc",
+    "headlines_test_randmask.csv": "dc4396f80d655aa9b3657edc1e9701964718f0f393b8f05531ef77c41a58982b"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

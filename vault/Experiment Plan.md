@@ -1,7 +1,7 @@
 ---
 tags: [experiments, plan]
 updated: 2026-11-13
-status: Passes 1-3 done; Pass 4 planned
+status: Passes 1-4 done (Pass 4 results in [[Pass 4 Results]])
 ---
 
 # Experiment Plan
@@ -130,7 +130,7 @@ Revised after Passes 1-2 ([[Bootstrap - All Passes]]): helpers on L + U give no 
 
 **Code (three sessions in parallel, disjoint files):** (A) `experiments/01b_pass3_data.ipynb` + `src/gainsplit/masking.py`; (B) training switches R1-R7, A9, extra eval splits, iSarcasmEval-train arm, `pass3` plan, tests (`config.py`, `data.py`, `train.py`, `evaluate.py`, `plans.py`); (C) step 3a analysis (`analysis.py`, `03_analysis.ipynb`, tests). File formats shared by A and B are fixed in the briefs.
 
-## Pass 4 plan (started 2026-11-12; training arms PROPOSED 2026-11-13, DELEGATED per [[Repo Rules]] rule 7)
+## Pass 4 plan (run 2026-11-13, results in [[Pass 4 Results]]; started 2026-11-12; training arms PROPOSED 2026-11-13, DELEGATED per [[Repo Rules]] rule 7)
 Data: `pairs_train.csv` from [[Pairgen Full Run Results]] (unfiltered main set, 22,417 pairs) and `pairs_train_filtered.csv` (judge v2, 17,315 pairs; ablation only). Not written or run yet.
 
 **Why every train seed may be used at every budget (VERIFIED from `pairgen.build_prompt`):** the generation prompt shows only the seed text, never its label, and every generated side is new text (no copy of any train, dev or test headline). So a pair carries no gold label of its seed. Pairs from all 22,800 train seeds are the semi-supervised signal made from the unlabeled pool; no run sees a gold label outside its own L.

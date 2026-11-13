@@ -1,6 +1,6 @@
 ---
 tags: [ideas]
-updated: 2026-11-11
+updated: 2026-11-13
 ---
 
 # Research Ideas
@@ -41,3 +41,12 @@ Instructor asked for a generative-AI variant and for sarcasm detection that gene
 - Owner asked whether the models can be made explainable. Proposal: token attributions with Integrated Gradients (Captum) on a fixed test sample, for A1 and the Pass 4 pair-trained model, run in Kaggle after training.
 - Main use is a number, not pictures: share of attribution falling on the top-100 outlet cue words (`cue_words.json`). Prediction (IDEA): the pair-trained model puts less weight on cue words than A1, matching the cue-mask gap from [[Pass 3 Results]]. Plus 2-3 example heatmaps.
 - Not attention weights (contested as explanations). LIME/SHAP possible but slower and noisier on short text.
+
+## After Pass 4 (2026-11-13, IDEA, not decided)
+Pairs as plain extra labeled rows cost 15-16 F1 points in-domain but lift iSarcasmEval AUC by about 21-25 points ([[Pass 4 Results]]). Ways to keep the transfer without the in-domain loss:
+- Lower pair weight (e.g. 0.1 or 0.3 on the pair rows' loss), or fewer pair rows per step.
+- Pair-ranking loss: ask only that the sarcastic side scores higher than its serious side, instead of giving both sides absolute labels.
+- Two stages: train on pairs (A15-style), then fine-tune on L only.
+- Length-matched pairs: drop or rebalance pairs whose sides differ a lot in length (length-only AUC 0.785 inside the pairs).
+- Reframe: zero-label cross-domain sarcasm from LLM pairs (A15 AUC 76.2 vs in-domain 65.75), only if the iSarcasmEval length check comes out clean.
+

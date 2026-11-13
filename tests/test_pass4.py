@@ -188,6 +188,18 @@ def test_pair_checks_run_on_fixture(pass4_data):
     assert lengths["auc_length_only"].between(0, 1).all()
 
 
+def test_isarc_length_shortcut_runs_on_fixture(pass4_data):
+    from gainsplit import pair_checks as pc
+    train = pd.read_csv(pass4_data / "headlines_train.csv", keep_default_na=False)
+    isarc_test = pd.read_csv(pass4_data / "isarcasm_test.csv", keep_default_na=False)
+    pairs, _ = load_pairs("unfiltered", pass4_data)
+    t = pc.isarc_length_shortcut(isarc_test, pairs, train)
+    assert list(t["set"]) == ["isarc test", "real train (reference)", "generated pairs (reference)"]
+    assert t["auc_length_only"].between(0, 1).all()
+    # without the optional reference frames, only the isarc row is returned
+    assert list(pc.isarc_length_shortcut(isarc_test)["set"]) == ["isarc test"]
+
+
 # ---- analysis -------------------------------------------------------------------------------
 def test_holm():
     from gainsplit.analysis_pass4 import holm
@@ -206,6 +218,32 @@ def _write(root, arm, budget, seed, tag, y, p, explain=None):
                                                "config": {"arm": arm, "budget": budget, "seed": seed, "tag": tag}}))
     if explain is not None:
         explain.to_csv(d / "explain.csv", index=False)
+
+
+def test_isarc_length_auc_matches_run_items_and_rejects_mismatch(tmp_path):
+    from gainsplit import analysis as an
+    from gainsplit import analysis_pass4 as a4
+    rng = np.random.default_rng(0)
+    y = rng.integers(0, 2, 200)
+    p = rng.random(200)
+    _write(tmp_path, "A1", 10, 0, "", y, p)
+    runs = an.load_runs(tmp_path)
+    ids = pd.read_csv(runs.iloc[0]["preds_isarc_test"])["id"].to_numpy()
+    texts = pd.Series(["word " * (n % 5 + 1) for n in range(len(y))])
+    isarc_test = pd.DataFrame({"id": ids, "text": texts.to_numpy(), "label": y})
+    res = a4.isarc_length_auc(isarc_test, runs, n=200)
+    assert 0 <= res["auc"] <= 100 and res["n_items"] == len(y)
+    assert res["ci_low"] <= res["auc"] <= res["ci_high"]
+
+    bad = isarc_test.copy()
+    bad["label"] = 1 - bad["label"]
+    with pytest.raises(ValueError):
+        a4.isarc_length_auc(bad, runs, n=50)
+
+    # with no isarc predictions available, falls back to the given frame's own labels
+    empty_runs = runs.assign(preds_isarc_test="")
+    res2 = a4.isarc_length_auc(isarc_test, empty_runs, n=50)
+    assert res2["n_items"] == len(y)
 
 
 def test_pass4_analysis_end_to_end(tmp_path):
@@ -233,5 +271,9 @@ def test_pass4_analysis_end_to_end(tmp_path):
     assert (auc.loc[auc["contrast"] == "AUC A10 - A1", "mean_diff"] > 0).all()
     e = a4.explain_contrast_table(a4.load_explain(runs), n=200)
     assert e.iloc[0]["mean_diff"] == pytest.approx(-0.2)
-    tables = a4.run_all([tmp_path], tmp_path / "out", n=200)
+    isarc_test = pd.DataFrame({"id": np.arange(len(y)), "text": ["word " * (i % 5 + 1) for i in range(len(y))],
+                              "label": y})
+    tables = a4.run_all([tmp_path], tmp_path / "out", n=200, isarc_test=isarc_test)
     assert (tmp_path / "out" / "contrasts.csv").exists() and len(tables["summary"])
+    assert (tmp_path / "out" / "isarc_length_shortcut.csv").exists()
+    assert tables["isarc_length_shortcut"]["auc"].between(0, 100).all()

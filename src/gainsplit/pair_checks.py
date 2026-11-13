@@ -116,3 +116,29 @@ def length_table(train: pd.DataFrame, pairs: pd.DataFrame) -> pd.DataFrame:
                      "words_serious": float(n[df["label"] == 0].mean()),
                      "auc_length_only": float(roc_auc_score(df["label"], n))})
     return pd.DataFrame(rows)
+
+
+def isarc_length_shortcut(isarc_test: pd.DataFrame, pairs: pd.DataFrame | None = None,
+                          train: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Does word count alone predict the iSarcasmEval test label (Pass 4 transfer check)?
+
+    The pair arms transfer well to iSarcasmEval (AUC 72-76) while generated sarcastic sides
+    are longer than serious ones (length-only AUC 0.785 inside the pairs, [[Pass 4 Results]]).
+    This checks whether length alone already separates the real iSarcasmEval test labels,
+    which would mean the transfer gain may be a length shortcut rather than sarcasm itself.
+
+    One row for iSarcasmEval test; `pairs` and `train` rows (if given) are printed alongside
+    for reference, not re-derived (see `length_table`). AUC 0.5 = no signal from length alone.
+    """
+    def row(name, df):
+        n = df["text"].str.split().str.len()
+        y = df["label"].to_numpy()
+        return {"set": name, "n": len(df), "words_sarcastic": float(n[y == 1].mean()),
+                "words_serious": float(n[y == 0].mean()), "auc_length_only": float(roc_auc_score(y, n))}
+
+    rows = [row("isarc test", isarc_test)]
+    if train is not None:
+        rows.append(row("real train (reference)", train))
+    if pairs is not None:
+        rows.append(row("generated pairs (reference)", pairs))
+    return pd.DataFrame(rows)
