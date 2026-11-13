@@ -226,7 +226,26 @@ A16/A17 vs A10(weighted) then separates "does cleaning add anything on top of th
 
 **Main-run notebook (`experiments/11_pass5.ipynb`, written 2026-11-14):** copy of `08_pass4.ipynb`'s structure with `PLAN = "pass5"` (30 runs), prints the two frozen settings in the pre-flight, and the first-look cell shows the Pass 5 arms next to A1/A7 (Passes 1-2) and unweighted A10/A11 (Pass 4) read from the repo clone. The baseline part was dry-run locally against the committed summaries (A1 10% 88.21, A10 10% 73.38, matching [[Pass 4 Results]]). No analysis notebook for Pass 5 contrasts yet.
 
-**Not yet started (2026-11-14):** the main `pass5` run (notebook 11) and a CPU analysis of its contrasts (A16 vs A10-weighted, A10-weighted vs A10 and A1, A17 vs A11 and A7, iSarcasmEval AUC vs the length-only baseline).
+**Main run done 2026-11-14** (notebook 11, 30/30 runs; [[Pass 5 Results]]). **Not yet started:** a CPU analysis of its contrasts (A16 vs A10-weighted, A10-weighted vs A10 and A1, A17 vs A11 and A7, iSarcasmEval AUC vs the length-only baseline).
+
+## Pass 6 plan (written 2026-11-14, not run; owner chose two-stage training after [[Pass 5 Results]]; design DELEGATED per [[Repo Rules]] rule 7)
+Passes 4-5 mixed the generated pairs into every training step; the model lost 10-16 points on Headlines at every weight tried, and once down-weighted its iSarcasmEval transfer fell to the length-only baseline. Pass 6 separates the two sources in time: **stage 1** trains on the pairs alone, **stage 2** fine-tunes the same model on the gold labels alone, so the gold labels have the last word. Idea listed in [[Research Ideas]] "After Pass 4" ("two stages").
+
+**Arms (new switch `pretrain`, new config field `pretrain_steps`):**
+| Arm | Stage 1 | Stage 2 | Compare with |
+|---|---|---|---|
+| A18 | unfiltered pairs only, 720 steps (exactly A15's training) | L only, plain BERT, usual steps | A1 (in-domain), A15 and the length baseline (transfer) |
+| A19 | the same | L only, BERT + FGM (epsilon 0.5), usual steps | A7 |
+
+**Design choices (DELEGATED):**
+- Stage-1 length 720 steps at both budgets = A15's steps at 10%. Stage 1 is then the exact Pass 4 A15_p10 model for each seed (AUC 76.2 on iSarcasmEval), so no tuning run is needed, and stage 2 starts from a known model. Every run records its stage-1 dev score; the notebook checks it equals A15's (a re-run check, like Pass 3-4's).
+- Stage 2 keeps the stage-1 sarcasm head (same task) and starts a fresh optimizer and warm-up schedule; step count by the usual rule, so stage 2 is A1/A7's training budget exactly.
+- Unfiltered pairs at full weight in stage 1 (cleaning and weighting did nothing useful in Pass 5); no tuning plan.
+- Plan `pass6`: 20 test-scored runs (2 arms x {10%, 1%} x 5 seeds), masked test sets scored; about 40 min on T4 x2, one commit. Notebook `experiments/12_pass6.ipynb`.
+
+**Predictions (IDEA, written before running):** (H6.1) A18 stays within 1 point of A1 on Headlines test macro-F1 at 10% and 1%, because stage 2 is A1's full training. (H6.2) A18's iSarcasmEval AUC falls well below A15's 76.2 as stage 2 overwrites the pair training; it is a gain only if it stays clearly above the length-only baseline 68.7. (H6.3) A19 is within 1 point of A7 in-domain. A useful method needs H6.1 and an AUC clearly above 68.7 at the same time; otherwise the pair results go into the paper as a negative finding. Any outcome is reportable ([[Decisions]]).
+
+**Code (written 2026-11-14, not run on Kaggle):** `config.py` (arms A18/A19, `pretrain_steps` with checks), `train.py` (`fit(model=...)` continues an existing model; `train_run` runs stage 1, scores it on dev, then stage 2 on L only; `result.json` gets a `pretrain` block), `plans.py` (`PASS6_PRETRAIN_STEPS = 720`, plan `pass6`). Tests: local non-torch suite 163 passed, 2 skipped; with torch (scratch CPU install) 229 passed, including a check that stage 1 gives exactly A15's dev scores and that stage 2 changes the model and differs from A1; 1 failure from matplotlib missing in that scratch install only (the same test passes in the normal local suite and on Kaggle). Notebook 12's first-look cell dry-run locally on stand-in files.
 
 ## Status
 Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].

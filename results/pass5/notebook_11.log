@@ -1,0 +1,165 @@
+7.8s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+7.8s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+7.8s 3 0.00s - to python to disable frozen modules.
+7.8s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+8.4s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+8.4s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+8.4s 7 0.00s - to python to disable frozen modules.
+8.4s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+9.5s 9 Cloning into '/tmp/GainSplit'...
+9.7s 10 Cloning into '/tmp/GainSplit'...
+9.7s 11 
+9.7s 12 Cloning into '/tmp/GainSplit'...
+14.8s 13 code commit: af2764d1b1e397cb70f494450156035a9e5be2a7
+113.4s 14 ........................................................................ [ 32%]
+113.4s 15 ........................................................................ [ 65%]
+113.4s 16 ........................................................................ [ 98%]
+113.4s 17 ...                                                                      [100%]
+113.4s 18 =============================== warnings summary ===============================
+113.4s 19 tests/test_analysis.py::test_save_tables_and_figures
+113.4s 20 /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:64: PyparsingDeprecationWarning: 'oneOf' deprecated - use 'one_of'
+113.4s 21 prop = Group((name + Suppress("=") + comma_separated(value)) | oneOf(_CONSTANTS))
+113.4s 22 
+113.4s 23 tests/test_analysis.py::test_save_tables_and_figures
+113.4s 24 tests/test_analysis.py::test_save_tables_and_figures
+113.4s 25 tests/test_analysis.py::test_save_tables_and_figures
+113.4s 26 tests/test_analysis.py::test_save_tables_and_figures
+113.4s 27 tests/test_analysis.py::test_save_tables_and_figures
+113.4s 28 tests/test_analysis.py::test_save_tables_and_figures
+113.4s 29 /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:85: PyparsingDeprecationWarning: 'parseString' deprecated - use 'parse_string'
+113.4s 30 parse = parser.parseString(pattern)
+113.4s 31 
+113.4s 32 tests/test_analysis.py::test_save_tables_and_figures
+113.4s 33 tests/test_analysis.py::test_save_tables_and_figures
+113.4s 34 tests/test_analysis.py::test_save_tables_and_figures
+113.4s 35 tests/test_analysis.py::test_save_tables_and_figures
+113.4s 36 tests/test_analysis.py::test_save_tables_and_figures
+113.4s 37 tests/test_analysis.py::test_save_tables_and_figures
+113.4s 38 /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:89: PyparsingDeprecationWarning: 'resetCache' deprecated - use 'reset_cache'
+113.4s 39 parser.resetCache()
+113.4s 40 
+113.4s 41 tests/test_analysis.py::test_save_tables_and_figures
+113.4s 42 /usr/local/lib/python3.13/dist-packages/matplotlib/_mathtext.py:45: PyparsingDeprecationWarning: 'enablePackrat' deprecated - use 'enable_packrat'
+113.4s 43 ParserElement.enablePackrat()
+113.4s 44 
+113.4s 45 tests/test_analysis.py: 215 warnings
+113.4s 46 tests/test_masking.py: 2 warnings
+113.4s 47 tests/test_pass4.py: 148 warnings
+113.4s 48 tests/test_pass4_train.py: 78 warnings
+113.4s 49 tests/test_tfidf_plans.py: 8 warnings
+113.4s 50 /usr/local/lib/python3.13/dist-packages/sklearn/linear_model/_logistic.py:451: DeprecationWarning: scipy.optimize: The `disp` and `iprint` options of the L-BFGS-B solver are deprecated and will be removed in SciPy 1.18.0.
+113.4s 51 opt_res = optimize.minimize(
+113.4s 52 
+113.4s 53 tests/test_pass4.py::test_pass4_analysis_end_to_end
+113.4s 54 /tmp/GainSplit/src/gainsplit/analysis_pass4.py:179: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+113.4s 55 "median_rel_completeness_gap": g.apply(
+113.4s 56 
+113.4s 57 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+113.4s 58 219 passed, 466 warnings in 92.74s (0:01:32)
+113.4s 59 
+115.6s 60 GPUs: ['Tesla T4', 'Tesla T4']
+116.9s 61 data: /kaggle/input/datasets/arifurrhmn/gainsplit-processed - all files match manifest.json
+116.9s 62 frozen settings: pair_weight = 0.1 | cleaned_drop_pct = 20.0
+118.0s 63 A16_p10_s0               arm=A16 labels= 10% seed=0 eps=0 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 64 A16_p10_s1               arm=A16 labels= 10% seed=1 eps=0 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 65 A16_p10_s2               arm=A16 labels= 10% seed=2 eps=0 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 66 A16_p10_s3               arm=A16 labels= 10% seed=3 eps=0 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 67 A16_p10_s4               arm=A16 labels= 10% seed=4 eps=0 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 68 A17_p10_s0               arm=A17 labels= 10% seed=0 eps=0.5 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 69 A17_p10_s1               arm=A17 labels= 10% seed=1 eps=0.5 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 70 A17_p10_s2               arm=A17 labels= 10% seed=2 eps=0.5 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 71 A17_p10_s3               arm=A17 labels= 10% seed=3 eps=0.5 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 72 A17_p10_s4               arm=A17 labels= 10% seed=4 eps=0.5 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 73 A10_p10_s0_weighted      arm=A10 labels= 10% seed=0 eps=0 pair_weight=0.1 cleaned_drop_pct=0
+118.0s 74 A10_p10_s1_weighted      arm=A10 labels= 10% seed=1 eps=0 pair_weight=0.1 cleaned_drop_pct=0
+118.0s 75 A10_p10_s2_weighted      arm=A10 labels= 10% seed=2 eps=0 pair_weight=0.1 cleaned_drop_pct=0
+118.0s 76 A10_p10_s3_weighted      arm=A10 labels= 10% seed=3 eps=0 pair_weight=0.1 cleaned_drop_pct=0
+118.0s 77 A10_p10_s4_weighted      arm=A10 labels= 10% seed=4 eps=0 pair_weight=0.1 cleaned_drop_pct=0
+118.0s 78 A16_p1_s0                arm=A16 labels=  1% seed=0 eps=0 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 79 A16_p1_s1                arm=A16 labels=  1% seed=1 eps=0 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 80 A16_p1_s2                arm=A16 labels=  1% seed=2 eps=0 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 81 A16_p1_s3                arm=A16 labels=  1% seed=3 eps=0 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 82 A16_p1_s4                arm=A16 labels=  1% seed=4 eps=0 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 83 A17_p1_s0                arm=A17 labels=  1% seed=0 eps=0.5 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 84 A17_p1_s1                arm=A17 labels=  1% seed=1 eps=0.5 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 85 A17_p1_s2                arm=A17 labels=  1% seed=2 eps=0.5 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 86 A17_p1_s3                arm=A17 labels=  1% seed=3 eps=0.5 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 87 A17_p1_s4                arm=A17 labels=  1% seed=4 eps=0.5 pair_weight=0.1 cleaned_drop_pct=20
+118.0s 88 A10_p1_s0_weighted       arm=A10 labels=  1% seed=0 eps=0 pair_weight=0.1 cleaned_drop_pct=0
+118.0s 89 A10_p1_s1_weighted       arm=A10 labels=  1% seed=1 eps=0 pair_weight=0.1 cleaned_drop_pct=0
+118.0s 90 A10_p1_s2_weighted       arm=A10 labels=  1% seed=2 eps=0 pair_weight=0.1 cleaned_drop_pct=0
+118.0s 91 A10_p1_s3_weighted       arm=A10 labels=  1% seed=3 eps=0 pair_weight=0.1 cleaned_drop_pct=0
+118.0s 92 A10_p1_s4_weighted       arm=A10 labels=  1% seed=4 eps=0 pair_weight=0.1 cleaned_drop_pct=0
+118.0s 93 30 runs
+118.2s 94 30 runs, 0 already done, 30 to run on GPU [0, 1]
+118.2s 95 start  A16_p10_s0  on GPU 0
+118.2s 96 start  A16_p10_s1  on GPU 1
+256.2s 97 done   A16_p10_s0  (2.3 min)
+259.2s 98 start  A16_p10_s2  on GPU 0
+265.2s 99 done   A16_p10_s1  (2.5 min)
+268.2s 100 start  A16_p10_s3  on GPU 1
+397.2s 101 done   A16_p10_s2  (2.3 min)
+400.2s 102 start  A16_p10_s4  on GPU 0
+415.2s 103 done   A16_p10_s3  (2.5 min)
+418.2s 104 start  A17_p10_s0  on GPU 1
+541.2s 105 done   A16_p10_s4  (2.4 min)
+544.2s 106 start  A17_p10_s1  on GPU 0
+661.2s 107 done   A17_p10_s0  (4.1 min)
+664.2s 108 start  A17_p10_s2  on GPU 1
+781.2s 109 done   A17_p10_s1  (4.0 min)
+784.3s 110 start  A17_p10_s3  on GPU 0
+907.3s 111 done   A17_p10_s2  (4.1 min)
+910.3s 112 start  A17_p10_s4  on GPU 1
+1021.3s 113 done   A17_p10_s3  (4.0 min)
+1024.3s 114 start  A10_p10_s0_weighted  on GPU 0
+1153.3s 115 done   A17_p10_s4  (4.1 min)
+1156.3s 116 start  A10_p10_s1_weighted  on GPU 1
+1171.3s 117 done   A10_p10_s0_weighted  (2.5 min)
+1174.3s 118 start  A10_p10_s2_weighted  on GPU 0
+1306.3s 119 done   A10_p10_s1_weighted  (2.5 min)
+1309.3s 120 start  A10_p10_s3_weighted  on GPU 1
+1318.3s 121 done   A10_p10_s2_weighted  (2.4 min)
+1321.3s 122 start  A10_p10_s4_weighted  on GPU 0
+1456.3s 123 done   A10_p10_s3_weighted  (2.5 min)
+1459.3s 124 start  A16_p1_s0  on GPU 1
+1465.3s 125 done   A10_p10_s4_weighted  (2.4 min)
+1468.3s 126 start  A16_p1_s1  on GPU 0
+1519.3s 127 done   A16_p1_s0  (1.0 min)
+1522.3s 128 start  A16_p1_s2  on GPU 1
+1525.3s 129 done   A16_p1_s1  (1.0 min)
+1528.3s 130 start  A16_p1_s3  on GPU 0
+1582.3s 131 done   A16_p1_s2  (1.0 min)
+1585.3s 132 start  A16_p1_s4  on GPU 1
+1585.3s 133 done   A16_p1_s3  (1.0 min)
+1588.3s 134 start  A17_p1_s0  on GPU 0
+1648.3s 135 done   A16_p1_s4  (1.1 min)
+1651.3s 136 start  A17_p1_s1  on GPU 1
+1672.3s 137 done   A17_p1_s0  (1.4 min)
+1675.3s 138 start  A17_p1_s2  on GPU 0
+1738.3s 139 done   A17_p1_s1  (1.5 min)
+1741.3s 140 start  A17_p1_s3  on GPU 1
+1756.3s 141 done   A17_p1_s2  (1.4 min)
+1759.3s 142 start  A17_p1_s4  on GPU 0
+1828.3s 143 done   A17_p1_s3  (1.5 min)
+1831.3s 144 start  A10_p1_s0_weighted  on GPU 1
+1843.3s 145 done   A17_p1_s4  (1.4 min)
+1846.3s 146 start  A10_p1_s1_weighted  on GPU 0
+1891.3s 147 done   A10_p1_s0_weighted  (1.0 min)
+1894.3s 148 start  A10_p1_s2_weighted  on GPU 1
+1903.3s 149 done   A10_p1_s1_weighted  (1.0 min)
+1906.3s 150 start  A10_p1_s3_weighted  on GPU 0
+1957.3s 151 done   A10_p1_s2_weighted  (1.1 min)
+1960.3s 152 start  A10_p1_s4_weighted  on GPU 1
+1963.3s 153 done   A10_p1_s3_weighted  (1.0 min)
+2020.3s 154 done   A10_p1_s4_weighted  (1.0 min)
+2023.1s 155 total so far: 33.6 min
+2023.6s 156 /kaggle/working/results_pass5.zip
+2023.6s 157 notebook time: 33.6 min
+2026.8s 158 /usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+2026.8s 159 cells[i][c] = re.sub('\\\\\|', '|', cell)
+2026.9s 160 /usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+2026.9s 161 text = re.sub(r'_', '\_', text) # Escape underscores in display text
+2027.7s 162 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+2027.8s 163 [NbConvertApp] Writing 35775 bytes to __notebook__.ipynb
+2030.3s 164 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+2030.9s 165 [NbConvertApp] Writing 318372 bytes to __results__.html

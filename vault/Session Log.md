@@ -7,6 +7,16 @@ updated: 2026-11-13
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-14 - Pass 6 (two-stage training) planned and coded
+- Owner chose to try two-stage training before writing up. Design, predictions and code in [[Experiment Plan]] "Pass 6 plan": A18 (pairs only for 720 steps, i.e. exactly A15, then L only like A1) and A19 (same, stage 2 with FGM like A7); plan `pass6`, 20 runs; notebook `experiments/12_pass6.ipynb`.
+- Tests: non-torch 163 passed, 2 skipped; torch suite in the scratch CPU install 229 passed (stage 1 equals A15 exactly; stage 2 trains on L only and changes the model); the single failure is matplotlib missing in that install.
+- Not committed. Next (owner): commit (including `results/pass5/`, which the notebook reads as a baseline), push, run notebook 12 as a commit, send `results_pass6.zip` and the log.
+
+## 2026-11-14 - Pass 5 results read
+- Owner ran notebook 11 as a commit (commit af2764d, 30/30 runs, 33.6 min, 219 tests passed). Zip and log filed in `results/pass5/` (log as `notebook_11.log`, tracked); 211 files match the zip. `download (4).txt` was an exact copy of the log and stays in Downloads.
+- Read in [[Pass 5 Results]] (seed-paired means, no bootstrap): pair weight 0.1 lifts test F1 by +4.5 (10%) / +2.6 (1%) over Pass 4's A10 but stays 10-14 points below A1; cleaning adds nothing (-0.2 / -0.4); FGM on top adds +1.7 / +0.7 (5/5). iSarcasmEval AUC drops 2-4 points to 68.9-70.6, level with the length-only baseline 68.7. H5.1 and H5.2 rejected, H5.3 supported.
+- Next: decide between one more method (two-stage training, pair-ranking loss, or regenerated pairs) and writing the paper with the pair results as a negative finding; bootstrap for Pass 5 contrasts still to write.
+
 ## 2026-11-14 - Receipts audit (logs and outputs)
 - Owner asked that every log and output be kept as a receipt. Audit found: the `*.log` rule in `.gitignore` (meant for LaTeX) was keeping every Kaggle log out of git, so the notebook logs and the per-run `logs/` folders were on disk only (the per-run logs were still inside each tracked zip). Fixed with `!results/**/*.log`.
 - Filed from Downloads on the owner's request (copies; originals left in Downloads): `results/pairgen_full/` (`pairgen_generate.zip`, `pairgen_finalize.zip` with `pairs_train.csv` SHA-256 6412c1fa..., `notebook_05_attempt1_oom.log` = the first full run that ran out of GPU memory, `notebook_05_finalize.log`); `results/judge_v2/` (`judge_v2.zip`, filtered set SHA-256 f1f37413... matching `manifest_judge_v2.json`; `notebook_06.log`); `results/analysis_pass4/notebook_09_run2_length_check.log`. All three versions of `analysis_pass4.zip` are already in git history (commits f366f8b, f2013fe, b7018f6).

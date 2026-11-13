@@ -288,8 +288,11 @@ def gan_step(model, cfg, opts, scheds, scaler, batch, n_l, use_fp16, device) -> 
 
 
 def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, helpers=False, fgm=False,
-        pool_groups=None, pool_batch=None, pool_is_pairs=False):
+        pool_groups=None, pool_batch=None, pool_is_pairs=False, model=None):
     """Train a fresh model for `steps` steps; return (model, training curve).
+
+    `model` (Pass 6): continue training this model instead of a fresh one (stage 2 of the
+    two-stage arms). The optimizer and learning-rate schedule are always new. Plain arms only.
 
     `labeled` is L (with sent/emo columns if `helpers`), or None for A15 (no gold rows: every
     batch is a pool batch only). `pool` is None or a frame of extra rows that join every step
@@ -303,7 +306,10 @@ def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, he
     (which carry no sarcasm label at all, so no weight applies to them).
     """
     set_seed(cfg.seed)
-    model = SarcasmClassifier(cfg.model_name, gan=gan, helpers=helpers).to(device)
+    if model is None:
+        model = SarcasmClassifier(cfg.model_name, gan=gan, helpers=helpers).to(device)
+    elif gan or helpers:
+        raise ValueError("continuing an existing model is only written for plain (non-GAN, non-helper) arms")
     if gan:
         # one optimizer for BERT + discriminator (+ helper heads), a separate one for the generator
         opt_d, sched_d = make_optimizer(((n, p) for n, p in model.named_parameters()
@@ -452,6 +458,18 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
         print(f"  pairs ({sw['pairs']}): {pair_info['n_rows']} rows from {pair_info['n_seeds']} seeds, "
               f"{pool_batch} rows per step, pair_weight={cfg.pair_weight}")
     fit_labeled = None if sw.get("no_gold") else labeled   # A15: the budget only sets the step count
+    start_model, pretrain_info = None, None
+    if sw.get("pretrain"):
+        # Pass 6 stage 1: the pairs alone, exactly A15's training (same seed, same pair stream), but for
+        # `pretrain_steps` steps whatever the budget. Stage 2 below then sees L only (the pool is dropped).
+        print(f"  stage 1: pairs only, {cfg.pretrain_steps} steps")
+        start_model, log1 = fit(cfg, tokenizer, None, pool, cfg.pretrain_steps, device, use_fp16,
+                                pool_groups=pool_groups, pool_batch=pool_batch, pool_is_pairs=True)
+        p_dev1 = predict(start_model, encode(tokenizer, splits.dev["text"], cfg.max_len), device, fp16=use_fp16)
+        pretrain_info = {"steps": cfg.pretrain_steps, "train_log": log1,
+                         "dev": scores(splits.dev["label"], p_dev1)}   # stage-1 model on dev (checks it equals A15)
+        print(f"  stage 1 dev macro-F1 {pretrain_info['dev']['macro_f1']:.4f}; stage 2: L only, {steps} steps")
+        pool, pool_groups, pool_batch = None, None, None
     if sw.get("pseudo"):
         # A6: the teacher is an A1 model (same seed, same steps). It labels U; the student trains on L + pseudo-labels.
         print("  A6 teacher (plain A1 training):")
@@ -471,7 +489,8 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
         print("  A6 student (fresh BERT):")
     model, train_log = fit(cfg, tokenizer, fit_labeled, pool, steps, device, use_fp16,
                            gan=gan, helpers=helpers, fgm=bool(sw.get("fgm")),
-                           pool_groups=pool_groups, pool_batch=pool_batch, pool_is_pairs=bool(sw.get("pairs")))
+                           pool_groups=pool_groups, pool_batch=pool_batch,
+                           pool_is_pairs=bool(sw.get("pairs")) and pool is not None, model=start_model)
 
     out_dir.mkdir(parents=True, exist_ok=True)
     results = {}
@@ -495,9 +514,10 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
         "config": cfg.to_dict(),
         "n_labeled": 0 if sw.get("no_gold") else len(labeled),
         "n_unlabeled": len(unlabeled),
-        "uses_u": pool is not None and not sw.get("pairs"),
+        "uses_u": pool is not None and not sw.get("pairs"),   # Pass 6: pool is None after stage 1, so False
         "pairs": pair_info,       # Pass 4 pair arms: which pair set, its size and file hashes
         "explain": explain_info,  # Pass 4 explain runs: IG summary (details in explain.csv)
+        "pretrain": pretrain_info,  # Pass 6 two-stage arms: stage-1 steps, curve and dev scores
         "steps": steps,
         "minutes": round((time.time() - t0) / 60, 2),
         "scores": results,

@@ -1,0 +1,21 @@
+A10_p1_s2_weighted: |L|=228 |U|=22572 steps=200 device=cuda
+  pairs (unfiltered): 44834 rows from 22417 seeds, 32 rows per step, pair_weight=0.1
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2735.42it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/200  loss_sarc 0.1785  loss 0.1785
+  step 200/200  loss_sarc 0.02878  loss 0.02878
+A10_p1_s2_weighted: done in 0.85 min; dev macro-F1 0.6396, test macro-F1 0.6671, isarc_test macro-F1 0.3977, test_cuemask macro-F1 0.6416, test_randmask macro-F1 0.6639

@@ -134,3 +134,40 @@ def test_a16_a17_use_the_cleaned_pair_set_and_respect_pair_weight(pass4_data, ti
     rec17 = train_run(_cfg(tiny_bert, arm="A17", eval_test=True, cleaned_drop_pct=20, pair_weight=0.3,
                            fgm_epsilon=0.5), pass4_data, tmp_path / "b")
     assert rec17["pairs"]["pair_set"] == "cleaned" and rec17["config"]["pair_weight"] == 0.3
+
+
+# ---------------------------------------------------------------------------- Pass 6: two-stage arms
+
+def test_two_stage_stage1_equals_a15(pass4_data, tiny_bert, tmp_path):
+    """Stage 1 of A18 must be exactly A15's training: same seed, same pair stream, same steps.
+    A15 at min_steps=5 trains 5 steps; A18 with pretrain_steps=5 must report the same dev scores
+    for its stage-1 model."""
+    a15 = train_run(_cfg(tiny_bert, arm="A15"), pass4_data, tmp_path / "a15")
+    a18 = train_run(_cfg(tiny_bert, arm="A18", pretrain_steps=a15["steps"]), pass4_data, tmp_path / "a18")
+    assert a18["pretrain"]["dev"] == a15["scores"]["dev"]
+    assert a18["pretrain"]["steps"] == a15["steps"]
+
+
+def test_two_stage_stage2_trains_on_gold_only(pass4_data, tiny_bert, tmp_path):
+    """Stage 2 uses L only, with the usual step count, and changes the stage-1 model."""
+    rec = train_run(_cfg(tiny_bert, arm="A18", pretrain_steps=4, min_steps=6, eval_test=True, eval_masked=True),
+                    pass4_data, tmp_path / "r")
+    assert rec["steps"] == 6 and rec["n_labeled"] == 20 and not rec["uses_u"]
+    assert rec["pairs"]["pair_set"] == "unfiltered" and rec["pretrain"]["steps"] == 4
+    assert rec["scores"]["dev"] != rec["pretrain"]["dev"]
+    assert {"test", "test_cuemask", "test_randmask", "isarc_test"} <= set(rec["scores"])
+
+
+def test_two_stage_differs_from_a1(pass4_data, tiny_bert, tmp_path):
+    """Starting stage 2 from the pair-trained model must give a different model than A1 from scratch."""
+    a1 = train_run(_cfg(tiny_bert, arm="A1", eval_test=True), pass4_data, tmp_path / "a1")
+    a18 = train_run(_cfg(tiny_bert, arm="A18", pretrain_steps=5, eval_test=True), pass4_data, tmp_path / "a18")
+    assert a18["steps"] == a1["steps"]
+    p1, p18 = (pd.read_csv(tmp_path / n / "runs" / f"{arm}_p10_s0" / "preds_test.csv")
+               for n, arm in (("a1", "A1"), ("a18", "A18")))
+    assert (p1["p_sarcastic"] - p18["p_sarcastic"]).abs().max() > 1e-6
+
+
+def test_a19_two_stage_with_fgm(pass4_data, tiny_bert, tmp_path):
+    rec = train_run(_cfg(tiny_bert, arm="A19", pretrain_steps=3, fgm_epsilon=0.5), pass4_data, tmp_path / "r")
+    assert rec["pretrain"]["steps"] == 3 and "loss_adv" in rec["train_log"][-1]

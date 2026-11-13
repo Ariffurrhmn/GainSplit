@@ -246,8 +246,34 @@ def pass5() -> list[RunConfig]:
     return runs
 
 
+# ---------------------------------------------------------------------------- Pass 6
+
+PASS6_PRETRAIN_STEPS = 720   # = A15's steps at 10% (10 passes x 72 batches), so stage 1 is exactly Pass 4's A15_p10 model
+PASS6_SEEDS = PASS1_SEEDS
+
+
+def pass6() -> list[RunConfig]:
+    """Two-stage training (vault: Experiment Plan, "Pass 6 plan"): stage 1 trains on the
+    generated pairs only (A15's training, 720 steps, the same at every budget); stage 2 keeps
+    that model and fine-tunes it on the gold labels only, with the usual step count.
+    20 test-scored runs (2 arms x 2 budgets x 5 seeds), masked test sets scored.
+
+    - A18: pairs -> plain BERT on L (compare with A1, and with A15 for transfer)
+    - A19: pairs -> BERT + FGM on L (compare with A7)
+    Baselines A1, A7 (Passes 1-2), A15 and A10/A11 (Pass 4) and the Pass 5 arms are reused.
+    """
+    runs = []
+    for b in (10, 1):
+        runs += [RunConfig("A18", b, s, pretrain_steps=PASS6_PRETRAIN_STEPS, eval_test=True, eval_masked=True)
+                 for s in PASS6_SEEDS]
+        runs += [RunConfig("A19", b, s, fgm_epsilon=PASS2_FGM_EPSILON, pretrain_steps=PASS6_PRETRAIN_STEPS,
+                           eval_test=True, eval_masked=True) for s in PASS6_SEEDS]
+    return runs
+
+
 PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "session2": session2, "pass1": pass1, "fgm_tuning": fgm_tuning,
          "pass2a": pass2a, "pass2b": pass2b, "pass3": pass3,
          "gan_check": gan_check, "pass4": pass4, "pass4_full100": pass4_full100,
-         "pair_weight_tuning": pair_weight_tuning, "cleaned_drop_tuning": cleaned_drop_tuning, "pass5": pass5}
+         "pair_weight_tuning": pair_weight_tuning, "cleaned_drop_tuning": cleaned_drop_tuning, "pass5": pass5,
+         "pass6": pass6}

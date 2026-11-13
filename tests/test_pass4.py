@@ -408,3 +408,37 @@ def test_pass4_analysis_end_to_end(tmp_path):
     assert (tmp_path / "out" / "contrasts.csv").exists() and len(tables["summary"])
     assert (tmp_path / "out" / "isarc_length_shortcut.csv").exists()
     assert tables["isarc_length_shortcut"]["auc"].between(0, 100).all()
+
+
+# ---------------------------------------------------------------------------- Pass 6
+
+def test_pass6_plan():
+    runs = plans.pass6()
+    assert len(runs) == 20 and len({r.run_id for r in runs}) == 20
+    assert all(r.eval_test and r.eval_masked and r.pretrain_steps == plans.PASS6_PRETRAIN_STEPS == 720 for r in runs)
+    assert all(r.pair_weight == 1.0 and r.cleaned_drop_pct == 0 for r in runs)
+    count = pd.Series([(r.arm, r.budget) for r in runs]).value_counts()
+    assert (count == 5).all() and set(count.index) == {("A18", 10), ("A18", 1), ("A19", 10), ("A19", 1)}
+    assert all((r.fgm_epsilon > 0) == (r.arm == "A19") for r in runs)
+
+
+def test_pass6_stage1_matches_a15_at_10_percent():
+    """Stage 1 is meant to be exactly Pass 4's A15_p10 model: same step count as A15 at 10%."""
+    a15 = RunConfig("A15", 10, 0)
+    assert a15.steps(2280) == plans.PASS6_PRETRAIN_STEPS   # 10% of the 22,800 training headlines
+
+
+@pytest.mark.parametrize("kw,msg", [
+    ({"arm": "A18"}, "pretrain_steps > 0"),
+    ({"arm": "A1", "pretrain_steps": 10}, "only used by the two-stage arms"),
+    ({"arm": "A18", "pretrain_steps": 10, "pair_weight": 0.5}, "pair_weight must stay 1.0"),
+    ({"arm": "A19", "pretrain_steps": 10}, "fgm_epsilon > 0"),
+])
+def test_pass6_config_checks(kw, msg):
+    with pytest.raises(ValueError, match=msg):
+        RunConfig(**{"budget": 10, "seed": 0, **kw})
+
+
+def test_pretrain_arms_switches():
+    assert ARMS["A18"]["pretrain"] and ARMS["A18"]["pairs"] == "unfiltered" and not ARMS["A18"].get("fgm")
+    assert ARMS["A19"]["pretrain"] and ARMS["A19"]["fgm"]

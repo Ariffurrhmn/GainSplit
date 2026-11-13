@@ -1,0 +1,29 @@
+A10_p10_s0_weighted: |L|=2280 |U|=20520 steps=720 device=cuda
+  pairs (unfiltered): 44834 rows from 22417 seeds, 32 rows per step, pair_weight=0.1
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2747.09it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:177: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.4685  loss 0.4685
+  step 200/720  loss_sarc 0.206  loss 0.206
+  step 300/720  loss_sarc 0.09027  loss 0.09027
+  step 400/720  loss_sarc 0.05617  loss 0.05617
+  step 500/720  loss_sarc 0.04347  loss 0.04347
+  step 600/720  loss_sarc 0.03401  loss 0.03401
+  step 700/720  loss_sarc 0.03175  loss 0.03175
+  step 720/720  loss_sarc 0.02766  loss 0.02766
+A10_p10_s0_weighted: done in 2.23 min; dev macro-F1 0.7663, test macro-F1 0.7732, isarc_test macro-F1 0.4897, test_cuemask macro-F1 0.7270, test_randmask macro-F1 0.7536

@@ -16,6 +16,9 @@ import math
 #   pairs   Pass 4: LLM-written headline pairs join every step as a labeled second batch;
 #           the value names the pair set (see PAIR_SETS)
 #   no_gold Pass 4: the gold-labeled rows L are not used at all (only their count sets the steps)
+#   pretrain Pass 6: two stages. Stage 1 trains on the pairs only (exactly A15's training, for
+#           `pretrain_steps` steps); stage 2 keeps that model and fine-tunes it on L only (A1, or A7
+#           with `fgm`), with a fresh optimizer and the usual step count. The pairs never meet L.
 ARMS = {
     "A0": {"gan": False, "helpers": False, "tfidf": True},    # TF-IDF + logistic regression (floor)
     "A1": {"gan": False, "helpers": False},                   # plain BERT on L
@@ -37,6 +40,9 @@ ARMS = {
     # Pass 5: clean the shortcut out of the pairs and/or down-weight their loss (vault: Experiment Plan, "Pass 5 plan")
     "A16": {"gan": False, "helpers": False, "pairs": "cleaned"},                     # A10 with the worst-scoring seeds dropped
     "A17": {"gan": False, "helpers": False, "fgm": True, "pairs": "cleaned"},        # A11 with the same cleaning
+    # Pass 6: two-stage training, pairs first, then gold labels only (vault: Experiment Plan, "Pass 6 plan")
+    "A18": {"gan": False, "helpers": False, "pairs": "unfiltered", "pretrain": True},               # pairs -> A1
+    "A19": {"gan": False, "helpers": False, "fgm": True, "pairs": "unfiltered", "pretrain": True},  # pairs -> A7
 }
 IMPLEMENTED_ARMS = set(ARMS)
 
@@ -85,6 +91,7 @@ class RunConfig:
     explain: bool = False       # Pass 4: Integrated Gradients on a fixed test sample after training (needs eval_test)
     pair_weight: float = 1.0    # Pass 5: pair rows' share of the sarcasm loss (1.0 = same as Pass 4, full weight)
     cleaned_drop_pct: float = 0.0  # Pass 5: for pairs="cleaned", the % of worst-scoring seeds dropped (0-100)
+    pretrain_steps: int = 0     # Pass 6: stage-1 steps on the pairs only (pretrain arms A18/A19; 0 for every other arm)
 
     def __post_init__(self):
         if self.arm not in ARMS:
@@ -124,6 +131,13 @@ class RunConfig:
             raise ValueError(f"cleaned_drop_pct is only used by pairs='cleaned' (got pairs={pairs!r})")
         if pairs == "cleaned" and not (0 < self.cleaned_drop_pct < 100):
             raise ValueError(f"cleaned_drop_pct must be between 0 and 100, exclusive (got {self.cleaned_drop_pct})")
+        pretrain = ARMS[self.arm].get("pretrain", False)
+        if pretrain and not self.pretrain_steps > 0:
+            raise ValueError(f"{self.arm} needs pretrain_steps > 0 (got {self.pretrain_steps})")
+        if not pretrain and self.pretrain_steps != 0:
+            raise ValueError(f"pretrain_steps is only used by the two-stage arms (A18, A19) (got {self.pretrain_steps} for {self.arm})")
+        if pretrain and self.pair_weight != 1.0:
+            raise ValueError("the two-stage arms train on the pairs alone in stage 1, so pair_weight must stay 1.0")
         if self.explain and not self.eval_test:
             raise ValueError("explain needs eval_test=True (it reads the test set)")
         if self.explain and (ARMS[self.arm]["gan"] or self.arm == "A0"):
