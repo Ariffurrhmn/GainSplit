@@ -7,6 +7,11 @@ updated: 2026-11-13
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-14 - Pass 7 (full labels) planned and coded
+- Owner asked whether any run passes 94% on Headlines. Checked all committed summaries: none does; A1 at 100% (Pass 1) is the best, 93.35% mean accuracy, best seed 93.90%, level with the seed paper's 93.88% (different split). No model weights are kept, only predictions, so any new evaluation means retraining. Owner chose a full-label pass over new datasets (SARC, Twitter sets) given the deadline.
+- Written: plan `pass7` (A19 x5, A7 x5 at 100%, plus an A1 seed-0 re-run as a receipt; 11 runs, about 2 h), test, notebook `experiments/13_pass7.ipynb` (re-run check, stage-1 check, accuracy table). Design and predictions in [[Experiment Plan]] "Pass 7 plan". Local suite 164 passed, 2 skipped; no training-code change; the notebook's first-look cell dry-run on stand-in files.
+- Not committed. Next (owner): commit (with `results/pass6/`), push, run notebook 13 as a commit, send `results_pass7.zip` and the log.
+
 ## 2026-11-14 - Pass 6 results read
 - Owner ran notebook 12 as a commit (commit a57421e, 20/20 runs, 31.8 min, 230 tests passed, stage-1 check PASS: every stage-1 model equals A15 exactly). Zip and log filed in `results/pass6/` (log as `notebook_12.log`); 141 files match the zip. `download (5).txt` was an exact copy of the log and stays in Downloads.
 - Read in [[Pass 6 Results]]: at 10% A18 = A1 + 0.3 and A19 = A7 - 0.1 in-domain, but iSarcasmEval AUC 58-59 (below the 68.7 length baseline); at 1% A18 -4.4 and A19 -2.8 in-domain, AUC 63-66. H6.1/H6.3 hold at 10% only; H6.2: no transfer gain beyond length.

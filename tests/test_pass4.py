@@ -442,3 +442,18 @@ def test_pass6_config_checks(kw, msg):
 def test_pretrain_arms_switches():
     assert ARMS["A18"]["pretrain"] and ARMS["A18"]["pairs"] == "unfiltered" and not ARMS["A18"].get("fgm")
     assert ARMS["A19"]["pretrain"] and ARMS["A19"]["fgm"]
+
+
+# ---------------------------------------------------------------------------- Pass 7
+
+def test_pass7_plan():
+    runs = plans.pass7()
+    assert len(runs) == 11 and len({r.run_id for r in runs}) == 11
+    assert all(r.budget == 100 and r.eval_test and r.eval_masked for r in runs)
+    count = pd.Series([r.arm for r in runs]).value_counts().to_dict()
+    assert count == {"A19": 5, "A7": 5, "A1": 1}
+    assert all(r.fgm_epsilon == plans.PASS2_FGM_EPSILON for r in runs if r.arm in ("A7", "A19"))
+    assert all(r.pretrain_steps == plans.PASS6_PRETRAIN_STEPS for r in runs if r.arm == "A19")
+    rerun = [r for r in runs if r.arm == "A1"][0]
+    assert rerun.run_id == "A1_p100_s0_rerun" and rerun.seed == 0
+    assert [r.arm for r in runs][:5] == ["A19"] * 5   # longest runs first

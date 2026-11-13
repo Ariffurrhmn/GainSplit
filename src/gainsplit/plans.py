@@ -271,9 +271,30 @@ def pass6() -> list[RunConfig]:
     return runs
 
 
+# ---------------------------------------------------------------------------- Pass 7
+
+PASS7_SEEDS = PASS1_SEEDS
+
+
+def pass7() -> list[RunConfig]:
+    """Every training label (budget 100%) for the two strongest recipes so far (vault: Experiment
+    Plan, "Pass 7 plan"): does FGM, and FGM after the pair stage, push Headlines test accuracy past
+    A1's 93.35% (Pass 1) towards 94%? No new settings: epsilon (0.5) and the stage-1 length (720)
+    stay frozen from earlier passes, so nothing is picked on test. 11 runs, longest first:
+    - A19 at 100%: pairs-only stage 1 (= A15), then all labels with FGM (5 seeds)
+    - A7 at 100%: all labels with FGM (5 seeds)
+    - A1 at 100%, seed 0, tag "rerun": must equal Pass 1's A1_p100_s0 exactly, and adds the masked tests
+    """
+    return ([RunConfig("A19", 100, s, fgm_epsilon=PASS2_FGM_EPSILON, pretrain_steps=PASS6_PRETRAIN_STEPS,
+                       eval_test=True, eval_masked=True) for s in PASS7_SEEDS]
+            + [RunConfig("A7", 100, s, fgm_epsilon=PASS2_FGM_EPSILON, eval_test=True, eval_masked=True)
+               for s in PASS7_SEEDS]
+            + [RunConfig("A1", 100, 0, eval_test=True, eval_masked=True, tag="rerun")])
+
+
 PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "session2": session2, "pass1": pass1, "fgm_tuning": fgm_tuning,
          "pass2a": pass2a, "pass2b": pass2b, "pass3": pass3,
          "gan_check": gan_check, "pass4": pass4, "pass4_full100": pass4_full100,
          "pair_weight_tuning": pair_weight_tuning, "cleaned_drop_tuning": cleaned_drop_tuning, "pass5": pass5,
-         "pass6": pass6}
+         "pass6": pass6, "pass7": pass7}

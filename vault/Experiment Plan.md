@@ -247,6 +247,20 @@ Passes 4-5 mixed the generated pairs into every training step; the model lost 10
 
 **Code (written 2026-11-14, not run on Kaggle):** `config.py` (arms A18/A19, `pretrain_steps` with checks), `train.py` (`fit(model=...)` continues an existing model; `train_run` runs stage 1, scores it on dev, then stage 2 on L only; `result.json` gets a `pretrain` block), `plans.py` (`PASS6_PRETRAIN_STEPS = 720`, plan `pass6`). Tests: local non-torch suite 163 passed, 2 skipped; with torch (scratch CPU install) 229 passed, including a check that stage 1 gives exactly A15's dev scores and that stage 2 changes the model and differs from A1; 1 failure from matplotlib missing in that scratch install only (the same test passes in the normal local suite and on Kaggle). Notebook 12's first-look cell dry-run locally on stand-in files.
 
+## Pass 7 plan (written 2026-11-14, not run; owner's request: can a full-label run pass 94% accuracy on Headlines; design DELEGATED per [[Repo Rules]] rule 7)
+Every run so far except Pass 1's A1 used 1-30% of the labels. A1 at 100% reaches 93.35% test accuracy (best seed 93.90%, VERIFIED from `results/pass1/summary.csv`), level with the seed paper's reported 93.88% on its own 80/20 split ([[Seed Paper - Irfan 2025]]; not like-for-like, see [[Decisions]] 2026-11-11). FGM and the two-stage pair recipe have never been tried with all labels.
+
+**Plan `pass7` (11 test-scored runs at budget 100, masked tests scored, one commit, about 2 h on T4 x2, notebook `experiments/13_pass7.ipynb`):**
+| Arm | What it is | Compare with |
+|---|---|---|
+| A7 x5 | all labels, FGM (epsilon 0.5) | A1 at 100% (Pass 1) |
+| A19 x5 | stage 1 pairs only (= A15, 720 steps), stage 2 all labels + FGM | A7 at 100% (isolates the pair stage) |
+| A1 seed 0, tag `rerun` | all labels, plain BERT | must equal Pass 1's A1_p100_s0 exactly (re-run receipt) |
+
+**Rules (DELEGATED):** nothing is tuned and nothing is picked on test; epsilon 0.5 and the stage-1 length stay frozen from Passes 2b and 6. The result is reported as the 5-seed mean with its spread, not the best seed. The seed paper's 93.88% is quoted as a reference on a different split, not as a beaten baseline. A stronger backbone (e.g. DeBERTa-v3) is left out: it changes the model, not the method, and would need its own lr check on dev.
+
+**Predictions (IDEA, written before running):** (H7.1) A7 beats A1 at 100%, but by less than at 10% (+0.3 to +0.8 points, so about 93.7-94.2% accuracy). (H7.2) A19 is within 0.3 points of A7: with 7,130 stage-2 steps the pair stage is mostly overwritten (Pass 6: the pair effect shrank as stage 2 grew). (H7.3) iSarcasmEval AUC of A7 and A19 stays near chance, as for A1 at 100% (51.7). Reaching 94.0% mean accuracy is possible but not expected with bert-base; any outcome is reportable.
+
 ## Status
 Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].
 
