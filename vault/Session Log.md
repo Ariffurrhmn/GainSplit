@@ -7,6 +7,14 @@ updated: 2026-11-13
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-14 - pair_weight_tuning results read
+- Owner ran notebook 10 stage 1 on Kaggle (commit b7018f6, 9/9 runs, 13.2 min, 219 tests passed) and sent `results_pair_weight_tuning.zip` and the log. Read in [[Experiment Plan]] "Pass 5 plan".
+- Dev macro-F1 means: weight 0.1 77.02, 0.3 74.23, 1.0 72.11 (A1 on the same seeds 86.73). 0.1 is best on every seed. The weight-1.0 runs match Pass 4's A10 dev scores exactly.
+- Reading (INFERRED): 0.1 sits at the edge of the grid and recovers about a third of the loss. Tuning on in-domain dev alone pushes the weight toward 0, which is just A1. Open decision for the owner: freeze 0.1 under the pre-set rule, or change how the weight is chosen.
+- On the owner's request, `results_pair_weight_tuning.zip` and the notebook log (as `notebook_10_stage1.log`) were moved from Downloads into `results/pair_weight_tuning/` and unpacked: 28 files, all match the zip. The `.log` files are git-ignored (`*.log` rule) and stay inside the tracked zip. `download (2).txt` was an exact copy of the log and stays in Downloads.
+- Owner asked for stage 2 to be ready. Prepared with the recommended choice (keep the pre-set rule): `PASS5_PAIR_WEIGHT = 0.1` in `plans.py`, notebook 10 default `PLAN = "cleaned_drop_tuning"`. The plan builds 9 A16 runs (drop 10/20/30, seeds 0-2, weight 0.1, dev only); local suite 156 passed, 2 skipped. Not committed or pushed.
+- Next (owner): commit and push, re-run notebook 10 (stage 2), send the zip and log. Stage 2 baseline to beat: 77.02 (weight 0.1, no cleaning).
+
 ## 2026-11-14 - Pass 5 tuning notebook written
 - Written `experiments/10_pass5_tuning.ipynb` (GPU, two stages: `pair_weight_tuning` then `cleaned_drop_tuning` once the first winner is frozen and pushed; interactive, no commit needed, 9+9 runs). Reuses `02_train.ipynb`'s dev-only summary pattern, not `08_pass4.ipynb`'s (which assumes test scoring and would error on a dev-only plan). Logged in [[Experiment Plan]] "Pass 5 plan".
 - Checked: the data-check cell runs correctly against the real local `gainsplit-processed` folder (loads `unfiltered` pairs; the shortcut-score file is not yet re-added locally, and the cell's try/except handles that as designed). Plan listing and grouping cells checked against the real plan output.

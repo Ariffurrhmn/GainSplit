@@ -202,6 +202,18 @@ A16/A17 vs A10(weighted) then separates "does cleaning add anything on top of th
 
 **Tuning notebook (`experiments/10_pass5_tuning.ipynb`, written 2026-11-14):** GPU, two stages run one after the other (`cleaned_drop_tuning` needs `pair_weight_tuning`'s winner frozen into `PASS5_PAIR_WEIGHT` and pushed first, same dependency as `fgm_tuning` -> `pass2b`). Interactive session, no commit needed (18 runs total, small and quick); reuses `02_train.ipynb`'s structure (dev-only summary table), not `08_pass4.ipynb`'s (which assumes test scoring and would break on a dev-only plan's missing `test`/`isarc_test` score keys).
 
+**`pair_weight_tuning` result (run 2026-11-14 by the owner, notebook 10 stage 1, commit b7018f6, 9/9 runs, 13.2 min, 219 tests passed on Kaggle; dev only, VERIFIED from `summary.csv` in `results_pair_weight_tuning.zip`):**
+| pair_weight | dev macro-F1 seed 0 / 1 / 2 | mean (sd) |
+|---|---|---|
+| 0.1 | 76.63 / 76.08 / 78.36 | **77.02** (1.19) |
+| 0.3 | 73.55 / 74.18 / 74.96 | 74.23 (0.71) |
+| 1.0 | 71.72 / 71.46 / 73.14 | 72.11 (0.90) |
+| A1 reference (Pass 1, same seeds, no pairs) | 86.45 / 86.39 / 87.34 | 86.73 |
+- Sanity check: the `pair_weight=1.0` runs reproduce Pass 4's A10 dev scores for seeds 0-2 exactly (71.72 / 71.46 / 73.14), so the new weighting code leaves the old path unchanged on GPU too.
+- By the pre-set rule, 0.1 wins (best mean, best on every seed, no tie).
+- Reading (INFERRED): dev F1 rises steadily as the weight falls, and 0.1 is the edge of the grid. 0.1 recovers about a third of the in-domain loss (4.9 of 14.6 points) and is still 9.7 points below A1, so H5.1 ("most of the loss recovered") looks unlikely at this weight. Because the tuning score is in-domain dev F1 only, any lower weight would probably score higher still, ending at weight 0 = A1. This rule therefore cannot find the trade-off point H5.3 is about. The transfer side (iSarcasmEval AUC) is only measured in the test-scored `pass5` runs.
+- Frozen 2026-11-14: `PASS5_PAIR_WEIGHT = 0.1` (pre-set rule kept; the trade-off is reported from the test-scored `pass5` runs). Notebook 10 now defaults to `cleaned_drop_tuning`.
+
 **Not yet started:** no training notebook written for the main `pass5` plan itself (will reuse `08_pass4.ipynb`'s structure once both tuning constants are frozen); owner has not run `pair_weight_tuning` or `cleaned_drop_tuning` on Kaggle.
 
 ## Status
