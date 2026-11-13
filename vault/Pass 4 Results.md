@@ -1,7 +1,7 @@
 ---
 tags: [results]
 created: 2026-11-13
-updated: 2026-11-13
+updated: 2026-11-14
 ---
 
 # Pass 4 Results
@@ -65,15 +65,19 @@ Contrasts (`contrasts.md`, `auc_contrasts.md`):
 
 ## Reading (INFERRED)
 - The generated pairs carry a different notion of sarcasm from the Headlines label (outlet: The Onion vs HuffPost). Mixing them 1:1 into the batch pulls the model away from the Headlines label; more steps make it worse.
-- The same pairs move the model toward the iSarcasmEval notion (intended sarcasm in tweets): zero-label A15 reaches AUC 76.2, above a model trained on iSarcasmEval's own train set (65.75). This is the strongest Pass 4 signal and the most surprising one; it needs a shortcut check before any claim: does length (or another surface feature) alone separate iSarcasmEval test labels? If a length-only score reaches about 0.7 AUC there, the transfer may be a length artifact.
+- The same pairs move the model toward the iSarcasmEval notion (intended sarcasm in tweets): zero-label A15 reaches AUC 76.2, above a model trained on iSarcasmEval's own train set (65.75). This is the strongest Pass 4 signal and the most surprising one. The length-shortcut check below confirms the worry: length alone gets 68.7, most of the way there, so the transfer claim must be stated net of a length baseline, not as "the model learned sarcasm" outright.
 - The judge filter is the only data-side knob that helps, consistent with the filter removing pairs whose serious side reads as sarcastic ([[Pairgen Full Run Results]]).
 - As a method for in-domain gain, pairs as plain extra labeled rows fail. Options for a next step are in [[Research Ideas]] "After Pass 4": lower pair weight, pair-ranking loss instead of shared labels, pre-train on pairs then fine-tune on L, length-matched pairs.
 
-## iSarcasmEval length-shortcut check (written 2026-11-13, not run)
-Code: `pair_checks.isarc_length_shortcut` (descriptive: word count by class and AUC on the real iSarcasmEval test labels, printed in notebook 09 section A) and `analysis_pass4.isarc_length_auc` (bootstrap 95% CI of the same AUC over the exact items a run was scored on, wired into `run_all` as the `isarc_length_shortcut` table, section E). 29 tests cover both (`tests/test_pass4.py`), full suite 137 passed / 2 skipped locally.
-- Reads whether word count alone already separates the real iSarcasmEval test labels (not the generated pairs, which is `pairs_length`, already run). If this AUC is itself high (close to the 72-76 the pair arms reach), the transfer gain in this note may be partly a length shortcut rather than sarcasm, and the claim needs to say so.
-- Not yet run: needs the owner to re-run notebook 09 (CPU only, same inputs as before) once code is pushed.
+## iSarcasmEval length-shortcut check (run 2026-11-14)
+Code: `pair_checks.isarc_length_shortcut` and `analysis_pass4.isarc_length_auc` (bootstrap 95% CI over the exact 1,400 iSarcasmEval test items every run was scored on), wired into notebook 09 (`isarc_length_shortcut.csv/.md`). Run by the owner on Kaggle CPU, same inputs as the Pass 4 analysis; the 330-run re-run reproduces every previously committed table unchanged (byte-identical files), confirming determinism.
+
+**Result: word count alone gets AUC 68.7 [64.8, 72.5] on the real iSarcasmEval test (n=1,400).** That is close to, and its interval overlaps, the pair arms' transfer AUCs (71.7-76.2) and clears the in-domain reference (65.75). Chance is 50; a perfect model is 100.
+
+**Verdict (INFERRED):** length is a large part of the transfer effect, not the whole of it. 68.7 is close to the pair arms' 71.7-76.2 but consistently a few points below all of them (A10 1%: 71.7 vs 68.7; A15: 76.2 vs 68.7), and the gap holds across every pair arm, so the models are doing a little more than counting words, but length by itself would already beat the 50/50 floor and get most of the way to the in-domain reference. The "no gold labels, cross-domain transfer" claim (A15 at 76.2) cannot be made as "the model learned sarcasm"; it has to be qualified as "performs above chance and above a length-only baseline, but length explains most of the gap to chance". This matches the data-side finding above: generated sarcastic sides are longer (`pairs_length`, AUC 0.785 inside the pairs), so a model trained on them picks up length as a cheap, partially-correct proxy for the iSarcasmEval label too.
+- The small headline-style AUC gap is not nothing: if length alone would hit 71+ there'd be little left to claim; it doesn't, it hits 68.7, reliably under A10's 71.7.
+- Open question for the paper (IDEA): whether the residual gain (pair AUC minus length AUC, about 3-8 points depending on arm) survives controlling for length directly (e.g. logistic regression on length + model score, or length-matched pairs per [[Research Ideas]] "After Pass 4"). Not run.
 
 ## Open
-- iSarcasmEval length-shortcut check above: written, not run.
+- Whether the pair arms' iSarcasmEval gain survives controlling for length directly (residual AUC after removing the length signal): not run, see above.
 - Whether to run `pass4_full100` (A10 at 100%): given the in-domain result, INFERRED low value.

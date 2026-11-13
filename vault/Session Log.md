@@ -7,6 +7,12 @@ updated: 2026-11-13
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-14 - iSarcasmEval length-shortcut check run
+- Owner ran notebook 09 (CPU, same inputs as the Pass 4 analysis) and sent the new `analysis_pass4.zip` and log. Read in [[Pass 4 Results]] "iSarcasmEval length-shortcut check". The 330-run re-run reproduces every previously committed table byte-identical, confirming determinism.
+- Result: word count alone gets AUC 68.7 [64.8, 72.5] on the real iSarcasmEval test (1,400 items), vs the pair arms' 71.7-76.2 and the in-domain reference 65.75.
+- Verdict: length explains a large part of the transfer gain but not all of it; every pair arm's AUC is a few points above the length-only baseline, consistently. The "zero gold labels, cross-domain transfer" claim (A15, 76.2) needs to be stated net of this length baseline, not as the model having learned sarcasm outright.
+- Open: whether the residual gain survives directly controlling for length (not run).
+
 ## 2026-11-13 - iSarcasmEval length-shortcut check written
 - Owner asked to write the length check flagged as open in [[Pass 4 Results]]. Written: `pair_checks.isarc_length_shortcut` (descriptive AUC of word count vs the real iSarcasmEval test labels) and `analysis_pass4.isarc_length_auc` (bootstrap 95% CI over the exact items a run was scored on), wired into notebook 09 (section A prints the descriptive table, section E's `run_all` writes `isarc_length_shortcut.csv/.md`). Logged in [[Pass 4 Results]] "iSarcasmEval length-shortcut check".
 - 9 new/extended tests; full suite 137 passed, 2 skipped (torch, as before), locally.
