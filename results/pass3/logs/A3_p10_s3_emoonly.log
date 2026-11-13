@@ -1,0 +1,28 @@
+A3_p10_s3_emoonly: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2338.05it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:135: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.4493  loss_emo 0.7906  loss 0.6865
+  step 200/720  loss_sarc 0.1519  loss_emo 0.5665  loss 0.3219
+  step 300/720  loss_sarc 0.02697  loss_emo 0.3671  loss 0.1371
+  step 400/720  loss_sarc 0.00872  loss_emo 0.291  loss 0.09601
+  step 500/720  loss_sarc 0.00359  loss_emo 0.2167  loss 0.0686
+  step 600/720  loss_sarc 0.0017  loss_emo 0.1834  loss 0.05671
+  step 700/720  loss_sarc 0.00084  loss_emo 0.1556  loss 0.04753
+  step 720/720  loss_sarc 0.00098  loss_emo 0.1146  loss 0.03537
+A3_p10_s3_emoonly: done in 2.08 min; dev macro-F1 0.8759, test macro-F1 0.8954, isarc_test macro-F1 0.4795, test_cuemask macro-F1 0.8336, test_randmask macro-F1 0.8669

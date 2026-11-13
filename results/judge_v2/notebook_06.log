@@ -1,0 +1,159 @@
+6.5s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+6.5s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+6.5s 3 0.00s - to python to disable frozen modules.
+6.5s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+7.1s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+7.1s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+7.1s 7 0.00s - to python to disable frozen modules.
+7.1s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+8.2s 9 Cloning into '/tmp/GainSplit'...
+8.4s 10 Cloning into '/tmp/GainSplit'...
+8.4s 11 
+8.4s 12 Cloning into '/tmp/GainSplit'...
+14.4s 13 code commit: ac5609f7848d9818db61172cb1205cae5b1973f6
+17.1s 14 ........................                                                 [100%]
+17.1s 15 24 passed in 0.28s
+17.1s 16 
+18.3s 17 pairs file: /kaggle/input/notebooks/arifurrhmn/full-run-dataset/pairgen/pairs_train.csv | rows: 44834 | pairs: 22417 | SHA-256 matches the manifest
+18.3s 18 label       0     1
+18.3s 19 model
+18.3s 20 gemma    7533  7533
+18.3s 21 mistral  7462  7462
+18.3s 22 qwen     7422  7422
+18.3s 23 few-shot examples: 6 | tune: 400 | report: 400
+18.3s 24 
+18.3s 25 prompt v2 for the first tune headline:
+18.3s 26 
+18.3s 27 You will see a news headline. Every headline in this task, real news and satire alike, is written in lowercase with all punctuation removed, so the format tells you nothing about the answer.
+18.3s 28 Decide whether the headline is written as satire or sarcasm (in the style of a satire news site), or as a plain serious news headline.
+18.3s 29 
+18.3s 30 Examples:
+18.3s 31 
+18.3s 32 Headline: tucker carlson unsure why he in middle of 20 minute rant against croutons
+18.3s 33 Answer: SARCASTIC
+18.3s 34 Headline: amazon s m a strategy evolves
+18.3s 35 Answer: SERIOUS
+18.3s 36 Headline: how to use photoshop for good rather than evil
+18.3s 37 Answer: SERIOUS
+18.3s 38 Headline: lie to cover surprise party sounds more fun than surprise party
+18.3s 39 Answer: SARCASTIC
+18.3s 40 Headline: audience calls candidates back on stage for debate encore
+18.3s 41 Answer: SARCASTIC
+18.3s 42 Headline: watch jennifer lawrence jimmy fallon s instructional dance videos
+18.3s 43 Answer: SERIOUS
+18.3s 44 
+18.3s 45 Headline: understanding the islamic state
+18.3s 46 Answer with exactly one word: SARCASTIC or SERIOUS.
+42.2s 47 HF_TOKEN found: True | GPUs: ['Tesla T4', 'Tesla T4']
+51.2s 48 [transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+51.2s 49 
+51.2s 50 [transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+347.2s 51 smollm3: 5.1 min
+919.2s 52 qwen: 9.5 min
+1620.2s 53 gemma: 11.7 min
+2252.2s 54 mistral: 10.5 min
+2252.5s 55 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2252.5s 56 
+2252.5s 57 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2261.6s 58 irony labels: {0: 'non_irony', 1: 'irony'} | irony index: 1
+2263.2s 59 irony: 0.2 min
+2263.4s 60 judge per author model: {'qwen': 'gemma|v2', 'gemma': None, 'mistral': 'gemma|v2'}
+18107.1s 61 gemma|v2: 29768 generated headlines (qwen, mistral) in 264.1 min
+18107.3s 62 pairs kept: 17315 of 22417 | training rows: 34630
+18107.5s 63 {
+18107.5s 64 "commit": "ac5609f7848d9818db61172cb1205cae5b1973f6",
+18107.5s 65 "input_pairs_train_sha256": "6412c1facfb2cb743acc190223660d0f085bd72d165c57447d6ac39cdfe43f34",
+18107.5s 66 "input_pairs_commit": "7893defce9003e89c266ba0ab0b61321712a5992",
+18107.5s 67 "judges": {
+18107.5s 68 "qwen": "gemma|v2",
+18107.5s 69 "gemma": null,
+18107.5s 70 "mistral": "gemma|v2"
+18107.5s 71 },
+18107.5s 72 "min_score": 0.75,
+18107.5s 73 "scores": {
+18107.5s 74 "smollm3|v1": {
+18107.5s 75 "threshold": 3.566294513642788,
+18107.5s 76 "tune_bacc": 0.6525,
+18107.5s 77 "report_bacc": 0.65,
+18107.5s 78 "report_auc": 0.6848,
+18107.5s 79 "report_sarcastic_rate": 0.63
+18107.5s 80 },
+18107.5s 81 "smollm3|v2": {
+18107.5s 82 "threshold": 4.022125501185656,
+18107.5s 83 "tune_bacc": 0.6075,
+18107.5s 84 "report_bacc": 0.5825,
+18107.5s 85 "report_auc": 0.6283,
+18107.5s 86 "report_sarcastic_rate": 0.6275
+18107.5s 87 },
+18107.5s 88 "qwen|v1": {
+18107.5s 89 "threshold": 6.158892452716827,
+18107.5s 90 "tune_bacc": 0.66,
+18107.5s 91 "report_bacc": 0.6525,
+18107.5s 92 "report_auc": 0.695,
+18107.5s 93 "report_sarcastic_rate": 0.6875
+18107.5s 94 },
+18107.5s 95 "qwen|v2": {
+18107.5s 96 "threshold": 7.56517356261611,
+18107.5s 97 "tune_bacc": 0.7275,
+18107.5s 98 "report_bacc": 0.705,
+18107.5s 99 "report_auc": 0.7892,
+18107.5s 100 "report_sarcastic_rate": 0.53
+18107.5s 101 },
+18107.5s 102 "gemma|v1": {
+18107.5s 103 "threshold": 15.041089892671152,
+18107.5s 104 "tune_bacc": 0.7425,
+18107.5s 105 "report_bacc": 0.745,
+18107.5s 106 "report_auc": 0.8122,
+18107.5s 107 "report_sarcastic_rate": 0.515
+18107.5s 108 },
+18107.5s 109 "gemma|v2": {
+18107.5s 110 "threshold": 14.18101656475028,
+18107.5s 111 "tune_bacc": 0.795,
+18107.5s 112 "report_bacc": 0.7725,
+18107.5s 113 "report_auc": 0.8617,
+18107.5s 114 "report_sarcastic_rate": 0.5075
+18107.5s 115 },
+18107.5s 116 "mistral|v1": {
+18107.5s 117 "threshold": 0.3588673770427704,
+18107.5s 118 "tune_bacc": 0.7025,
+18107.5s 119 "report_bacc": 0.71,
+18107.5s 120 "report_auc": 0.7563,
+18107.5s 121 "report_sarcastic_rate": 0.635
+18107.5s 122 },
+18107.5s 123 "mistral|v2": {
+18107.5s 124 "threshold": 5.5997727394569665,
+18107.5s 125 "tune_bacc": 0.7275,
+18107.5s 126 "report_bacc": 0.7125,
+18107.5s 127 "report_auc": 0.7859,
+18107.5s 128 "report_sarcastic_rate": 0.6275
+18107.5s 129 },
+18107.5s 130 "irony": {
+18107.5s 131 "threshold": 1.7743744850158691,
+18107.5s 132 "tune_bacc": 0.6025,
+18107.5s 133 "report_bacc": 0.5225,
+18107.5s 134 "report_auc": 0.5049,
+18107.5s 135 "report_sarcastic_rate": 0.3475
+18107.5s 136 }
+18107.5s 137 },
+18107.5s 138 "counts": {
+18107.5s 139 "pairs": 22417,
+18107.5s 140 "pairs_judged": 14884,
+18107.5s 141 "pairs_kept": 17315,
+18107.5s 142 "training_rows": 34630,
+18107.5s 143 "kept_by_model": {
+18107.5s 144 "gemma": 7533,
+18107.5s 145 "mistral": 4986,
+18107.5s 146 "qwen": 4796
+18107.5s 147 }
+18107.5s 148 },
+18107.5s 149 "hours": 5.03
+18107.5s 150 }
+18107.7s 151 /kaggle/working/judge_v2.zip
+18114.4s 152 /usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+18114.4s 153 cells[i][c] = re.sub('\\\\\|', '|', cell)
+18114.7s 154 /usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+18114.7s 155 text = re.sub(r'_', '\_', text) # Escape underscores in display text
+18116.0s 156 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+18116.1s 157 [NbConvertApp] Writing 697213 bytes to __notebook__.ipynb
+18118.6s 158 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+18119.4s 159 [NbConvertApp] Writing 892129 bytes to __results__.html

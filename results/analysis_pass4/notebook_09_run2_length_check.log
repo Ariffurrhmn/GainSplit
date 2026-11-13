@@ -1,0 +1,43 @@
+9.2s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+9.2s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+9.2s 3 0.00s - to python to disable frozen modules.
+9.2s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+10.0s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+10.0s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+10.0s 7 0.00s - to python to disable frozen modules.
+10.0s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+11.4s 9 Cloning into '/tmp/GainSplit'...
+11.6s 10 Cloning into '/tmp/GainSplit'...
+11.6s 11 
+11.6s 12 Cloning into '/tmp/GainSplit'...
+29.7s 13 data: /kaggle/input/datasets/arifurrhmn/gainsplit-processed
+29.7s 14 results: ['/tmp/GainSplit/results/pass1', '/tmp/GainSplit/results/pass2a', '/tmp/GainSplit/results/pass2b', '/tmp/GainSplit/results/pass3', '/kaggle/input/notebooks/arifurrhmn/notebook-8/results/pass4']
+30.5s 15 {'pair_set': 'unfiltered', 'pairs_train_sha256': '6412c1facfb2cb743acc190223660d0f085bd72d165c57447d6ac39cdfe43f34', 'n_rows': 44834, 'n_seeds': 22417, 'rows_per_label': {'0': 22417, '1': 22417}, 'seeds_per_model': {'gemma': 7533, 'mistral': 7462, 'qwen': 7422}}
+88.3s 16 pairs_style_probe
+88.3s 17 pairs_real_reader
+88.3s 18 pairs_cue_words
+88.3s 19 pairs_length
+88.3s 20 isarc_length_shortcut
+96.3s 21 330 runs loaded
+97.8s 22 re-runs identical: True
+171.7s 23 /tmp/GainSplit/src/gainsplit/analysis_pass4.py:179: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+171.7s 24 "median_rel_completeness_gap": g.apply(
+171.7s 25 
+171.7s 26 /tmp/GainSplit/src/gainsplit/analysis_pass4.py:179: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+171.7s 27 "median_rel_completeness_gap": g.apply(
+172.4s 28 {'auc': 68.70104166666667, 'ci_low': 64.84314994886586, 'ci_high': 72.54560446012339, 'n_items': 1400}
+315.2s 29 /tmp/GainSplit/src/gainsplit/analysis_pass4.py:179: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+315.2s 30 "median_rel_completeness_gap": g.apply(
+315.2s 31 
+315.2s 32 /tmp/GainSplit/src/gainsplit/analysis_pass4.py:179: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+315.2s 33 "median_rel_completeness_gap": g.apply(
+315.8s 34 tables: ['summary', 'rerun_check', 'contrasts', 'gap_contrasts', 'masked', 'transfer', 'auc_contrasts', 'explain', 'explain_contrasts', 'isarc_length_shortcut']
+315.8s 35 /kaggle/working/analysis_pass4.zip
+319.3s 36 /usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+319.3s 37 cells[i][c] = re.sub('\\\\\|', '|', cell)
+319.5s 38 /usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+319.5s 39 text = re.sub(r'_', '\_', text) # Escape underscores in display text
+320.5s 40 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+320.6s 41 [NbConvertApp] Writing 84507 bytes to __notebook__.ipynb
+323.7s 42 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+324.4s 43 [NbConvertApp] Writing 338131 bytes to __results__.html

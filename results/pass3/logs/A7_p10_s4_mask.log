@@ -1,0 +1,28 @@
+A7_p10_s4_mask: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2700.55it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:172: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.4988  loss_adv 0.613  loss 1.112
+  step 200/720  loss_sarc 0.1562  loss_adv 0.3135  loss 0.4697
+  step 300/720  loss_sarc 0.03161  loss_adv 0.1303  loss 0.162
+  step 400/720  loss_sarc 0.00468  loss_adv 0.06516  loss 0.06984
+  step 500/720  loss_sarc 0.00102  loss_adv 0.03253  loss 0.03355
+  step 600/720  loss_sarc 0.00023  loss_adv 0.02739  loss 0.02762
+  step 700/720  loss_sarc 0.00017  loss_adv 0.0052  loss 0.00537
+  step 720/720  loss_sarc 0.00015  loss_adv 0.00059  loss 0.00073
+A7_p10_s4_mask: done in 2.24 min; dev macro-F1 0.8861, test macro-F1 0.8968, isarc_test macro-F1 0.4756, test_cuemask macro-F1 0.8549, test_randmask macro-F1 0.8818

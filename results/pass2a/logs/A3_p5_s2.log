@@ -1,0 +1,24 @@
+A3_p5_s2: |L|=1140 |U|=21660 steps=360 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2338.23it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:119: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/360  loss_sarc 0.3166  loss_sent 0.8452  loss_emo 0.7211  loss 0.7865
+  step 200/360  loss_sarc 0.01396  loss_sent 0.4314  loss_emo 0.388  loss 0.2598
+  step 300/360  loss_sarc 0.00426  loss_sent 0.322  loss_emo 0.2772  loss 0.184
+  step 360/360  loss_sarc 0.00296  loss_sent 0.2896  loss_emo 0.2364  loss 0.1608
+A3_p5_s2: done in 1.21 min; dev macro-F1 0.8542, test macro-F1 0.8654, isarc_test macro-F1 0.5157

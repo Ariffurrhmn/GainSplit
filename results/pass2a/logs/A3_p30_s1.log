@@ -1,0 +1,42 @@
+A3_p30_s1: |L|=6840 |U|=15960 steps=2140 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2597.56it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:119: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/2140  loss_sarc 0.5231  loss_sent 1.008  loss_emo 0.8722  loss 1.087
+  step 200/2140  loss_sarc 0.3271  loss_sent 0.7055  loss_emo 0.6009  loss 0.719
+  step 300/2140  loss_sarc 0.2272  loss_sent 0.5119  loss_emo 0.4598  loss 0.5187
+  step 400/2140  loss_sarc 0.2137  loss_sent 0.4614  loss_emo 0.3819  loss 0.4667
+  step 500/2140  loss_sarc 0.08354  loss_sent 0.4311  loss_emo 0.357  loss 0.32
+  step 600/2140  loss_sarc 0.06255  loss_sent 0.3565  loss_emo 0.2984  loss 0.259
+  step 700/2140  loss_sarc 0.03528  loss_sent 0.3458  loss_emo 0.2662  loss 0.2189
+  step 800/2140  loss_sarc 0.02443  loss_sent 0.3071  loss_emo 0.2442  loss 0.1898
+  step 900/2140  loss_sarc 0.01359  loss_sent 0.2921  loss_emo 0.231  loss 0.1705
+  step 1000/2140  loss_sarc 0.01153  loss_sent 0.2646  loss_emo 0.2026  loss 0.1517
+  step 1100/2140  loss_sarc 0.00668  loss_sent 0.1651  loss_emo 0.164  loss 0.1054
+  step 1200/2140  loss_sarc 0.0041  loss_sent 0.1461  loss_emo 0.143  loss 0.09083
+  step 1300/2140  loss_sarc 0.00379  loss_sent 0.1544  loss_emo 0.1227  loss 0.08693
+  step 1400/2140  loss_sarc 0.00361  loss_sent 0.1305  loss_emo 0.1176  loss 0.07805
+  step 1500/2140  loss_sarc 0.00156  loss_sent 0.1363  loss_emo 0.1184  loss 0.078
+  step 1600/2140  loss_sarc 0.00145  loss_sent 0.07643  loss_emo 0.07699  loss 0.04747
+  step 1700/2140  loss_sarc 0.00124  loss_sent 0.07185  loss_emo 0.07007  loss 0.04382
+  step 1800/2140  loss_sarc 0.00125  loss_sent 0.05844  loss_emo 0.06437  loss 0.03809
+  step 1900/2140  loss_sarc 0.00114  loss_sent 0.05616  loss_emo 0.0615  loss 0.03644
+  step 2000/2140  loss_sarc 0.00153  loss_sent 0.04937  loss_emo 0.06291  loss 0.03521
+  step 2100/2140  loss_sarc 0.00124  loss_sent 0.03238  loss_emo 0.03641  loss 0.02188
+  step 2140/2140  loss_sarc 0.00104  loss_sent 0.03537  loss_emo 0.03822  loss 0.02312
+A3_p30_s1: done in 6.21 min; dev macro-F1 0.8961, test macro-F1 0.9127, isarc_test macro-F1 0.4906

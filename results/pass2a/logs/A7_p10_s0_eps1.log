@@ -1,0 +1,28 @@
+A7_p10_s0_eps1: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2245.01it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:156: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.4717  loss_adv 0.6406  loss 1.112
+  step 200/720  loss_sarc 0.1559  loss_adv 0.3619  loss 0.5178
+  step 300/720  loss_sarc 0.03468  loss_adv 0.1593  loss 0.194
+  step 400/720  loss_sarc 0.00544  loss_adv 0.0915  loss 0.09694
+  step 500/720  loss_sarc 0.00177  loss_adv 0.07961  loss 0.08138
+  step 600/720  loss_sarc 0.0009  loss_adv 0.04869  loss 0.04959
+  step 700/720  loss_sarc 0.00039  loss_adv 0.03229  loss 0.03269
+  step 720/720  loss_sarc 0.00033  loss_adv 0.03752  loss 0.03785
+A7_p10_s0_eps1: done in 2.28 min; dev macro-F1 0.8794

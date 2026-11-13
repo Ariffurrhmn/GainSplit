@@ -1,0 +1,90 @@
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2745.55it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+A1_p100_s1: |L|=22800 |U|=0 steps=7130 device=cuda
+  step 100/7130  loss_sarc 0.6058  loss 0.6058
+  step 200/7130  loss_sarc 0.4094  loss 0.4094
+  step 300/7130  loss_sarc 0.3281  loss 0.3281
+  step 400/7130  loss_sarc 0.3055  loss 0.3055
+  step 500/7130  loss_sarc 0.278  loss 0.278
+  step 600/7130  loss_sarc 0.2685  loss 0.2685
+  step 700/7130  loss_sarc 0.2445  loss 0.2445
+  step 800/7130  loss_sarc 0.209  loss 0.209
+  step 900/7130  loss_sarc 0.1772  loss 0.1772
+  step 1000/7130  loss_sarc 0.1631  loss 0.1631
+  step 1100/7130  loss_sarc 0.1896  loss 0.1896
+  step 1200/7130  loss_sarc 0.1877  loss 0.1877
+  step 1300/7130  loss_sarc 0.1561  loss 0.1561
+  step 1400/7130  loss_sarc 0.1564  loss 0.1564
+  step 1500/7130  loss_sarc 0.09306  loss 0.09306
+  step 1600/7130  loss_sarc 0.07165  loss 0.07165
+  step 1700/7130  loss_sarc 0.06504  loss 0.06504
+  step 1800/7130  loss_sarc 0.07022  loss 0.07022
+  step 1900/7130  loss_sarc 0.07923  loss 0.07923
+  step 2000/7130  loss_sarc 0.07097  loss 0.07097
+  step 2100/7130  loss_sarc 0.07336  loss 0.07336
+  step 2200/7130  loss_sarc 0.04975  loss 0.04975
+  step 2300/7130  loss_sarc 0.04481  loss 0.04481
+  step 2400/7130  loss_sarc 0.01694  loss 0.01694
+  step 2500/7130  loss_sarc 0.03358  loss 0.03358
+  step 2600/7130  loss_sarc 0.0169  loss 0.0169
+  step 2700/7130  loss_sarc 0.04195  loss 0.04195
+  step 2800/7130  loss_sarc 0.05335  loss 0.05335
+  step 2900/7130  loss_sarc 0.01694  loss 0.01694
+  step 3000/7130  loss_sarc 0.01513  loss 0.01513
+  step 3100/7130  loss_sarc 0.0238  loss 0.0238
+  step 3200/7130  loss_sarc 0.02029  loss 0.02029
+  step 3300/7130  loss_sarc 0.01181  loss 0.01181
+  step 3400/7130  loss_sarc 0.02219  loss 0.02219
+  step 3500/7130  loss_sarc 0.01193  loss 0.01193
+  step 3600/7130  loss_sarc 0.0209  loss 0.0209
+  step 3700/7130  loss_sarc 0.009  loss 0.009
+  step 3800/7130  loss_sarc 0.00842  loss 0.00842
+  step 3900/7130  loss_sarc 0.01126  loss 0.01126
+  step 4000/7130  loss_sarc 0.0078  loss 0.0078
+  step 4100/7130  loss_sarc 0.01013  loss 0.01013
+  step 4200/7130  loss_sarc 0.00631  loss 0.00631
+  step 4300/7130  loss_sarc 0.004  loss 0.004
+  step 4400/7130  loss_sarc 0.00321  loss 0.00321
+  step 4500/7130  loss_sarc 0.00872  loss 0.00872
+  step 4600/7130  loss_sarc 0.01661  loss 0.01661
+  step 4700/7130  loss_sarc 0.00691  loss 0.00691
+  step 4800/7130  loss_sarc 0.00129  loss 0.00129
+  step 4900/7130  loss_sarc 0.00876  loss 0.00876
+  step 5000/7130  loss_sarc 0.00759  loss 0.00759
+  step 5100/7130  loss_sarc 0.00388  loss 0.00388
+  step 5200/7130  loss_sarc 0.00254  loss 0.00254
+  step 5300/7130  loss_sarc 0.00195  loss 0.00195
+  step 5400/7130  loss_sarc 0.00273  loss 0.00273
+  step 5500/7130  loss_sarc 0.00016  loss 0.00016
+  step 5600/7130  loss_sarc 0.00248  loss 0.00248
+  step 5700/7130  loss_sarc 6e-05  loss 6e-05
+  step 5800/7130  loss_sarc 0.00018  loss 0.00018
+  step 5900/7130  loss_sarc 0.00844  loss 0.00844
+  step 6000/7130  loss_sarc 0.00025  loss 0.00025
+  step 6100/7130  loss_sarc 5e-05  loss 5e-05
+  step 6200/7130  loss_sarc 0.00683  loss 0.00683
+  step 6300/7130  loss_sarc 0.00017  loss 0.00017
+  step 6400/7130  loss_sarc 2e-05  loss 2e-05
+  step 6500/7130  loss_sarc 3e-05  loss 3e-05
+  step 6600/7130  loss_sarc 3e-05  loss 3e-05
+  step 6700/7130  loss_sarc 0.00108  loss 0.00108
+  step 6800/7130  loss_sarc 0.00144  loss 0.00144
+  step 6900/7130  loss_sarc 0.00012  loss 0.00012
+  step 7000/7130  loss_sarc 1e-05  loss 1e-05
+  step 7100/7130  loss_sarc 0.00235  loss 0.00235
+  step 7130/7130  loss_sarc 2e-05  loss 2e-05
+A1_p100_s1: done in 12.64 min; dev macro-F1 0.9253, test macro-F1 0.9289, isarc_test macro-F1 0.5064

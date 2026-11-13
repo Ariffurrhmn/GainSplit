@@ -1,0 +1,25 @@
+A10_p1_s2_steps3x: |L|=228 |U|=22572 steps=600 device=cuda
+  pairs (unfiltered): 44834 rows from 22417 seeds, 32 rows per step
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2749.32it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.bias                       | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/600  loss_sarc 0.3482  loss 0.3482
+  step 200/600  loss_sarc 0.1494  loss 0.1494
+  step 300/600  loss_sarc 0.113  loss 0.113
+  step 400/600  loss_sarc 0.09699  loss 0.09699
+  step 500/600  loss_sarc 0.0966  loss 0.0966
+  step 600/600  loss_sarc 0.08386  loss 0.08386
+A10_p1_s2_steps3x: done in 1.85 min; dev macro-F1 0.5947, test macro-F1 0.6083, isarc_test macro-F1 0.3695, test_cuemask macro-F1 0.5895, test_randmask macro-F1 0.6099

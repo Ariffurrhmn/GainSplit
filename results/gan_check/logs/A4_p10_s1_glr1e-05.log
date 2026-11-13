@@ -1,0 +1,27 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+A4_p10_s1_glr1e-05: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2489.45it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/720  loss_sarc 0.6027  loss_unsup_real 0.09107  loss_unsup_fake 0.9662  p_fake_real 0.07851  p_fake_fake 0.3838  loss_g_unsup 0.4935  loss_g_fm 0.09108  loss_d 1.66  loss_g 0.5846  loss 1.66
+  step 200/720  loss_sarc 0.1812  loss_unsup_real 0.00468  loss_unsup_fake 0.889  p_fake_real 0.00467  p_fake_fake 0.4128  loss_g_unsup 0.5431  loss_g_fm 0.12  loss_d 1.075  loss_g 0.6631  loss 1.075
+  step 300/720  loss_sarc 0.04103  loss_unsup_real 0.0027  loss_unsup_fake 0.6888  p_fake_real 0.00269  p_fake_fake 0.5081  loss_g_unsup 0.7383  loss_g_fm 0.131  loss_d 0.7325  loss_g 0.8693  loss 0.7325
+  step 400/720  loss_sarc 0.00936  loss_unsup_real 0.0011  loss_unsup_fake 0.4459  p_fake_real 0.0011  p_fake_fake 0.644  loss_g_unsup 1.073  loss_g_fm 0.1571  loss_d 0.4563  loss_g 1.23  loss 0.4563
+  step 500/720  loss_sarc 0.00978  loss_unsup_real 0.0008  loss_unsup_fake 0.4491  p_fake_real 0.0008  p_fake_fake 0.6419  loss_g_unsup 1.059  loss_g_fm 0.1595  loss_d 0.4596  loss_g 1.218  loss 0.4596
+  step 600/720  loss_sarc 0.00697  loss_unsup_real 0.00104  loss_unsup_fake 0.489  p_fake_real 0.00104  p_fake_fake 0.6168  loss_g_unsup 0.9813  loss_g_fm 0.1409  loss_d 0.497  loss_g 1.122  loss 0.497
+  step 700/720  loss_sarc 0.0031  loss_unsup_real 0.00114  loss_unsup_fake 0.4984  p_fake_real 0.00114  p_fake_fake 0.6107  loss_g_unsup 0.9625  loss_g_fm 0.1316  loss_d 0.5026  loss_g 1.094  loss 0.5026
+  step 720/720  loss_sarc 0.00295  loss_unsup_real 0.00115  loss_unsup_fake 0.4994  p_fake_real 0.00115  p_fake_fake 0.6103  loss_g_unsup 0.9598  loss_g_fm 0.1306  loss_d 0.5035  loss_g 1.09  loss 0.5035
+A4_p10_s1_glr1e-05: done in 2.03 min; dev macro-F1 0.8655

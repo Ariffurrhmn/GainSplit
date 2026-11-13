@@ -1,0 +1,250 @@
+6.1s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+6.1s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+6.1s 3 0.00s - to python to disable frozen modules.
+6.1s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+6.6s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+6.6s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+6.6s 7 0.00s - to python to disable frozen modules.
+6.6s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+7.6s 9 Cloning into '/tmp/GainSplit'...
+7.8s 10 Cloning into '/tmp/GainSplit'...
+7.8s 11 
+7.8s 12 Cloning into '/tmp/GainSplit'...
+11.7s 13 code commit: 7893defce9003e89c266ba0ab0b61321712a5992
+14.2s 14 ..................                                                       [100%]
+14.2s 15 18 passed in 0.13s
+14.2s 16 
+15.1s 17 data: /kaggle/input/datasets/arifurrhmn/gainsplit-processed | seeds: 22800 | plan fingerprint: 5ff0dead7b8738c3
+15.1s 18 seed_label      0      1    All
+15.1s 19 model
+15.1s 20 gemma        4014   3586   7600
+15.1s 21 mistral      3972   3628   7600
+15.1s 22 qwen         3974   3626   7600
+15.1s 23 All         11960  10840  22800
+36.4s 24 HF_TOKEN found: True
+36.4s 25 GPUs: ['Tesla T4', 'Tesla T4']
+36.6s 26 chunks copied from earlier sessions: 0
+36.6s 27 
+36.6s 28 qwen: 16 chunks, 16 to do
+39.8s 29 [transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+39.8s 30 
+39.8s 31 [transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+144.3s 32 loaded in 108 s
+462.1s 33 chunk 0: 500 seeds in 318 s | about 1.3 h left for qwen
+803.4s 34 chunk 1: 500 seeds in 341 s | about 1.3 h left for qwen
+1133.5s 35 chunk 2: 500 seeds in 330 s | about 1.2 h left for qwen
+1466.2s 36 chunk 3: 500 seeds in 333 s | about 1.1 h left for qwen
+1815.1s 37 chunk 4: 500 seeds in 349 s | about 1.1 h left for qwen
+2149.0s 38 chunk 5: 500 seeds in 334 s | about 0.9 h left for qwen
+2484.7s 39 chunk 6: 500 seeds in 336 s | about 0.8 h left for qwen
+2821.0s 40 chunk 7: 500 seeds in 336 s | about 0.7 h left for qwen
+3153.6s 41 chunk 8: 500 seeds in 333 s | about 0.6 h left for qwen
+3486.6s 42 chunk 9: 500 seeds in 333 s | about 0.6 h left for qwen
+3821.5s 43 chunk 10: 500 seeds in 335 s | about 0.5 h left for qwen
+4155.8s 44 chunk 11: 500 seeds in 334 s | about 0.4 h left for qwen
+4487.6s 45 chunk 12: 500 seeds in 332 s | about 0.3 h left for qwen
+4827.6s 46 chunk 13: 500 seeds in 340 s | about 0.2 h left for qwen
+5169.1s 47 chunk 14: 500 seeds in 342 s | about 0.1 h left for qwen
+5239.3s 48 chunk 15: 100 seeds in 70 s | about 0.0 h left for qwen
+5239.3s 49 
+5239.3s 50 gemma: 16 chunks, 16 to do
+5386.2s 51 loaded in 147 s
+5397.4s 52 Traceback (most recent call last):
+5397.4s 53 File "<string>", line 1, in <module>
+5397.4s 54 import sys;import papermill as pm;pm.execute_notebook("__notebook__.ipynb","__notebook__.ipynb",progress_bar=False,log_output=True,stdout_file=sys.stdout,stderr_file=sys.stderr,allow_errors=False,timeout=43200)
+5397.4s 55 ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5397.4s 56 File "/usr/local/lib/python3.13/dist-packages/papermill/execute.py", line 131, in execute_notebook
+5397.4s 57 raise_for_execution_errors(nb, output_path)
+5397.4s 58 ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+5397.4s 59 File "/usr/local/lib/python3.13/dist-packages/papermill/execute.py", line 251, in raise_for_execution_errors
+5397.4s 60 raise error
+5397.4s 61 papermill.exceptions.PapermillExecutionError:
+5397.4s 62 ---------------------------------------------------------------------------
+5397.4s 63 Exception encountered at "In [5]":
+5397.4s 64 ---------------------------------------------------------------------------
+5397.4s 65 OutOfMemoryError                          Traceback (most recent call last)
+5397.4s 66 /tmp/ipykernel_23/2720732451.py in <cell line: 0>()
+5397.4s 67 22             torch.manual_seed(SEED * 10_000 + k)
+5397.4s 68 23             t1 = time.time()
+5397.4s 69 ---> 24             part["raw"] = run_prompts(tok, model, [pg.build_prompt(t) for t in part["seed_text"]],
+5397.4s 70 25                                       GEN["batch_size"], GEN["max_new_tokens"], sample=True)
+5397.4s 71 26             secs = time.time() - t1
+5397.4s 72 
+5397.4s 73 /tmp/ipykernel_23/513861136.py in run_prompts(tok, model, prompts, batch_size, max_new_tokens, sample)
+5397.4s 74 33         kw = dict(do_sample=True, temperature=GEN["temperature"], top_p=GEN["top_p"]) if sample else dict(do_sample=False)
+5397.4s 75 34         with torch.no_grad():
+5397.4s 76 ---> 35             gen = model.generate(**enc, max_new_tokens=max_new_tokens, pad_token_id=tok.pad_token_id, **kw)
+5397.4s 77 36         outs += tok.batch_decode(gen[:, enc["input_ids"].shape[1]:], skip_special_tokens=True)
+5397.4s 78 37     return outs
+5397.4s 79 
+5397.4s 80 /usr/local/lib/python3.13/dist-packages/torch/utils/_contextlib.py in decorate_context(*args, **kwargs)
+5397.4s 81 122         # pyrefly: ignore [bad-context-manager]
+5397.4s 82 123         with ctx_factory():
+5397.4s 83 --> 124             return func(*args, **kwargs)
+5397.4s 84 125
+5397.4s 85 126     return decorate_context
+5397.4s 86 
+5397.4s 87 /usr/local/lib/python3.13/dist-packages/transformers/generation/utils.py in generate(self, inputs, generation_config, logits_processor, stopping_criteria, prefix_allowed_tokens_fn, synced_gpus, assistant_model, streamer, negative_prompt_ids, negative_prompt_attention_mask, custom_generate, **kwargs)
+5397.4s 88 2987
+5397.4s 89 2988         # 9. Call generation mode
+5397.4s 90 -> 2989         result = decoding_method(
+5397.4s 91 2990             self,
+5397.4s 92 2991             input_ids,
+5397.4s 93 
+5397.4s 94 /usr/local/lib/python3.13/dist-packages/transformers/generation/utils.py in _sample(self, input_ids, logits_processor, stopping_criteria, generation_config, synced_gpus, streamer, **model_kwargs)
+5397.4s 95 3187
+5397.4s 96 3188         prefill_consumed = False
+5397.4s 97 -> 3189         outputs = self._prefill(
+5397.4s 98 3190             input_ids,
+5397.4s 99 3191             generation_config,
+5397.4s 100 
+5397.4s 101 /usr/local/lib/python3.13/dist-packages/transformers/generation/utils.py in _prefill(self, input_ids, generation_config, model_kwargs, is_first_iteration)
+5397.4s 102 4298                 **model_kwargs,
+5397.4s 103 4299             )
+5397.4s 104 -> 4300             return self(**model_inputs, return_dict=True)
+5397.4s 105 4301
+5397.4s 106 4302         # Chunked prefill (for very large contexts)
+5397.4s 107 
+5397.4s 108 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)
+5397.4s 109 1777             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]
+5397.4s 110 1778         else:
+5397.4s 111 -> 1779             return self._call_impl(*args, **kwargs)
+5397.4s 112 1780
+5397.4s 113 1781     # torchrec tests the code consistency with the following code
+5397.4s 114 
+5397.4s 115 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)
+5397.4s 116 1788                 or _global_backward_pre_hooks or _global_backward_hooks
+5397.4s 117 1789                 or _global_forward_hooks or _global_forward_pre_hooks):
+5397.4s 118 -> 1790             return forward_call(*args, **kwargs)
+5397.4s 119 1791
+5397.4s 120 1792         result = None
+5397.4s 121 
+5397.4s 122 /usr/local/lib/python3.13/dist-packages/accelerate/hooks.py in new_forward(module, *args, **kwargs)
+5397.4s 123 190                 output = module._old_forward(*args, **kwargs)
+5397.4s 124 191         else:
+5397.4s 125 --> 192             output = module._old_forward(*args, **kwargs)
+5397.4s 126 193         return module._hf_hook.post_forward(module, output)
+5397.4s 127 194
+5397.4s 128 
+5397.4s 129 /usr/local/lib/python3.13/dist-packages/transformers/utils/generic.py in wrapper(self, *args, **kwargs)
+5397.4s 130 941         if return_dict_passed is not None:
+5397.4s 131 942             return_dict = return_dict_passed
+5397.4s 132 --> 943         output = func(self, *args, **kwargs)
+5397.4s 133 944         if not return_dict and not isinstance(output, tuple):
+5397.4s 134 945             output = output.to_tuple()
+5397.4s 135 
+5397.4s 136 /usr/local/lib/python3.13/dist-packages/transformers/models/gemma2/modeling_gemma2.py in forward(self, input_ids, attention_mask, position_ids, past_key_values, inputs_embeds, labels, use_cache, logits_to_keep, **kwargs)
+5397.4s 137 503         ```"""
+5397.4s 138 504         # decoder outputs consists of (dec_features, layer_state, dec_hidden, dec_attn)
+5397.4s 139 --> 505         outputs: BaseModelOutputWithPast = self.model(
+5397.4s 140 506             input_ids=input_ids,
+5397.4s 141 507             attention_mask=attention_mask,
+5397.4s 142 
+5397.4s 143 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)
+5397.4s 144 1777             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]
+5397.4s 145 1778         else:
+5397.4s 146 -> 1779             return self._call_impl(*args, **kwargs)
+5397.4s 147 1780
+5397.4s 148 1781     # torchrec tests the code consistency with the following code
+5397.4s 149 
+5397.4s 150 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)
+5397.4s 151 1788                 or _global_backward_pre_hooks or _global_backward_hooks
+5397.4s 152 1789                 or _global_forward_hooks or _global_forward_pre_hooks):
+5397.4s 153 -> 1790             return forward_call(*args, **kwargs)
+5397.4s 154 1791
+5397.4s 155 1792         result = None
+5397.4s 156 
+5397.4s 157 /usr/local/lib/python3.13/dist-packages/transformers/utils/generic.py in wrapper(self, *args, **kwargs)
+5397.4s 158 1079                     output = func(self, *args, **kwargs)
+5397.4s 159 1080             else:
+5397.4s 160 -> 1081                 output = func(self, *args, **kwargs)
+5397.4s 161 1082         # Restore original config value
+5397.4s 162 1083         finally:
+5397.4s 163 
+5397.4s 164 /usr/local/lib/python3.13/dist-packages/transformers/utils/output_capturing.py in wrapper(self, *args, **kwargs)
+5397.4s 165 285             # Run the forward
+5397.4s 166 286             try:
+5397.4s 167 --> 287                 outputs = func(self, *args, **kwargs)
+5397.4s 168 288             # Reset the states
+5397.4s 169 289             finally:
+5397.4s 170 
+5397.4s 171 /usr/local/lib/python3.13/dist-packages/transformers/models/gemma2/modeling_gemma2.py in forward(self, input_ids, attention_mask, position_ids, past_key_values, inputs_embeds, use_cache, **kwargs)
+5397.4s 172 438
+5397.4s 173 439         for i, decoder_layer in enumerate(self.layers[: self.config.num_hidden_layers]):
+5397.4s 174 --> 440             hidden_states = decoder_layer(
+5397.4s 175 441                 hidden_states,
+5397.4s 176 442                 attention_mask=causal_mask_mapping[self.config.layer_types[i]],
+5397.4s 177 
+5397.4s 178 /usr/local/lib/python3.13/dist-packages/transformers/modeling_layers.py in __call__(self, *args, **kwargs)
+5397.4s 179 109
+5397.4s 180 110             return self._gradient_checkpointing_func(partial(super().__call__, **kwargs), *args)
+5397.4s 181 --> 111         return super().__call__(*args, **kwargs)
+5397.4s 182 112
+5397.4s 183 113
+5397.4s 184 
+5397.4s 185 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)
+5397.4s 186 1777             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]
+5397.4s 187 1778         else:
+5397.4s 188 -> 1779             return self._call_impl(*args, **kwargs)
+5397.4s 189 1780
+5397.4s 190 1781     # torchrec tests the code consistency with the following code
+5397.4s 191 
+5397.4s 192 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)
+5397.4s 193 1788                 or _global_backward_pre_hooks or _global_backward_hooks
+5397.4s 194 1789                 or _global_forward_hooks or _global_forward_pre_hooks):
+5397.4s 195 -> 1790             return forward_call(*args, **kwargs)
+5397.4s 196 1791
+5397.4s 197 1792         result = None
+5397.4s 198 
+5397.4s 199 /usr/local/lib/python3.13/dist-packages/accelerate/hooks.py in new_forward(module, *args, **kwargs)
+5397.4s 200 190                 output = module._old_forward(*args, **kwargs)
+5397.4s 201 191         else:
+5397.4s 202 --> 192             output = module._old_forward(*args, **kwargs)
+5397.4s 203 193         return module._hf_hook.post_forward(module, output)
+5397.4s 204 194
+5397.4s 205 
+5397.4s 206 /usr/local/lib/python3.13/dist-packages/transformers/models/gemma2/modeling_gemma2.py in forward(self, hidden_states, position_embeddings, attention_mask, position_ids, past_key_values, **kwargs)
+5397.4s 207 321         residual = hidden_states
+5397.4s 208 322         hidden_states = self.pre_feedforward_layernorm(hidden_states)
+5397.4s 209 --> 323         hidden_states = self.mlp(hidden_states)
+5397.4s 210 324         hidden_states = self.post_feedforward_layernorm(hidden_states)
+5397.4s 211 325         hidden_states = residual + hidden_states
+5397.4s 212 
+5397.4s 213 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py in _wrapped_call_impl(self, *args, **kwargs)
+5397.4s 214 1777             return self._compiled_call_impl(*args, **kwargs)  # type: ignore[misc]
+5397.4s 215 1778         else:
+5397.4s 216 -> 1779             return self._call_impl(*args, **kwargs)
+5397.4s 217 1780
+5397.4s 218 1781     # torchrec tests the code consistency with the following code
+5397.4s 219 
+5397.4s 220 /usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py in _call_impl(self, *args, **kwargs)
+5397.4s 221 1788                 or _global_backward_pre_hooks or _global_backward_hooks
+5397.4s 222 1789                 or _global_forward_hooks or _global_forward_pre_hooks):
+5397.4s 223 -> 1790             return forward_call(*args, **kwargs)
+5397.4s 224 1791
+5397.4s 225 1792         result = None
+5397.4s 226 
+5397.4s 227 /usr/local/lib/python3.13/dist-packages/accelerate/hooks.py in new_forward(module, *args, **kwargs)
+5397.4s 228 190                 output = module._old_forward(*args, **kwargs)
+5397.4s 229 191         else:
+5397.4s 230 --> 192             output = module._old_forward(*args, **kwargs)
+5397.4s 231 193         return module._hf_hook.post_forward(module, output)
+5397.4s 232 194
+5397.4s 233 
+5397.4s 234 /usr/local/lib/python3.13/dist-packages/transformers/models/gemma2/modeling_gemma2.py in forward(self, x)
+5397.4s 235 78
+5397.4s 236 79     def forward(self, x):
+5397.4s 237 ---> 80         down_proj = self.down_proj(self.act_fn(self.gate_proj(x)) * self.up_proj(x))
+5397.4s 238 81         return down_proj
+5397.4s 239 82
+5397.4s 240 
+5397.4s 241 OutOfMemoryError: CUDA out of memory. Tried to allocate 356.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 224.81 MiB is free. Including non-PyTorch memory, this process has 14.34 GiB memory in use. Of the allocated memory 13.33 GiB is allocated by PyTorch, and 906.31 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+5397.4s 242 
+5399.8s 243 /usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+5399.8s 244 cells[i][c] = re.sub('\\\\\|', '|', cell)
+5400.0s 245 /usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+5400.0s 246 text = re.sub(r'_', '\_', text) # Escape underscores in display text
+5400.9s 247 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+5401.0s 248 [NbConvertApp] Writing 320987 bytes to __notebook__.ipynb
+5403.5s 249 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+5404.3s 250 [NbConvertApp] Writing 601991 bytes to __results__.html

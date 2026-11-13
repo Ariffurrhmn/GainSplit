@@ -1,0 +1,28 @@
+A3_p10_s2_teacher2: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2822.57it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:135: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.4706  loss_sent 0.8088  loss_emo 0.7499  loss 0.9382
+  step 200/720  loss_sarc 0.1478  loss_sent 0.4804  loss_emo 0.4894  loss 0.4388
+  step 300/720  loss_sarc 0.02165  loss_sent 0.3521  loss_emo 0.3497  loss 0.2322
+  step 400/720  loss_sarc 0.00617  loss_sent 0.2967  loss_emo 0.2866  loss 0.1811
+  step 500/720  loss_sarc 0.00279  loss_sent 0.2623  loss_emo 0.2228  loss 0.1483
+  step 600/720  loss_sarc 0.00256  loss_sent 0.2329  loss_emo 0.2185  loss 0.138
+  step 700/720  loss_sarc 0.00204  loss_sent 0.1881  loss_emo 0.1635  loss 0.1075
+  step 720/720  loss_sarc 0.00264  loss_sent 0.1282  loss_emo 0.1533  loss 0.0871
+A3_p10_s2_teacher2: done in 2.23 min; dev macro-F1 0.8775, test macro-F1 0.8882, isarc_test macro-F1 0.5057, test_cuemask macro-F1 0.8392, test_randmask macro-F1 0.8701

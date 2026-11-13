@@ -1,0 +1,40 @@
+A1_p30_s0: |L|=6840 |U|=15960 steps=2140 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2589.81it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/2140  loss_sarc 0.5297  loss 0.5297
+  step 200/2140  loss_sarc 0.3533  loss 0.3533
+  step 300/2140  loss_sarc 0.2123  loss 0.2123
+  step 400/2140  loss_sarc 0.2183  loss 0.2183
+  step 500/2140  loss_sarc 0.1147  loss 0.1147
+  step 600/2140  loss_sarc 0.07215  loss 0.07215
+  step 700/2140  loss_sarc 0.04691  loss 0.04691
+  step 800/2140  loss_sarc 0.02768  loss 0.02768
+  step 900/2140  loss_sarc 0.01466  loss 0.01466
+  step 1000/2140  loss_sarc 0.01249  loss 0.01249
+  step 1100/2140  loss_sarc 0.01553  loss 0.01553
+  step 1200/2140  loss_sarc 0.00442  loss 0.00442
+  step 1300/2140  loss_sarc 0.00336  loss 0.00336
+  step 1400/2140  loss_sarc 0.00416  loss 0.00416
+  step 1500/2140  loss_sarc 0.00223  loss 0.00223
+  step 1600/2140  loss_sarc 0.00135  loss 0.00135
+  step 1700/2140  loss_sarc 0.0041  loss 0.0041
+  step 1800/2140  loss_sarc 3e-05  loss 3e-05
+  step 1900/2140  loss_sarc 0.00034  loss 0.00034
+  step 2000/2140  loss_sarc 0.00013  loss 0.00013
+  step 2100/2140  loss_sarc 3e-05  loss 3e-05
+  step 2140/2140  loss_sarc 0.00046  loss 0.00046
+A1_p30_s0: done in 4.03 min; dev macro-F1 0.8970, test macro-F1 0.9074, isarc_test macro-F1 0.5226

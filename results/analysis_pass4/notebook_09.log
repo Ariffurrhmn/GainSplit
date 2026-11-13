@@ -1,0 +1,47 @@
+9.7s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+9.7s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+9.7s 3 0.00s - to python to disable frozen modules.
+9.7s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+10.5s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+10.5s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+10.5s 7 0.00s - to python to disable frozen modules.
+10.5s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+12.0s 9 Cloning into '/tmp/GainSplit'...
+12.2s 10 Cloning into '/tmp/GainSplit'...
+12.2s 11 
+12.2s 12 Cloning into '/tmp/GainSplit'...
+28.2s 13 data: /kaggle/input/datasets/arifurrhmn/gainsplit-processed
+28.2s 14 results: ['/tmp/GainSplit/results/pass1', '/tmp/GainSplit/results/pass2a', '/tmp/GainSplit/results/pass2b', '/tmp/GainSplit/results/pass3', '/kaggle/input/notebooks/arifurrhmn/notebook-8/results/pass4']
+28.9s 15 {'pair_set': 'unfiltered', 'pairs_train_sha256': '6412c1facfb2cb743acc190223660d0f085bd72d165c57447d6ac39cdfe43f34', 'n_rows': 44834, 'n_seeds': 22417, 'rows_per_label': {'0': 22417, '1': 22417}, 'seeds_per_model': {'gemma': 7533, 'mistral': 7462, 'qwen': 7422}}
+86.7s 16 pairs_style_probe
+86.7s 17 pairs_real_reader
+86.7s 18 pairs_cue_words
+86.7s 19 pairs_length
+86.7s 20 isarc_length_shortcut
+100.0s 21 word table cv_auc (whole-model): 0.9511
+101.6s 22 pairs_shortcut_words
+101.6s 23 pairs_shortcut_features
+114.6s 24 pair_shortcut_scores.csv: 22417 seeds, cv_auc 0.9511
+120.0s 25 330 runs loaded
+121.0s 26 re-runs identical: True
+179.5s 27 /tmp/GainSplit/src/gainsplit/analysis_pass4.py:179: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+179.5s 28 "median_rel_completeness_gap": g.apply(
+179.5s 29 
+179.5s 30 /tmp/GainSplit/src/gainsplit/analysis_pass4.py:179: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+179.5s 31 "median_rel_completeness_gap": g.apply(
+180.2s 32 {'auc': 68.70104166666667, 'ci_low': 64.84314994886586, 'ci_high': 72.54560446012339, 'n_items': 1400}
+307.3s 33 /tmp/GainSplit/src/gainsplit/analysis_pass4.py:179: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+307.3s 34 "median_rel_completeness_gap": g.apply(
+307.3s 35 
+307.3s 36 /tmp/GainSplit/src/gainsplit/analysis_pass4.py:179: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+307.3s 37 "median_rel_completeness_gap": g.apply(
+307.9s 38 tables: ['summary', 'rerun_check', 'contrasts', 'gap_contrasts', 'masked', 'transfer', 'auc_contrasts', 'explain', 'explain_contrasts', 'isarc_length_shortcut']
+307.9s 39 /kaggle/working/analysis_pass4.zip
+311.7s 40 /usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+311.7s 41 cells[i][c] = re.sub('\\\\\|', '|', cell)
+312.0s 42 /usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+312.0s 43 text = re.sub(r'_', '\_', text) # Escape underscores in display text
+312.9s 44 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+313.1s 45 [NbConvertApp] Writing 129078 bytes to __notebook__.ipynb
+316.5s 46 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+317.2s 47 [NbConvertApp] Writing 366713 bytes to __results__.html

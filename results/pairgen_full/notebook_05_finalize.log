@@ -1,0 +1,113 @@
+8.3s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+8.3s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+8.3s 3 0.00s - to python to disable frozen modules.
+8.3s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+8.9s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+8.9s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+8.9s 7 0.00s - to python to disable frozen modules.
+8.9s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+10.2s 9 Cloning into '/tmp/GainSplit'...
+10.4s 10 Cloning into '/tmp/GainSplit'...
+10.4s 11 
+10.4s 12 Cloning into '/tmp/GainSplit'...
+14.2s 13 code commit: 7893defce9003e89c266ba0ab0b61321712a5992
+17.3s 14 ..................                                                       [100%]
+17.4s 15 18 passed in 0.15s
+17.4s 16 
+18.7s 17 data: /kaggle/input/datasets/arifurrhmn/gainsplit-processed | seeds: 22800 | plan fingerprint: 5ff0dead7b8738c3
+18.9s 18 seed_label      0      1    All
+18.9s 19 model
+18.9s 20 gemma        4014   3586   7600
+18.9s 21 mistral      3972   3628   7600
+18.9s 22 qwen         3974   3626   7600
+18.9s 23 All         11960  10840  22800
+48.7s 24 HF_TOKEN found: True
+48.7s 25 GPUs: ['Tesla T4', 'Tesla T4']
+48.8s 26 STAGE is finalize - generation skipped
+51.7s 27 seeds generated: 22800 | missing: 0
+53.9s 28 real headlines: 400 | generated headlines: 44834
+58.1s 29 [transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+58.1s 30 
+58.1s 31 [transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+101.6s 32 [transformers] Ignoring clean_up_tokenization_spaces=True for BPE tokenizer TokenizersBackend. The clean_up_tokenization post-processing step is designed for WordPiece tokenizers and is destructive for BPE (it strips spaces before punctuation). Set clean_up_tokenization_spaces=False to suppress this warning, or set clean_up_tokenization_spaces_for_bpe_even_though_it_will_corrupt_output=True to force cleanup anyway.
+101.6s 33 
+101.6s 34 [transformers] Ignoring clean_up_tokenization_spaces=True for BPE tokenizer TokenizersBackend. The clean_up_tokenization post-processing step is designed for WordPiece tokenizers and is destructive for BPE (it strips spaces before punctuation). Set clean_up_tokenization_spaces=False to suppress this warning, or set clean_up_tokenization_spaces_for_bpe_even_though_it_will_corrupt_output=True to force cleanup anyway.
+2413.6s 35 smollm3: 45234 headlines in 39.3 min, unclear 0.000
+4932.8s 36 qwen: 30390 headlines in 42.0 min, unclear 0.016
+7940.3s 37 gemma: 30168 headlines in 50.1 min, unclear 0.000
+10579.4s 38 mistral: 30310 headlines in 44.0 min, unclear 0.001
+10579.9s 39 smollm3                balanced accuracy on real headlines: 0.507
+10579.9s 40 cross without qwen     balanced accuracy on real headlines: 0.427
+10579.9s 41 cross without gemma    balanced accuracy on real headlines: 0.483
+10579.9s 42 cross without mistral  balanced accuracy on real headlines: 0.498
+10579.9s 43 chosen judge: none (best 0.507 < 0.75): pairs are not filtered by a judge
+10580.1s 44 /tmp/ipykernel_23/1506798715.py:51: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+10580.1s 45 pairs["judge_both"] = pairs["seed_id"].map(both).fillna(False).astype(bool)
+10580.1s 46 
+10580.1s 47 /tmp/ipykernel_23/1506798715.py:51: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+10580.1s 48 pairs["judge_both"] = pairs["seed_id"].map(both).fillna(False).astype(bool)
+10580.8s 49 {
+10580.8s 50 "commit": "7893defce9003e89c266ba0ab0b61321712a5992",
+10580.8s 51 "plan_fingerprint": "5ff0dead7b8738c3",
+10580.8s 52 "seed": 2026,
+10580.8s 53 "n_seeds": 22800,
+10580.8s 54 "models": {
+10580.8s 55 "qwen": {
+10580.8s 56 "id": "Qwen/Qwen2.5-7B-Instruct",
+10580.8s 57 "extra": {}
+10580.8s 58 },
+10580.8s 59 "gemma": {
+10580.8s 60 "id": "google/gemma-2-9b-it",
+10580.8s 61 "extra": {
+10580.8s 62 "attn_implementation": "eager"
+10580.8s 63 },
+10580.8s 64 "batch_size": 16
+10580.8s 65 },
+10580.8s 66 "mistral": {
+10580.8s 67 "id": "mistralai/Mistral-7B-Instruct-v0.3",
+10580.8s 68 "extra": {}
+10580.8s 69 }
+10580.8s 70 },
+10580.8s 71 "prompt_version": 2,
+10580.8s 72 "gen": {
+10580.8s 73 "max_new_tokens": 120,
+10580.8s 74 "temperature": 0.8,
+10580.8s 75 "top_p": 0.95,
+10580.8s 76 "batch_size": 32
+10580.8s 77 },
+10580.8s 78 "max_words": 30,
+10580.8s 79 "judge_contest": {
+10580.8s 80 "candidates": {
+10580.8s 81 "smollm3": "HuggingFaceTB/SmolLM3-3B",
+10580.8s 82 "cross": "the two generators that did not write the pair"
+10580.8s 83 },
+10580.8s 84 "real_headlines": 400,
+10580.8s 85 "scores": {
+10580.8s 86 "smollm3": 0.507,
+10580.8s 87 "cross without qwen": 0.427,
+10580.8s 88 "cross without gemma": 0.483,
+10580.8s 89 "cross without mistral": 0.498
+10580.8s 90 },
+10580.8s 91 "min_score": 0.75,
+10580.8s 92 "chosen": null
+10580.8s 93 },
+10580.8s 94 "counts": {
+10580.8s 95 "pairs_ok": 22417,
+10580.8s 96 "pairs_kept": 22417,
+10580.8s 97 "training_rows": 44834,
+10580.8s 98 "kept_by_model": {
+10580.8s 99 "gemma": 7533,
+10580.8s 100 "mistral": 7462,
+10580.8s 101 "qwen": 7422
+10580.8s 102 }
+10580.8s 103 }
+10580.8s 104 }
+10581.7s 105 /kaggle/working/pairgen.zip
+10589.0s 106 /usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+10589.0s 107 cells[i][c] = re.sub('\\\\\|', '|', cell)
+10589.4s 108 /usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+10589.4s 109 text = re.sub(r'_', '\_', text) # Escape underscores in display text
+10591.1s 110 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+10591.2s 111 [NbConvertApp] Writing 581489 bytes to __notebook__.ipynb
+10593.7s 112 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+10594.7s 113 [NbConvertApp] Writing 806371 bytes to __results__.html

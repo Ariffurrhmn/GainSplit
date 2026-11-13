@@ -30,3 +30,6 @@ results/checkpoints/
 
 # Gold-audit export holds headline text; kept local while the Headlines licence is unchecked
 results/gold_audit/*.csv
+
+# Run logs from Kaggle are receipts: keep them (the *.log rule above is for LaTeX)
+!results/**/*.log

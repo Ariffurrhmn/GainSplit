@@ -1,0 +1,20 @@
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2779.22it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+A4_p1_s0: |L|=228 |U|=22572 steps=200 device=cuda
+  step 100/200  loss_sarc 0.2279  loss_unsup_real 0.04579  loss_unsup_fake 1.151  p_fake_real 0.04151  p_fake_fake 0.3205  loss_g_unsup 0.4053  loss_g_fm 0.06543  loss_d 1.424  loss_g 0.4707  loss 1.424
+  step 200/200  loss_sarc 0.0075  loss_unsup_real 0.00385  loss_unsup_fake 0.8455  p_fake_real 0.00384  p_fake_fake 0.4307  loss_g_unsup 0.5799  loss_g_fm 0.1002  loss_d 0.8569  loss_g 0.6801  loss 0.8569
+A4_p1_s0: done in 0.67 min; dev macro-F1 0.8056, test macro-F1 0.8160, isarc_test macro-F1 0.4931

@@ -1,0 +1,26 @@
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2683.65it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+A1_p10_s2_lr2e-05: |L|=2280 |U|=20520 steps=720 device=cuda
+  step 100/720  loss 0.4994
+  step 200/720  loss 0.2088
+  step 300/720  loss 0.0647
+  step 400/720  loss 0.0204
+  step 500/720  loss 0.0061
+  step 600/720  loss 0.0066
+  step 700/720  loss 0.0022
+  step 720/720  loss 0.0015
+A1_p10_s2_lr2e-05: done in 1.31 min; dev macro-F1 0.8753

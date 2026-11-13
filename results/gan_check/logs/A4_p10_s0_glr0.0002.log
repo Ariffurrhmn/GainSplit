@@ -1,0 +1,26 @@
+A4_p10_s0_glr0.0002: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2631.01it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/720  loss_sarc 0.5901  loss_unsup_real 0.09282  loss_unsup_fake 1.544  p_fake_real 0.08473  p_fake_fake 0.222  loss_g_unsup 0.28  loss_g_fm 0.04445  loss_d 2.227  loss_g 0.3244  loss 2.227
+  step 200/720  loss_sarc 0.1892  loss_unsup_real 0.0159  loss_unsup_fake 1.162  p_fake_real 0.01576  p_fake_fake 0.3296  loss_g_unsup 0.5588  loss_g_fm 0.1933  loss_d 1.367  loss_g 0.7521  loss 1.367
+  step 300/720  loss_sarc 0.06943  loss_unsup_real 0.00925  loss_unsup_fake 0.2467  p_fake_real 0.0092  p_fake_fake 0.7867  loss_g_unsup 1.877  loss_g_fm 0.4071  loss_d 0.3254  loss_g 2.284  loss 0.3254
+  step 400/720  loss_sarc 0.04131  loss_unsup_real 0.00642  loss_unsup_fake 0.2009  p_fake_real 0.00639  p_fake_fake 0.8231  loss_g_unsup 2.044  loss_g_fm 0.2499  loss_d 0.2486  loss_g 2.294  loss 0.2486
+  step 500/720  loss_sarc 0.01999  loss_unsup_real 0.00851  loss_unsup_fake 0.2692  p_fake_real 0.00847  p_fake_fake 0.7662  loss_g_unsup 1.569  loss_g_fm 0.1373  loss_d 0.2977  loss_g 1.706  loss 0.2977
+  step 600/720  loss_sarc 0.0172  loss_unsup_real 0.00912  loss_unsup_fake 0.4271  p_fake_real 0.00908  p_fake_fake 0.6559  loss_g_unsup 1.129  loss_g_fm 0.1017  loss_d 0.4534  loss_g 1.231  loss 0.4534
+  step 700/720  loss_sarc 0.01726  loss_unsup_real 0.01011  loss_unsup_fake 0.5759  p_fake_real 0.01005  p_fake_fake 0.5641  loss_g_unsup 0.8463  loss_g_fm 0.0907  loss_d 0.6032  loss_g 0.937  loss 0.6032
+  step 720/720  loss_sarc 0.01328  loss_unsup_real 0.01014  loss_unsup_fake 0.6001  p_fake_real 0.01008  p_fake_fake 0.5504  loss_g_unsup 0.8036  loss_g_fm 0.08814  loss_d 0.6235  loss_g 0.8917  loss 0.6235
+A4_p10_s0_glr0.0002: done in 1.99 min; dev macro-F1 0.8667

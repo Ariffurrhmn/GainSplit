@@ -1,0 +1,22 @@
+A5_p5_s3: |L|=1140 |U|=21660 steps=360 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2765.98it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/360  loss_sarc 0.5031  loss_unsup_real 0.08964  loss_unsup_fake 1.199  p_fake_real 0.07692  p_fake_fake 0.3039  loss_sent 0.8251  loss_emo 0.7538  loss_g_unsup 0.3781  loss_g_fm 0.05788  loss_d 2.265  loss_g 0.436  loss 2.265
+  step 200/360  loss_sarc 0.05211  loss_unsup_real 0.01293  loss_unsup_fake 0.6969  p_fake_real 0.01282  p_fake_fake 0.5038  loss_sent 0.4792  loss_emo 0.458  loss_g_unsup 0.7587  loss_g_fm 0.08108  loss_d 1.043  loss_g 0.8398  loss 1.043
+  step 300/360  loss_sarc 0.01472  loss_unsup_real 0.00797  loss_unsup_fake 0.6331  p_fake_real 0.00792  p_fake_fake 0.5333  loss_sent 0.3369  loss_emo 0.3347  loss_g_unsup 0.7924  loss_g_fm 0.09997  loss_d 0.8572  loss_g 0.8924  loss 0.8572
+  step 360/360  loss_sarc 0.01163  loss_unsup_real 0.00774  loss_unsup_fake 0.7018  p_fake_real 0.0077  p_fake_fake 0.4974  loss_sent 0.3109  loss_emo 0.3053  loss_g_unsup 0.6973  loss_g_fm 0.09912  loss_d 0.906  loss_g 0.7964  loss 0.906
+A5_p5_s3: done in 1.21 min; dev macro-F1 0.8561, test macro-F1 0.8725, isarc_test macro-F1 0.4712

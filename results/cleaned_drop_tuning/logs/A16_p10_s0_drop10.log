@@ -1,0 +1,30 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+A16_p10_s0_drop10: |L|=2280 |U|=20520 steps=720 device=cuda
+  pairs (cleaned): 40350 rows from 20175 seeds, 32 rows per step, pair_weight=0.1
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2655.95it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:177: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.4656  loss 0.4656
+  step 200/720  loss_sarc 0.2043  loss 0.2043
+  step 300/720  loss_sarc 0.08641  loss 0.08641
+  step 400/720  loss_sarc 0.05375  loss 0.05375
+  step 500/720  loss_sarc 0.0435  loss 0.0435
+  step 600/720  loss_sarc 0.03892  loss 0.03892
+  step 700/720  loss_sarc 0.03067  loss 0.03067
+  step 720/720  loss_sarc 0.03079  loss 0.03079
+A16_p10_s0_drop10: done in 2.27 min; dev macro-F1 0.7711

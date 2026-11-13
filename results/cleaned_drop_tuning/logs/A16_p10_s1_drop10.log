@@ -1,0 +1,28 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+A16_p10_s1_drop10: |L|=2280 |U|=20520 steps=720 device=cuda
+  pairs (cleaned): 40350 rows from 20175 seeds, 32 rows per step, pair_weight=0.1
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2733.21it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/720  loss_sarc 0.4716  loss 0.4716
+  step 200/720  loss_sarc 0.2064  loss 0.2064
+  step 300/720  loss_sarc 0.09651  loss 0.09651
+  step 400/720  loss_sarc 0.05389  loss 0.05389
+  step 500/720  loss_sarc 0.03946  loss 0.03946
+  step 600/720  loss_sarc 0.03522  loss 0.03522
+  step 700/720  loss_sarc 0.03041  loss 0.03041
+  step 720/720  loss_sarc 0.03171  loss 0.03171
+A16_p10_s1_drop10: done in 2.08 min; dev macro-F1 0.7649

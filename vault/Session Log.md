@@ -7,6 +7,12 @@ updated: 2026-11-13
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-14 - Receipts audit (logs and outputs)
+- Owner asked that every log and output be kept as a receipt. Audit found: the `*.log` rule in `.gitignore` (meant for LaTeX) was keeping every Kaggle log out of git, so the notebook logs and the per-run `logs/` folders were on disk only (the per-run logs were still inside each tracked zip). Fixed with `!results/**/*.log`.
+- Filed from Downloads on the owner's request (copies; originals left in Downloads): `results/pairgen_full/` (`pairgen_generate.zip`, `pairgen_finalize.zip` with `pairs_train.csv` SHA-256 6412c1fa..., `notebook_05_attempt1_oom.log` = the first full run that ran out of GPU memory, `notebook_05_finalize.log`); `results/judge_v2/` (`judge_v2.zip`, filtered set SHA-256 f1f37413... matching `manifest_judge_v2.json`; `notebook_06.log`); `results/analysis_pass4/notebook_09_run2_length_check.log`. All three versions of `analysis_pass4.zip` are already in git history (commits f366f8b, f2013fe, b7018f6).
+- Missing receipts (not on this machine): the log of the successful pairgen generate stage (`pairgen_generate.zip`), the log of the first notebook 09 run, and the notebook-level logs of Passes 1-3 (their per-run logs are in the zips). Committed Kaggle runs keep their log under the notebook's Versions tab, so the owner can download them there. The two tuning stages ran interactively and are not kept on Kaggle; their logs are filed here.
+- Rule from now on: every Kaggle run's zip and notebook log go into `results/<plan>/` and are committed.
+
 ## 2026-11-14 - cleaned_drop_tuning read, pass5 ready
 - Owner ran notebook 10 stage 2 (commit 1c4ce93, 9/9 runs, 13.2 min, 219 tests passed). On the owner's standing request, the zip and log were moved from Downloads into `results/cleaned_drop_tuning/` (log as `notebook_10_stage2.log`) and unpacked: 28 files, all match the zip. `download (3).txt` was an exact copy of the log and stays in Downloads.
 - Dev macro-F1 means: drop 10% 76.90, 20% 77.45, 30% 76.57 (no cleaning 77.02). 20% wins by the pre-set rule; frozen as `PASS5_CLEANED_DROP_PCT = 20.0`. Cleaning adds only about +0.4 on dev, within noise (INFERRED). Details in [[Experiment Plan]] "Pass 5 plan".

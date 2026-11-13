@@ -1,0 +1,28 @@
+A3_p10_s0_sentonly: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2544.47it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:135: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.4441  loss_sent 0.8671  loss 0.7043
+  step 200/720  loss_sarc 0.1429  loss_sent 0.5444  loss 0.3063
+  step 300/720  loss_sarc 0.02828  loss_sent 0.4014  loss 0.1487
+  step 400/720  loss_sarc 0.00452  loss_sent 0.3356  loss 0.1052
+  step 500/720  loss_sarc 0.00188  loss_sent 0.2715  loss 0.08334
+  step 600/720  loss_sarc 0.00117  loss_sent 0.2575  loss 0.07841
+  step 700/720  loss_sarc 0.00075  loss_sent 0.1901  loss 0.05778
+  step 720/720  loss_sarc 0.00077  loss_sent 0.1601  loss 0.04878
+A3_p10_s0_sentonly: done in 2.08 min; dev macro-F1 0.8657, test macro-F1 0.8835, isarc_test macro-F1 0.5045, test_cuemask macro-F1 0.8326, test_randmask macro-F1 0.8656

@@ -1,0 +1,107 @@
+8.1s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+8.1s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+8.1s 3 0.00s - to python to disable frozen modules.
+8.1s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+8.7s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+8.7s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+8.7s 7 0.00s - to python to disable frozen modules.
+8.7s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+9.9s 9 Cloning into '/tmp/GainSplit'...
+10.1s 10 Cloning into '/tmp/GainSplit'...
+10.1s 11 
+10.1s 12 Cloning into '/tmp/GainSplit'...
+15.6s 13 code commit: b7018f6caccc2ebdc41e55ab44d047240d0bea7d
+117.0s 14 ........................................................................ [ 32%]
+117.0s 15 ........................................................................ [ 65%]
+117.0s 16 ........................................................................ [ 98%]
+117.0s 17 ...                                                                      [100%]
+117.0s 18 =============================== warnings summary ===============================
+117.0s 19 tests/test_analysis.py::test_save_tables_and_figures
+117.0s 20 /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:64: PyparsingDeprecationWarning: 'oneOf' deprecated - use 'one_of'
+117.0s 21 prop = Group((name + Suppress("=") + comma_separated(value)) | oneOf(_CONSTANTS))
+117.0s 22 
+117.0s 23 tests/test_analysis.py::test_save_tables_and_figures
+117.0s 24 tests/test_analysis.py::test_save_tables_and_figures
+117.0s 25 tests/test_analysis.py::test_save_tables_and_figures
+117.0s 26 tests/test_analysis.py::test_save_tables_and_figures
+117.0s 27 tests/test_analysis.py::test_save_tables_and_figures
+117.0s 28 tests/test_analysis.py::test_save_tables_and_figures
+117.0s 29 /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:85: PyparsingDeprecationWarning: 'parseString' deprecated - use 'parse_string'
+117.0s 30 parse = parser.parseString(pattern)
+117.0s 31 
+117.0s 32 tests/test_analysis.py::test_save_tables_and_figures
+117.0s 33 tests/test_analysis.py::test_save_tables_and_figures
+117.0s 34 tests/test_analysis.py::test_save_tables_and_figures
+117.0s 35 tests/test_analysis.py::test_save_tables_and_figures
+117.0s 36 tests/test_analysis.py::test_save_tables_and_figures
+117.0s 37 tests/test_analysis.py::test_save_tables_and_figures
+117.0s 38 /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:89: PyparsingDeprecationWarning: 'resetCache' deprecated - use 'reset_cache'
+117.0s 39 parser.resetCache()
+117.0s 40 
+117.0s 41 tests/test_analysis.py::test_save_tables_and_figures
+117.0s 42 /usr/local/lib/python3.13/dist-packages/matplotlib/_mathtext.py:45: PyparsingDeprecationWarning: 'enablePackrat' deprecated - use 'enable_packrat'
+117.0s 43 ParserElement.enablePackrat()
+117.0s 44 
+117.0s 45 tests/test_analysis.py: 215 warnings
+117.0s 46 tests/test_masking.py: 2 warnings
+117.0s 47 tests/test_pass4.py: 148 warnings
+117.0s 48 tests/test_pass4_train.py: 78 warnings
+117.0s 49 tests/test_tfidf_plans.py: 8 warnings
+117.0s 50 /usr/local/lib/python3.13/dist-packages/sklearn/linear_model/_logistic.py:451: DeprecationWarning: scipy.optimize: The `disp` and `iprint` options of the L-BFGS-B solver are deprecated and will be removed in SciPy 1.18.0.
+117.0s 51 opt_res = optimize.minimize(
+117.0s 52 
+117.0s 53 tests/test_pass4.py::test_pass4_analysis_end_to_end
+117.0s 54 /tmp/GainSplit/src/gainsplit/analysis_pass4.py:179: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+117.0s 55 "median_rel_completeness_gap": g.apply(
+117.0s 56 
+117.0s 57 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+117.0s 58 219 passed, 466 warnings in 95.52s (0:01:35)
+117.0s 59 
+119.2s 60 GPUs: ['Tesla T4', 'Tesla T4']
+121.9s 61 data: /kaggle/input/datasets/arifurrhmn/gainsplit-processed - all files match manifest.json
+122.7s 62 unfiltered pairs: 44834 rows, 22417 seeds
+122.9s 63 shortcut scores: found, 22417 seeds (needed for cleaned_drop_tuning)
+122.9s 64 A10_p10_s0_pw0.1     arm=A10 labels= 10% seed=0 pair_weight=0.1 cleaned_drop_pct=0 test scored: False
+122.9s 65 A10_p10_s1_pw0.1     arm=A10 labels= 10% seed=1 pair_weight=0.1 cleaned_drop_pct=0 test scored: False
+122.9s 66 A10_p10_s2_pw0.1     arm=A10 labels= 10% seed=2 pair_weight=0.1 cleaned_drop_pct=0 test scored: False
+122.9s 67 A10_p10_s0_pw0.3     arm=A10 labels= 10% seed=0 pair_weight=0.3 cleaned_drop_pct=0 test scored: False
+122.9s 68 A10_p10_s1_pw0.3     arm=A10 labels= 10% seed=1 pair_weight=0.3 cleaned_drop_pct=0 test scored: False
+122.9s 69 A10_p10_s2_pw0.3     arm=A10 labels= 10% seed=2 pair_weight=0.3 cleaned_drop_pct=0 test scored: False
+122.9s 70 A10_p10_s0_pw1       arm=A10 labels= 10% seed=0 pair_weight=1 cleaned_drop_pct=0 test scored: False
+122.9s 71 A10_p10_s1_pw1       arm=A10 labels= 10% seed=1 pair_weight=1 cleaned_drop_pct=0 test scored: False
+122.9s 72 A10_p10_s2_pw1       arm=A10 labels= 10% seed=2 pair_weight=1 cleaned_drop_pct=0 test scored: False
+122.9s 73 9 runs
+123.1s 74 9 runs, 0 already done, 9 to run on GPU [0, 1]
+123.1s 75 start  A10_p10_s0_pw0.1  on GPU 0
+123.1s 76 start  A10_p10_s1_pw0.1  on GPU 1
+258.1s 77 done   A10_p10_s1_pw0.1  (2.3 min)
+261.1s 78 start  A10_p10_s2_pw0.1  on GPU 1
+267.1s 79 done   A10_p10_s0_pw0.1  (2.4 min)
+270.1s 80 start  A10_p10_s0_pw0.3  on GPU 0
+393.1s 81 done   A10_p10_s2_pw0.1  (2.2 min)
+396.1s 82 start  A10_p10_s1_pw0.3  on GPU 1
+411.1s 83 done   A10_p10_s0_pw0.3  (2.4 min)
+414.1s 84 start  A10_p10_s2_pw0.3  on GPU 0
+528.1s 85 done   A10_p10_s1_pw0.3  (2.2 min)
+531.1s 86 start  A10_p10_s0_pw1  on GPU 1
+555.1s 87 done   A10_p10_s2_pw0.3  (2.4 min)
+558.2s 88 start  A10_p10_s1_pw1  on GPU 0
+663.2s 89 done   A10_p10_s0_pw1  (2.2 min)
+666.2s 90 start  A10_p10_s2_pw1  on GPU 1
+699.2s 91 done   A10_p10_s1_pw1  (2.4 min)
+798.2s 92 done   A10_p10_s2_pw1  (2.2 min)
+801.1s 93 runs per group:
+801.1s 94 arm  budget  pair_weight  cleaned_drop_pct
+801.1s 95 A10  10      0.1          0.0                 3
+801.1s 96 0.3          0.0                 3
+801.1s 97 1.0          0.0                 3
+801.1s 98 /kaggle/working/results_pair_weight_tuning.zip
+801.1s 99 notebook time: 13.2 min
+804.3s 100 /usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+804.3s 101 cells[i][c] = re.sub('\\\\\|', '|', cell)
+804.4s 102 /usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+804.4s 103 text = re.sub(r'_', '\_', text) # Escape underscores in display text
+805.2s 104 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+805.3s 105 [NbConvertApp] Writing 35959 bytes to __notebook__.ipynb
+807.8s 106 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+808.3s 107 [NbConvertApp] Writing 310563 bytes to __results__.html

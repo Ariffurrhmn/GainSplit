@@ -1,0 +1,26 @@
+A7_p10_s2_eps1: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2443.30it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/720  loss_sarc 0.4855  loss_adv 0.6614  loss 1.147
+  step 200/720  loss_sarc 0.1675  loss_adv 0.367  loss 0.5345
+  step 300/720  loss_sarc 0.02937  loss_adv 0.1576  loss 0.187
+  step 400/720  loss_sarc 0.00531  loss_adv 0.09447  loss 0.09978
+  step 500/720  loss_sarc 0.00139  loss_adv 0.05716  loss 0.05855
+  step 600/720  loss_sarc 0.0004  loss_adv 0.03247  loss 0.03287
+  step 700/720  loss_sarc 0.00025  loss_adv 0.02094  loss 0.02119
+  step 720/720  loss_sarc 0.00022  loss_adv 0.02554  loss 0.02576
+A7_p10_s2_eps1: done in 2.27 min; dev macro-F1 0.8904

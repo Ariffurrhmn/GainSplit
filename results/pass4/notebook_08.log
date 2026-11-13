@@ -1,0 +1,298 @@
+7.9s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+7.9s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+7.9s 3 0.00s - to python to disable frozen modules.
+7.9s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+8.6s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+8.6s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+8.6s 7 0.00s - to python to disable frozen modules.
+8.6s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+9.7s 9 Cloning into '/tmp/GainSplit'...
+9.9s 10 Cloning into '/tmp/GainSplit'...
+9.9s 11 
+9.9s 12 Cloning into '/tmp/GainSplit'...
+13.3s 13 code commit: 51fea9b3b35b6a266ba4ed1cce3cad496145d9ac
+106.1s 14 ........................................................................ [ 37%]
+106.1s 15 ........................................................................ [ 74%]
+106.1s 16 .................................................                        [100%]
+106.1s 17 =============================== warnings summary ===============================
+106.1s 18 tests/test_analysis.py::test_save_tables_and_figures
+106.1s 19 /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:64: PyparsingDeprecationWarning: 'oneOf' deprecated - use 'one_of'
+106.1s 20 prop = Group((name + Suppress("=") + comma_separated(value)) | oneOf(_CONSTANTS))
+106.1s 21 
+106.1s 22 tests/test_analysis.py::test_save_tables_and_figures
+106.1s 23 tests/test_analysis.py::test_save_tables_and_figures
+106.1s 24 tests/test_analysis.py::test_save_tables_and_figures
+106.1s 25 tests/test_analysis.py::test_save_tables_and_figures
+106.1s 26 tests/test_analysis.py::test_save_tables_and_figures
+106.1s 27 tests/test_analysis.py::test_save_tables_and_figures
+106.1s 28 /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:85: PyparsingDeprecationWarning: 'parseString' deprecated - use 'parse_string'
+106.1s 29 parse = parser.parseString(pattern)
+106.1s 30 
+106.1s 31 tests/test_analysis.py::test_save_tables_and_figures
+106.1s 32 tests/test_analysis.py::test_save_tables_and_figures
+106.1s 33 tests/test_analysis.py::test_save_tables_and_figures
+106.1s 34 tests/test_analysis.py::test_save_tables_and_figures
+106.1s 35 tests/test_analysis.py::test_save_tables_and_figures
+106.1s 36 tests/test_analysis.py::test_save_tables_and_figures
+106.1s 37 /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:89: PyparsingDeprecationWarning: 'resetCache' deprecated - use 'reset_cache'
+106.1s 38 parser.resetCache()
+106.1s 39 
+106.1s 40 tests/test_analysis.py::test_save_tables_and_figures
+106.1s 41 /usr/local/lib/python3.13/dist-packages/matplotlib/_mathtext.py:45: PyparsingDeprecationWarning: 'enablePackrat' deprecated - use 'enable_packrat'
+106.1s 42 ParserElement.enablePackrat()
+106.1s 43 
+106.1s 44 tests/test_analysis.py: 215 warnings
+106.1s 45 tests/test_masking.py: 2 warnings
+106.1s 46 tests/test_pass4.py: 46 warnings
+106.1s 47 tests/test_tfidf_plans.py: 8 warnings
+106.1s 48 /usr/local/lib/python3.13/dist-packages/sklearn/linear_model/_logistic.py:451: DeprecationWarning: scipy.optimize: The `disp` and `iprint` options of the L-BFGS-B solver are deprecated and will be removed in SciPy 1.18.0.
+106.1s 49 opt_res = optimize.minimize(
+106.1s 50 
+106.1s 51 tests/test_pass4.py::test_pass4_analysis_end_to_end
+106.1s 52 /tmp/GainSplit/src/gainsplit/analysis_pass4.py:179: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.
+106.1s 53 "median_rel_completeness_gap": g.apply(
+106.1s 54 
+106.1s 55 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+106.1s 56 193 passed, 286 warnings in 87.07s (0:01:27)
+106.1s 57 
+108.4s 58 GPUs: ['Tesla T4', 'Tesla T4']
+111.0s 59 data: /kaggle/input/datasets/arifurrhmn/gainsplit-processed - all files match manifest.json
+113.8s 60 A11_p10_s0               arm=A11 labels= 10% seed=0 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 61 A11_p10_s1               arm=A11 labels= 10% seed=1 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 62 A11_p10_s2               arm=A11 labels= 10% seed=2 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 63 A11_p10_s3               arm=A11 labels= 10% seed=3 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 64 A11_p10_s4               arm=A11 labels= 10% seed=4 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 65 A10_p10_s0               arm=A10 labels= 10% seed=0 eps=0 step_mult=1 pair_batch=32 explain=True
+113.8s 66 A10_p10_s1               arm=A10 labels= 10% seed=1 eps=0 step_mult=1 pair_batch=32 explain=True
+113.8s 67 A10_p10_s2               arm=A10 labels= 10% seed=2 eps=0 step_mult=1 pair_batch=32 explain=True
+113.8s 68 A10_p10_s3               arm=A10 labels= 10% seed=3 eps=0 step_mult=1 pair_batch=32 explain=True
+113.8s 69 A10_p10_s4               arm=A10 labels= 10% seed=4 eps=0 step_mult=1 pair_batch=32 explain=True
+113.8s 70 A12_p10_s0               arm=A12 labels= 10% seed=0 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 71 A12_p10_s1               arm=A12 labels= 10% seed=1 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 72 A12_p10_s2               arm=A12 labels= 10% seed=2 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 73 A12_p10_s3               arm=A12 labels= 10% seed=3 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 74 A12_p10_s4               arm=A12 labels= 10% seed=4 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 75 A13_p10_s0               arm=A13 labels= 10% seed=0 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 76 A13_p10_s1               arm=A13 labels= 10% seed=1 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 77 A13_p10_s2               arm=A13 labels= 10% seed=2 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 78 A13_p10_s3               arm=A13 labels= 10% seed=3 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 79 A13_p10_s4               arm=A13 labels= 10% seed=4 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 80 A14_p10_s0               arm=A14 labels= 10% seed=0 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 81 A14_p10_s1               arm=A14 labels= 10% seed=1 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 82 A14_p10_s2               arm=A14 labels= 10% seed=2 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 83 A14_p10_s3               arm=A14 labels= 10% seed=3 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 84 A14_p10_s4               arm=A14 labels= 10% seed=4 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 85 A1_p10_s0_explain        arm=A1  labels= 10% seed=0 eps=0 step_mult=1 pair_batch=32 explain=True
+113.8s 86 A1_p10_s1_explain        arm=A1  labels= 10% seed=1 eps=0 step_mult=1 pair_batch=32 explain=True
+113.8s 87 A1_p10_s2_explain        arm=A1  labels= 10% seed=2 eps=0 step_mult=1 pair_batch=32 explain=True
+113.8s 88 A1_p10_s3_explain        arm=A1  labels= 10% seed=3 eps=0 step_mult=1 pair_batch=32 explain=True
+113.8s 89 A1_p10_s4_explain        arm=A1  labels= 10% seed=4 eps=0 step_mult=1 pair_batch=32 explain=True
+113.8s 90 A15_p10_s0               arm=A15 labels= 10% seed=0 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 91 A15_p10_s1               arm=A15 labels= 10% seed=1 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 92 A15_p10_s2               arm=A15 labels= 10% seed=2 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 93 A15_p10_s3               arm=A15 labels= 10% seed=3 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 94 A15_p10_s4               arm=A15 labels= 10% seed=4 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 95 A10_p1_s0_steps3x        arm=A10 labels=  1% seed=0 eps=0 step_mult=3 pair_batch=32 explain=False
+113.8s 96 A10_p1_s1_steps3x        arm=A10 labels=  1% seed=1 eps=0 step_mult=3 pair_batch=32 explain=False
+113.8s 97 A10_p1_s2_steps3x        arm=A10 labels=  1% seed=2 eps=0 step_mult=3 pair_batch=32 explain=False
+113.8s 98 A10_p1_s3_steps3x        arm=A10 labels=  1% seed=3 eps=0 step_mult=3 pair_batch=32 explain=False
+113.8s 99 A10_p1_s4_steps3x        arm=A10 labels=  1% seed=4 eps=0 step_mult=3 pair_batch=32 explain=False
+113.8s 100 A11_p1_s0                arm=A11 labels=  1% seed=0 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 101 A11_p1_s1                arm=A11 labels=  1% seed=1 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 102 A11_p1_s2                arm=A11 labels=  1% seed=2 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 103 A11_p1_s3                arm=A11 labels=  1% seed=3 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 104 A11_p1_s4                arm=A11 labels=  1% seed=4 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 105 A10_p1_s0                arm=A10 labels=  1% seed=0 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 106 A10_p1_s1                arm=A10 labels=  1% seed=1 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 107 A10_p1_s2                arm=A10 labels=  1% seed=2 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 108 A10_p1_s3                arm=A10 labels=  1% seed=3 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 109 A10_p1_s4                arm=A10 labels=  1% seed=4 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 110 A12_p1_s0                arm=A12 labels=  1% seed=0 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 111 A12_p1_s1                arm=A12 labels=  1% seed=1 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 112 A12_p1_s2                arm=A12 labels=  1% seed=2 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 113 A12_p1_s3                arm=A12 labels=  1% seed=3 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 114 A12_p1_s4                arm=A12 labels=  1% seed=4 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 115 A13_p1_s0                arm=A13 labels=  1% seed=0 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 116 A13_p1_s1                arm=A13 labels=  1% seed=1 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 117 A13_p1_s2                arm=A13 labels=  1% seed=2 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 118 A13_p1_s3                arm=A13 labels=  1% seed=3 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 119 A13_p1_s4                arm=A13 labels=  1% seed=4 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 120 A14_p1_s0                arm=A14 labels=  1% seed=0 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 121 A14_p1_s1                arm=A14 labels=  1% seed=1 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 122 A14_p1_s2                arm=A14 labels=  1% seed=2 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 123 A14_p1_s3                arm=A14 labels=  1% seed=3 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 124 A14_p1_s4                arm=A14 labels=  1% seed=4 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 125 A7_p1_s0_mask            arm=A7  labels=  1% seed=0 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 126 A7_p1_s1_mask            arm=A7  labels=  1% seed=1 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 127 A7_p1_s2_mask            arm=A7  labels=  1% seed=2 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 128 A7_p1_s3_mask            arm=A7  labels=  1% seed=3 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 129 A7_p1_s4_mask            arm=A7  labels=  1% seed=4 eps=0.5 step_mult=1 pair_batch=32 explain=False
+113.8s 130 A1_p1_s0_mask            arm=A1  labels=  1% seed=0 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 131 A1_p1_s1_mask            arm=A1  labels=  1% seed=1 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 132 A1_p1_s2_mask            arm=A1  labels=  1% seed=2 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 133 A1_p1_s3_mask            arm=A1  labels=  1% seed=3 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 134 A1_p1_s4_mask            arm=A1  labels=  1% seed=4 eps=0 step_mult=1 pair_batch=32 explain=False
+113.8s 135 75 runs
+114.0s 136 75 runs, 0 already done, 75 to run on GPU [0, 1]
+114.0s 137 start  A11_p10_s0  on GPU 0
+114.0s 138 start  A11_p10_s1  on GPU 1
+345.0s 139 done   A11_p10_s1  (3.9 min)
+348.0s 140 start  A11_p10_s2  on GPU 1
+363.0s 141 done   A11_p10_s0  (4.2 min)
+366.0s 142 start  A11_p10_s3  on GPU 0
+579.0s 143 done   A11_p10_s2  (3.9 min)
+582.0s 144 start  A11_p10_s4  on GPU 1
+609.0s 145 done   A11_p10_s3  (4.1 min)
+612.0s 146 start  A10_p10_s0  on GPU 0
+813.0s 147 done   A11_p10_s4  (3.9 min)
+816.0s 148 start  A10_p10_s1  on GPU 1
+855.0s 149 done   A10_p10_s0  (4.1 min)
+858.0s 150 start  A10_p10_s2  on GPU 0
+1044.0s 151 done   A10_p10_s1  (3.8 min)
+1047.0s 152 start  A10_p10_s3  on GPU 1
+1098.0s 153 done   A10_p10_s2  (4.0 min)
+1101.1s 154 start  A10_p10_s4  on GPU 0
+1275.1s 155 done   A10_p10_s3  (3.8 min)
+1278.1s 156 start  A12_p10_s0  on GPU 1
+1341.1s 157 done   A10_p10_s4  (4.0 min)
+1344.1s 158 start  A12_p10_s1  on GPU 0
+1416.1s 159 done   A12_p10_s0  (2.3 min)
+1419.1s 160 start  A12_p10_s2  on GPU 1
+1488.1s 161 done   A12_p10_s1  (2.4 min)
+1491.1s 162 start  A12_p10_s3  on GPU 0
+1557.1s 163 done   A12_p10_s2  (2.3 min)
+1560.1s 164 start  A12_p10_s4  on GPU 1
+1635.1s 165 done   A12_p10_s3  (2.4 min)
+1638.1s 166 start  A13_p10_s0  on GPU 0
+1698.1s 167 done   A12_p10_s4  (2.3 min)
+1701.1s 168 start  A13_p10_s1  on GPU 1
+1782.1s 169 done   A13_p10_s0  (2.4 min)
+1785.1s 170 start  A13_p10_s2  on GPU 0
+1839.1s 171 done   A13_p10_s1  (2.3 min)
+1842.1s 172 start  A13_p10_s3  on GPU 1
+1929.1s 173 done   A13_p10_s2  (2.4 min)
+1932.1s 174 start  A13_p10_s4  on GPU 0
+1983.1s 175 done   A13_p10_s3  (2.4 min)
+1986.1s 176 start  A14_p10_s0  on GPU 1
+2079.1s 177 done   A13_p10_s4  (2.5 min)
+2082.1s 178 start  A14_p10_s1  on GPU 0
+2127.1s 179 done   A14_p10_s0  (2.4 min)
+2130.1s 180 start  A14_p10_s2  on GPU 1
+2229.1s 181 done   A14_p10_s1  (2.5 min)
+2232.1s 182 start  A14_p10_s3  on GPU 0
+2271.1s 183 done   A14_p10_s2  (2.4 min)
+2274.1s 184 start  A14_p10_s4  on GPU 1
+2379.2s 185 done   A14_p10_s3  (2.5 min)
+2382.2s 186 start  A1_p10_s0_explain  on GPU 0
+2415.2s 187 done   A14_p10_s4  (2.4 min)
+2418.2s 188 start  A1_p10_s1_explain  on GPU 1
+2577.2s 189 done   A1_p10_s0_explain  (3.3 min)
+2580.2s 190 start  A1_p10_s2_explain  on GPU 0
+2601.2s 191 done   A1_p10_s1_explain  (3.1 min)
+2604.2s 192 start  A1_p10_s3_explain  on GPU 1
+2772.2s 193 done   A1_p10_s2_explain  (3.2 min)
+2775.2s 194 start  A1_p10_s4_explain  on GPU 0
+2787.2s 195 done   A1_p10_s3_explain  (3.1 min)
+2790.2s 196 start  A15_p10_s0  on GPU 1
+2892.2s 197 done   A15_p10_s0  (1.7 min)
+2895.2s 198 start  A15_p10_s1  on GPU 1
+2970.2s 199 done   A1_p10_s4_explain  (3.3 min)
+2973.2s 200 start  A15_p10_s2  on GPU 0
+2997.2s 201 done   A15_p10_s1  (1.7 min)
+3000.2s 202 start  A15_p10_s3  on GPU 1
+3081.2s 203 done   A15_p10_s2  (1.8 min)
+3084.2s 204 start  A15_p10_s4  on GPU 0
+3105.2s 205 done   A15_p10_s3  (1.8 min)
+3108.2s 206 start  A10_p1_s0_steps3x  on GPU 1
+3192.2s 207 done   A15_p10_s4  (1.8 min)
+3195.2s 208 start  A10_p1_s1_steps3x  on GPU 0
+3231.2s 209 done   A10_p1_s0_steps3x  (2.1 min)
+3234.2s 210 start  A10_p1_s2_steps3x  on GPU 1
+3324.2s 211 done   A10_p1_s1_steps3x  (2.2 min)
+3327.2s 212 start  A10_p1_s3_steps3x  on GPU 0
+3357.2s 213 done   A10_p1_s2_steps3x  (2.1 min)
+3360.2s 214 start  A10_p1_s4_steps3x  on GPU 1
+3453.2s 215 done   A10_p1_s3_steps3x  (2.1 min)
+3456.2s 216 start  A11_p1_s0  on GPU 0
+3483.2s 217 done   A10_p1_s4_steps3x  (2.1 min)
+3486.2s 218 start  A11_p1_s1  on GPU 1
+3543.2s 219 done   A11_p1_s0  (1.5 min)
+3546.2s 220 start  A11_p1_s2  on GPU 0
+3570.2s 221 done   A11_p1_s1  (1.4 min)
+3573.2s 222 start  A11_p1_s3  on GPU 1
+3633.3s 223 done   A11_p1_s2  (1.5 min)
+3636.3s 224 start  A11_p1_s4  on GPU 0
+3654.2s 225 done   A11_p1_s3  (1.4 min)
+3657.3s 226 start  A10_p1_s0  on GPU 1
+3717.3s 227 done   A10_p1_s0  (1.0 min)
+3720.3s 228 start  A10_p1_s1  on GPU 1
+3723.3s 229 done   A11_p1_s4  (1.5 min)
+3726.3s 230 start  A10_p1_s2  on GPU 0
+3777.3s 231 done   A10_p1_s1  (1.0 min)
+3780.3s 232 start  A10_p1_s3  on GPU 1
+3789.3s 233 done   A10_p1_s2  (1.1 min)
+3792.3s 234 start  A10_p1_s4  on GPU 0
+3840.3s 235 done   A10_p1_s3  (1.0 min)
+3843.3s 236 start  A12_p1_s0  on GPU 1
+3855.3s 237 done   A10_p1_s4  (1.1 min)
+3858.3s 238 start  A12_p1_s1  on GPU 0
+3900.3s 239 done   A12_p1_s0  (1.0 min)
+3903.3s 240 start  A12_p1_s2  on GPU 1
+3918.3s 241 done   A12_p1_s1  (1.0 min)
+3921.3s 242 start  A12_p1_s3  on GPU 0
+3960.3s 243 done   A12_p1_s2  (1.0 min)
+3963.3s 244 start  A12_p1_s4  on GPU 1
+3981.3s 245 done   A12_p1_s3  (1.0 min)
+3984.3s 246 start  A13_p1_s0  on GPU 0
+4020.3s 247 done   A12_p1_s4  (1.0 min)
+4023.3s 248 start  A13_p1_s1  on GPU 1
+4044.3s 249 done   A13_p1_s0  (1.0 min)
+4047.3s 250 start  A13_p1_s2  on GPU 0
+4080.3s 251 done   A13_p1_s1  (1.0 min)
+4083.3s 252 start  A13_p1_s3  on GPU 1
+4107.3s 253 done   A13_p1_s2  (1.0 min)
+4110.3s 254 start  A13_p1_s4  on GPU 0
+4140.3s 255 done   A13_p1_s3  (1.0 min)
+4143.3s 256 start  A14_p1_s0  on GPU 1
+4170.3s 257 done   A13_p1_s4  (1.0 min)
+4173.3s 258 start  A14_p1_s1  on GPU 0
+4200.3s 259 done   A14_p1_s0  (1.0 min)
+4203.3s 260 start  A14_p1_s2  on GPU 1
+4233.3s 261 done   A14_p1_s1  (1.0 min)
+4236.3s 262 start  A14_p1_s3  on GPU 0
+4260.3s 263 done   A14_p1_s2  (1.0 min)
+4263.3s 264 start  A14_p1_s4  on GPU 1
+4296.3s 265 done   A14_p1_s3  (1.0 min)
+4299.3s 266 start  A7_p1_s0_mask  on GPU 0
+4320.3s 267 done   A14_p1_s4  (1.0 min)
+4323.3s 268 start  A7_p1_s1_mask  on GPU 1
+4356.3s 269 done   A7_p1_s0_mask  (1.0 min)
+4359.3s 270 start  A7_p1_s2_mask  on GPU 0
+4380.3s 271 done   A7_p1_s1_mask  (1.0 min)
+4383.3s 272 start  A7_p1_s3_mask  on GPU 1
+4416.3s 273 done   A7_p1_s2_mask  (1.0 min)
+4419.3s 274 start  A7_p1_s4_mask  on GPU 0
+4440.3s 275 done   A7_p1_s3_mask  (1.0 min)
+4443.3s 276 start  A1_p1_s0_mask  on GPU 1
+4476.3s 277 done   A7_p1_s4_mask  (1.0 min)
+4479.3s 278 start  A1_p1_s1_mask  on GPU 0
+4485.3s 279 done   A1_p1_s0_mask  (0.7 min)
+4488.3s 280 start  A1_p1_s2_mask  on GPU 1
+4524.3s 281 done   A1_p1_s1_mask  (0.8 min)
+4527.3s 282 start  A1_p1_s3_mask  on GPU 0
+4530.3s 283 done   A1_p1_s2_mask  (0.7 min)
+4533.3s 284 start  A1_p1_s4_mask  on GPU 1
+4572.3s 285 done   A1_p1_s3_mask  (0.8 min)
+4578.3s 286 done   A1_p1_s4_mask  (0.8 min)
+4581.2s 287 total so far: 76.2 min
+4581.2s 288 re-run check: PASS
+4582.2s 289 /kaggle/working/results_pass4.zip
+4582.2s 290 notebook time: 76.2 min
+4585.6s 291 /usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+4585.6s 292 cells[i][c] = re.sub('\\\\\|', '|', cell)
+4585.8s 293 /usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+4585.8s 294 text = re.sub(r'_', '\_', text) # Escape underscores in display text
+4586.6s 295 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+4586.7s 296 [NbConvertApp] Writing 54022 bytes to __notebook__.ipynb
+4589.3s 297 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+4589.9s 298 [NbConvertApp] Writing 331421 bytes to __results__.html
