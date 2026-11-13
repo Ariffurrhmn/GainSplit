@@ -7,6 +7,26 @@ updated: 2026-11-13
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-13 - Pass 4 code written (one commit)
+- Owner asked for all Pass 4 work that can run in parallel in one push, nothing that waits on an earlier result, and a time budget (about 3 GPU-h of quota left). `pair_pilot` dropped, pair batch fixed at 32 rows; A10 at 100% moved to optional `pass4_full100` ([[Decisions]]).
+- Written: arms A10-A15 (`config.py`), pair loader with hash and leak checks and the seeded `matched` / `unpaired` sets (`data.py`), `GroupBatchStream` and pairs-only training (`train.py`), Integrated Gradients inside the run (`explain.py`), plans `pass4` (75 runs) and `pass4_full100` (5), CPU analysis (`analysis_pass4.py`) and CPU pair checks (`pair_checks.py`); notebooks `07_pair_checks` (CPU), `08_pass4` (GPU, CPU pre-flight first), `09_pass4_analysis` (CPU). Details in [[Experiment Plan]] "Pass 4 plan".
+- Checked locally: 135 tests pass without torch; with a CPU torch install in a scratch environment, 91 tests incl. tiny-BERT training of every Pass 4 arm pass; the old and new code give identical predictions (difference 0) for A1, A3, A4, A6, A7 on a tiny BERT. Not run on Kaggle; nothing committed.
+- Time (INFERRED from measured Pass 1-3 run times): `pass4` about 1.3-1.5 h of a T4 x2 session; `pass4_full100` about 55 min more.
+- Next (owner): file `pairgen` and `judge_v2` zips in `results/`; add `pairs_train.csv`, `manifest_pairs.json`, `pairs_train_filtered.csv`, `manifest_judge_v2.json` to a new `gainsplit-processed` version; run notebook 07 locally (CPU); commit and push; run notebook 08 (Save & Run All, then stop the interactive session); send `results_pass4.zip` and the log; run notebook 09 locally.
+
+## 2026-11-13 - Pass 4 training arms planned
+- Owner asked for the Pass 4 plan. Written to [[Experiment Plan]] "Pass 4 plan" and logged in [[Decisions]] (DELEGATED).
+- Pairs from all train seeds at every budget (prompt never shows the seed label); pair batch after the L batch, whole pairs together, one sarcasm loss, equal steps.
+- Arms: A10 pairs (1/10/100%), A11 FGM + pairs, A12 unpaired control, A13 judge-filtered, A14 model-matched random subset, A15 pairs only; one A1 re-run check; 1% sensitivity with 3x steps. `pair_pilot` (6 dev runs) picks pair batch 16 vs 32 first. 71 test-scored runs, about 4 GPU-h (INFERRED). Contrasts and predictions written before any run.
+- Next: write the Pass 4 code (config, data, train, plans, analysis, tests) and review it; owner adds `pairs_train.csv`, `pairs_train_filtered.csv` and both manifests to `gainsplit-processed`, then runs `pair_pilot`.
+
+## 2026-11-13 - Judge contest v2 results
+- Owner ran notebook 06 (commit ac5609f, 5.0 h) and sent `judge_v2.zip` and the log. Read in [[Pairgen Full Run Results]]; all hashes match.
+- Scoring removed the SARCASTIC bias. Only Gemma with prompt v2 passes (report balanced accuracy 0.773, AUC 0.862); next best Gemma v1 0.745, Mistral v2 0.713; irony classifier at chance.
+- Filtered set: 17,315 of 22,417 pairs (Qwen 65% and Mistral 67% kept; Gemma pairs unjudged, all kept). Rejections are mostly serious sides read as sarcastic, at about the judge's false-positive rate on real serious headlines (0.235).
+- Ablation caveat: filtering also shrinks the set and raises Gemma's share (34% to 43%); a size- and model-matched random subset is needed as a control (IDEA).
+- Next (owner): file the zip and log in `results/judge_v2/`; add `pairs_train_filtered.csv` + `manifest_judge_v2.json` to `gainsplit-processed`. Then plan the Pass 4 training arms.
+
 ## 2026-11-13 - Judge contest v2 written
 - Owner asked for a better judge. Written: `src/gainsplit/judge.py`, `tests/test_judge.py` (24 tests pass with pairgen) and `experiments/06_judge_v2.ipynb`: score-based judges (log-probability of SARCASTIC minus SERIOUS) with a threshold set on 400 real train headlines and pass/fail on 400 others, prompt v2 with a format note and 3 + 3 real examples, plus an off-the-shelf irony classifier. Details in [[Pairgen Full Run Results]].
 - Dry run on made-up data passes both paths; GPU cell not run.

@@ -89,7 +89,7 @@ def collect(out_root) -> pd.DataFrame:
         r = json.loads(f.read_text())
         c = r["config"]
         row = {"run_id": r["run_id"], "arm": c["arm"], "budget": c["budget"], "seed": c["seed"],
-               "lr": c["lr"], "helper_weight": c["helper_weight"],
+               "tag": c.get("tag", ""), "lr": c["lr"], "helper_weight": c["helper_weight"],
                "fgm_epsilon": c.get("fgm_epsilon", 0.0),  # older result.json files have no such field
                "steps": r["steps"], "minutes": r["minutes"]}
         for split, s in r["scores"].items():

@@ -13,6 +13,9 @@ import math
 #   pseudo  one round of self-training (the A1 teacher labels U)
 #   fgm     adversarial step on the word embeddings
 #   tfidf   no neural network at all (scikit-learn, CPU)
+#   pairs   Pass 4: LLM-written headline pairs join every step as a labeled second batch;
+#           the value names the pair set (see PAIR_SETS)
+#   no_gold Pass 4: the gold-labeled rows L are not used at all (only their count sets the steps)
 ARMS = {
     "A0": {"gan": False, "helpers": False, "tfidf": True},    # TF-IDF + logistic regression (floor)
     "A1": {"gan": False, "helpers": False},                   # plain BERT on L
@@ -24,6 +27,13 @@ ARMS = {
     "A7": {"gan": False, "helpers": False, "fgm": True},      # BERT + FGM on L
     "A8": {"gan": False, "helpers": True, "shuffle": True},   # A3 with shuffled helper labels
     "A9": {"gan": False, "helpers": True, "l_only": True, "shuffle": True},  # A2 with shuffled helper labels
+    # Pass 4: generated sarcastic/serious headline pairs (vault: Experiment Plan, "Pass 4 plan")
+    "A10": {"gan": False, "helpers": False, "pairs": "unfiltered"},               # A1 + pairs
+    "A11": {"gan": False, "helpers": False, "fgm": True, "pairs": "unfiltered"},  # A7 (FGM) + pairs
+    "A12": {"gan": False, "helpers": False, "pairs": "unpaired"},                 # control: one side per pair
+    "A13": {"gan": False, "helpers": False, "pairs": "filtered"},                 # judge-filtered pairs
+    "A14": {"gan": False, "helpers": False, "pairs": "matched"},                  # control for A13: random subset
+    "A15": {"gan": False, "helpers": False, "pairs": "unfiltered", "no_gold": True},  # pairs only, no gold labels
 }
 IMPLEMENTED_ARMS = set(ARMS)
 
@@ -35,6 +45,12 @@ IMPLEMENTED_ARMS = set(ARMS)
 #   sentonly / emoonly  only that head is trained
 HELPER_VARIANTS = ("", "soft", "flip25", "flip50", "vader", "teacher2", "sentonly", "emoonly")
 TRAIN_DATA = ("headlines", "isarcasm")
+# Pass 4 pair sets (built in data.load_pairs):
+#   unfiltered  every pair that passed the automatic checks (pairs_train.csv)
+#   filtered    pairs kept by the judge-v2 filter (pairs_train_filtered.csv)
+#   matched     random subset of the unfiltered pairs with the same pairs per model as `filtered`
+#   unpaired    one side of every unfiltered pair (side drawn at random): same text source, no topic match
+PAIR_SETS = ("unfiltered", "filtered", "matched", "unpaired")
 
 
 @dataclass
@@ -60,14 +76,17 @@ class RunConfig:
     train_data: str = "headlines"  # "isarcasm": train on the iSarcasmEval training set (A1 only, budget 100)
     gen_lr: float = 0.0         # GAN arms only: learning rate of the generator's optimizer (0 = same as lr)
     step_mult: int = 1          # multiplies the step count from steps() (1 = the usual rule)
+    pair_batch: int = 32        # Pass 4: generated rows per step (16 whole pairs); fixed 2026-11-13, not tuned
+    explain: bool = False       # Pass 4: Integrated Gradients on a fixed test sample after training (needs eval_test)
 
     def __post_init__(self):
         if self.arm not in ARMS:
             raise ValueError(f"unknown arm {self.arm!r}; choose from {sorted(ARMS)}")
-        if self.arm == "A7" and not self.fgm_epsilon > 0:
-            raise ValueError(f"A7 needs fgm_epsilon > 0 (got {self.fgm_epsilon})")
-        if self.arm != "A7" and self.fgm_epsilon != 0:
-            raise ValueError(f"fgm_epsilon is only used by A7 (got {self.fgm_epsilon} for {self.arm})")
+        fgm = ARMS[self.arm].get("fgm", False)
+        if fgm and not self.fgm_epsilon > 0:
+            raise ValueError(f"{self.arm} needs fgm_epsilon > 0 (got {self.fgm_epsilon})")
+        if not fgm and self.fgm_epsilon != 0:
+            raise ValueError(f"fgm_epsilon is only used by FGM arms (A7, A11) (got {self.fgm_epsilon} for {self.arm})")
         if self.helper_variant not in HELPER_VARIANTS:
             raise ValueError(f"unknown helper_variant {self.helper_variant!r}; choose from {list(HELPER_VARIANTS)}")
         if self.helper_variant and not ARMS[self.arm]["helpers"]:
@@ -83,6 +102,17 @@ class RunConfig:
             raise ValueError(f"gen_lr is only used by GAN arms (got {self.gen_lr} for {self.arm})")
         if self.step_mult < 1:
             raise ValueError(f"step_mult must be >= 1 (got {self.step_mult})")
+        pairs = ARMS[self.arm].get("pairs")
+        if pairs is not None and pairs not in PAIR_SETS:
+            raise ValueError(f"unknown pair set {pairs!r} for {self.arm}")
+        if pairs and (self.pair_batch < 2 or self.pair_batch % 2):
+            raise ValueError(f"pair_batch must be an even number >= 2 (got {self.pair_batch})")
+        if pairs and self.train_data != "headlines":
+            raise ValueError(f"{self.arm} uses the Headlines pairs; train_data must be 'headlines'")
+        if self.explain and not self.eval_test:
+            raise ValueError("explain needs eval_test=True (it reads the test set)")
+        if self.explain and (ARMS[self.arm]["gan"] or self.arm == "A0"):
+            raise ValueError(f"explain is written for arms with a plain sarcasm head (got {self.arm})")
 
     @property
     def run_id(self) -> str:

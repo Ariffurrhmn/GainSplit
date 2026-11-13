@@ -1,6 +1,7 @@
 ---
 tags: [results, pass4]
 created: 2026-11-12
+updated: 2026-11-13
 ---
 
 # Pairgen Full Run Results
@@ -50,8 +51,23 @@ Hub: [[00 - Project Context]]. Earlier pilot: [[Pairgen Pilot Results]]. Output 
 - Outputs: `judge_v2_contest.json`, `real_scores.csv`, `gen_scores.csv`, `pairs_judged.csv`, `pairs_train_filtered.csv`, `manifest_judge_v2.json`, `judge_v2.zip`. The unfiltered `pairs_train.csv` stays the main Pass 4 dataset; the filtered one is an ablation.
 - Dry run on made-up data with fake scorers: both paths work (a judge passes; none passes). The GPU scoring cell was not run (no torch locally). Expected time 1-4 h (INFERRED).
 
+## Judge contest v2: results (run 2026-11-12/13, read 2026-11-13)
+Source: `judge_v2.zip` + log from the owner's Kaggle commit (code commit ac5609f; 24 tests passed on Kaggle). Not yet filed in `results/`. Numbers VERIFIED from the files; readings INFERRED.
+- Integrity: input `pairs_train.csv` SHA-256 matches the pairgen manifest; all five output hashes in `manifest_judge_v2.json` match the files. Run time 5.0 h (real-headline scoring about 37 min for all candidates; Gemma scoring 29,768 generated headlines 4.4 h).
+- Report-set balanced accuracy (400 real train headlines; AUC in brackets): Gemma v2 **0.773** (0.862), Gemma v1 0.745 (0.812), Mistral v2 0.713 (0.786), Mistral v1 0.710 (0.756), Qwen v2 0.705 (0.789), Qwen v1 0.653 (0.695), SmolLM3 v1 0.650 (0.685), SmolLM3 v2 0.583 (0.628), irony classifier 0.523 (0.505, chance).
+- Score + threshold fixed the SARCASTIC bias: predicted-sarcastic rate on the report set 0.51-0.69 (v1 run: 0.62-0.98). Prompt v2 helps every LLM except SmolLM3.
+- Only Gemma v2 passes 0.75. Judges: Qwen and Mistral pairs judged by Gemma v2; Gemma pairs unjudged (a generator never judges its own pairs) and kept, flagged `judged = False`.
+- Selection note: `choose_judges` picks by report-set score, which slightly favours the winner; here Gemma v2 is also best on the tune set (0.795), so the choice does not depend on it. Its margin over the bar is small (0.773 vs 0.75 on 400 headlines).
+- Gemma v2 on real headlines (threshold 14.18): sarcastic rate 0.78 on real sarcastic, 0.235 on real serious (report set).
+- Filter result: 14,884 pairs judged, 9,782 kept (Qwen 4,796 of 7,422 = 0.646; Mistral 4,986 of 7,462 = 0.668). With all 7,533 Gemma pairs: 17,315 of 22,417 pairs, 34,630 rows (`pairs_train_filtered.csv`, balanced, two rows per seed).
+- Why pairs fail: mostly the serious side scores as sarcastic (Qwen 0.254, Mistral 0.283 of serious sides above threshold); sarcastic sides pass at 0.888 (Qwen) and 0.944 (Mistral). Median score: sarcastic sides about 18.5-19.2, serious sides about 10.5-11.0.
+- Reading (INFERRED): the serious-side rejection rate (0.25-0.28) is close to the judge's false-positive rate on real serious headlines (0.235), so much of what the filter removes may be judge error rather than bad pairs. The filter is a noisy check, not a quality gold standard.
+- Confound for the ablation (INFERRED): filtering changes the size (17,315 vs 22,417 pairs) and the model mix (Gemma 43% vs 34% of pairs). A filtered-vs-unfiltered gap alone cannot separate "filtering" from "less data" or "more Gemma". IDEA: add a control arm with a random subset of the unfiltered pairs matched to the filtered per-model counts (Gemma 7,533, Mistral 4,986, Qwen 4,796).
+
 ## Still to do
+- Owner files `judge_v2.zip` and the log in `results/judge_v2/`, and adds `pairs_train_filtered.csv` + `manifest_judge_v2.json` to the `gainsplit-processed` Kaggle dataset alongside `pairs_train.csv`.
+- Paper: report the v2 contest table (8 LLM judges + irony classifier), the bias fix from scoring, and that only Gemma v2 passes, narrowly.
 - Owner files `pairgen (1).zip` as `results/pairgen/pairgen.zip` (and the log), and adds `pairs_train.csv` + `manifest_pairs.json` to a new version of the Kaggle dataset `gainsplit-processed` for Pass 4.
-- Owner runs `06_judge_v2.ipynb` and sends `judge_v2.zip` and the log.
+- Done 2026-11-13: owner ran `06_judge_v2.ipynb` and sent `judge_v2.zip` and the log (results above).
 - Paper: report the judge contest honestly (no judge reached 0.75; strong SARCASTIC bias of zero-shot LLM judges on this text format) and the single-judge separation as descriptive evidence.
 - Done 2026-11-12: the notebook that ran replaced `experiments/05_pairgen_full.ipynb` (content unchanged, JSON re-indented). The one-click version (commit 7893def) stays in git history.

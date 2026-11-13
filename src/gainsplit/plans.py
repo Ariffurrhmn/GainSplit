@@ -140,7 +140,50 @@ def gan_check() -> list[RunConfig]:
     return glr + long
 
 
+PASS4_SEEDS = PASS2_SEEDS
+
+
+def _p4(arm, budget, tag="", **kw) -> list[RunConfig]:
+    """Pass 4 runs for one arm and budget, seeds 0-4: test and masked test sets scored.
+    FGM arms (A7, A11) get the frozen Pass 2 epsilon."""
+    eps = PASS2_FGM_EPSILON if ARMS[arm].get("fgm") else 0.0
+    return [RunConfig(arm, budget, s, fgm_epsilon=eps, eval_test=True, eval_masked=True, tag=tag, **kw)
+            for s in PASS4_SEEDS]
+
+
+def pass4() -> list[RunConfig]:
+    """Generated headline pairs (vault: Experiment Plan, "Pass 4 plan"): 75 runs, all on GPU, one commit.
+
+    Nothing here waits for an earlier result: the pair batch is fixed at 32 rows (16 pairs, the
+    size of the U batch in the helper and GAN arms) instead of being tuned on dev first.
+    Baselines A1, A6, A7 are reused from Passes 1-3 (training is deterministic).
+
+    10% (35 runs): A11, A10 (+ explain), A12, A13, A14, A1 re-run with explain (also checks that
+                   the new code reproduces Pass 1 exactly), A15 (pairs only, 10% step count).
+    1%  (40 runs): A10 with 3x steps (sensitivity), A11, A10, A12, A13, A14, and A7 / A1 re-runs
+                   that add the masked test sets at 1% (tag "mask"; must equal Pass 1 / Pass 2b).
+    Longest runs first, so the two GPUs stay busy to the end.
+    """
+    if PASS2_FGM_EPSILON is None:
+        raise ValueError("set PASS2_FGM_EPSILON in plans.py before building pass4")
+    return (_p4("A11", 10)                                   # FGM + pairs: slowest
+            + _p4("A10", 10, explain=True)
+            + _p4("A12", 10) + _p4("A13", 10) + _p4("A14", 10)
+            + _p4("A1", 10, "explain", explain=True)
+            + _p4("A15", 10)
+            + _p4("A10", 1, "steps3x", step_mult=3)
+            + _p4("A11", 1)
+            + _p4("A10", 1) + _p4("A12", 1) + _p4("A13", 1) + _p4("A14", 1)
+            + _p4("A7", 1, "mask") + _p4("A1", 1, "mask"))
+
+
+def pass4_full100() -> list[RunConfig]:
+    """Optional extra (5 runs, about 1.6 GPU-h of run time): A10 with all labels (100%).
+    Asks whether the pairs still help when every training label is known. Run only if quota is left."""
+    return _p4("A10", 100)
+
+
 PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "session2": session2, "pass1": pass1, "fgm_tuning": fgm_tuning,
          "pass2a": pass2a, "pass2b": pass2b, "pass3": pass3,
-         "gan_check": gan_check}
+         "gan_check": gan_check, "pass4": pass4, "pass4_full100": pass4_full100}

@@ -1,7 +1,7 @@
 ---
 tags: [experiments, plan]
-updated: 2026-11-10
-status: planned, not started
+updated: 2026-11-13
+status: Passes 1-3 done; Pass 4 planned
 ---
 
 # Experiment Plan
@@ -130,8 +130,44 @@ Revised after Passes 1-2 ([[Bootstrap - All Passes]]): helpers on L + U give no 
 
 **Code (three sessions in parallel, disjoint files):** (A) `experiments/01b_pass3_data.ipynb` + `src/gainsplit/masking.py`; (B) training switches R1-R7, A9, extra eval splits, iSarcasmEval-train arm, `pass3` plan, tests (`config.py`, `data.py`, `train.py`, `evaluate.py`, `plans.py`); (C) step 3a analysis (`analysis.py`, `03_analysis.ipynb`, tests). File formats shared by A and B are fixed in the briefs.
 
-## Pass 4 plan (started 2026-11-12; training arms not planned yet)
-Data: `pairs_train.csv` from [[Pairgen Full Run Results]] (unfiltered main set; a judge-filtered set only if the v2 judge contest passes).
+## Pass 4 plan (started 2026-11-12; training arms PROPOSED 2026-11-13, DELEGATED per [[Repo Rules]] rule 7)
+Data: `pairs_train.csv` from [[Pairgen Full Run Results]] (unfiltered main set, 22,417 pairs) and `pairs_train_filtered.csv` (judge v2, 17,315 pairs; ablation only). Not written or run yet.
+
+**Why every train seed may be used at every budget (VERIFIED from `pairgen.build_prompt`):** the generation prompt shows only the seed text, never its label, and every generated side is new text (no copy of any train, dev or test headline). So a pair carries no gold label of its seed. Pairs from all 22,800 train seeds are the semi-supervised signal made from the unlabeled pool; no run sees a gold label outside its own L.
+
+**How pairs enter training.** Same loop, same step rule as every other arm (equal steps: 200 at 1%, about 720 at 10%, about 7,130 at 100%). Each step adds one pair batch after the L batch, as the pool batch does for the U arms. The pair batch holds whole pairs (both sides of a pair in the same batch), so each update sees the two sides of the same topic side by side. Pair rows have their intended label and join the one sarcasm loss over L + pair rows, the same way A6 uses pseudo-labeled rows. No new loss term, no new weight. Consequence: at 1% a run sees about 6,400 pair rows and at 10% about 23,000, i.e. part of the set; the set size is not the limiting factor at these budgets.
+
+**Arms** (5 seeds, 0-4, test scored; baselines A1, A6, A7 reused from Passes 1-2 because training is deterministic, checked exactly in Pass 3):
+| Arm | What it is | Budgets | Runs | Question |
+|---|---|---|---|---|
+| A10 | A1 + unfiltered pairs | 1, 10, 100 | 15 | Do the pairs help, and where? |
+| A11 | A7 (FGM, Pass 2b epsilon) + pairs; FGM covers L and pair rows | 1, 10 | 10 | Do pairs stack with the best existing method (the candidate recipe)? |
+| A12 | unpaired control: one side per seed (side picked at random, seed 2027), rows sampled singly; same rows per batch as A10 | 1, 10 | 10 | Does the topic-matched pairing matter, or only the extra generated text? |
+| A13 | A10 with the judge-filtered pairs | 1, 10 | 10 | Does the judge filter help? |
+| A14 | A10 with a random subset of the unfiltered pairs, same per-model counts as A13 (Gemma 7,533, Mistral 4,986, Qwen 4,796; seed 2027) | 1, 10 | 10 | Control for A13: separates filtering from the change in model mix |
+| A15 | pairs only, no gold labels; run as budget 10 so it gets the 10% step count (720) | 10 | 5 | How far do LLM pairs go with zero human labels? |
+| check | A1 at 10% re-run with explanations (tag `explain`), seeds 0-4 | 10 | 5 | Must match Pass 1 exactly (new code leaves the old path unchanged); also the A1 side of the explainability step |
+| mask | A1 and A7 at 1% re-runs with masked test sets (tag `mask`) | 1 | 10 | Masked-test baselines at 1% (Pass 3 had them at 10% only); must match Pass 1 / 2b |
+| sens | A10 at 1% with `step_mult = 3` (tag `steps3x`) | 1 | 5 | Do the pairs need more steps at 1%? Sensitivity only, not a main contrast |
+
+~~`pair_pilot`~~ dropped 2026-11-13 ([[Decisions]]): the pair batch is fixed at 32 rows (16 pairs), the size of the pool batch in the helper and GAN arms, so the whole pass runs in one commit with nothing waiting on an earlier result.
+
+**As coded (2026-11-13): plan `pass4`, 75 test-scored runs** (A10-A14 at 1% and 10%, A15 at 10%, the re-runs and the sensitivity runs above), A10 at 100% moved to the optional plan `pass4_full100` (5 runs). Time (INFERRED from measured Pass 1-3 run times: pair arm about the cost of a helper arm, 0.7 min at 1% and 2.1 min at 10%; A11 about 3.3 min; explanations about +0.7 min): about 115 run-minutes plus start-up, so **about 1.3-1.5 h of a T4 x2 session** for `pass4`; `pass4_full100` adds about 55 min. Owner's remaining quota on 2026-11-13: about 3 GPU-h.
+
+**Evaluation (same as Pass 3):** Headlines test macro-F1; cue-masked and random-masked test (`eval_masked`); iSarcasmEval test AUC with bootstrap intervals (in-domain reference 65.8, [[Pass 3 Results]]).
+
+**Pre-set contrasts** (paired bootstrap, 10,000 resamples, as before; Holm over the Pass 4 contrasts as robustness column):
+- A10 - A1 at 1/10/100; A11 - A7 and A11 - A1 at 1/10; A11 - A6 at 1 (the strongest 1% baseline).
+- A10 - A12 at 1/10 (pairing); A13 - A14 at 1/10 (filtering); A14 - A10 at 1/10 (subset and model mix).
+- Cue-mask gap and iSarcasmEval AUC: A10 and A11 vs A1 and A7. A15 reported descriptively next to A1 at 1% and 10%.
+
+**Predictions written before running (IDEA):** (H4.1) A10 > A1, largest at 1%, near zero at 100%. (H4.2) A10 has a smaller cue-mask gap than A1. (H4.3) A10's iSarcasmEval AUC is above A1's, below 65.8. (H4.4) A10 > A12; if not, the claim is "generated text helps", not "counterfactual pairs help", and the paper says so. (H4.5) A13 ≈ A14 (the judge is noisy; [[Pairgen Full Run Results]]). (H4.6) A11 ≥ A7.
+
+**Main Pass 4 model for the explainability step:** A10 at 10% (the cleanest pair effect), fixed now; A11 too if time allows.
+
+**Extra check (Mahato 2026 concern, [[Novelty Check - LLM Counterfactuals]]):** TF-IDF + logistic regression that separates generated from real train headlines (CPU, minutes). Reports how visible "LLM style" is; within the pairs it cannot predict the label, since both sides are generated. Optional: Unfun human counterfactual test set, only if the owner downloads it (licence and overlap check first).
+
+**Code (written 2026-11-13, not run on Kaggle yet):** `config.py` (arms A10-A15, `pair_batch`, `explain`), `data.py` (pair loader with SHA-256 checks, `matched` / `unpaired` subsets with seed 2027, leak checks, `preflight`), `train.py` (`GroupBatchStream` keeps pairs whole; A15 trains on pairs only; explain step), `explain.py` (Integrated Gradients written directly in torch, all-padding baseline, 32 steps, 500 fixed test headlines, completeness check), `plans.py` (`pass4`, `pass4_full100`), `analysis_pass4.py` (contrasts + Holm, gap and AUC differences, cue-share bootstrap, re-run check), `pair_checks.py` (CPU: style probe, real-trained reader, cue-word and length shortcuts). Notebooks: `07_pair_checks.ipynb` (CPU, before the GPU run), `08_pass4.ipynb` (GPU, one commit, CPU pre-flight first), `09_pass4_analysis.ipynb` (CPU, after). Tests: `tests/test_pass4.py`, `tests/test_pass4_train.py`.
 
 **Fixed step: explainability check (CONFIRMED by owner 2026-11-12).** After Pass 4 training, on Kaggle:
 - Method: Integrated Gradients token attributions (Captum) for the predicted class, all-padding baseline, on a fixed, seeded, class-balanced sample of the Headlines test set (size set with the training plan).

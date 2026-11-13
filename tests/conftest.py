@@ -90,3 +90,49 @@ def pass3_data(fake_data) -> Path:
     outputs = {n: {"bytes": (d / n).stat().st_size, "sha256": _sha(d / n)} for n in names_new}
     (d / "manifest_pass3.json").write_text(json.dumps({"outputs": outputs}))
     return d
+
+
+PAIR_MODELS = ("gemma", "mistral", "qwen")
+
+
+def _gen_text(rng, taken):
+    """A made-up generated headline (10-12 words, so it never equals a 3-8 word real headline)."""
+    while True:
+        t = " ".join(rng.choice(WORDS, size=rng.integers(10, 13)))
+        if t not in taken:
+            taken.add(t)
+            return t
+
+
+@pytest.fixture
+def pass4_data(pass3_data) -> Path:
+    """pass3_data plus the Pass 4 files: cue_words.json (added to manifest_pass3.json), a pair file
+    for 120 train seeds (40 per model) with manifest_pairs.json, and a judge-filtered file
+    (Gemma all kept, Mistral 25, Qwen 20) with manifest_judge_v2.json."""
+    d = pass3_data
+    rng = np.random.default_rng(4)
+    cues = {"k_per_class": 3, "sarcastic": [["area", 1.0], ["man", 0.9], ["nation", 0.8]],
+            "non_sarcastic": [["report", -1.0], ["study", -0.9], ["finds", -0.8]]}
+    (d / "cue_words.json").write_text(json.dumps(cues))
+    m3 = json.loads((d / "manifest_pass3.json").read_text())
+    m3["outputs"]["cue_words.json"] = {"bytes": (d / "cue_words.json").stat().st_size, "sha256": _sha(d / "cue_words.json")}
+    (d / "manifest_pass3.json").write_text(json.dumps(m3))
+
+    rows, taken = [], set()
+    for i, seed_id in enumerate(range(120)):
+        model = PAIR_MODELS[i % 3]
+        rows.append({"id": f"{seed_id}_s", "seed_id": seed_id, "model": model, "text": _gen_text(rng, taken), "label": 1})
+        rows.append({"id": f"{seed_id}_n", "seed_id": seed_id, "model": model, "text": _gen_text(rng, taken), "label": 0})
+    pairs = pd.DataFrame(rows).sample(frac=1, random_state=0)   # shuffled on purpose: the loader must re-sort
+    pairs.to_csv(d / "pairs_train.csv", index=False)
+    (d / "manifest_pairs.json").write_text(json.dumps({"sha256": {"pairs_train.csv": _sha(d / "pairs_train.csv")}}))
+
+    keep_n = {"gemma": 40, "mistral": 25, "qwen": 20}
+    keep = set()
+    for m, n in keep_n.items():
+        keep |= set(sorted(pairs.loc[pairs["model"] == m, "seed_id"].unique())[:n])
+    pairs[pairs["seed_id"].isin(keep)].to_csv(d / "pairs_train_filtered.csv", index=False)
+    (d / "manifest_judge_v2.json").write_text(json.dumps({
+        "input_pairs_train_sha256": _sha(d / "pairs_train.csv"),
+        "sha256": {"pairs_train_filtered.csv": _sha(d / "pairs_train_filtered.csv")}}))
+    return d

@@ -27,8 +27,9 @@ import transformers
 from transformers import AutoTokenizer, get_linear_schedule_with_warmup
 
 from .config import IMPLEMENTED_ARMS, RunConfig
-from .data import (EMO_P, SENT_P, apply_helper_variant, find_data_dir, helper_label_counts, load_helper_labels,
-                   load_isarcasm_splits, load_masked_tests, load_splits, permute_helper_labels, verify, verify_pass3)
+from .data import (EMO_P, SENT_P, apply_helper_variant, find_data_dir, helper_label_counts, load_cue_words,
+                   load_helper_labels, load_isarcasm_splits, load_masked_tests, load_pairs, load_splits,
+                   permute_helper_labels, verify, verify_pass3)
 from .evaluate import predict, scores
 from .models import SarcasmClassifier
 from .tfidf import run_tfidf
@@ -76,6 +77,38 @@ class BatchStream:
             self.order, self.pos = torch.randperm(self.n, generator=self.gen), 0
         idx = self.order[self.pos:self.pos + self.batch_size]
         self.pos += self.batch_size
+        y = None if self.labels is None else self.labels[idx]
+        return (self.enc["input_ids"][idx], self.enc["attention_mask"][idx], y,
+                {k: v[idx] for k, v in self.extra.items()})
+
+
+class GroupBatchStream(BatchStream):
+    """Pass 4: like BatchStream, but rows come in fixed groups that always share a batch.
+
+    The rows must be sorted so each group (a seed_id) is contiguous and every group has the same
+    size: 2 for whole pairs, 1 for the unpaired control. Groups are shuffled, never split, so a
+    pair's sarcastic and serious sides are always trained on in the same step. A batch holds
+    batch_size // group_size groups."""
+
+    def __init__(self, enc: dict, labels, groups, batch_size: int, seed: int):
+        super().__init__(enc, labels, batch_size, seed)
+        codes = pd.factorize(pd.Series(np.asarray(groups)))[0]
+        sizes = np.bincount(codes)
+        k = int(sizes[0])
+        if not (sizes == k).all():
+            raise ValueError("GroupBatchStream: every group must have the same number of rows")
+        if not (codes == np.repeat(np.arange(len(sizes)), k)).all():
+            raise ValueError("GroupBatchStream: rows of a group must be next to each other")
+        self.members = torch.arange(self.n).reshape(len(sizes), k)
+        self.n_groups = len(sizes)
+        self.per_batch = max(1, min(batch_size // k, self.n_groups))
+        self.order, self.pos = None, self.n_groups
+
+    def __next__(self):
+        if self.pos + self.per_batch > self.n_groups:
+            self.order, self.pos = torch.randperm(self.n_groups, generator=self.gen), 0
+        idx = self.members[self.order[self.pos:self.pos + self.per_batch]].reshape(-1)
+        self.pos += self.per_batch
         y = None if self.labels is None else self.labels[idx]
         return (self.enc["input_ids"][idx], self.enc["attention_mask"][idx], y,
                 {k: v[idx] for k, v in self.extra.items()})
@@ -239,15 +272,18 @@ def gan_step(model, cfg, opts, scheds, scaler, batch, n_l, use_fp16, device) -> 
     return stats
 
 
-def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, helpers=False, fgm=False):
+def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, helpers=False, fgm=False,
+        pool_groups=None, pool_batch=None):
     """Train a fresh model for `steps` steps; return (model, training curve).
 
-    `labeled` is L (with sent/emo columns if `helpers`). `pool` is None or a frame of
-    extra rows that join every step as a second batch: U for A3/A4/A5/A8, or the
-    pseudo-labeled rows for A6 (those carry a `label` column, U does not).
+    `labeled` is L (with sent/emo columns if `helpers`), or None for A15 (no gold rows: every
+    batch is a pool batch only). `pool` is None or a frame of extra rows that join every step
+    as a second batch: U for A3/A4/A5/A8, the pseudo-labeled rows for A6, or the generated
+    pairs for A10-A15 (A6 and pair rows carry a `label` column, U does not).
+    `pool_groups` (Pass 4): group key per pool row; groups are never split across batches.
+    `pool_batch`: rows per pool batch (default: cfg.batch_size).
     """
     set_seed(cfg.seed)
-    enc_l = encode(tokenizer, labeled["text"], cfg.max_len)
     model = SarcasmClassifier(cfg.model_name, gan=gan, helpers=helpers).to(device)
     if gan:
         # one optimizer for BERT + discriminator (+ helper heads), a separate one for the generator
@@ -264,24 +300,35 @@ def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, he
             t.update(sent_soft=df[SENT_P].to_numpy(), emo_soft=df[EMO_P].to_numpy())
         return t
 
-    extra_l = helper_targets(labeled) if helpers else None
-    stream_l = BatchStream(enc_l, labeled["label"], cfg.batch_size, cfg.seed, extra_l)
+    stream_l = None
+    if labeled is not None:
+        enc_l = encode(tokenizer, labeled["text"], cfg.max_len)
+        extra_l = helper_targets(labeled) if helpers else None
+        stream_l = BatchStream(enc_l, labeled["label"], cfg.batch_size, cfg.seed, extra_l)
     stream_u = None
     if pool is not None:  # its own seeded stream, so the pool's batch order does not disturb L's
         enc_u = encode(tokenizer, pool["text"], cfg.max_len)
         extra_u = helper_targets(pool) if helpers else None
         y_pool = pool["label"] if "label" in pool else None
-        stream_u = BatchStream(enc_u, y_pool, cfg.batch_size, cfg.seed + 1000, extra_u)
+        if pool_groups is not None:
+            stream_u = GroupBatchStream(enc_u, y_pool, pool_groups, pool_batch or cfg.batch_size, cfg.seed + 1000)
+        else:
+            stream_u = BatchStream(enc_u, y_pool, pool_batch or cfg.batch_size, cfg.seed + 1000, extra_u)
+    if stream_l is None and stream_u is None:
+        raise ValueError("nothing to train on: no labeled rows and no pool")
 
     model.train()
     window, train_log = {}, []
     for step in range(1, steps + 1):
-        ids, mask, y, extra = next(stream_l)
-        if stream_u is not None:  # append one pool batch of the same size after the L batch
+        if stream_l is None:  # A15: generated pairs only
+            ids, mask, y, extra = next(stream_u)
+        else:
+            ids, mask, y, extra = next(stream_l)
+        if stream_u is not None and stream_l is not None:  # append one pool batch after the L batch
             ids_u, mask_u, y_u, extra_u = next(stream_u)
             ids, mask = torch.cat([ids, ids_u]), torch.cat([mask, mask_u])
             extra = {k: torch.cat([v, extra_u[k]]) for k, v in extra.items()}
-            if y_u is not None:  # pseudo-labels are used like labels: one loss over L + pseudo rows
+            if y_u is not None:  # pseudo-labels / pair labels are used like labels: one loss over all labeled rows
                 y = torch.cat([y, y_u])
         n_l = y.shape[0]  # rows that have a sarcasm label (L rows, plus the pseudo-labeled rows for A6)
         batch = (ids.to(device), mask.to(device), y.to(device), {k: v.to(device) for k, v in extra.items()})
@@ -343,7 +390,7 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
     manifest = verify(data_dir)
     # only runs that read the Pass 3 files check them, so older plans run without them
     masked = cfg.eval_test and cfg.eval_masked
-    if masked or cfg.helper_variant in ("vader", "teacher2"):
+    if masked or cfg.explain or cfg.helper_variant in ("vader", "teacher2"):
         manifest["outputs"].update(verify_pass3(data_dir)["outputs"])
     if cfg.train_data == "isarcasm":
         splits = load_isarcasm_splits(data_dir)
@@ -372,6 +419,14 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
     steps = cfg.steps(len(labeled))
     print(f"{cfg.run_id}: |L|={len(labeled)} |U|={len(unlabeled)} steps={steps} device={device}")
     pool, pseudo_info = (unlabeled if use_u else None), None
+    pool_groups, pool_batch, pair_info = None, None, None
+    if sw.get("pairs"):
+        # Pass 4: generated pairs join every step; the sides of a pair always share a batch.
+        pool, pair_info = load_pairs(sw["pairs"], data_dir)
+        pool_groups, pool_batch = pool["seed_id"].to_numpy(), cfg.pair_batch
+        print(f"  pairs ({sw['pairs']}): {pair_info['n_rows']} rows from {pair_info['n_seeds']} seeds, "
+              f"{pool_batch} rows per step")
+    fit_labeled = None if sw.get("no_gold") else labeled   # A15: the budget only sets the step count
     if sw.get("pseudo"):
         # A6: the teacher is an A1 model (same seed, same steps). It labels U; the student trains on L + pseudo-labels.
         print("  A6 teacher (plain A1 training):")
@@ -389,8 +444,9 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
             pool = unlabeled.iloc[idx].reset_index(drop=True)
             pool["label"] = y_pseudo
         print("  A6 student (fresh BERT):")
-    model, train_log = fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16,
-                           gan=gan, helpers=helpers, fgm=bool(sw.get("fgm")))
+    model, train_log = fit(cfg, tokenizer, fit_labeled, pool, steps, device, use_fp16,
+                           gan=gan, helpers=helpers, fgm=bool(sw.get("fgm")),
+                           pool_groups=pool_groups, pool_batch=pool_batch)
 
     out_dir.mkdir(parents=True, exist_ok=True)
     results = {}
@@ -399,13 +455,24 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
         results[name] = scores(df["label"], p)
         pd.DataFrame({"id": df["id"], "label": df["label"], "p_sarcastic": p.round(6)}).to_csv(
             out_dir / f"preds_{name}.csv", index=False)
+    explain_info = None
+    if cfg.explain:  # Pass 4: IG word attributions on a fixed test sample (explain.csv)
+        from .explain import explain_run
+        t_x = time.time()
+        explain_info = explain_run(model, tokenizer, splits.test, load_cue_words(data_dir), cfg.max_len, device,
+                                   out_dir / "explain.csv")
+        explain_info["minutes"] = round((time.time() - t_x) / 60, 2)
+        print(f"  explain: mean cue share {explain_info['mean_cue_share']:.4f} on {explain_info['n']} test headlines "
+              f"({explain_info['minutes']} min)")
 
     record = {
         "run_id": cfg.run_id,
         "config": cfg.to_dict(),
-        "n_labeled": len(labeled),
+        "n_labeled": 0 if sw.get("no_gold") else len(labeled),
         "n_unlabeled": len(unlabeled),
-        "uses_u": pool is not None,
+        "uses_u": pool is not None and not sw.get("pairs"),
+        "pairs": pair_info,       # Pass 4 pair arms: which pair set, its size and file hashes
+        "explain": explain_info,  # Pass 4 explain runs: IG summary (details in explain.csv)
         "steps": steps,
         "minutes": round((time.time() - t0) / 60, 2),
         "scores": results,

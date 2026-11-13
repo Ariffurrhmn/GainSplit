@@ -241,3 +241,163 @@ def helper_label_counts(labeled: pd.DataFrame, unlabeled: pd.DataFrame) -> dict:
     both = pd.concat([labeled, unlabeled])
     return {"sent": {c: int((both["sent"] == i).sum()) for i, c in enumerate(SENT_CLASSES)},
             "emo": {c: int((both["emo"] == i).sum()) for i, c in enumerate(EMO_CLASSES)}}
+
+
+# ---------------------------------------------------------------- Pass 4: generated headline pairs
+
+PAIRS_FILE = "pairs_train.csv"                    # notebook 05 finalize output (all checked pairs)
+PAIRS_MANIFEST = "manifest_pairs.json"
+FILTERED_FILE = "pairs_train_filtered.csv"        # notebook 06 output (judge-v2 filter)
+FILTERED_MANIFEST = "manifest_judge_v2.json"
+CUE_WORDS = "cue_words.json"                      # Pass 3 file: the outlet cue words
+PAIR_SUBSET_SEED = 2027   # fixed: every run and seed uses the same `matched` subset and `unpaired` sides
+PAIR_COLUMNS = ["id", "seed_id", "model", "text", "label"]
+
+
+def find_input_file(name: str, data_dir=None, root=None) -> Path:
+    """Locate a Pass 4 input file.
+
+    Order: the folder in GAINSPLIT_PAIRS (if set), then `data_dir`, then a search under `root`
+    (default: GAINSPLIT_INPUT or /kaggle/input). If the search finds several copies, they must
+    be byte-identical (same SHA-256), so it cannot matter which one is read.
+    """
+    if os.environ.get("GAINSPLIT_PAIRS"):
+        p = Path(os.environ["GAINSPLIT_PAIRS"]) / name
+        if p.exists():
+            return p
+    if data_dir is not None and (Path(data_dir) / name).exists():
+        return Path(data_dir) / name
+    root = Path(root or os.environ.get("GAINSPLIT_INPUT", "/kaggle/input"))
+    hits = sorted(root.rglob(name)) if root.exists() else []
+    if not hits:
+        raise FileNotFoundError(f"{name} not found (looked in GAINSPLIT_PAIRS, {data_dir} and under {root}); "
+                                "add it to the gainsplit-processed dataset")
+    if len({sha256(h) for h in hits}) > 1:
+        raise ValueError(f"different copies of {name}: {[str(h) for h in hits]}")
+    return hits[0]
+
+
+def _read_checked(name: str, manifest_name: str, data_dir):
+    """Read a pair file and check it against the SHA-256 in its manifest. Returns (rows, sha256, manifest)."""
+    path = find_input_file(name, data_dir)
+    mpath = path.parent / manifest_name
+    if not mpath.exists():
+        mpath = find_input_file(manifest_name, data_dir)
+    manifest = json.loads(mpath.read_text())
+    got = sha256(path)
+    if manifest.get("sha256", {}).get(name) != got:
+        raise ValueError(f"{name} does not match {manifest_name} (file changed or wrong version)")
+    df = pd.read_csv(path, keep_default_na=False)
+    missing = set(PAIR_COLUMNS) - set(df.columns)
+    if missing:
+        raise ValueError(f"{name} lacks columns {sorted(missing)}")
+    return df[PAIR_COLUMNS].copy(), got, manifest
+
+
+def check_pairs(pairs: pd.DataFrame, train_ids=None, heldout_texts=None) -> None:
+    """Every seed has exactly one sarcastic (1) and one serious (0) row; ids are unique; seeds come
+    from train only; no generated text equals a dev or test headline. Raises ValueError otherwise."""
+    g = pairs.groupby("seed_id")["label"]
+    if not ((g.size() == 2) & (g.sum() == 1)).all():
+        raise ValueError("pair file: every seed_id must have exactly one row with label 1 and one with label 0")
+    if pairs["id"].duplicated().any():
+        raise ValueError("pair file: duplicate ids")
+    if train_ids is not None and not set(pairs["seed_id"]).issubset(set(train_ids)):
+        raise ValueError("pair file: some seed_ids are not in headlines_train.csv")
+    if heldout_texts is not None and set(pairs["text"]) & set(heldout_texts):
+        raise ValueError("pair file: a generated headline equals a dev or test headline")
+
+
+def matched_subset(unfiltered: pd.DataFrame, filtered: pd.DataFrame, seed: int = PAIR_SUBSET_SEED) -> pd.DataFrame:
+    """A14 control: draw, per generator model, as many whole pairs from `unfiltered` as `filtered` keeps.
+
+    Same size and model mix as the judge-filtered set, but the pairs are chosen at random,
+    so A13 - A14 measures the judge's choice alone."""
+    rng = np.random.default_rng(seed)
+    want = filtered.groupby("model")["seed_id"].nunique()
+    seeds = []
+    for model in sorted(want.index):
+        pool = np.sort(unfiltered.loc[unfiltered["model"] == model, "seed_id"].unique())
+        if len(pool) < want[model]:
+            raise ValueError(f"{model}: {want[model]} pairs wanted, only {len(pool)} available")
+        seeds.extend(rng.choice(pool, size=int(want[model]), replace=False).tolist())
+    return unfiltered[unfiltered["seed_id"].isin(set(seeds))].reset_index(drop=True)
+
+
+def unpaired_sides(unfiltered: pd.DataFrame, seed: int = PAIR_SUBSET_SEED) -> pd.DataFrame:
+    """A12 control: keep one side of each pair, chosen at random. The two classes then come from
+    different topics (no topic-matched partner), with the same generated-text source."""
+    rng = np.random.default_rng(seed)
+    seeds = np.sort(unfiltered["seed_id"].unique())
+    side = pd.Series(rng.integers(0, 2, size=len(seeds)), index=seeds)   # 1: keep the sarcastic side
+    keep = unfiltered["label"].to_numpy() == unfiltered["seed_id"].map(side).to_numpy()
+    return unfiltered[keep].reset_index(drop=True)
+
+
+def load_pairs(pair_set: str, data_dir, check_against=None):
+    """Load one Pass 4 pair set; return (rows, info for result.json).
+
+    Rows have columns id, seed_id, model, text, label, sorted by seed_id then label, so the two
+    sides of a pair sit next to each other (the batch stream keeps them together).
+    `check_against`: the processed data folder; if given, the leak checks run against its splits.
+    """
+    unf, unf_sha, _ = _read_checked(PAIRS_FILE, PAIRS_MANIFEST, data_dir)
+    check_pairs(unf)
+    info = {"pair_set": pair_set, "pairs_train_sha256": unf_sha}
+    fil = None
+    if pair_set in ("filtered", "matched"):
+        fil, fil_sha, fman = _read_checked(FILTERED_FILE, FILTERED_MANIFEST, data_dir)
+        if fman.get("input_pairs_train_sha256") not in (None, unf_sha):
+            raise ValueError("pairs_train_filtered.csv was made from a different pairs_train.csv")
+        if not set(fil["id"]).issubset(set(unf["id"])):
+            raise ValueError("pairs_train_filtered.csv has rows that are not in pairs_train.csv")
+        check_pairs(fil)
+        info["pairs_train_filtered_sha256"] = fil_sha
+    if pair_set == "unfiltered":
+        rows = unf
+    elif pair_set == "filtered":
+        rows = fil
+    elif pair_set == "matched":
+        rows = matched_subset(unf, fil)
+    elif pair_set == "unpaired":
+        rows = unpaired_sides(unf)
+    else:
+        raise ValueError(f"unknown pair set {pair_set!r}")
+    if check_against is not None:
+        read = lambda n: pd.read_csv(Path(check_against) / n, keep_default_na=False)
+        held = pd.concat([read("headlines_dev.csv")["text"], read("headlines_test.csv")["text"]])
+        check_pairs(unf, read("headlines_train.csv")["id"], held)
+    rows = rows.sort_values(["seed_id", "label"], kind="stable").reset_index(drop=True)
+    info.update(n_rows=int(len(rows)), n_seeds=int(rows["seed_id"].nunique()),
+                rows_per_label={str(k): int(v) for k, v in rows["label"].value_counts().sort_index().items()},
+                seeds_per_model={str(k): int(v) for k, v in rows.groupby("model")["seed_id"].nunique().items()})
+    return rows, info
+
+
+def load_cue_words(data_dir) -> list[str]:
+    """The 2 x 100 outlet cue words from the Pass 3 file cue_words.json (checked via manifest_pass3.json)."""
+    verify_pass3(data_dir)
+    cues = json.loads((Path(data_dir) / CUE_WORDS).read_text())
+    return [w for w, _ in cues["sarcastic"]] + [w for w, _ in cues["non_sarcastic"]]
+
+
+def preflight(configs, data_dir) -> pd.DataFrame:
+    """CPU check before any GPU time is spent: load every pair set and file the plan needs.
+
+    Raises on the first problem (missing file, hash mismatch, broken pairs, leak). Returns one row
+    per pair set with its size, so the notebook can show what the runs will read."""
+    from .config import ARMS
+    data_dir = Path(data_dir)
+    verify(data_dir)
+    sets = sorted({ARMS[c.arm]["pairs"] for c in configs if ARMS[c.arm].get("pairs")})
+    if any(c.eval_masked or c.explain for c in configs):
+        verify_pass3(data_dir)
+    if any(c.explain for c in configs):
+        load_cue_words(data_dir)
+    rows = []
+    for i, s in enumerate(sets):
+        df, info = load_pairs(s, data_dir, check_against=data_dir if i == 0 else None)
+        rows.append({"pair_set": s, "rows": info["n_rows"], "pairs_or_seeds": info["n_seeds"],
+                     **{f"label_{k}": v for k, v in info["rows_per_label"].items()},
+                     **{f"seeds_{k}": v for k, v in info["seeds_per_model"].items()}})
+    return pd.DataFrame(rows)
