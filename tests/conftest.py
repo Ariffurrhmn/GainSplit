@@ -106,9 +106,10 @@ def _gen_text(rng, taken):
 
 @pytest.fixture
 def pass4_data(pass3_data) -> Path:
-    """pass3_data plus the Pass 4 files: cue_words.json (added to manifest_pass3.json), a pair file
-    for 120 train seeds (40 per model) with manifest_pairs.json, and a judge-filtered file
-    (Gemma all kept, Mistral 25, Qwen 20) with manifest_judge_v2.json."""
+    """pass3_data plus the Pass 4-5 files: cue_words.json (added to manifest_pass3.json), a pair
+    file for 120 train seeds (40 per model) with manifest_pairs.json, a judge-filtered file
+    (Gemma all kept, Mistral 25, Qwen 20) with manifest_judge_v2.json, and a shortcut-score file
+    (pair_checks.shortcut_scores on the same 120-seed pairs) with manifest_shortcut_scores.json."""
     d = pass3_data
     rng = np.random.default_rng(4)
     cues = {"k_per_class": 3, "sarcastic": [["area", 1.0], ["man", 0.9], ["nation", 0.8]],
@@ -135,4 +136,12 @@ def pass4_data(pass3_data) -> Path:
     (d / "manifest_judge_v2.json").write_text(json.dumps({
         "input_pairs_train_sha256": _sha(d / "pairs_train.csv"),
         "sha256": {"pairs_train_filtered.csv": _sha(d / "pairs_train_filtered.csv")}}))
+
+    from gainsplit import pair_checks as pc
+    scores = pc.shortcut_scores(pairs)
+    scores[["seed_id", "seed_shortcut_score"]].drop_duplicates("seed_id").rename(
+        columns={"seed_shortcut_score": "shortcut_score"}).to_csv(d / "pair_shortcut_scores.csv", index=False)
+    (d / "manifest_shortcut_scores.json").write_text(json.dumps({
+        "input_pairs_train_sha256": _sha(d / "pairs_train.csv"),
+        "sha256": {"pair_shortcut_scores.csv": _sha(d / "pair_shortcut_scores.csv")}}))
     return d

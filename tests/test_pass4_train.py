@@ -99,3 +99,38 @@ def test_a1_path_unchanged_by_pass4_fields(fake_data, tiny_bert, tmp_path):
     train_run(RunConfig(**base, pair_batch=8), fake_data, tmp_path / "b")   # pair_batch is unused by A1
     pa, pb = (pd.read_csv(tmp_path / n / "runs" / "A1_p10_s0" / "preds_dev.csv") for n in ("a", "b"))
     assert (pa["p_sarcastic"] - pb["p_sarcastic"]).abs().max() == 0
+
+
+@pytest.mark.parametrize("arm,kw", [("A10", {}), ("A11", {"fgm_epsilon": 0.5})])
+def test_pair_weight_one_matches_pass4_exactly(pass4_data, tiny_bert, tmp_path, arm, kw):
+    """pair_weight=1.0 (the RunConfig default, Pass 4's behaviour) must give byte-identical
+    predictions to not passing pair_weight at all, so every Pass 4 run and re-run check stays
+    valid after Pass 5's training-loop change."""
+    a = train_run(_cfg(tiny_bert, arm=arm, eval_test=True, **kw), pass4_data, tmp_path / "a")
+    b = train_run(_cfg(tiny_bert, arm=arm, eval_test=True, pair_weight=1.0, **kw), pass4_data, tmp_path / "b")
+    pa, pb = (pd.read_csv(tmp_path / n / "runs" / f"{arm}_p10_s0" / "preds_test.csv") for n in ("a", "b"))
+    assert (pa["p_sarcastic"] - pb["p_sarcastic"]).abs().max() == 0
+    assert a["scores"]["test"] == b["scores"]["test"]
+
+
+@pytest.mark.parametrize("arm,kw", [("A10", {}), ("A11", {"fgm_epsilon": 0.5})])
+def test_pair_weight_changes_training(pass4_data, tiny_bert, tmp_path, arm, kw):
+    """A lower pair_weight must change the model: dropping the pair rows' loss to near 0 should
+    land close to (not necessarily identical to, since the gold batch order is unaffected but the
+    gradient magnitudes differ) the A1/A7 no-pairs training the pair rows are being weighted down
+    towards, and clearly different from the full-weight (1.0) run."""
+    full = train_run(_cfg(tiny_bert, arm=arm, eval_test=True, pair_weight=1.0, **kw), pass4_data, tmp_path / "full")
+    light = train_run(_cfg(tiny_bert, arm=arm, eval_test=True, pair_weight=0.01, **kw), pass4_data, tmp_path / "light")
+    pf, pl = (pd.read_csv(tmp_path / n / "runs" / f"{arm}_p10_s0" / "preds_test.csv") for n in ("full", "light"))
+    assert (pf["p_sarcastic"] - pl["p_sarcastic"]).abs().max() > 1e-6   # different weight -> different model
+
+
+def test_a16_a17_use_the_cleaned_pair_set_and_respect_pair_weight(pass4_data, tiny_bert, tmp_path):
+    rec16 = train_run(_cfg(tiny_bert, arm="A16", eval_test=True, cleaned_drop_pct=20, pair_weight=0.3),
+                      pass4_data, tmp_path / "a")
+    assert rec16["pairs"]["pair_set"] == "cleaned" and rec16["pairs"]["cleaned_drop_pct"] == 20
+    unf_rows = 240   # from the A10 parametrization above: 120 seeds x 2 rows, pass4_data fixture
+    assert round(rec16["pairs"]["n_rows"] / unf_rows, 2) == 0.8   # 20% of seeds dropped
+    rec17 = train_run(_cfg(tiny_bert, arm="A17", eval_test=True, cleaned_drop_pct=20, pair_weight=0.3,
+                           fgm_epsilon=0.5), pass4_data, tmp_path / "b")
+    assert rec17["pairs"]["pair_set"] == "cleaned" and rec17["config"]["pair_weight"] == 0.3

@@ -34,6 +34,9 @@ ARMS = {
     "A13": {"gan": False, "helpers": False, "pairs": "filtered"},                 # judge-filtered pairs
     "A14": {"gan": False, "helpers": False, "pairs": "matched"},                  # control for A13: random subset
     "A15": {"gan": False, "helpers": False, "pairs": "unfiltered", "no_gold": True},  # pairs only, no gold labels
+    # Pass 5: clean the shortcut out of the pairs and/or down-weight their loss (vault: Experiment Plan, "Pass 5 plan")
+    "A16": {"gan": False, "helpers": False, "pairs": "cleaned"},                     # A10 with the worst-scoring seeds dropped
+    "A17": {"gan": False, "helpers": False, "fgm": True, "pairs": "cleaned"},        # A11 with the same cleaning
 }
 IMPLEMENTED_ARMS = set(ARMS)
 
@@ -45,12 +48,14 @@ IMPLEMENTED_ARMS = set(ARMS)
 #   sentonly / emoonly  only that head is trained
 HELPER_VARIANTS = ("", "soft", "flip25", "flip50", "vader", "teacher2", "sentonly", "emoonly")
 TRAIN_DATA = ("headlines", "isarcasm")
-# Pass 4 pair sets (built in data.load_pairs):
+# Pass 4-5 pair sets (built in data.load_pairs):
 #   unfiltered  every pair that passed the automatic checks (pairs_train.csv)
 #   filtered    pairs kept by the judge-v2 filter (pairs_train_filtered.csv)
 #   matched     random subset of the unfiltered pairs with the same pairs per model as `filtered`
 #   unpaired    one side of every unfiltered pair (side drawn at random): same text source, no topic match
-PAIR_SETS = ("unfiltered", "filtered", "matched", "unpaired")
+#   cleaned     Pass 5: unfiltered minus the seeds whose generated text leans most on the AI
+#               writing-tic words found in pair_checks.shortcut_word_table (pair_shortcut_scores.csv)
+PAIR_SETS = ("unfiltered", "filtered", "matched", "unpaired", "cleaned")
 
 
 @dataclass
@@ -78,6 +83,8 @@ class RunConfig:
     step_mult: int = 1          # multiplies the step count from steps() (1 = the usual rule)
     pair_batch: int = 32        # Pass 4: generated rows per step (16 whole pairs); fixed 2026-11-13, not tuned
     explain: bool = False       # Pass 4: Integrated Gradients on a fixed test sample after training (needs eval_test)
+    pair_weight: float = 1.0    # Pass 5: pair rows' share of the sarcasm loss (1.0 = same as Pass 4, full weight)
+    cleaned_drop_pct: float = 0.0  # Pass 5: for pairs="cleaned", the % of worst-scoring seeds dropped (0-100)
 
     def __post_init__(self):
         if self.arm not in ARMS:
@@ -109,6 +116,14 @@ class RunConfig:
             raise ValueError(f"pair_batch must be an even number >= 2 (got {self.pair_batch})")
         if pairs and self.train_data != "headlines":
             raise ValueError(f"{self.arm} uses the Headlines pairs; train_data must be 'headlines'")
+        if not pairs and self.pair_weight != 1.0:
+            raise ValueError(f"pair_weight is only used by pair arms (got {self.pair_weight} for {self.arm})")
+        if self.pair_weight < 0:
+            raise ValueError(f"pair_weight must be >= 0 (got {self.pair_weight})")
+        if pairs != "cleaned" and self.cleaned_drop_pct != 0.0:
+            raise ValueError(f"cleaned_drop_pct is only used by pairs='cleaned' (got pairs={pairs!r})")
+        if pairs == "cleaned" and not (0 < self.cleaned_drop_pct < 100):
+            raise ValueError(f"cleaned_drop_pct must be between 0 and 100, exclusive (got {self.cleaned_drop_pct})")
         if self.explain and not self.eval_test:
             raise ValueError("explain needs eval_test=True (it reads the test set)")
         if self.explain and (ARMS[self.arm]["gan"] or self.arm == "A0"):

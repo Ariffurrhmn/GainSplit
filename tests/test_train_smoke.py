@@ -253,7 +253,7 @@ def test_fgm_step_puts_the_embeddings_back():
     scaler = torch.amp.GradScaler("cpu", enabled=False)
     before = model.emb.weight.detach().clone()
     ids, mask, y = torch.tensor([[1, 2, 3], [4, 5, 6]]), torch.ones(2, 3), torch.tensor([0, 1])
-    stats = fgm_step(model, cfg, opt, sched, scaler, (ids, mask, y, {}), 2, False, torch.device("cpu"))
+    stats = fgm_step(model, cfg, opt, sched, scaler, (ids, mask, y, {}, None), 2, False, torch.device("cpu"))
     assert torch.equal(model.emb.weight.detach(), before)
     assert stats["loss"] == pytest.approx(stats["loss_sarc"] + stats["loss_adv"])
     assert stats["loss_adv"] != stats["loss_sarc"]      # the perturbed pass really ran

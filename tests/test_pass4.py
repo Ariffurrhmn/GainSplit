@@ -35,6 +35,14 @@ def test_old_run_ids_and_arms_unchanged():
     dict(arm="A10", explain=True),                     # explain needs the test set
     dict(arm="A4", explain=True, eval_test=True),      # explain needs a plain head
     dict(arm="A10", train_data="isarcasm", budget=100),
+    dict(arm="A1", pair_weight=0.3),                   # pair_weight on a non-pair arm
+    dict(arm="A10", pair_weight=-0.1),                 # negative weight
+    dict(arm="A1", cleaned_drop_pct=20),                # cleaned_drop_pct on a non-pair arm
+    dict(arm="A10", cleaned_drop_pct=20),               # cleaned_drop_pct without pairs="cleaned"
+    dict(arm="A12", cleaned_drop_pct=20),                # A12 uses pairs="unpaired", not "cleaned"
+    dict(arm="A16"),                                    # A16 is pairs="cleaned": needs cleaned_drop_pct
+    dict(arm="A16", cleaned_drop_pct=0),                # must be > 0
+    dict(arm="A16", cleaned_drop_pct=100),               # ... and < 100
 ])
 def test_bad_pass4_combinations_are_rejected(kw):
     with pytest.raises(ValueError):
@@ -45,6 +53,10 @@ def test_good_pass4_combinations():
     RunConfig("A11", 10, 0, fgm_epsilon=0.5)
     RunConfig("A10", 10, 0, eval_test=True, explain=True)
     RunConfig("A1", 10, 0, eval_test=True, explain=True, tag="explain")
+    RunConfig("A10", 10, 0, pair_weight=0.3)
+    RunConfig("A10", 10, 0, pair_weight=0.0)  # allowed: pairs join every batch but get no loss weight
+    RunConfig("A16", 10, 0, cleaned_drop_pct=20)
+    RunConfig("A17", 10, 0, fgm_epsilon=0.5, cleaned_drop_pct=20, pair_weight=0.5)
 
 
 # ---- plan -------------------------------------------------------------------------------
@@ -69,6 +81,53 @@ def test_pass4_registered_and_older_plans_unchanged():
     for name, n in expected.items():
         runs = plans.PLANS[name]()
         assert len(runs) == n and all(r.pair_batch == 32 and not r.explain for r in runs)
+
+
+def test_pair_weight_tuning():
+    runs = plans.pair_weight_tuning()
+    assert len(runs) == 9 and len({r.run_id for r in runs}) == 9
+    assert all(r.arm == "A10" and r.budget == 10 and not r.eval_test for r in runs)
+    assert sorted({r.pair_weight for r in runs}) == sorted(plans.PAIR_WEIGHT_GRID)
+    assert {r.tag for r in runs} == {f"pw{w:g}" for w in plans.PAIR_WEIGHT_GRID}
+
+
+def test_cleaned_drop_tuning_needs_pair_weight_set(monkeypatch):
+    monkeypatch.setattr(plans, "PASS5_PAIR_WEIGHT", None)
+    with pytest.raises(ValueError, match="PASS5_PAIR_WEIGHT"):
+        plans.cleaned_drop_tuning()
+
+
+def test_cleaned_drop_tuning(monkeypatch):
+    monkeypatch.setattr(plans, "PASS5_PAIR_WEIGHT", 0.3)
+    runs = plans.cleaned_drop_tuning()
+    assert len(runs) == 9 and len({r.run_id for r in runs}) == 9
+    assert all(r.arm == "A16" and r.budget == 10 and r.pair_weight == 0.3 and not r.eval_test for r in runs)
+    assert sorted({r.cleaned_drop_pct for r in runs}) == sorted(plans.CLEANED_DROP_GRID)
+
+
+@pytest.mark.parametrize("missing", ["PASS5_PAIR_WEIGHT", "PASS5_CLEANED_DROP_PCT"])
+def test_pass5_needs_both_tuned_values_set(monkeypatch, missing):
+    monkeypatch.setattr(plans, "PASS5_PAIR_WEIGHT", 0.3)
+    monkeypatch.setattr(plans, "PASS5_CLEANED_DROP_PCT", 20.0)
+    monkeypatch.setattr(plans, missing, None)
+    with pytest.raises(ValueError, match=missing):
+        plans.pass5()
+
+
+def test_pass5_plan(monkeypatch):
+    monkeypatch.setattr(plans, "PASS5_PAIR_WEIGHT", 0.3)
+    monkeypatch.setattr(plans, "PASS5_CLEANED_DROP_PCT", 20.0)
+    runs = plans.pass5()
+    assert len(runs) == 30 and len({r.run_id for r in runs}) == 30
+    assert all(r.eval_test and r.eval_masked and r.pair_batch == 32 for r in runs)
+    count = pd.Series([(r.arm, r.budget, r.tag) for r in runs]).value_counts()
+    assert (count == 5).all() and len(count) == 6
+    assert all(r.pair_weight == 0.3 for r in runs)
+    assert all(r.cleaned_drop_pct == 20.0 for r in runs if r.arm in ("A16", "A17"))
+    assert all(r.cleaned_drop_pct == 0.0 for r in runs if r.arm == "A10")  # unfiltered, weight-only comparison
+    assert all(r.fgm_epsilon == plans.PASS2_FGM_EPSILON for r in runs if r.arm == "A17")
+    assert all(r.tag == "weighted" for r in runs if r.arm == "A10")       # never collides with Pass 4's A10 runs
+    assert {r.budget for r in runs} == {1, 10}
 
 
 # ---- pair data -----------------------------------------------------------------------------
@@ -105,6 +164,50 @@ def test_changed_pair_file_is_caught(pass4_data):
     p.write_text(p.read_text() + "999_s,999,qwen,extra row,1\n")
     with pytest.raises(ValueError, match="manifest_pairs"):
         load_pairs("unfiltered", pass4_data)
+
+
+def test_shortcut_scores_and_cleaned_subset(pass4_data):
+    from gainsplit import pair_checks as pc
+    from gainsplit.data import cleaned_subset, load_shortcut_scores
+    unf, _ = load_pairs("unfiltered", pass4_data)
+    sc = pc.shortcut_scores(unf)
+    assert set(sc.columns) >= {"id", "seed_id", "label", "row_score", "seed_shortcut_score"}
+    assert len(sc) == len(unf) and 0 <= sc.attrs["cv_auc"] <= 1
+    # a seed's score is the max of its two rows, same for both rows of that seed
+    g = sc.groupby("seed_id")["seed_shortcut_score"].nunique()
+    assert (g == 1).all()
+
+    scores = load_shortcut_scores(pass4_data)
+    assert set(scores.index) == set(unf["seed_id"])
+    cleaned = cleaned_subset(unf, scores, drop_pct=20)
+    check_pairs(cleaned)                                 # whole pairs only, nothing split
+    assert cleaned["seed_id"].nunique() == round(unf["seed_id"].nunique() * 0.8)
+    kept_max_score = scores.loc[cleaned["seed_id"].unique()].max()
+    dropped = set(unf["seed_id"]) - set(cleaned["seed_id"])
+    assert scores.loc[list(dropped)].min() >= kept_max_score  # dropped seeds score no lower than kept ones
+    again = cleaned_subset(unf, scores, drop_pct=20)
+    pd.testing.assert_frame_equal(cleaned, again)        # deterministic
+
+    with pytest.raises(ValueError, match="between 0 and 100"):
+        cleaned_subset(unf, scores, drop_pct=0)
+    with pytest.raises(ValueError, match="no shortcut score"):
+        cleaned_subset(unf, scores.drop(scores.index[0]), drop_pct=20)
+
+
+def test_load_pairs_cleaned(pass4_data):
+    rows, info = load_pairs("cleaned", pass4_data, cleaned_drop_pct=25)
+    check_pairs(rows)
+    unf, _ = load_pairs("unfiltered", pass4_data)
+    assert rows["seed_id"].nunique() == round(unf["seed_id"].nunique() * 0.75)
+    assert info["cleaned_drop_pct"] == 25
+    assert set(rows["id"]) <= set(unf["id"])
+
+
+def test_changed_shortcut_scores_file_is_caught(pass4_data):
+    p = pass4_data / "pair_shortcut_scores.csv"
+    p.write_text(p.read_text() + "99999,0.0\n")
+    with pytest.raises(ValueError, match="manifest_shortcut_scores"):
+        load_pairs("cleaned", pass4_data, cleaned_drop_pct=20)
 
 
 def test_filtered_from_another_pairs_file_is_caught(pass4_data):

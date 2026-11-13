@@ -7,6 +7,13 @@ updated: 2026-11-13
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-14 - Pass 5 plan and code written
+- Owner's idea (after the Pass 4 shortcut-pattern findings): clean the generated pairs of the found shortcut words, and/or trust them less during training, to recover Pass 4's in-domain loss without losing the transfer gain. Design and code written and logged in [[Experiment Plan]] "Pass 5 plan".
+- Two new config knobs: `pair_weight` (down-weights the pair rows' share of the sarcasm loss) and a new pair set `"cleaned"` (drops the worst-scoring seeds by `pair_checks.shortcut_scores`, a precomputed per-seed score file, same workflow as `cue_words.json`). New arms A16 (A10 + cleaning), A17 (A11 + cleaning).
+- Tuning plans `pair_weight_tuning` (9 runs, dev) and `cleaned_drop_tuning` (9 runs, dev), then the main `pass5` (30 test-scored runs) once both are frozen, following the `w_tuning`/`fgm_tuning` pattern.
+- Tested thoroughly before any Kaggle time: non-torch suite 156 passed/2 skipped; a scratch CPU torch+transformers install (set up this session) ran the torch-dependent suite too, 219 passed/0 skipped, including a new check that `pair_weight=1.0` gives byte-identical predictions to the old code for A10 and A11 (so every Pass 4 run and re-run check stays valid). Caught and fixed one real regression in the process: a direct unit test of `fgm_step` needed updating for the new 5-element batch tuple.
+- Not run: no Kaggle time spent; owner needs to run `pair_weight_tuning` and `cleaned_drop_tuning` first (dev only, picks the two frozen values), then `pass5`.
+
 ## 2026-11-14 - Shortcut-pattern hunting in the generated pairs written
 - Owner's idea: instead of finding shortcuts in the generated pairs one feature at a time (length, outlet cue words), systematically find every word/phrase pattern and feed the list into cleaning the next generation round. Written: `pair_checks.shortcut_word_table` (TF-IDF + logistic regression over all pairs, top words/phrases each side, cross-checked against real training headlines) and `pair_checks.shortcut_feature_table` (named surface features beyond length). Wired into notebook 09 as new section "A5". Logged in [[Pass 4 Results]] "Shortcut-pattern hunting in the generated pairs".
 - 2 new tests; full suite 139 passed, 2 skipped, locally.

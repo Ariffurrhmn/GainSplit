@@ -105,5 +105,7 @@ def test_pass2b_needs_epsilon_first(monkeypatch):
 
 def test_every_registered_plan_builds_with_unique_run_ids(monkeypatch):
     monkeypatch.setattr(plans, "PASS2_FGM_EPSILON", 1.0)
+    monkeypatch.setattr(plans, "PASS5_PAIR_WEIGHT", 0.3)       # not yet tuned for real; any value builds the plan
+    monkeypatch.setattr(plans, "PASS5_CLEANED_DROP_PCT", 20.0)
     for build in plans.PLANS.values():
         _ids(build())

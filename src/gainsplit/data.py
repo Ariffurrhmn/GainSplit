@@ -250,6 +250,9 @@ PAIRS_MANIFEST = "manifest_pairs.json"
 FILTERED_FILE = "pairs_train_filtered.csv"        # notebook 06 output (judge-v2 filter)
 FILTERED_MANIFEST = "manifest_judge_v2.json"
 CUE_WORDS = "cue_words.json"                      # Pass 3 file: the outlet cue words
+SHORTCUT_SCORES_FILE = "pair_shortcut_scores.csv"       # notebook 09 output (Pass 5 cleaning)
+SHORTCUT_SCORES_MANIFEST = "manifest_shortcut_scores.json"
+DEFAULT_CLEANED_DROP_PCT = 20.0   # preflight's reference display only; real runs set their own cleaned_drop_pct
 PAIR_SUBSET_SEED = 2027   # fixed: every run and seed uses the same `matched` subset and `unpaired` sides
 PAIR_COLUMNS = ["id", "seed_id", "model", "text", "label"]
 
@@ -277,8 +280,12 @@ def find_input_file(name: str, data_dir=None, root=None) -> Path:
     return hits[0]
 
 
-def _read_checked(name: str, manifest_name: str, data_dir):
-    """Read a pair file and check it against the SHA-256 in its manifest. Returns (rows, sha256, manifest)."""
+def _read_checked(name: str, manifest_name: str, data_dir, columns=None):
+    """Read a CSV and check it against the SHA-256 in its manifest. Returns (rows, sha256, manifest).
+
+    `columns` (default PAIR_COLUMNS): the required columns, kept and returned in that order.
+    """
+    columns = PAIR_COLUMNS if columns is None else columns
     path = find_input_file(name, data_dir)
     mpath = path.parent / manifest_name
     if not mpath.exists():
@@ -288,10 +295,10 @@ def _read_checked(name: str, manifest_name: str, data_dir):
     if manifest.get("sha256", {}).get(name) != got:
         raise ValueError(f"{name} does not match {manifest_name} (file changed or wrong version)")
     df = pd.read_csv(path, keep_default_na=False)
-    missing = set(PAIR_COLUMNS) - set(df.columns)
+    missing = set(columns) - set(df.columns)
     if missing:
         raise ValueError(f"{name} lacks columns {sorted(missing)}")
-    return df[PAIR_COLUMNS].copy(), got, manifest
+    return df[columns].copy(), got, manifest
 
 
 def check_pairs(pairs: pd.DataFrame, train_ids=None, heldout_texts=None) -> None:
@@ -334,12 +341,42 @@ def unpaired_sides(unfiltered: pd.DataFrame, seed: int = PAIR_SUBSET_SEED) -> pd
     return unfiltered[keep].reset_index(drop=True)
 
 
-def load_pairs(pair_set: str, data_dir, check_against=None):
-    """Load one Pass 4 pair set; return (rows, info for result.json).
+def load_shortcut_scores(data_dir) -> pd.Series:
+    """Pass 5: per-seed shortcut score from `pair_shortcut_scores.csv` (notebook 09, section A5),
+    checked against `manifest_shortcut_scores.json`. Higher = that seed's generated pair leans
+    more heavily on the AI writing-tic words found in `pair_checks.shortcut_word_table` (the max
+    of its two sides' scores). Returns a Series indexed by seed_id."""
+    df, _, _ = _read_checked(SHORTCUT_SCORES_FILE, SHORTCUT_SCORES_MANIFEST, data_dir,
+                             columns=["seed_id", "shortcut_score"])
+    df["seed_id"] = df["seed_id"].astype(int)
+    df["shortcut_score"] = df["shortcut_score"].astype(float)
+    return df.set_index("seed_id")["shortcut_score"]
+
+
+def cleaned_subset(unfiltered: pd.DataFrame, scores: pd.Series, drop_pct: float) -> pd.DataFrame:
+    """Pass 5: drop the `drop_pct`% of seeds with the highest shortcut score (both sides go
+    together, so pairing is preserved). Ties at the cutoff are broken by seed_id, so the result
+    is exactly reproducible."""
+    if not (0 < drop_pct < 100):
+        raise ValueError(f"drop_pct must be between 0 and 100, exclusive (got {drop_pct})")
+    seeds = np.sort(unfiltered["seed_id"].unique())
+    missing = set(seeds) - set(scores.index)
+    if missing:
+        raise ValueError(f"{len(missing)} seed(s) in the pairs have no shortcut score, e.g. {sorted(missing)[:5]}")
+    s = scores.loc[seeds].sort_values(kind="stable")   # stable sort: ties keep seed_id order
+    n_drop = int(round(len(s) * drop_pct / 100))
+    keep_seeds = set(s.index[:len(s) - n_drop]) if n_drop else set(s.index)
+    return unfiltered[unfiltered["seed_id"].isin(keep_seeds)].reset_index(drop=True)
+
+
+def load_pairs(pair_set: str, data_dir, check_against=None, cleaned_drop_pct: float = DEFAULT_CLEANED_DROP_PCT):
+    """Load one Pass 4-5 pair set; return (rows, info for result.json).
 
     Rows have columns id, seed_id, model, text, label, sorted by seed_id then label, so the two
     sides of a pair sit next to each other (the batch stream keeps them together).
     `check_against`: the processed data folder; if given, the leak checks run against its splits.
+    `cleaned_drop_pct`: only used by pair_set="cleaned" (see `cleaned_subset`); the default is for
+    `preflight`'s display only, real training runs pass their own `RunConfig.cleaned_drop_pct`.
     """
     unf, unf_sha, _ = _read_checked(PAIRS_FILE, PAIRS_MANIFEST, data_dir)
     check_pairs(unf)
@@ -361,6 +398,10 @@ def load_pairs(pair_set: str, data_dir, check_against=None):
         rows = matched_subset(unf, fil)
     elif pair_set == "unpaired":
         rows = unpaired_sides(unf)
+    elif pair_set == "cleaned":
+        scores = load_shortcut_scores(data_dir)
+        rows = cleaned_subset(unf, scores, cleaned_drop_pct)
+        info["cleaned_drop_pct"] = cleaned_drop_pct
     else:
         raise ValueError(f"unknown pair set {pair_set!r}")
     if check_against is not None:

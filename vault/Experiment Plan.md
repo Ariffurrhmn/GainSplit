@@ -1,7 +1,7 @@
 ---
 tags: [experiments, plan]
-updated: 2026-11-13
-status: Passes 1-4 done (Pass 4 results in [[Pass 4 Results]])
+updated: 2026-11-14
+status: Passes 1-4 done (Pass 4 results in [[Pass 4 Results]]); Pass 5 plan written, not run
 ---
 
 # Experiment Plan
@@ -176,6 +176,31 @@ Data: `pairs_train.csv` from [[Pairgen Full Run Results]] (unfiltered main set, 
 - Prediction written down before running (IDEA): the pair-trained model puts a smaller share on cue words than A1, in line with a smaller cue-mask gap ([[Pass 3 Results]]).
 - Paper: the cue-share number in the results table, plus 2-3 highlighted example headlines (same headlines for both models).
 - Not used: attention weights as explanations; LIME/SHAP (slower, noisier on short text). Background: [[Research Ideas]] "Explainability".
+
+## Pass 5 plan (written 2026-11-14, not run; owner's idea, DELEGATED design per [[Repo Rules]] rule 7)
+Pass 4's main problem ([[Pass 4 Results]]): mixing the generated pairs in at full weight, unfiltered, costs 15-16 points of in-domain macro-F1 at 1% and 10% (A10/A11 vs A1/A7), because the pairs carry a different, AI-specific notion of "sarcastic" ([[Pass 4 Results]] "Shortcut-pattern hunting in the generated pairs": the AI leans on stock registers like "finally", "groundbreaking", "shockingly" vs. "discusses", "explores", "reportedly", near-absent from real headlines). Pass 5 asks whether removing that signal from the data, or simply trusting the pairs less during training, recovers the in-domain loss without losing the (partly length-explained, [[Pass 4 Results]] "iSarcasmEval length-shortcut check") transfer gain.
+
+**Two independent knobs, both added to the config (not new arms by themselves):**
+1. `pair_weight` (0-1, default 1.0 = Pass 4's unweighted behaviour): multiplies the pair rows' share of the sarcasm loss. The real L rows always keep weight 1.
+2. `cleaned_drop_pct` (new pair set `"cleaned"`, arms A16 = A10 + cleaning, A17 = A11 + cleaning): drops the worst `cleaned_drop_pct`% of seeds by a per-seed shortcut score (`pair_checks.shortcut_scores`, the same model as `shortcut_word_table`; the max of a seed's two rows, so a pair is always dropped or kept whole). The score file (`pair_shortcut_scores.csv` + manifest) is a **new precomputed data artifact**, built once in notebook 09 section A5.3, added to `gainsplit-processed` the same way `cue_words.json` was (no model refit on GPU time).
+
+**Tuning (dev only, before the main plan, same pattern as `w_tuning`/`fgm_tuning`):**
+- `pair_weight_tuning`: A10 at 10%, `pair_weight` in {0.1, 0.3, 1.0}, 3 seeds (9 runs). Winner sets `PASS5_PAIR_WEIGHT`.
+- `cleaned_drop_tuning`: A16 at 10% and the frozen `pair_weight`, `cleaned_drop_pct` in {10, 20, 30}, 3 seeds (9 runs). Winner sets `PASS5_CLEANED_DROP_PCT`.
+
+**Main plan `pass5` (30 test-scored runs, 5 seeds, budgets 1% and 10%; needs both constants set first):**
+| Arm | What it is | Isolates |
+|---|---|---|
+| A16 | A10 (pairs + plain BERT) with the cleaned set and the frozen weight | both fixes together |
+| A17 | A11 (pairs + FGM) with the cleaned set and the frozen weight | both fixes, stacked with FGM |
+| A10 (tag `weighted`) | A10, unfiltered pairs, frozen weight only, no cleaning | the weight knob alone, isolated from cleaning |
+A16/A17 vs A10(weighted) then separates "does cleaning add anything on top of the weight" from "does the weight alone already fix it". Baselines A1, A7 reused from Passes 1-2 (training deterministic, checked in every pass since Pass 3).
+
+**Predictions (IDEA, written before running):** (H5.1) some pair_weight < 1 recovers most of the in-domain loss (A10-weighted much closer to A1 than Pass 4's A10). (H5.2) cleaning adds a further, smaller recovery on top of the weight (A16 > A10-weighted). (H5.3) the iSarcasmEval transfer gain shrinks as pair_weight drops, trading in-domain accuracy against transfer, i.e. no free lunch; Pass 5 picks a point on that trade-off rather than eliminating it. Any outcome is reportable, same rule as Pass 1 ([[Decisions]]).
+
+**Code (written 2026-11-14, not run on Kaggle; local non-torch tests 156 passed/2 skipped, torch smoke tests in a scratch CPU install 219 passed, 0 skipped incl. a byte-identical check that `pair_weight=1.0` reproduces every existing Pass 4 run exactly):** `config.py` (`pair_weight`, `cleaned_drop_pct` fields; pair set `"cleaned"`; arms A16, A17), `data.py` (`load_shortcut_scores`, `cleaned_subset`), `train.py` (per-row loss weight threaded through `fit`/`plain_step`/`fgm_step`, `None` whenever `pair_weight == 1.0` so Pass 1-4 code paths are byte-identical), `pair_checks.py` (`_fit_shortcut_model` shared fit, `shortcut_scores`), `plans.py` (`pair_weight_tuning`, `cleaned_drop_tuning`, `pass5`). Notebook 09 section A5.3 exports `pair_shortcut_scores.csv`.
+
+**Not yet started:** no training notebook written for `pass5` itself (reuses `08_pass4.ipynb`'s structure once the tuning constants are frozen); owner has not run `pair_weight_tuning` or `cleaned_drop_tuning` on Kaggle.
 
 ## Status
 Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].

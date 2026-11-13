@@ -146,27 +146,58 @@ def isarc_length_shortcut(isarc_test: pd.DataFrame, pairs: pd.DataFrame | None =
 
 # ---------------------------------------------------------------- shortcut-pattern hunting
 
-def shortcut_word_table(pairs: pd.DataFrame, train: pd.DataFrame | None = None, top_k: int = 30,
-                        seed: int = SEED, folds: int = 5) -> pd.DataFrame:
-    """Which words/phrases drive the AI's own sarcastic/serious label inside the pairs?
-
-    Generalises `length_table` and `cue_predictiveness`, which each check one named feature
-    (length, outlet cue words) picked by hand. Here a single interpretable model (TF-IDF
-    unigrams+bigrams, min_df=3, logistic regression, same recipe as `_cv_auc`) is fit on all
-    the generated pairs at once, and its largest coefficients name the words/phrases "AI-
-    sarcastic-speak" and "AI-serious-speak" actually consist of, without guessing them one at
-    a time. Cross-validated so the ranking is not just overfit noise; the returned model is
-    refit on all of the data for the final coefficients (same as a single extra fold).
-
-    `top_k` words each side. If `train` is given, each word's presence rate in real
-    sarcastic vs. serious training headlines is added, so a word that is only an AI tic (near
-    0 in both real columns) can be told apart from one that is a real, shared sarcasm marker.
-    """
+def _fit_shortcut_model(pairs: pd.DataFrame, seed: int = SEED, folds: int = 5):
+    """Fit the one interpretable shortcut model (TF-IDF unigrams+bigrams, min_df=3, logistic
+    regression, same recipe as `_cv_auc`) on all the generated pairs, predicting the AI's own
+    sarcastic/serious label. Shared by `shortcut_word_table` (reads the vocabulary) and
+    `shortcut_scores` (reads row-level scores); fit once, used both ways, so the two always
+    agree. Returns (vectorizer, classifier, cv_auc)."""
     vec = TfidfVectorizer(ngram_range=(1, 2), min_df=3, sublinear_tf=True, token_pattern=r"\S+")
     X = vec.fit_transform(pairs["text"])
     y = pairs["label"].to_numpy()
     cv_auc = _cv_auc(pairs["text"], y, _words, seed, folds)
     clf = LogisticRegression(max_iter=2000, C=1.0, random_state=seed).fit(X, y)
+    return vec, clf, cv_auc
+
+
+def shortcut_scores(pairs: pd.DataFrame, seed: int = SEED, folds: int = 5) -> pd.DataFrame:
+    """Per-row and per-seed shortcut-exploitation score (Pass 5 cleaning input).
+
+    Score = the fitted model's decision function, signed so that higher always means "this row
+    leans more heavily, in its own intended direction, on the words `shortcut_word_table` finds"
+    (i.e. `score if label == 1 else -score`; a row that reads as the *opposite* of its intended
+    label scores low, same as a row with no shortcut words at all). `seed_shortcut_score` is the
+    max of a pair's two rows: Pass 5's `cleaned` pair set drops the worst-scoring seeds (both
+    sides go together, so pairing is preserved) using this column, written to
+    `pair_shortcut_scores.csv` by notebook 09.
+    """
+    vec, clf, cv_auc = _fit_shortcut_model(pairs, seed, folds)
+    raw = clf.decision_function(vec.transform(pairs["text"]))
+    y = pairs["label"].to_numpy()
+    out = pairs[["id", "seed_id", "label"]].copy()
+    out["row_score"] = np.where(y == 1, raw, -raw)
+    out["seed_shortcut_score"] = out.groupby("seed_id")["row_score"].transform("max")
+    out.attrs["cv_auc"] = cv_auc
+    return out
+
+
+def shortcut_word_table(pairs: pd.DataFrame, train: pd.DataFrame | None = None, top_k: int = 30,
+                        seed: int = SEED, folds: int = 5) -> pd.DataFrame:
+    """Which words/phrases drive the AI's own sarcastic/serious label inside the pairs?
+
+    Generalises `length_table` and `cue_predictiveness`, which each check one named feature
+    (length, outlet cue words) picked by hand. Here a single interpretable model (see
+    `_fit_shortcut_model`) is fit on all the generated pairs at once, and its largest
+    coefficients name the words/phrases "AI-sarcastic-speak" and "AI-serious-speak" actually
+    consist of, without guessing them one at a time. Cross-validated so the ranking is not just
+    overfit noise; the returned model is refit on all of the data for the final coefficients
+    (same as a single extra fold).
+
+    `top_k` words each side. If `train` is given, each word's presence rate in real
+    sarcastic vs. serious training headlines is added, so a word that is only an AI tic (near
+    0 in both real columns) can be told apart from one that is a real, shared sarcasm marker.
+    """
+    vec, clf, cv_auc = _fit_shortcut_model(pairs, seed, folds)
     coef = clf.coef_[0]
     vocab = np.array(vec.get_feature_names_out())
     order = np.argsort(coef)

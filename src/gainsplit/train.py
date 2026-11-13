@@ -149,11 +149,20 @@ def helper_losses(model, h, extra: dict, variant: str = "") -> dict:
 
 
 def plain_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device) -> dict:
-    """A1 / A3: BERT + linear heads. A3 adds the helper losses over the L and U rows together."""
-    ids, mask, y, extra = batch
+    """A1 / A3: BERT + linear heads. A3 adds the helper losses over the L and U rows together.
+
+    `batch`'s 5th element `w` is a per-row sarcasm-loss weight (Pass 5 `pair_weight`; None for
+    every other arm, unchanged behaviour): weighted mean instead of `F.cross_entropy`'s plain
+    mean, so Pass 1-4 runs (where `w` is always None) are untouched."""
+    ids, mask, y, extra, w = batch
     with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=use_fp16):
         h = model.dropout(model.encode(ids, mask))
-        loss_sarc = F.cross_entropy(model.head(h[:n_l]), y)       # sarcasm: only the L rows have a label
+        logits = model.head(h[:n_l])
+        if w is None:
+            loss_sarc = F.cross_entropy(logits, y)                # sarcasm: only the L rows have a label
+        else:
+            per_row = F.cross_entropy(logits, y, reduction="none")
+            loss_sarc = (per_row * w).sum() / w.sum()
         loss = loss_sarc
         stats = {"loss_sarc": loss_sarc.item()}
         if model.helpers:
@@ -173,18 +182,24 @@ def plain_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device) -> 
 
 def fgm_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device) -> dict:
     """A7: plain BERT on L + one FGM (fast gradient method) step on the word embeddings.
+    A11 (FGM + pairs): the same, with the pair rows' loss optionally down-weighted (`w`, Pass 5
+    `pair_weight`; None for A7 and every pre-Pass-5 arm, unchanged behaviour).
 
     1. Clean loss, backward: the word-embedding matrix now has a gradient g.
     2. Push the embeddings by r = epsilon * g / ||g||  (L2-normalised gradient).
     3. Adversarial loss on the pushed embeddings, backward: its gradients add to the clean ones.
     4. Put the embeddings back, then take one optimizer step on (clean + adversarial) loss.
     """
-    ids, mask, y, _ = batch
+    ids, mask, y, _, w = batch
     emb = model.encoder.embeddings.word_embeddings.weight
 
     def sarcasm_loss():
         with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=use_fp16):
-            return F.cross_entropy(model.head(model.dropout(model.encode(ids, mask))), y[:n_l])
+            logits = model.head(model.dropout(model.encode(ids, mask)))
+            if w is None:
+                return F.cross_entropy(logits, y[:n_l])
+            per_row = F.cross_entropy(logits, y[:n_l], reduction="none")
+            return (per_row * w).sum() / w.sum()
 
     loss_clean = sarcasm_loss()
     scaler.scale(loss_clean).backward()
@@ -214,7 +229,7 @@ def gan_step(model, cfg, opts, scheds, scaler, batch, n_l, use_fp16, device) -> 
     D is the discriminator: k real-class scores plus one "fake" score; p_fake is the
     probability it gives to "fake". The real vectors are the [CLS] vectors of the L+U batch."""
     opt_d, opt_g = opts
-    ids, mask, y, extra = batch
+    ids, mask, y, extra, _w = batch   # _w: always None here (GAN arms never use pairs/pair_weight)
     k = model.n_classes
     d_params = [p for n, p in model.named_parameters() if not n.startswith("generator.")]
     g_params = list(model.generator.parameters())
@@ -273,7 +288,7 @@ def gan_step(model, cfg, opts, scheds, scaler, batch, n_l, use_fp16, device) -> 
 
 
 def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, helpers=False, fgm=False,
-        pool_groups=None, pool_batch=None):
+        pool_groups=None, pool_batch=None, pool_is_pairs=False):
     """Train a fresh model for `steps` steps; return (model, training curve).
 
     `labeled` is L (with sent/emo columns if `helpers`), or None for A15 (no gold rows: every
@@ -282,6 +297,10 @@ def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, he
     pairs for A10-A15 (A6 and pair rows carry a `label` column, U does not).
     `pool_groups` (Pass 4): group key per pool row; groups are never split across batches.
     `pool_batch`: rows per pool batch (default: cfg.batch_size).
+    `pool_is_pairs` (Pass 5): True only for the pair arms (A10-A15); applies `cfg.pair_weight`
+    to the pool rows' share of the sarcasm loss (1.0 = unweighted, identical to Pass 4). Never
+    True for A6 (pseudo-labels keep weight 1, as in Pass 1-4) or the helper/GAN arms' U rows
+    (which carry no sarcasm label at all, so no weight applies to them).
     """
     set_seed(cfg.seed)
     model = SarcasmClassifier(cfg.model_name, gan=gan, helpers=helpers).to(device)
@@ -317,21 +336,27 @@ def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, he
     if stream_l is None and stream_u is None:
         raise ValueError("nothing to train on: no labeled rows and no pool")
 
+    pair_weight = cfg.pair_weight if pool_is_pairs else 1.0
     model.train()
     window, train_log = {}, []
     for step in range(1, steps + 1):
         if stream_l is None:  # A15: generated pairs only
             ids, mask, y, extra = next(stream_u)
+            w = torch.full_like(y, pair_weight, dtype=torch.float32) if pair_weight != 1.0 else None
         else:
             ids, mask, y, extra = next(stream_l)
+            w = torch.ones_like(y, dtype=torch.float32) if pair_weight != 1.0 else None
         if stream_u is not None and stream_l is not None:  # append one pool batch after the L batch
             ids_u, mask_u, y_u, extra_u = next(stream_u)
             ids, mask = torch.cat([ids, ids_u]), torch.cat([mask, mask_u])
             extra = {k: torch.cat([v, extra_u[k]]) for k, v in extra.items()}
             if y_u is not None:  # pseudo-labels / pair labels are used like labels: one loss over all labeled rows
                 y = torch.cat([y, y_u])
+                if w is not None:  # pool rows get pair_weight (only set when pool_is_pairs and weight != 1)
+                    w = torch.cat([w, torch.full_like(y_u, pair_weight, dtype=torch.float32)])
         n_l = y.shape[0]  # rows that have a sarcasm label (L rows, plus the pseudo-labeled rows for A6)
-        batch = (ids.to(device), mask.to(device), y.to(device), {k: v.to(device) for k, v in extra.items()})
+        batch = (ids.to(device), mask.to(device), y.to(device), {k: v.to(device) for k, v in extra.items()},
+                None if w is None else w.to(device))
         if gan:
             stats = gan_step(model, cfg, (opt_d, opt_g), (sched_d, sched_g), scaler, batch, n_l, use_fp16, device)
         elif fgm:
@@ -421,11 +446,11 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
     pool, pseudo_info = (unlabeled if use_u else None), None
     pool_groups, pool_batch, pair_info = None, None, None
     if sw.get("pairs"):
-        # Pass 4: generated pairs join every step; the sides of a pair always share a batch.
-        pool, pair_info = load_pairs(sw["pairs"], data_dir)
+        # Pass 4-5: generated pairs join every step; the sides of a pair always share a batch.
+        pool, pair_info = load_pairs(sw["pairs"], data_dir, cleaned_drop_pct=cfg.cleaned_drop_pct)
         pool_groups, pool_batch = pool["seed_id"].to_numpy(), cfg.pair_batch
         print(f"  pairs ({sw['pairs']}): {pair_info['n_rows']} rows from {pair_info['n_seeds']} seeds, "
-              f"{pool_batch} rows per step")
+              f"{pool_batch} rows per step, pair_weight={cfg.pair_weight}")
     fit_labeled = None if sw.get("no_gold") else labeled   # A15: the budget only sets the step count
     if sw.get("pseudo"):
         # A6: the teacher is an A1 model (same seed, same steps). It labels U; the student trains on L + pseudo-labels.
@@ -446,7 +471,7 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
         print("  A6 student (fresh BERT):")
     model, train_log = fit(cfg, tokenizer, fit_labeled, pool, steps, device, use_fp16,
                            gan=gan, helpers=helpers, fgm=bool(sw.get("fgm")),
-                           pool_groups=pool_groups, pool_batch=pool_batch)
+                           pool_groups=pool_groups, pool_batch=pool_batch, pool_is_pairs=bool(sw.get("pairs")))
 
     out_dir.mkdir(parents=True, exist_ok=True)
     results = {}

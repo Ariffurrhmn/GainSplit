@@ -183,7 +183,71 @@ def pass4_full100() -> list[RunConfig]:
     return _p4("A10", 100)
 
 
+# ---------------------------------------------------------------------------- Pass 5
+
+PAIR_WEIGHT_GRID = (0.1, 0.3, 1.0)        # 1.0 = Pass 4's behaviour (no down-weighting)
+PASS5_PAIR_WEIGHT = None                  # set from pair_weight_tuning (A10, 10%, dev) before building pass5
+CLEANED_DROP_GRID = (10.0, 20.0, 30.0)
+PASS5_CLEANED_DROP_PCT = None             # set from cleaned_drop_tuning (A10, 10%, dev) before building pass5
+
+
+def pair_weight_tuning() -> list[RunConfig]:
+    """Pass 5 step 1: A10 at 10% labels, unfiltered pairs, three pair_weight values x three
+    seeds, dev only (9 runs). Pick the weight with the best mean dev macro-F1 (tie within
+    ~1 std: the smaller weight, same rule as every other _tuning plan)."""
+    return [RunConfig("A10", 10, seed, pair_weight=w, eval_test=False, tag=f"pw{w:g}")
+            for w in PAIR_WEIGHT_GRID for seed in TUNING_SEEDS]
+
+
+def cleaned_drop_tuning() -> list[RunConfig]:
+    """Pass 5 step 2: A16 (A10 with pairs="cleaned") at 10% labels and the frozen pair_weight
+    from pair_weight_tuning, three drop percentages x three seeds, dev only (9 runs). Pick the
+    drop_pct with the best mean dev macro-F1 (tie: the smaller drop_pct, i.e. keep more data)."""
+    if PASS5_PAIR_WEIGHT is None:
+        raise ValueError("set PASS5_PAIR_WEIGHT in plans.py (the winning weight from pair_weight_tuning) "
+                         "before building cleaned_drop_tuning")
+    return [RunConfig("A16", 10, seed, pair_weight=PASS5_PAIR_WEIGHT, cleaned_drop_pct=pct,
+                      eval_test=False, tag=f"drop{pct:g}")
+            for pct in CLEANED_DROP_GRID for seed in TUNING_SEEDS]
+
+
+PASS5_SEEDS = PASS1_SEEDS
+
+
+def pass5() -> list[RunConfig]:
+    """Clean the generated pairs and/or down-weight their loss (vault: Experiment Plan,
+    "Pass 5 plan"): does either fix Pass 4's in-domain collapse (A10/A11 vs A1/A7, [[Pass 4
+    Results]])? 30 test-scored runs (3 arms x 2 budgets x 5 seeds), all on GPU, one commit;
+    baselines A1, A7 reused from Passes 1-2 (training is deterministic).
+
+    Arms (5 seeds each, 10% and 1% budgets):
+    - A16: A10 with the cleaned pair set and the frozen pair_weight (does cleaning alone fix it?)
+    - A17: A11 (FGM) with the same cleaning and weight (does it stack with FGM?)
+    - A10 at the frozen pair_weight, uncleaned pairs (does the weight alone fix it, with no
+      cleaning, isolating the two knobs' separate contributions)
+    Masked test sets scored throughout (`eval_masked`), so the cue-mask gap and iSarcasmEval
+    transfer/length-shortcut checks from Pass 4's analysis apply unchanged.
+    """
+    if PASS5_PAIR_WEIGHT is None:
+        raise ValueError("set PASS5_PAIR_WEIGHT in plans.py (the winning weight from pair_weight_tuning) "
+                         "before building pass5")
+    if PASS5_CLEANED_DROP_PCT is None:
+        raise ValueError("set PASS5_CLEANED_DROP_PCT in plans.py (the winning drop_pct from "
+                         "cleaned_drop_tuning) before building pass5")
+    runs = []
+    for b in (10, 1):
+        runs += [RunConfig("A16", b, s, pair_weight=PASS5_PAIR_WEIGHT, cleaned_drop_pct=PASS5_CLEANED_DROP_PCT,
+                           eval_test=True, eval_masked=True) for s in PASS5_SEEDS]
+        runs += [RunConfig("A17", b, s, fgm_epsilon=PASS2_FGM_EPSILON, pair_weight=PASS5_PAIR_WEIGHT,
+                           cleaned_drop_pct=PASS5_CLEANED_DROP_PCT, eval_test=True, eval_masked=True)
+                for s in PASS5_SEEDS]
+        runs += [RunConfig("A10", b, s, pair_weight=PASS5_PAIR_WEIGHT, eval_test=True, eval_masked=True,
+                           tag="weighted") for s in PASS5_SEEDS]
+    return runs
+
+
 PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "session2": session2, "pass1": pass1, "fgm_tuning": fgm_tuning,
          "pass2a": pass2a, "pass2b": pass2b, "pass3": pass3,
-         "gan_check": gan_check, "pass4": pass4, "pass4_full100": pass4_full100}
+         "gan_check": gan_check, "pass4": pass4, "pass4_full100": pass4_full100,
+         "pair_weight_tuning": pair_weight_tuning, "cleaned_drop_tuning": cleaned_drop_tuning, "pass5": pass5}
