@@ -188,7 +188,7 @@ def pass4_full100() -> list[RunConfig]:
 PAIR_WEIGHT_GRID = (0.1, 0.3, 1.0)        # 1.0 = Pass 4's behaviour (no down-weighting)
 PASS5_PAIR_WEIGHT = 0.1                   # from pair_weight_tuning (A10, 10%, dev, 2026-11-14): 0.1 best mean (77.02) and best on every seed; edge of the grid
 CLEANED_DROP_GRID = (10.0, 20.0, 30.0)
-PASS5_CLEANED_DROP_PCT = None             # set from cleaned_drop_tuning (A10, 10%, dev) before building pass5
+PASS5_CLEANED_DROP_PCT = 20.0             # from cleaned_drop_tuning (A16, 10%, weight 0.1, dev, 2026-11-14): 20 best mean (77.45; 10 -> 76.90, 30 -> 76.57)
 
 
 def pair_weight_tuning() -> list[RunConfig]:

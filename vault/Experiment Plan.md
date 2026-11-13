@@ -214,7 +214,19 @@ A16/A17 vs A10(weighted) then separates "does cleaning add anything on top of th
 - Reading (INFERRED): dev F1 rises steadily as the weight falls, and 0.1 is the edge of the grid. 0.1 recovers about a third of the in-domain loss (4.9 of 14.6 points) and is still 9.7 points below A1, so H5.1 ("most of the loss recovered") looks unlikely at this weight. Because the tuning score is in-domain dev F1 only, any lower weight would probably score higher still, ending at weight 0 = A1. This rule therefore cannot find the trade-off point H5.3 is about. The transfer side (iSarcasmEval AUC) is only measured in the test-scored `pass5` runs.
 - Frozen 2026-11-14: `PASS5_PAIR_WEIGHT = 0.1` (pre-set rule kept; the trade-off is reported from the test-scored `pass5` runs). Notebook 10 now defaults to `cleaned_drop_tuning`.
 
-**Not yet started:** no training notebook written for the main `pass5` plan itself (will reuse `08_pass4.ipynb`'s structure once both tuning constants are frozen); owner has not run `pair_weight_tuning` or `cleaned_drop_tuning` on Kaggle.
+**`cleaned_drop_tuning` result (run 2026-11-14 by the owner, notebook 10 stage 2, commit 1c4ce93, 9/9 runs, 13.2 min, 219 tests passed on Kaggle; dev only, VERIFIED from `results/cleaned_drop_tuning/summary.csv`):**
+| cleaned_drop_pct (weight 0.1) | dev macro-F1 seed 0 / 1 / 2 | mean (sd) |
+|---|---|---|
+| 10 | 77.11 / 76.49 / 77.11 | 76.90 (0.36) |
+| **20** | 77.42 / 77.54 / 77.41 | **77.45** (0.07) |
+| 30 | 76.12 / 76.69 / 76.89 | 76.57 (0.40) |
+| 0 (no cleaning, from stage 1) | 76.63 / 76.08 / 78.36 | 77.02 (1.19) |
+- By the pre-set rule, 20 wins (best mean; 10 is 0.55 below, more than 1 sd, so no tie). Frozen as `PASS5_CLEANED_DROP_PCT = 20.0`. The 20% cleaned set has 17,934 seeds (35,868 rows).
+- Reading (INFERRED): cleaning adds very little on top of the weight. 20% is +0.43 over no cleaning on average, better on 2 of 3 seeds (+0.79, +1.46, -0.95), and all three drop levels sit within about 1 point of each other. The effect is noise-sized on dev; `pass5` (5 seeds, test, A16 vs A10-weighted) will say whether it is real. H5.2 looks weak.
+
+**Main-run notebook (`experiments/11_pass5.ipynb`, written 2026-11-14):** copy of `08_pass4.ipynb`'s structure with `PLAN = "pass5"` (30 runs), prints the two frozen settings in the pre-flight, and the first-look cell shows the Pass 5 arms next to A1/A7 (Passes 1-2) and unweighted A10/A11 (Pass 4) read from the repo clone. The baseline part was dry-run locally against the committed summaries (A1 10% 88.21, A10 10% 73.38, matching [[Pass 4 Results]]). No analysis notebook for Pass 5 contrasts yet.
+
+**Not yet started (2026-11-14):** the main `pass5` run (notebook 11) and a CPU analysis of its contrasts (A16 vs A10-weighted, A10-weighted vs A10 and A1, A17 vs A11 and A7, iSarcasmEval AUC vs the length-only baseline).
 
 ## Status
 Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].

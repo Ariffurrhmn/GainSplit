@@ -7,6 +7,12 @@ updated: 2026-11-13
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-14 - cleaned_drop_tuning read, pass5 ready
+- Owner ran notebook 10 stage 2 (commit 1c4ce93, 9/9 runs, 13.2 min, 219 tests passed). On the owner's standing request, the zip and log were moved from Downloads into `results/cleaned_drop_tuning/` (log as `notebook_10_stage2.log`) and unpacked: 28 files, all match the zip. `download (3).txt` was an exact copy of the log and stays in Downloads.
+- Dev macro-F1 means: drop 10% 76.90, 20% 77.45, 30% 76.57 (no cleaning 77.02). 20% wins by the pre-set rule; frozen as `PASS5_CLEANED_DROP_PCT = 20.0`. Cleaning adds only about +0.4 on dev, within noise (INFERRED). Details in [[Experiment Plan]] "Pass 5 plan".
+- Written `experiments/11_pass5.ipynb` (main `pass5`, 30 test-scored runs, about 25-30 min on T4 x2, Save & Commit). Plan builds 30 runs as designed; local suite 156 passed, 2 skipped; the notebook's baseline cell dry-run locally against the committed summaries.
+- Not committed or pushed. Next (owner): commit, push, run notebook 11 as a commit, send `results_pass5.zip` and the log. Then a Pass 5 analysis (CPU) is still to write.
+
 ## 2026-11-14 - pair_weight_tuning results read
 - Owner ran notebook 10 stage 1 on Kaggle (commit b7018f6, 9/9 runs, 13.2 min, 219 tests passed) and sent `results_pair_weight_tuning.zip` and the log. Read in [[Experiment Plan]] "Pass 5 plan".
 - Dev macro-F1 means: weight 0.1 77.02, 0.3 74.23, 1.0 72.11 (A1 on the same seeds 86.73). 0.1 is best on every seed. The weight-1.0 runs match Pass 4's A10 dev scores exactly.
