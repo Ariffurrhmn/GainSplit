@@ -188,6 +188,34 @@ def test_pair_checks_run_on_fixture(pass4_data):
     assert lengths["auc_length_only"].between(0, 1).all()
 
 
+def test_shortcut_word_table_runs_on_fixture(pass4_data):
+    from gainsplit import pair_checks as pc
+    train = pd.read_csv(pass4_data / "headlines_train.csv", keep_default_na=False)
+    pairs, _ = load_pairs("unfiltered", pass4_data)
+    t = pc.shortcut_word_table(pairs, train, top_k=5)
+    assert len(t) <= 10 and set(t["leans"]) <= {"sarcastic", "serious"}
+    assert 0 <= t.attrs["cv_auc"] <= 1
+    assert t["real_rate_sarcastic"].between(0, 1).all() and t["real_rate_serious"].between(0, 1).all()
+    assert (t["real_n_sarcastic"] > 0).all() and (t["real_n_serious"] > 0).all()
+    # without train, no real_rate columns, same word/coef columns otherwise
+    t2 = pc.shortcut_word_table(pairs, top_k=5)
+    assert "real_rate_sarcastic" not in t2.columns and len(t2) == len(t)
+
+
+def test_shortcut_feature_table_runs_on_fixture(pass4_data):
+    from gainsplit import pair_checks as pc
+    train = pd.read_csv(pass4_data / "headlines_train.csv", keep_default_na=False)
+    pairs, _ = load_pairs("unfiltered", pass4_data)
+    t = pc.shortcut_feature_table(pairs, train)
+    assert set(t["feature"]) == {"n_words", "n_chars", "n_exclaim", "n_question", "n_allcaps_words",
+                                 "has_thus", "has_therefore", "has_clearly", "has_obviously",
+                                 "has_literally", "has_honestly", "has_indeed", "has_surely"}
+    assert t["generated_auc"].dropna().between(0, 1).all() and t["real_auc"].dropna().between(0, 1).all()
+    # without train, only the generated_* columns
+    t2 = pc.shortcut_feature_table(pairs)
+    assert not any(c.startswith("real_") for c in t2.columns)
+
+
 def test_isarc_length_shortcut_runs_on_fixture(pass4_data):
     from gainsplit import pair_checks as pc
     train = pd.read_csv(pass4_data / "headlines_train.csv", keep_default_na=False)

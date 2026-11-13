@@ -48,5 +48,6 @@ Pairs as plain extra labeled rows cost 15-16 F1 points in-domain but lift iSarca
 - Pair-ranking loss: ask only that the sarcastic side scores higher than its serious side, instead of giving both sides absolute labels.
 - Two stages: train on pairs (A15-style), then fine-tune on L only.
 - Length-matched pairs: drop or rebalance pairs whose sides differ a lot in length (length-only AUC 0.785 inside the pairs).
+- More generally: an explicit "avoid these words" list for the generation prompt, or a filter on pairs that rely heavily on them, built from the full shortcut-pattern search in [[Pass 4 Results]] "Shortcut-pattern hunting in the generated pairs" (2026-11-14) — not just length, every word/phrase the AI leans on (cv_auc 0.951, well above length or cue words alone).
 - Reframe: zero-label cross-domain sarcasm from LLM pairs (A15 AUC 76.2 vs in-domain 65.75), only if the iSarcasmEval length check comes out clean.
 

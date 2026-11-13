@@ -142,3 +142,93 @@ def isarc_length_shortcut(isarc_test: pd.DataFrame, pairs: pd.DataFrame | None =
     if pairs is not None:
         rows.append(row("generated pairs (reference)", pairs))
     return pd.DataFrame(rows)
+
+
+# ---------------------------------------------------------------- shortcut-pattern hunting
+
+def shortcut_word_table(pairs: pd.DataFrame, train: pd.DataFrame | None = None, top_k: int = 30,
+                        seed: int = SEED, folds: int = 5) -> pd.DataFrame:
+    """Which words/phrases drive the AI's own sarcastic/serious label inside the pairs?
+
+    Generalises `length_table` and `cue_predictiveness`, which each check one named feature
+    (length, outlet cue words) picked by hand. Here a single interpretable model (TF-IDF
+    unigrams+bigrams, min_df=3, logistic regression, same recipe as `_cv_auc`) is fit on all
+    the generated pairs at once, and its largest coefficients name the words/phrases "AI-
+    sarcastic-speak" and "AI-serious-speak" actually consist of, without guessing them one at
+    a time. Cross-validated so the ranking is not just overfit noise; the returned model is
+    refit on all of the data for the final coefficients (same as a single extra fold).
+
+    `top_k` words each side. If `train` is given, each word's presence rate in real
+    sarcastic vs. serious training headlines is added, so a word that is only an AI tic (near
+    0 in both real columns) can be told apart from one that is a real, shared sarcasm marker.
+    """
+    vec = TfidfVectorizer(ngram_range=(1, 2), min_df=3, sublinear_tf=True, token_pattern=r"\S+")
+    X = vec.fit_transform(pairs["text"])
+    y = pairs["label"].to_numpy()
+    cv_auc = _cv_auc(pairs["text"], y, _words, seed, folds)
+    clf = LogisticRegression(max_iter=2000, C=1.0, random_state=seed).fit(X, y)
+    coef = clf.coef_[0]
+    vocab = np.array(vec.get_feature_names_out())
+    order = np.argsort(coef)
+    top = np.r_[order[-top_k:][::-1], order[:top_k]]
+    rows = [{"word": vocab[i], "coef": float(coef[i]),
+             "leans": "sarcastic" if coef[i] > 0 else "serious"} for i in top]
+    out = pd.DataFrame(rows)
+    out.attrs["cv_auc"] = cv_auc   # whole-model AUC, for context next to the per-word table
+    if train is not None:
+        toks = train["text"].str.split()
+        sarc, ser = train["label"].to_numpy() == 1, train["label"].to_numpy() == 0
+        n_sarc, n_ser = int(sarc.sum()), int(ser.sum())
+
+        def rate(w, mask):
+            n = len(w.split())
+            if n == 1:
+                return float(toks[mask].map(lambda t: w in t).mean())
+            return float(train.loc[mask, "text"].str.contains(rf"\b{w}\b", regex=True).mean())
+        out["real_rate_sarcastic"] = [rate(w, sarc) for w in out["word"]]
+        out["real_rate_serious"] = [rate(w, ser) for w in out["word"]]
+        out["real_n_sarcastic"], out["real_n_serious"] = n_sarc, n_ser
+    return out
+
+
+def shortcut_feature_table(pairs: pd.DataFrame, train: pd.DataFrame | None = None,
+                           seed: int = SEED) -> pd.DataFrame:
+    """Named, hand-picked surface features (beyond single words): does each one alone predict
+    the AI's label inside the pairs, and does the same feature predict the real training label?
+
+    Features: word count (as `length_table`), character count, exclamation/question marks,
+    all-caps word count, and a short list of hedging/filler connectives that come up often in
+    generated text ("thus", "therefore", "clearly", "obviously", "literally", "honestly",
+    "indeed", "surely"). Each row: AUC of that one feature alone, both sets side by side.
+    """
+    fillers = ["thus", "therefore", "clearly", "obviously", "literally", "honestly", "indeed", "surely"]
+
+    def features(df):
+        t = df["text"]
+        words = t.str.split()
+        feats = {
+            "n_words": words.str.len(),
+            "n_chars": t.str.len(),
+            "n_exclaim": t.str.count("!"),
+            "n_question": t.str.count(r"\?"),
+            "n_allcaps_words": words.map(lambda ws: sum(w.isupper() and len(w) > 1 for w in ws)),
+        }
+        for w in fillers:
+            feats[f"has_{w}"] = t.str.lower().str.contains(rf"\b{w}\b", regex=True).astype(int)
+        return pd.DataFrame(feats)
+
+    def score(df):
+        f, y = features(df), df["label"].to_numpy()
+        rows = []
+        for name in f.columns:
+            x = f[name].to_numpy(float)
+            auc = roc_auc_score(y, x) if x.std() > 0 else float("nan")
+            rows.append({"feature": name, "auc": auc,
+                         "mean_sarcastic": float(x[y == 1].mean()), "mean_serious": float(x[y == 0].mean())})
+        return pd.DataFrame(rows)
+
+    gen = score(pairs).rename(columns={c: f"generated_{c}" for c in ("auc", "mean_sarcastic", "mean_serious")})
+    if train is None:
+        return gen
+    real = score(train).rename(columns={c: f"real_{c}" for c in ("auc", "mean_sarcastic", "mean_serious")})
+    return gen.merge(real, on="feature")

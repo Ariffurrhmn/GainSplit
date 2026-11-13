@@ -7,6 +7,12 @@ updated: 2026-11-13
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-14 - Shortcut-pattern hunting in the generated pairs written
+- Owner's idea: instead of finding shortcuts in the generated pairs one feature at a time (length, outlet cue words), systematically find every word/phrase pattern and feed the list into cleaning the next generation round. Written: `pair_checks.shortcut_word_table` (TF-IDF + logistic regression over all pairs, top words/phrases each side, cross-checked against real training headlines) and `pair_checks.shortcut_feature_table` (named surface features beyond length). Wired into notebook 09 as new section "A5". Logged in [[Pass 4 Results]] "Shortcut-pattern hunting in the generated pairs".
+- 2 new tests; full suite 139 passed, 2 skipped, locally.
+- Spot-checked locally (not yet a committed result) on the real `pairs_train.csv`: whole-model cv_auc 0.951, well above length (0.785) or cue words (0.626) alone. Top words are stock LLM registers ("finally", "groundbreaking", "shockingly" vs. "discusses", "explores", "reportedly"), almost absent from real training headlines on both sides — pure AI writing tics, not shared sarcasm markers. The guessed filler-word list (thus, therefore, ...) carries no signal.
+- Next: owner pushes and re-runs notebook 09 (CPU only) to get this as a committed result; then decide how to use the list (prompt instruction vs. filter) in a retrain, alongside the pair-weight and length-matching ideas already in [[Research Ideas]] "After Pass 4".
+
 ## 2026-11-14 - iSarcasmEval length-shortcut check run
 - Owner ran notebook 09 (CPU, same inputs as the Pass 4 analysis) and sent the new `analysis_pass4.zip` and log. Read in [[Pass 4 Results]] "iSarcasmEval length-shortcut check". The 330-run re-run reproduces every previously committed table byte-identical, confirming determinism.
 - Result: word count alone gets AUC 68.7 [64.8, 72.5] on the real iSarcasmEval test (1,400 items), vs the pair arms' 71.7-76.2 and the in-domain reference 65.75.
