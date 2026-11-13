@@ -7,6 +7,12 @@ updated: 2026-11-13
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-13 - Kaggle upload folder prepared
+- Owner asked to run everything on Kaggle and to get only the files for the input and the notebooks to import. Owner's request, so the files were assembled in this session (copy only, no content changed).
+- `data/kaggle_upload/gainsplit-processed/` (git-ignored, 20 files, 22 MB): the 16 files of `data/processed/` plus `pairs_train.csv` + `manifest_pairs.json` (from the finalize zip, `pairs_train.csv` SHA-256 6412c1fa..., same as judge v2 checked) and `pairs_train_filtered.csv` + `manifest_judge_v2.json` (from `judge_v2.zip`). All files pass `verify`, `verify_pass3` and the Pass 4 pre-flight (unfiltered 44,834 rows; filtered and matched 34,630 with Gemma 7,533 / Mistral 4,986 / Qwen 4,796; unpaired 22,417).
+- Notebook 07 merged into 09: `09_pass4_analysis.ipynb` now runs the pair checks and the full Pass 4 analysis on Kaggle CPU (accelerator None), with inputs `gainsplit-processed` + the output of notebook 08; baselines come from the repo clone.
+- Next (owner): upload the folder as a new version of `gainsplit-processed`; push; import `08_pass4.ipynb` (GPU T4 x2, commit) and then `09_pass4_analysis.ipynb` (CPU).
+
 ## 2026-11-13 - Pass 4 code written (one commit)
 - Owner asked for all Pass 4 work that can run in parallel in one push, nothing that waits on an earlier result, and a time budget (about 3 GPU-h of quota left). `pair_pilot` dropped, pair batch fixed at 32 rows; A10 at 100% moved to optional `pass4_full100` ([[Decisions]]).
 - Written: arms A10-A15 (`config.py`), pair loader with hash and leak checks and the seeded `matched` / `unpaired` sets (`data.py`), `GroupBatchStream` and pairs-only training (`train.py`), Integrated Gradients inside the run (`explain.py`), plans `pass4` (75 runs) and `pass4_full100` (5), CPU analysis (`analysis_pass4.py`) and CPU pair checks (`pair_checks.py`); notebooks `07_pair_checks` (CPU), `08_pass4` (GPU, CPU pre-flight first), `09_pass4_analysis` (CPU). Details in [[Experiment Plan]] "Pass 4 plan".
