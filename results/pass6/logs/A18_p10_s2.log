@@ -1,0 +1,37 @@
+A18_p10_s2: |L|=2280 |U|=20520 steps=720 device=cuda
+  pairs (unfiltered): 44834 rows from 22417 seeds, 32 rows per step, pair_weight=1.0
+  stage 1: pairs only, 720 steps
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2930.54it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/720  loss_sarc 0.4061  loss 0.4061
+  step 200/720  loss_sarc 0.2693  loss 0.2693
+  step 300/720  loss_sarc 0.213  loss 0.213
+  step 400/720  loss_sarc 0.183  loss 0.183
+  step 500/720  loss_sarc 0.1793  loss 0.1793
+  step 600/720  loss_sarc 0.156  loss 0.156
+  step 700/720  loss_sarc 0.1528  loss 0.1528
+  step 720/720  loss_sarc 0.1194  loss 0.1194
+  stage 1 dev macro-F1 0.5477; stage 2: L only, 720 steps
+  step 100/720  loss_sarc 0.5805  loss 0.5805
+  step 200/720  loss_sarc 0.1394  loss 0.1394
+  step 300/720  loss_sarc 0.02525  loss 0.02525
+  step 400/720  loss_sarc 0.00829  loss 0.00829
+  step 500/720  loss_sarc 0.00296  loss 0.00296
+  step 600/720  loss_sarc 0.00012  loss 0.00012
+  step 700/720  loss_sarc 9e-05  loss 9e-05
+  step 720/720  loss_sarc 9e-05  loss 9e-05
+A18_p10_s2: done in 2.78 min; dev macro-F1 0.8786, test macro-F1 0.8902, isarc_test macro-F1 0.5050, test_cuemask macro-F1 0.8411, test_randmask macro-F1 0.8716

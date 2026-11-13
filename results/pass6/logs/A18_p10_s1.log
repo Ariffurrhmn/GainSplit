@@ -1,0 +1,40 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+A18_p10_s1: |L|=2280 |U|=20520 steps=720 device=cuda
+  pairs (unfiltered): 44834 rows from 22417 seeds, 32 rows per step, pair_weight=1.0
+  stage 1: pairs only, 720 steps
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2763.70it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:177: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.3782  loss 0.3782
+  step 200/720  loss_sarc 0.214  loss 0.214
+  step 300/720  loss_sarc 0.2005  loss 0.2005
+  step 400/720  loss_sarc 0.1899  loss 0.1899
+  step 500/720  loss_sarc 0.179  loss 0.179
+  step 600/720  loss_sarc 0.1654  loss 0.1654
+  step 700/720  loss_sarc 0.1489  loss 0.1489
+  step 720/720  loss_sarc 0.1981  loss 0.1981
+  stage 1 dev macro-F1 0.5443; stage 2: L only, 720 steps
+  step 100/720  loss_sarc 0.565  loss 0.565
+  step 200/720  loss_sarc 0.1396  loss 0.1396
+  step 300/720  loss_sarc 0.01819  loss 0.01819
+  step 400/720  loss_sarc 0.01283  loss 0.01283
+  step 500/720  loss_sarc 0.00029  loss 0.00029
+  step 600/720  loss_sarc 0.00198  loss 0.00198
+  step 700/720  loss_sarc 7e-05  loss 7e-05
+  step 720/720  loss_sarc 6e-05  loss 6e-05
+A18_p10_s1: done in 2.95 min; dev macro-F1 0.8699, test macro-F1 0.8876, isarc_test macro-F1 0.5183, test_cuemask macro-F1 0.8425, test_randmask macro-F1 0.8675

@@ -7,6 +7,11 @@ updated: 2026-11-13
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-14 - Pass 6 results read
+- Owner ran notebook 12 as a commit (commit a57421e, 20/20 runs, 31.8 min, 230 tests passed, stage-1 check PASS: every stage-1 model equals A15 exactly). Zip and log filed in `results/pass6/` (log as `notebook_12.log`); 141 files match the zip. `download (5).txt` was an exact copy of the log and stays in Downloads.
+- Read in [[Pass 6 Results]]: at 10% A18 = A1 + 0.3 and A19 = A7 - 0.1 in-domain, but iSarcasmEval AUC 58-59 (below the 68.7 length baseline); at 1% A18 -4.4 and A19 -2.8 in-domain, AUC 63-66. H6.1/H6.3 hold at 10% only; H6.2: no transfer gain beyond length.
+- Next: paper framing (negative finding for the pairs, next to the Passes 1-3 ablation) to agree with the instructor; bootstrap for Passes 5-6.
+
 ## 2026-11-14 - Pass 6 (two-stage training) planned and coded
 - Owner chose to try two-stage training before writing up. Design, predictions and code in [[Experiment Plan]] "Pass 6 plan": A18 (pairs only for 720 steps, i.e. exactly A15, then L only like A1) and A19 (same, stage 2 with FGM like A7); plan `pass6`, 20 runs; notebook `experiments/12_pass6.ipynb`.
 - Tests: non-torch 163 passed, 2 skipped; torch suite in the scratch CPU install 229 passed (stage 1 equals A15 exactly; stage 2 trains on L only and changes the model); the single failure is matplotlib missing in that install.

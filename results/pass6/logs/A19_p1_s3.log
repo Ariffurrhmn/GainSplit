@@ -1,0 +1,33 @@
+A19_p1_s3: |L|=228 |U|=22572 steps=200 device=cuda
+  pairs (unfiltered): 44834 rows from 22417 seeds, 32 rows per step, pair_weight=1.0
+  stage 1: pairs only, 720 steps
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 3080.79it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:220: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.4097  loss 0.4097
+  step 200/720  loss_sarc 0.2175  loss 0.2175
+  step 300/720  loss_sarc 0.2122  loss 0.2122
+  step 400/720  loss_sarc 0.1736  loss 0.1736
+  step 500/720  loss_sarc 0.1667  loss 0.1667
+  step 600/720  loss_sarc 0.1666  loss 0.1666
+  step 700/720  loss_sarc 0.1589  loss 0.1589
+  step 720/720  loss_sarc 0.1815  loss 0.1815
+  stage 1 dev macro-F1 0.5447; stage 2: L only, 200 steps
+  step 100/200  loss_sarc 0.2342  loss_adv 0.3201  loss 0.5543
+  step 200/200  loss_sarc 0.0001  loss_adv 0.00157  loss 0.00167
+A19_p1_s3: done in 2.25 min; dev macro-F1 0.7788, test macro-F1 0.7927, isarc_test macro-F1 0.5086, test_cuemask macro-F1 0.7335, test_randmask macro-F1 0.7733

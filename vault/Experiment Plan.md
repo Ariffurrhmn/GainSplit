@@ -228,7 +228,7 @@ A16/A17 vs A10(weighted) then separates "does cleaning add anything on top of th
 
 **Main run done 2026-11-14** (notebook 11, 30/30 runs; [[Pass 5 Results]]). **Not yet started:** a CPU analysis of its contrasts (A16 vs A10-weighted, A10-weighted vs A10 and A1, A17 vs A11 and A7, iSarcasmEval AUC vs the length-only baseline).
 
-## Pass 6 plan (written 2026-11-14, not run; owner chose two-stage training after [[Pass 5 Results]]; design DELEGATED per [[Repo Rules]] rule 7)
+## Pass 6 plan (written 2026-11-14, run 2026-11-14, results in [[Pass 6 Results]]; owner chose two-stage training after [[Pass 5 Results]]; design DELEGATED per [[Repo Rules]] rule 7)
 Passes 4-5 mixed the generated pairs into every training step; the model lost 10-16 points on Headlines at every weight tried, and once down-weighted its iSarcasmEval transfer fell to the length-only baseline. Pass 6 separates the two sources in time: **stage 1** trains on the pairs alone, **stage 2** fine-tunes the same model on the gold labels alone, so the gold labels have the last word. Idea listed in [[Research Ideas]] "After Pass 4" ("two stages").
 
 **Arms (new switch `pretrain`, new config field `pretrain_steps`):**

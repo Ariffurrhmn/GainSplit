@@ -1,0 +1,38 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+A18_p10_s0: |L|=2280 |U|=20520 steps=720 device=cuda
+  pairs (unfiltered): 44834 rows from 22417 seeds, 32 rows per step, pair_weight=1.0
+  stage 1: pairs only, 720 steps
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2646.27it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/720  loss_sarc 0.3992  loss 0.3992
+  step 200/720  loss_sarc 0.2416  loss 0.2416
+  step 300/720  loss_sarc 0.2011  loss 0.2011
+  step 400/720  loss_sarc 0.188  loss 0.188
+  step 500/720  loss_sarc 0.1691  loss 0.1691
+  step 600/720  loss_sarc 0.1597  loss 0.1597
+  step 700/720  loss_sarc 0.1619  loss 0.1619
+  step 720/720  loss_sarc 0.1407  loss 0.1407
+  stage 1 dev macro-F1 0.5415; stage 2: L only, 720 steps
+  step 100/720  loss_sarc 0.5514  loss 0.5514
+  step 200/720  loss_sarc 0.1303  loss 0.1303
+  step 300/720  loss_sarc 0.01898  loss 0.01898
+  step 400/720  loss_sarc 0.00724  loss 0.00724
+  step 500/720  loss_sarc 0.00088  loss 0.00088
+  step 600/720  loss_sarc 0.00199  loss 0.00199
+  step 700/720  loss_sarc 0.00018  loss 0.00018
+  step 720/720  loss_sarc 9e-05  loss 9e-05
+A18_p10_s0: done in 2.82 min; dev macro-F1 0.8592, test macro-F1 0.8787, isarc_test macro-F1 0.5179, test_cuemask macro-F1 0.8299, test_randmask macro-F1 0.8614

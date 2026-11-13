@@ -1,0 +1,37 @@
+A19_p10_s4: |L|=2280 |U|=20520 steps=720 device=cuda
+  pairs (unfiltered): 44834 rows from 22417 seeds, 32 rows per step, pair_weight=1.0
+  stage 1: pairs only, 720 steps
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2877.65it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/720  loss_sarc 0.3954  loss 0.3954
+  step 200/720  loss_sarc 0.2291  loss 0.2291
+  step 300/720  loss_sarc 0.1962  loss 0.1962
+  step 400/720  loss_sarc 0.2002  loss 0.2002
+  step 500/720  loss_sarc 0.1746  loss 0.1746
+  step 600/720  loss_sarc 0.194  loss 0.194
+  step 700/720  loss_sarc 0.1468  loss 0.1468
+  step 720/720  loss_sarc 0.1744  loss 0.1744
+  stage 1 dev macro-F1 0.5338; stage 2: L only, 720 steps
+  step 100/720  loss_sarc 0.594  loss_adv 0.8122  loss 1.406
+  step 200/720  loss_sarc 0.1691  loss_adv 0.3193  loss 0.4884
+  step 300/720  loss_sarc 0.02403  loss_adv 0.124  loss 0.148
+  step 400/720  loss_sarc 0.00213  loss_adv 0.05762  loss 0.05975
+  step 500/720  loss_sarc 0.00072  loss_adv 0.05127  loss 0.05199
+  step 600/720  loss_sarc 0.00024  loss_adv 0.01421  loss 0.01445
+  step 700/720  loss_sarc 0.00014  loss_adv 0.00576  loss 0.0059
+  step 720/720  loss_sarc 0.00012  loss_adv 0.00987  loss 0.00999
+A19_p10_s4: done in 3.85 min; dev macro-F1 0.8920, test macro-F1 0.8990, isarc_test macro-F1 0.5141, test_cuemask macro-F1 0.8528, test_randmask macro-F1 0.8808
