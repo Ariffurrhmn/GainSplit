@@ -247,7 +247,7 @@ Passes 4-5 mixed the generated pairs into every training step; the model lost 10
 
 **Code (written 2026-11-14, not run on Kaggle):** `config.py` (arms A18/A19, `pretrain_steps` with checks), `train.py` (`fit(model=...)` continues an existing model; `train_run` runs stage 1, scores it on dev, then stage 2 on L only; `result.json` gets a `pretrain` block), `plans.py` (`PASS6_PRETRAIN_STEPS = 720`, plan `pass6`). Tests: local non-torch suite 163 passed, 2 skipped; with torch (scratch CPU install) 229 passed, including a check that stage 1 gives exactly A15's dev scores and that stage 2 changes the model and differs from A1; 1 failure from matplotlib missing in that scratch install only (the same test passes in the normal local suite and on Kaggle). Notebook 12's first-look cell dry-run locally on stand-in files.
 
-## Pass 7 plan (written 2026-11-14, not run; owner's request: can a full-label run pass 94% accuracy on Headlines; design DELEGATED per [[Repo Rules]] rule 7)
+## Pass 7 plan (written 2026-11-14, run 2026-11-14; owner's request: can a full-label run pass 94% accuracy on Headlines; design DELEGATED per [[Repo Rules]] rule 7)
 Every run so far except Pass 1's A1 used 1-30% of the labels. A1 at 100% reaches 93.35% test accuracy (best seed 93.90%, VERIFIED from `results/pass1/summary.csv`), level with the seed paper's reported 93.88% on its own 80/20 split ([[Seed Paper - Irfan 2025]]; not like-for-like, see [[Decisions]] 2026-11-11). FGM and the two-stage pair recipe have never been tried with all labels.
 
 **Plan `pass7` (11 test-scored runs at budget 100, masked tests scored, one commit, about 2 h on T4 x2, notebook `experiments/13_pass7.ipynb`):**
@@ -260,6 +260,23 @@ Every run so far except Pass 1's A1 used 1-30% of the labels. A1 at 100% reaches
 **Rules (DELEGATED):** nothing is tuned and nothing is picked on test; epsilon 0.5 and the stage-1 length stay frozen from Passes 2b and 6. The result is reported as the 5-seed mean with its spread, not the best seed. The seed paper's 93.88% is quoted as a reference on a different split, not as a beaten baseline. A stronger backbone (e.g. DeBERTa-v3) is left out: it changes the model, not the method, and would need its own lr check on dev.
 
 **Predictions (IDEA, written before running):** (H7.1) A7 beats A1 at 100%, but by less than at 10% (+0.3 to +0.8 points, so about 93.7-94.2% accuracy). (H7.2) A19 is within 0.3 points of A7: with 7,130 stage-2 steps the pair stage is mostly overwritten (Pass 6: the pair effect shrank as stage 2 grew). (H7.3) iSarcasmEval AUC of A7 and A19 stays near chance, as for A1 at 100% (51.7). Reaching 94.0% mean accuracy is possible but not expected with bert-base; any outcome is reportable.
+
+**Outcome (2026-11-14, [[Pass 7 Results]]):** 11/11 runs, re-run and stage-1 checks PASS. A7 93.90% mean accuracy (+0.55 over A1, 5/5 seeds; best seed 94.32%), A19 93.67% (-0.23 vs A7), iSarcasmEval AUC 53.8 / 57.5. H7.1 holds, H7.2 holds narrowly, H7.3 mostly (A19 keeps a small pair imprint). 94% is not reached as a 5-seed mean.
+
+## Bootstrap plan for Passes 5-7 (written 2026-11-14, before running; not run)
+Same method as [[Bootstrap - All Passes]] and Pass 4: paired bootstrap over test items, 10,000 resamples, one resample shared by every seed, statistic = mean over seeds 0-4; Holm correction within each table. Code `src/gainsplit/analysis_pass5_7.py` (tests `tests/test_pass5_7.py`), CPU notebook `experiments/14_bootstrap_pass5_7.ipynb`, output `results/analysis_pass5_7/`. All contrasts are fixed here; none is added after seeing results.
+
+| Table (Holm family) | Contrasts |
+|---|---|
+| `contrasts_f1` (19) | Pass 5 at 1% and 10%: A10[weighted]-A1, A10[weighted]-A10, A16-A10[weighted] (cleaning), A17-A16 (FGM on top), A17-A7. Pass 6 at 1% and 10%: A18-A1, A19-A7, A19-A18. Pass 7 at 100%: A7-A1, A19-A1, A19-A7 |
+| `contrasts_accuracy_100` (3) | the three Pass 7 contrasts on accuracy |
+| `auc_contrasts` (12) | iSarcasmEval AUC: A10[weighted]-A10, A10[weighted]-A1, A17-A7, A18-A1, A19-A7 at 1% and 10%; A7-A1 and A19-A7 at 100% |
+| `auc_vs_length` (22) | iSarcasmEval AUC of every pair arm of Passes 4-7 minus word count alone, paired on the same items (new: the transfer claim net of length) |
+| `gap_contrasts` (10) | cue-mask gap: A10[weighted], A16, A18 vs A1; A17, A19 vs A7; at 1% and 10% |
+
+Checks first: 41 re-runs identical to their originals, 25 stage-1 models equal to A15 (both confirmed on the committed files with a structure check that printed row counts only).
+
+**Expectations (IDEA, from the seed-paired means):** A7-A1 at 100% (+0.56, 5/5) is significant before Holm, borderline after; A19-A7 at 100% is not. A18-A1 and A19-A7 at 10% are not significant; at 1% they are negative and significant. Only A15 (pairs only, 76.2) may sit clearly above word count (68.7); the arms with gold labels in Passes 5-7 do not.
 
 ## Status
 Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].

@@ -1,11 +1,23 @@
 ---
 tags: [log]
-updated: 2026-11-13
+updated: 2026-11-14
 ---
 
 # Session Log
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
+
+## 2026-11-14 - Pass 7 results read, bootstrap for Passes 5-7 written, framing drafted
+- Owner ran notebook 13 as a commit (commit e21d7c4, 11/11 runs, 127.8 min, 231 tests passed). Zip and log moved from Downloads into `results/pass7/` (log as `notebook_13.log`); 78 unpacked files match the zip. `download (6).txt` was an exact copy of the log and stays in Downloads. No receipt missing for this pass.
+- Checks: `A1_p100_s0_rerun` equals Pass 1 (test, dev and iSarcasmEval predictions byte-identical); every A19 stage 1 equals Pass 4's A15. Read in [[Pass 7 Results]]: A7 93.90% mean accuracy (+0.55 over A1, 5/5 seeds; best seed 94.32%), A19 93.67%; no 5-seed mean passes 94%. H7.1 holds, H7.2 holds narrowly, H7.3 mostly.
+- Written: `src/gainsplit/analysis_pass5_7.py`, `tests/test_pass5_7.py`, CPU notebook `experiments/14_bootstrap_pass5_7.ipynb`; contrast list fixed in [[Experiment Plan]] "Bootstrap plan for Passes 5-7" before any run. Local suite 167 passed, 2 skipped; a structure check on the committed runs (row counts only) found every planned contrast and 41/41 re-runs, 25/25 stage-1 checks passing. Not run.
+- Framing options and questions for the instructor in [[Paper Framing - Passes 1-7]].
+- Not committed. Next (owner): commit and push (incl. `results/pass7/`), run notebook 14 on Kaggle (CPU), send `analysis_pass5_7.zip` and the log; take the framing questions to the instructor.
+
+## 2026-11-14 - Next experiments after Pass 6 (discussion)
+- Owner: the generated pairs do not seem to improve the case. Agreed for in-domain results; the only open pair claim is zero-label transfer net of length (A15 76.2 vs word count 68.7).
+- Ranked candidates written to [[Research Ideas]] "After Pass 6": (1) length-controlled transfer check on existing predictions, CPU; (2) stacked FGM + self-training + helpers-on-L recipe; (3) LLM zero/few-shot baseline; (4) pair-ranking loss only if (1) leaves a residual; (5) shortcut audit as a contribution.
+- Pass 7 (notebook 13) still to be run by the owner. Nothing decided; no code written.
 
 ## 2026-11-14 - Pass 7 (full labels) planned and coded
 - Owner asked whether any run passes 94% on Headlines. Checked all committed summaries: none does; A1 at 100% (Pass 1) is the best, 93.35% mean accuracy, best seed 93.90%, level with the seed paper's 93.88% (different split). No model weights are kept, only predictions, so any new evaluation means retraining. Owner chose a full-label pass over new datasets (SARC, Twitter sets) given the deadline.

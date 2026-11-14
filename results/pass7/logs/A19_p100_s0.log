@@ -1,0 +1,104 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+A19_p100_s0: |L|=22800 |U|=0 steps=7130 device=cuda
+  pairs (unfiltered): 44834 rows from 22417 seeds, 32 rows per step, pair_weight=1.0
+  stage 1: pairs only, 720 steps
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2592.05it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:220: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.3992  loss 0.3992
+  step 200/720  loss_sarc 0.2416  loss 0.2416
+  step 300/720  loss_sarc 0.2011  loss 0.2011
+  step 400/720  loss_sarc 0.188  loss 0.188
+  step 500/720  loss_sarc 0.1691  loss 0.1691
+  step 600/720  loss_sarc 0.1597  loss 0.1597
+  step 700/720  loss_sarc 0.1619  loss 0.1619
+  step 720/720  loss_sarc 0.1407  loss 0.1407
+  stage 1 dev macro-F1 0.5415; stage 2: L only, 7130 steps
+  step 100/7130  loss_sarc 0.8838  loss_adv 1.284  loss 2.168
+  step 200/7130  loss_sarc 0.4504  loss_adv 0.5787  loss 1.029
+  step 300/7130  loss_sarc 0.3171  loss_adv 0.4869  loss 0.8041
+  step 400/7130  loss_sarc 0.2916  loss_adv 0.4546  loss 0.7462
+  step 500/7130  loss_sarc 0.292  loss_adv 0.4379  loss 0.7298
+  step 600/7130  loss_sarc 0.2447  loss_adv 0.3941  loss 0.6388
+  step 700/7130  loss_sarc 0.2246  loss_adv 0.3685  loss 0.5932
+  step 800/7130  loss_sarc 0.1646  loss_adv 0.306  loss 0.4706
+  step 900/7130  loss_sarc 0.1685  loss_adv 0.3002  loss 0.4687
+  step 1000/7130  loss_sarc 0.161  loss_adv 0.3024  loss 0.4634
+  step 1100/7130  loss_sarc 0.1555  loss_adv 0.2943  loss 0.4498
+  step 1200/7130  loss_sarc 0.1396  loss_adv 0.2759  loss 0.4155
+  step 1300/7130  loss_sarc 0.1486  loss_adv 0.2828  loss 0.4314
+  step 1400/7130  loss_sarc 0.1434  loss_adv 0.2759  loss 0.4193
+  step 1500/7130  loss_sarc 0.06556  loss_adv 0.1665  loss 0.232
+  step 1600/7130  loss_sarc 0.0462  loss_adv 0.1489  loss 0.1951
+  step 1700/7130  loss_sarc 0.04556  loss_adv 0.153  loss 0.1986
+  step 1800/7130  loss_sarc 0.0372  loss_adv 0.1395  loss 0.1767
+  step 1900/7130  loss_sarc 0.0561  loss_adv 0.1634  loss 0.2195
+  step 2000/7130  loss_sarc 0.05052  loss_adv 0.1526  loss 0.2032
+  step 2100/7130  loss_sarc 0.05035  loss_adv 0.1562  loss 0.2066
+  step 2200/7130  loss_sarc 0.02185  loss_adv 0.1081  loss 0.1299
+  step 2300/7130  loss_sarc 0.00914  loss_adv 0.08637  loss 0.09551
+  step 2400/7130  loss_sarc 0.00784  loss_adv 0.08552  loss 0.09336
+  step 2500/7130  loss_sarc 0.0087  loss_adv 0.08096  loss 0.08966
+  step 2600/7130  loss_sarc 0.01027  loss_adv 0.07981  loss 0.09008
+  step 2700/7130  loss_sarc 0.01479  loss_adv 0.09737  loss 0.1122
+  step 2800/7130  loss_sarc 0.00973  loss_adv 0.08204  loss 0.09177
+  step 2900/7130  loss_sarc 0.00627  loss_adv 0.06731  loss 0.07358
+  step 3000/7130  loss_sarc 0.00379  loss_adv 0.05978  loss 0.06357
+  step 3100/7130  loss_sarc 0.00318  loss_adv 0.06204  loss 0.06522
+  step 3200/7130  loss_sarc 0.00235  loss_adv 0.06093  loss 0.06328
+  step 3300/7130  loss_sarc 0.00253  loss_adv 0.05142  loss 0.05395
+  step 3400/7130  loss_sarc 0.00282  loss_adv 0.06314  loss 0.06596
+  step 3500/7130  loss_sarc 0.00314  loss_adv 0.06104  loss 0.06419
+  step 3600/7130  loss_sarc 0.0021  loss_adv 0.0471  loss 0.0492
+  step 3700/7130  loss_sarc 0.00049  loss_adv 0.03557  loss 0.03606
+  step 3800/7130  loss_sarc 0.00059  loss_adv 0.04945  loss 0.05004
+  step 3900/7130  loss_sarc 0.00105  loss_adv 0.04041  loss 0.04145
+  step 4000/7130  loss_sarc 0.00043  loss_adv 0.04172  loss 0.04215
+  step 4100/7130  loss_sarc 0.00066  loss_adv 0.0505  loss 0.05116
+  step 4200/7130  loss_sarc 0.00055  loss_adv 0.04324  loss 0.04378
+  step 4300/7130  loss_sarc 0.00099  loss_adv 0.04297  loss 0.04397
+  step 4400/7130  loss_sarc 0.0004  loss_adv 0.03229  loss 0.03269
+  step 4500/7130  loss_sarc 0.00024  loss_adv 0.03283  loss 0.03307
+  step 4600/7130  loss_sarc 0.00015  loss_adv 0.02534  loss 0.02548
+  step 4700/7130  loss_sarc 0.00011  loss_adv 0.03301  loss 0.03312
+  step 4800/7130  loss_sarc 0.00016  loss_adv 0.023  loss 0.02316
+  step 4900/7130  loss_sarc 9e-05  loss_adv 0.03647  loss 0.03656
+  step 5000/7130  loss_sarc 0.00013  loss_adv 0.0273  loss 0.02743
+  step 5100/7130  loss_sarc 7e-05  loss_adv 0.02525  loss 0.02532
+  step 5200/7130  loss_sarc 8e-05  loss_adv 0.01757  loss 0.01765
+  step 5300/7130  loss_sarc 4e-05  loss_adv 0.0179  loss 0.01794
+  step 5400/7130  loss_sarc 4e-05  loss_adv 0.02204  loss 0.02208
+  step 5500/7130  loss_sarc 4e-05  loss_adv 0.02412  loss 0.02417
+  step 5600/7130  loss_sarc 4e-05  loss_adv 0.01647  loss 0.01651
+  step 5700/7130  loss_sarc 4e-05  loss_adv 0.02628  loss 0.02631
+  step 5800/7130  loss_sarc 3e-05  loss_adv 0.00994  loss 0.00997
+  step 5900/7130  loss_sarc 3e-05  loss_adv 0.01064  loss 0.01067
+  step 6000/7130  loss_sarc 3e-05  loss_adv 0.01047  loss 0.0105
+  step 6100/7130  loss_sarc 2e-05  loss_adv 0.01032  loss 0.01035
+  step 6200/7130  loss_sarc 2e-05  loss_adv 0.01334  loss 0.01337
+  step 6300/7130  loss_sarc 2e-05  loss_adv 0.01236  loss 0.01238
+  step 6400/7130  loss_sarc 2e-05  loss_adv 0.00839  loss 0.00841
+  step 6500/7130  loss_sarc 2e-05  loss_adv 0.0069  loss 0.00692
+  step 6600/7130  loss_sarc 2e-05  loss_adv 0.00559  loss 0.00561
+  step 6700/7130  loss_sarc 2e-05  loss_adv 0.00382  loss 0.00383
+  step 6800/7130  loss_sarc 2e-05  loss_adv 0.01253  loss 0.01255
+  step 6900/7130  loss_sarc 2e-05  loss_adv 0.00741  loss 0.00742
+  step 7000/7130  loss_sarc 2e-05  loss_adv 0.00326  loss 0.00327
+  step 7100/7130  loss_sarc 2e-05  loss_adv 0.0112  loss 0.01122
+  step 7130/7130  loss_sarc 2e-05  loss_adv 0.00221  loss 0.00223
+A19_p100_s0: done in 22.86 min; dev macro-F1 0.9363, test macro-F1 0.9367, isarc_test macro-F1 0.5257, test_cuemask macro-F1 0.8997, test_randmask macro-F1 0.9250

@@ -51,3 +51,12 @@ Pairs as plain extra labeled rows cost 15-16 F1 points in-domain but lift iSarca
 - More generally: an explicit "avoid these words" list for the generation prompt, or a filter on pairs that rely heavily on them, built from the full shortcut-pattern search in [[Pass 4 Results]] "Shortcut-pattern hunting in the generated pairs" (2026-11-14) — not just length, every word/phrase the AI leans on (cv_auc 0.951, well above length or cue words alone).
 - Reframe: zero-label cross-domain sarcasm from LLM pairs (A15 AUC 76.2 vs in-domain 65.75), only if the iSarcasmEval length check comes out clean.
 
+
+## After Pass 6 (2026-11-14, IDEA, not decided)
+Owner's reading: the generated pairs are not helping the case. Agreed for in-domain (Passes 4-6: they hurt or, at best, tie A1/A7). The only open pair claim is transfer: zero-label A15 at iSarcasmEval AUC 76.2 vs word count 68.7 ([[Pass 4 Results]], [[Pass 6 Results]]). Candidates, cheapest first:
+1. **Length-controlled transfer check (CPU, existing predictions, no retraining).** Logistic regression on iSarcasmEval: length alone vs length + A15 score (bootstrap CI on the AUC gain); AUC within length bins; same for A10/A11. Decides whether any pair claim survives. If the residual is ~0, the pairs become a negative finding plus the shortcut audit.
+2. **Stacked recipe for in-domain gain (GPU, ~30-40 runs).** FGM + self-training + helper heads on L, never run together; each gave about +1.6 at 1% ([[Bootstrap - All Passes]]). Answers the instructor's "more gain" request with a label-efficiency claim, independent of the pairs.
+3. **LLM zero/few-shot baseline** on Headlines test and iSarcasmEval test (models already used for generation). Reviewers will ask; sets the ceiling the transfer claim must be read against. Contamination risk on Headlines.
+4. **Pair-ranking loss** (last pair-salvage method): sarcastic side must score above its serious side, no absolute labels on generated text; with length-matched pairs only. Run only if item 1 shows a real residual.
+5. **Contribution reframe:** the shortcut audit (length 0.785, word-tic model cv_auc 0.951, near-absent from real headlines) as a reusable check for LLM-generated augmentation data.
+Parked (too costly before 20 Dec): regenerating pairs with an avoid-words prompt; new datasets (SemEval-2018, SARC).
