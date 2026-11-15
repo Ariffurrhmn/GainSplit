@@ -6,7 +6,7 @@ updated: 2026-11-15
 
 # Pass 10 Results
 
-Hub: [[00 - Project Context]]. Plan and predictions (fixed before running): [[Experiment Plan]] "Pass 10 plan". Novelty: [[Novelty Check - MLM Pretraining]]. Q4 (notebook 21) not in yet.
+Hub: [[00 - Project Context]]. Plan and predictions (fixed before running): [[Experiment Plan]] "Pass 10 plan". Novelty: [[Novelty Check - MLM Pretraining]]. All four questions are in.
 
 ## Q1: helpers, FGM and self-training on the MLM encoder (notebook 19)
 Run by the owner on Kaggle (slug `notebookd630829dea`, commit 166e5c2, 280 tests passed, 62/62 runs, 92.4 min). Raw files in `results/pass10_stack/` (zip, runs, logs, analysis, log renamed `notebook_19.log`); unpacked folder matches the zip (`diff -r`). Encoder check PASS; **re-run check PASS** (A20 and A21 at 1% seed 0 identical to Pass 8a; A2, A6, A7, A1 rows from earlier passes also identical). Numbers VERIFIED from the tables.
@@ -57,10 +57,18 @@ Gain over A1: seed 1 **+7.72** [6.82, 8.63] at 1%, **+2.68** at 10%; seed 2 **+6
 
 **Verdicts:** H10.6 SUPPORTED (both new encoders help at 1% and 10%; range across the three encoders 0.83 at 1%, under the 1.5-point bound). H10.7 SUPPORTED (5%, 30%; no difference at 100%). H10.8 holds as predicted (no significant difference for MLM-1% vs BERT-10% and MLM-10% vs BERT-30%; not proof of equality, intervals about +-0.8).
 
+## Q4: outlet shortcut and transfer (notebook 21, CPU)
+Run by the owner on Kaggle (commit 4342e20, about 1 min of analysis; every results folder found). Files in `results/analysis_pass10/` (zip, unpacked tables incl. `all_verdicts.csv`, log renamed `notebook_21.log`); unpacked tables match the zip. `download (8).txt` in Downloads was an exact copy of the log and stays there. Numbers VERIFIED from those tables; paired bootstrap, 10,000 resamples, Holm within each table.
+
+**Cue-mask shortcut gap** (random-mask minus cue-mask macro-F1, arm minus A1, or minus A7 for FGM arms): every row between -0.6 and +0.8, none significant (smallest p_holm 0.89). A20 -0.07 at 1%, -0.17 at 10%; the other two encoders +0.04 / +0.69 at 1%; the full stack A36 +0.83 at 1% (p 0.063 before Holm). **H10.9 not supported:** the pretrained models lean on outlet cue words exactly as much as plain BERT. This replaces the Pass 8 reading ([[Pass 8 Results]] caveat, now confirmed).
+
+**iSarcasmEval AUC minus word count alone (68.7):** every pretrained arm is 11-21 points below (A20 49.8 / 54.1 at 1% / 10%; JEPA A22 52.6 / 57.3 best; full stack A36 47.8 / 54.6); all robust. **H10.10 SUPPORTED:** Headlines-only pretraining gives no transfer to iSarcasmEval; models sit near chance (AUC 50 = chance).
+
 ## Reading (INFERRED)
 - **MLM pretraining does almost all the work.** Each old ingredient keeps 0-0.5 points of its +1.6 once the encoder is pretrained; pretraining absorbs them (robust negative interactions). Self-training stays healthy (92-96% correct pseudo-labels) but has little left to teach, because the MLM model already gets those headlines right.
 - **The best recipe at 1% is MLM + helpers + self-training (88.9) or all three (88.8), about +1 point over MLM alone (robust)**; at 10% the stack adds +0.6 but not robustly. So the full recipe is "pretrain, then stack": +8.4 over plain BERT at 1% (80.4 -> 88.8), of which about 7.4 is pretraining.
 - The "golden" scenario from the plan (self-training adds clearly on its own) did not happen; the stack does add a small, robust extra at 1%.
 - **The MLM gain is not a lucky pretraining run.** Three independent pretrainings give +6.9 to +7.7 at 1% and +2.3 to +2.8 at 10%, every fine-tuning seed ahead. The single-seed limitation of Pass 8 is closed.
 - **Label efficiency, stated carefully:** with MLM pretraining, 1% of the labels (228 headlines) reaches the score plain BERT needs about 8-10% for; the saving shrinks as labels grow (4.4x at 5%, 3.3x at 10%, 1.7x at 30%) and vanishes with all labels. A smooth, monotone curve, as Gururangan et al. 2020 and Shi et al. 2023 report for other tasks.
+- **What MLM learns is in-domain, not general sarcasm:** same cue-word reliance as BERT and no transfer to iSarcasmEval. The paper must say the gain is a label-efficiency gain on Headlines, not better sarcasm understanding.
 - Encoder seed 2 has a weaker frozen probe (84.2 vs 86.1-86.4) yet fine-tunes almost as well (87.3 vs 87.8-88.1): the probe is a rough guide, not a predictor of the fine-tuned score.

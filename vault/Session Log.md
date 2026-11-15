@@ -7,6 +7,17 @@ updated: 2026-11-15
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-15 - Pass 10 notebook 21 (shortcuts, transfer) filed; Pass 10 complete
+- Owner ran notebook 21 (CPU, commit 4342e20) and downloaded `analysis_pass10.zip` and the log to Downloads. Filed in `results/analysis_pass10/` (zip moved in, tables unpacked and matching the zip, log as `notebook_21.log`); `download (8).txt` is an exact copy of the log and stays in Downloads.
+- Read in [[Pass 10 Results]]: H10.9 not supported (cue-mask gap of every pretrained arm equals BERT's; Pass 8 reading withdrawn); H10.10 supported (all pretrained arms 11-21 AUC points below word count on iSarcasmEval). Q1-Q3 verdicts unchanged.
+- Pass 10 complete; experiments stopped. Not committed. Next: commit, then rewrite the paper.
+
+## 2026-11-15 - Proposal B (PolarityTax) reviewed against GainSplit
+- Owner asked whether to pursue Proposal B (sentiment/emotion helper interference with sarcasm, polarity-flip examples; repo `PolarityTax`, no code or runs) separately or merge it into this paper, as the instructor once suggested.
+- Assessment (INFERRED): a separate Paper B before 20 Dec is not feasible (no code, 20-30 GPU-h estimate, novelty low-to-moderate next to SocKET, likely small effects). A full merge would dilute the pretraining story and the 6-page limit. Recommended: a small "why helper tasks do not help" section in this paper from data we already have (Pass 2-3 helper results, shuffled labels, label-quality rows, Pass 10 absorption), plus one CPU analysis on existing predictions: helper-arm vs A1 on polarity-incongruent test headlines. Keep the rest of Proposal B for later.
+- Stratum sizes on the Headlines test set, from the sentiment teacher labels (VERIFIED, `helper_labels.csv`): sarcastic headlines with positive surface sentiment 107, negative 474, neutral 774 (non-sarcastic: 194 / 454 / 848). The incongruent group is small, so that analysis is exploratory.
+- Nothing decided, no code written.
+
 ## 2026-11-15 - Pass 10 notebooks 19 and 20 filed
 - Owner downloaded notebook 20 (Kaggle slug `notebook6d64711193`) into `data/kaggle_out/`; filed in `results/pass10_seeds/` (zip, runs, logs, pretraining receipts, analysis, log as `notebook_20.log`); `diff -r` against the zip: identical. Encoder check PASS (notebook 15's encoder matched the receipt). The two new encoders stay in `data/kaggle_out/notebook6d64711193/ckpt/` (git-ignored).
 - Read in [[Pass 10 Results]]: H10.6, H10.7, H10.8 hold. Gain stable across three pretraining seeds (+6.9 to +7.7 at 1%); +3.5 at 5%, +1.0 at 30%, none at 100%; MLM-1% vs BERT-10% -0.38 n.s.

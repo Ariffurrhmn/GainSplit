@@ -1,0 +1,35 @@
+hypothesis,contrast,budget,mean_diff,ci_low,ci_high,p_holm,verdict,claim
+H10.1,A32-A20 (self-training on top of MLM),1,0.35,-0.12,0.82,1.0,not supported (no significant difference),self-training adds on top of MLM at 1%
+H10.1,A32-A20 (self-training on top of MLM),10,0.03,-0.34,0.41,1.0,no significant difference,... at 10% (no direction)
+H10.2,A31-A20 (helpers on top of MLM),1,0.48,0.12,0.85,0.0888,SUPPORTED (no significant difference),helpers add nothing on top of MLM at 1%
+H10.2,A31-A20 (helpers on top of MLM),10,0.07,-0.28,0.42,1.0,SUPPORTED (no significant difference),... nor at 10%
+H10.2,A21-A20 (FGM on top of MLM),1,-0.09,-0.53,0.34,1.0,SUPPORTED (no significant difference),FGM adds nothing on top of MLM at 1%
+H10.2,A21-A20 (FGM on top of MLM),10,0.14,-0.29,0.55,1.0,SUPPORTED (no significant difference),... nor at 10%
+H10.3,A36-A20 (all three on top of MLM),1,0.97,0.39,1.54,0.0234,SUPPORTED,the full stack beats MLM alone at 1%
+H10.3,A36-A20 (all three on top of MLM),10,0.58,0.09,1.06,0.2024,no significant difference,... at 10% (no direction)
+H10.4,pretraining x helpers,1,-1.15,-1.74,-0.54,0.0,SUPPORTED,pretraining shrinks the helpers' gain at 1%
+H10.4,pretraining x FGM,1,-1.67,-2.31,-1.02,0.0,SUPPORTED,pretraining shrinks FGM's gain at 1%
+H10.4,pretraining x self-training,1,-1.26,-1.88,-0.65,0.0022,significant difference,pretraining and self-training (no direction)
+H10.5,A36-A30 (MLM under the full stack),1,4.21,3.45,4.99,0.0,SUPPORTED,MLM still adds under the full stack at 1%
+H10.5,A36-A30 (MLM under the full stack),10,1.71,1.12,2.32,0.0,SUPPORTED,... and at 10%
+H10.6,A20[pt1]-A1 (pretraining seed 1),1,7.72,6.82,8.63,0.0,SUPPORTED,pretraining seed 1 helps at 1%
+H10.6,A20[pt1]-A1 (pretraining seed 1),10,2.68,1.97,3.42,0.0,SUPPORTED,... and at 10%
+H10.6,A20[pt2]-A1 (pretraining seed 2),1,6.89,5.97,7.82,0.0,SUPPORTED,pretraining seed 2 helps at 1%
+H10.6,A20[pt2]-A1 (pretraining seed 2),10,2.26,1.55,2.97,0.0,SUPPORTED,... and at 10%
+H10.7,A20-A1 (MLM vs BERT),5,3.49,2.76,4.22,0.0,SUPPORTED,MLM helps at 5%
+H10.7,A20-A1 (MLM vs BERT),30,1.04,0.5,1.61,0.0,SUPPORTED,MLM helps at 30%
+H10.7,A20-A1 (MLM vs BERT),100,0.09,-0.42,0.6,1.0,SUPPORTED (no significant difference),no difference with every label
+H10.8,A20@1% - A1@10%,1,-0.38,-1.15,0.41,1.0,SUPPORTED (no significant difference),MLM with 1% labels matches BERT with 10%
+H10.8,A20@10% - A1@30%,10,0.17,-0.44,0.8,1.0,SUPPORTED (no significant difference),MLM with 10% labels matches BERT with 30%
+H10.9,gap(A20) - gap(A1),1,-0.07,-0.88,0.74,1.0,not supported (no significant difference),MLM leans less on outlet cue words at 1%
+H10.9,gap(A20) - gap(A1),10,-0.17,-0.93,0.61,1.0,not supported (no significant difference),... and at 10%
+H10.10,AUC A20 - word count,1,-18.87,-23.74,-14.02,0.0,SUPPORTED,A20 stays below word count alone on iSarcasmEval at 1%
+H10.10,AUC A21 - word count,1,-20.11,-25.11,-15.11,0.0,SUPPORTED,A21 stays below word count alone on iSarcasmEval at 1%
+H10.10,AUC A22 - word count,1,-16.05,-20.77,-11.37,0.0,SUPPORTED,A22 stays below word count alone on iSarcasmEval at 1%
+H10.10,AUC A23 - word count,1,-17.42,-22.34,-12.53,0.0,SUPPORTED,A23 stays below word count alone on iSarcasmEval at 1%
+H10.10,AUC A36 - word count,1,-20.95,-26.24,-15.75,0.0,SUPPORTED,A36 stays below word count alone on iSarcasmEval at 1%
+H10.10,AUC A20 - word count,10,-14.57,-18.9,-10.28,0.0,SUPPORTED,A20 stays below word count alone on iSarcasmEval at 10%
+H10.10,AUC A21 - word count,10,-14.07,-18.48,-9.7,0.0,SUPPORTED,A21 stays below word count alone on iSarcasmEval at 10%
+H10.10,AUC A22 - word count,10,-11.45,-15.3,-7.6,0.0,SUPPORTED,A22 stays below word count alone on iSarcasmEval at 10%
+H10.10,AUC A23 - word count,10,-12.86,-17.22,-8.47,0.0,SUPPORTED,A23 stays below word count alone on iSarcasmEval at 10%
+H10.10,AUC A36 - word count,10,-14.15,-19.03,-9.31,0.0,SUPPORTED,A36 stays below word count alone on iSarcasmEval at 10%
