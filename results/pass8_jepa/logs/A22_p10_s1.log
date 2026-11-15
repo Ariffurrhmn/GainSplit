@@ -1,0 +1,11 @@
+A22_p10_s1: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2674.46it/s]
+  step 100/720  loss_sarc 0.4256  loss 0.4256
+  step 200/720  loss_sarc 0.132  loss 0.132
+  step 300/720  loss_sarc 0.01721  loss 0.01721
+  step 400/720  loss_sarc 0.00292  loss 0.00292
+  step 500/720  loss_sarc 0.00019  loss 0.00019
+  step 600/720  loss_sarc 0.00014  loss 0.00014
+  step 700/720  loss_sarc 0.00013  loss 0.00013
+  step 720/720  loss_sarc 0.00012  loss 0.00012
+A22_p10_s1: done in 1.54 min; dev macro-F1 0.8791, test macro-F1 0.8977, isarc_test macro-F1 0.5105, test_cuemask macro-F1 0.8497, test_randmask macro-F1 0.8829

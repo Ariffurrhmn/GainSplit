@@ -1,0 +1,58 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+A30_p10_s1: |L|=2280 |U|=20520 steps=720 device=cuda
+  self-training teacher (A2+A7 recipe):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2650.85it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:239: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.4742  loss_adv 1.117  loss 2.108  loss_sent 0.9209  loss_emo 0.8008
+  step 200/720  loss_sarc 0.1521  loss_adv 0.623  loss 1.064  loss_sent 0.4816  loss_emo 0.4829
+  step 300/720  loss_sarc 0.01897  loss_adv 0.2869  loss 0.4643  loss_sent 0.2326  loss_emo 0.2957
+  step 400/720  loss_sarc 0.00538  loss_adv 0.1649  loss 0.2502  loss_sent 0.1076  loss_emo 0.1587
+  step 500/720  loss_sarc 0.0039  loss_adv 0.1  loss 0.141  loss_sent 0.05121  loss_emo 0.07239
+  step 600/720  loss_sarc 0.0027  loss_adv 0.05538  loss 0.07462  loss_sent 0.01998  loss_emo 0.03512
+  step 700/720  loss_sarc 0.00197  loss_adv 0.03499  loss 0.04749  loss_sent 0.01396  loss_emo 0.02118
+  step 720/720  loss_sarc 0.00186  loss_adv 0.03383  loss 0.04377  loss_sent 0.01236  loss_emo 0.01457
+  A6 pseudo-labels kept: 16932 of 20520 (confident 18385, per class {'0': 9919, '1': 8466})
+  A6 student (fresh BERT):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2466.66it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:239: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.3641  loss_adv 0.9989  loss 1.871  loss_sent 0.9082  loss_emo 0.7849
+  step 200/720  loss_sarc 0.1163  loss_adv 0.5468  loss 0.926  loss_sent 0.4433  loss_emo 0.4328
+  step 300/720  loss_sarc 0.0386  loss_adv 0.3088  loss 0.4768  loss_sent 0.1812  loss_emo 0.2503
+  step 400/720  loss_sarc 0.02488  loss_adv 0.2032  loss 0.2926  loss_sent 0.08426  loss_emo 0.131
+  step 500/720  loss_sarc 0.01964  loss_adv 0.1488  loss 0.2016  loss_sent 0.04428  loss_emo 0.0661
+  step 600/720  loss_sarc 0.01008  loss_adv 0.09576  loss 0.1258  loss_sent 0.02779  loss_emo 0.03859
+  step 700/720  loss_sarc 0.00461  loss_adv 0.07137  loss 0.08938  loss_sent 0.0182  loss_emo 0.02644
+  step 720/720  loss_sarc 0.00614  loss_adv 0.05683  loss 0.07292  loss_sent 0.01354  loss_emo 0.01962
+A30_p10_s1: done in 5.86 min; dev macro-F1 0.8875, test macro-F1 0.9023, isarc_test macro-F1 0.4845

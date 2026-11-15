@@ -1,0 +1,9 @@
+budget,arm,ingredients,gain_over_bert,sum_of_single_gains,share_of_sum
+1,A27,helpers+FGM,2.55,3.21,0.79
+1,A28,helpers+self-training,2.64,3.25,0.81
+1,A29,FGM+self-training,3.44,3.19,1.08
+1,A30,all three,4.17,4.83,0.86
+10,A27,helpers+FGM,1.27,1.76,0.72
+10,A28,helpers+self-training,1.01,0.81,1.25
+10,A29,FGM+self-training,2.07,2.14,0.97
+10,A30,all three,1.67,2.35,0.71

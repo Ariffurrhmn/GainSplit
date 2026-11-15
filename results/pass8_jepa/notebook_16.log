@@ -1,0 +1,214 @@
+[{"stream_name":"stderr","time":7.630019149,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":7.6300742150000005,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":7.6300807840000004,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":7.630084864,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":8.214832378,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.214869219,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.214874914,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.214878701,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":9.345425197,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stderr","time":9.547677241,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stderr","time":9.547706628,"data":"\n"}
+,{"stream_name":"stderr","time":9.547729504,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stdout","time":16.081419318,"data":"code commit: 9aa0147c9607c00d682e4551149551755288ece8\n"}
+,{"stream_name":"stdout","time":120.068227718,"data":"........................................................................ [ 27%]\n"}
+,{"stream_name":"stdout","time":120.068275403,"data":"........................................................................ [ 54%]\n"}
+,{"stream_name":"stdout","time":120.068282723,"data":"........................................................................ [ 81%]\n"}
+,{"stream_name":"stdout","time":120.068287507,"data":"................................................                         [100%]\n"}
+,{"stream_name":"stdout","time":120.068292398,"data":"=============================== warnings summary ===============================\n"}
+,{"stream_name":"stdout","time":120.068297086,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":120.068301627,"data":"  /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:64: PyparsingDeprecationWarning: 'oneOf' deprecated - use 'one_of'\n"}
+,{"stream_name":"stdout","time":120.068306441,"data":"    prop = Group((name + Suppress(\"=\") + comma_separated(value)) | oneOf(_CONSTANTS))\n"}
+,{"stream_name":"stdout","time":120.068311401,"data":"\n"}
+,{"stream_name":"stdout","time":120.068315423,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":120.06831986,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":120.068324548,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":120.068328915,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":120.06833307,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":120.068337543,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":120.068341795,"data":"  /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:85: PyparsingDeprecationWarning: 'parseString' deprecated - use 'parse_string'\n"}
+,{"stream_name":"stdout","time":120.068346286,"data":"    parse = parser.parseString(pattern)\n"}
+,{"stream_name":"stdout","time":120.068350375,"data":"\n"}
+,{"stream_name":"stdout","time":120.068378555,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":120.068395878,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":120.068399688,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":120.068402985,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":120.068406237,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":120.068409445,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":120.068412671,"data":"  /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:89: PyparsingDeprecationWarning: 'resetCache' deprecated - use 'reset_cache'\n"}
+,{"stream_name":"stdout","time":120.068416266,"data":"    parser.resetCache()\n"}
+,{"stream_name":"stdout","time":120.068419441,"data":"\n"}
+,{"stream_name":"stdout","time":120.068422577,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":120.068425915,"data":"  /usr/local/lib/python3.13/dist-packages/matplotlib/_mathtext.py:45: PyparsingDeprecationWarning: 'enablePackrat' deprecated - use 'enable_packrat'\n"}
+,{"stream_name":"stdout","time":120.068429377,"data":"    ParserElement.enablePackrat()\n"}
+,{"stream_name":"stdout","time":120.068432595,"data":"\n"}
+,{"stream_name":"stdout","time":120.068435621,"data":"tests/test_analysis.py: 215 warnings\n"}
+,{"stream_name":"stdout","time":120.068438866,"data":"tests/test_masking.py: 2 warnings\n"}
+,{"stream_name":"stdout","time":120.068442037,"data":"tests/test_pass4.py: 148 warnings\n"}
+,{"stream_name":"stdout","time":120.068446766,"data":"tests/test_pass4_train.py: 102 warnings\n"}
+,{"stream_name":"stdout","time":120.068450511,"data":"tests/test_pass8.py: 40 warnings\n"}
+,{"stream_name":"stdout","time":120.06845443,"data":"tests/test_tfidf_plans.py: 8 warnings\n"}
+,{"stream_name":"stdout","time":120.068457786,"data":"  /usr/local/lib/python3.13/dist-packages/sklearn/linear_model/_logistic.py:451: DeprecationWarning: scipy.optimize: The `disp` and `iprint` options of the L-BFGS-B solver are deprecated and will be removed in SciPy 1.18.0.\n"}
+,{"stream_name":"stdout","time":120.068463044,"data":"    opt_res = optimize.minimize(\n"}
+,{"stream_name":"stdout","time":120.068466011,"data":"\n"}
+,{"stream_name":"stdout","time":120.068469146,"data":"tests/test_pass4.py::test_pass4_analysis_end_to_end\n"}
+,{"stream_name":"stdout","time":120.068472712,"data":"  /tmp/GainSplit/src/gainsplit/analysis_pass4.py:179: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.\n"}
+,{"stream_name":"stdout","time":120.068476776,"data":"    \"median_rel_completeness_gap\": g.apply(\n"}
+,{"stream_name":"stdout","time":120.068480077,"data":"\n"}
+,{"stream_name":"stdout","time":120.068483121,"data":"tests/test_pass5_7.py::test_pass5_7_analysis_end_to_end\n"}
+,{"stream_name":"stdout","time":120.068486163,"data":"  /tmp/GainSplit/src/gainsplit/analysis_pass4.py:266: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.\n"}
+,{"stream_name":"stdout","time":120.06848992,"data":"    return pd.concat(out, ignore_index=True)\n"}
+,{"stream_name":"stdout","time":120.068497948,"data":"\n"}
+,{"stream_name":"stdout","time":120.068501491,"data":"-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n"}
+,{"stream_name":"stdout","time":120.068505131,"data":"264 passed, 531 warnings in 98.56s (0:01:38)\n"}
+,{"stream_name":"stdout","time":120.068508604,"data":" \n"}
+,{"stream_name":"stdout","time":122.251278197,"data":"GPUs: ['Tesla T4', 'Tesla T4']\n"}
+,{"stream_name":"stdout","time":123.370455795,"data":"data: /kaggle/input/datasets/arifurrhmn/gainsplit-processed - all files match manifest.json\n"}
+,{"stream_name":"stdout","time":2757.487249524,"data":"088  pred_std 0.701\n"}
+,{"stream_name":"stdout","time":2757.487307985,"data":"  step 1250/10000  loss 0.3162  target_std 0.9327  pred_std 0.7422\n"}
+,{"stream_name":"stdout","time":2757.487314398,"data":"  step 1500/10000  loss 0.3076  target_std 0.9397  pred_std 0.7562\n"}
+,{"stream_name":"stdout","time":2757.487318851,"data":"  step 1750/10000  loss 0.3071  target_std 0.943  pred_std 0.7628\n"}
+,{"stream_name":"stdout","time":2757.487323328,"data":"  step 2000/10000  loss 0.2982  target_std 0.9452  pred_std 0.7705\n"}
+,{"stream_name":"stdout","time":2757.487327593,"data":"  step 2250/10000  loss 0.299  target_std 0.9465  pred_std 0.7717\n"}
+,{"stream_name":"stdout","time":2757.487331819,"data":"  step 2500/10000  loss 0.2997  target_std 0.9473  pred_std 0.7729\n"}
+,{"stream_name":"stdout","time":2757.487336213,"data":"  step 2750/10000  loss 0.2903  target_std 0.948  pred_std 0.779\n"}
+,{"stream_name":"stdout","time":2757.487346296,"data":"  step 3000/10000  loss 0.2898  target_std 0.9485  pred_std 0.7805\n"}
+,{"stream_name":"stdout","time":2757.48734972,"data":"  step 3250/10000  loss 0.2901  target_std 0.9487  pred_std 0.7804\n"}
+,{"stream_name":"stdout","time":2757.487352579,"data":"  step 3500/10000  loss 0.2877  target_std 0.9491  pred_std 0.7831\n"}
+,{"stream_name":"stdout","time":2757.487355361,"data":"  step 3750/10000  loss 0.2827  target_std 0.9494  pred_std 0.7852\n"}
+,{"stream_name":"stdout","time":2757.487370843,"data":"  step 4000/10000  loss 0.2794  target_std 0.9495  pred_std 0.7881\n"}
+,{"stream_name":"stdout","time":2757.487375973,"data":"  step 4250/10000  loss 0.2752  target_std 0.9492  pred_std 0.79\n"}
+,{"stream_name":"stdout","time":2757.487393785,"data":"  step 4500/10000  loss 0.2714  target_std 0.9489  pred_std 0.792\n"}
+,{"stream_name":"stdout","time":2757.487398996,"data":"  step 4750/10000  loss 0.2681  target_std 0.9485  pred_std 0.7935\n"}
+,{"stream_name":"stdout","time":2757.487403216,"data":"  step 5000/10000  loss 0.2657  target_std 0.9479  pred_std 0.7939\n"}
+,{"stream_name":"stdout","time":2757.487407389,"data":"  step 5250/10000  loss 0.2612  target_std 0.9478  pred_std 0.7971\n"}
+,{"stream_name":"stdout","time":2757.487411557,"data":"  step 5500/10000  loss 0.257  target_std 0.9475  pred_std 0.7986\n"}
+,{"stream_name":"stdout","time":2757.487415726,"data":"  step 5750/10000  loss 0.2542  target_std 0.9471  pred_std 0.7992\n"}
+,{"stream_name":"stdout","time":2757.487419919,"data":"  step 6000/10000  loss 0.2511  target_std 0.947  pred_std 0.8015\n"}
+,{"stream_name":"stdout","time":2757.48742416,"data":"  step 6250/10000  loss 0.2463  target_std 0.9459  pred_std 0.803\n"}
+,{"stream_name":"stdout","time":2757.487428381,"data":"  step 6500/10000  loss 0.2432  target_std 0.9456  pred_std 0.8041\n"}
+,{"stream_name":"stdout","time":2757.487432602,"data":"  step 6750/10000  loss 0.2435  target_std 0.9452  pred_std 0.804\n"}
+,{"stream_name":"stdout","time":2757.487436774,"data":"  step 7000/10000  loss 0.2379  target_std 0.9449  pred_std 0.8065\n"}
+,{"stream_name":"stdout","time":2757.487452063,"data":"  step 7250/10000  loss 0.2369  target_std 0.9444  pred_std 0.8063\n"}
+,{"stream_name":"stdout","time":2757.487459705,"data":"  step 7500/10000  loss 0.234  target_std 0.944  pred_std 0.8072\n"}
+,{"stream_name":"stdout","time":2757.487462881,"data":"  step 7750/10000  loss 0.2309  target_std 0.9437  pred_std 0.809\n"}
+,{"stream_name":"stdout","time":2757.487478129,"data":"  step 8000/10000  loss 0.2287  target_std 0.9437  pred_std 0.8097\n"}
+,{"stream_name":"stdout","time":2757.487482144,"data":"  step 8250/10000  loss 0.2277  target_std 0.943  pred_std 0.81\n"}
+,{"stream_name":"stdout","time":2757.487486268,"data":"  step 8500/10000  loss 0.2245  target_std 0.9429  pred_std 0.8112\n"}
+,{"stream_name":"stdout","time":2757.487492274,"data":"  step 8750/10000  loss 0.2205  target_std 0.9425  pred_std 0.8134\n"}
+,{"stream_name":"stdout","time":2757.487501429,"data":"  step 9000/10000  loss 0.2223  target_std 0.9424  pred_std 0.8122\n"}
+,{"stream_name":"stdout","time":2757.487505017,"data":"  step 9250/10000  loss 0.2174  target_std 0.9418  pred_std 0.8141\n"}
+,{"stream_name":"stdout","time":2757.487508344,"data":"  step 9500/10000  loss 0.2157  target_std 0.9417  pred_std 0.8146\n"}
+,{"stream_name":"stdout","time":2757.487511708,"data":"  step 9750/10000  loss 0.2158  target_std 0.9415  pred_std 0.8141\n"}
+,{"stream_name":"stdout","time":2757.487515024,"data":"  step 10000/10000  loss 0.2128  target_std 0.9417  pred_std 0.8159\n"}
+,{"stream_name":"stdout","time":2757.48751893,"data":"after pretraining: dev {'loss': 0.37754, 'target_std': 0.94201, 'pred_std': 0.77675}; probe {'p1': {'dev_macro_f1_mean': 78.465, 'dev_macro_f1_sd': 0.829, 'per_seed': [79.646, 77.707, 78.694, 78.643, 77.633]}, 'p10': {'dev_macro_f1_mean': 79.833, 'dev_macro_f1_sd': 0.93, 'per_seed': [79.875, 79.614, 80.698, 78.388, 80.589]}}\n"}
+,{"stream_name":"stdout","time":2757.487524174,"data":"\n"}
+,{"stream_name":"stdout","time":2757.487527368,"data":"Writing model shards:   0%|          | 0/1 [00:00\u003c?, ?it/s]\n"}
+,{"stream_name":"stdout","time":2757.487531116,"data":"Writing model shards: 100%|██████████| 1/1 [00:00\u003c00:00,  2.17it/s]\n"}
+,{"stream_name":"stdout","time":2757.487535334,"data":"Writing model shards: 100%|██████████| 1/1 [00:00\u003c00:00,  2.17it/s]\n"}
+,{"stream_name":"stdout","time":2757.487538889,"data":"saved jepa encoder to /kaggle/working/ckpt/jepa (43.74 min)\n"}
+,{"stream_name":"stdout","time":2757.487542248,"data":"\n"}
+,{"stream_name":"stdout","time":2757.487545527,"data":"pretraining: 43.74 min; dev loss 1.32074 -\u003e 0.37754\n"}
+,{"stream_name":"stdout","time":2757.487550704,"data":"linear probe p1: dev macro-F1 76.16 (bert-base) -\u003e 78.47 (JEPA encoder)\n"}
+,{"stream_name":"stdout","time":2757.487556977,"data":"linear probe p10: dev macro-F1 80.63 (bert-base) -\u003e 79.83 (JEPA encoder)\n"}
+,{"stream_name":"stdout","time":2757.487560201,"data":"target_std after: 0.94201\n"}
+,{"stream_name":"stdout","time":2757.501942843,"data":"A23_p10_s0       arm=A23 labels= 10% seed=0 eps=0.5 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.50196529,"data":"A23_p10_s1       arm=A23 labels= 10% seed=1 eps=0.5 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.501970628,"data":"A23_p10_s2       arm=A23 labels= 10% seed=2 eps=0.5 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.501974655,"data":"A23_p10_s3       arm=A23 labels= 10% seed=3 eps=0.5 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.501978562,"data":"A23_p10_s4       arm=A23 labels= 10% seed=4 eps=0.5 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.501982652,"data":"A22_p10_s0       arm=A22 labels= 10% seed=0 eps=0 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502005477,"data":"A22_p10_s1       arm=A22 labels= 10% seed=1 eps=0 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502009193,"data":"A22_p10_s2       arm=A22 labels= 10% seed=2 eps=0 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502012613,"data":"A22_p10_s3       arm=A22 labels= 10% seed=3 eps=0 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502015953,"data":"A22_p10_s4       arm=A22 labels= 10% seed=4 eps=0 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502019323,"data":"A23_p1_s0        arm=A23 labels=  1% seed=0 eps=0.5 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502022735,"data":"A23_p1_s1        arm=A23 labels=  1% seed=1 eps=0.5 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502026099,"data":"A23_p1_s2        arm=A23 labels=  1% seed=2 eps=0.5 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502029438,"data":"A23_p1_s3        arm=A23 labels=  1% seed=3 eps=0.5 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502033107,"data":"A23_p1_s4        arm=A23 labels=  1% seed=4 eps=0.5 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502036497,"data":"A22_p1_s0        arm=A22 labels=  1% seed=0 eps=0 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502041267,"data":"A22_p1_s1        arm=A22 labels=  1% seed=1 eps=0 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502044672,"data":"A22_p1_s2        arm=A22 labels=  1% seed=2 eps=0 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502048142,"data":"A22_p1_s3        arm=A22 labels=  1% seed=3 eps=0 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502053077,"data":"A22_p1_s4        arm=A22 labels=  1% seed=4 eps=0 init=/kaggle/working/ckpt/jepa\n"}
+,{"stream_name":"stdout","time":2757.502056955,"data":"20 runs\n"}
+,{"stream_name":"stdout","time":2757.717811687,"data":"20 runs, 0 already done, 20 to run on GPU [0, 1]\n"}
+,{"stream_name":"stdout","time":2757.717841613,"data":"start  A23_p10_s0  on GPU 0\n"}
+,{"stream_name":"stdout","time":2757.717845901,"data":"start  A23_p10_s1  on GPU 1\n"}
+,{"stream_name":"stdout","time":2895.729548665,"data":"done   A23_p10_s1  (2.3 min)\n"}
+,{"stream_name":"stdout","time":2898.728049512,"data":"start  A23_p10_s2  on GPU 1\n"}
+,{"stream_name":"stdout","time":2916.727689394,"data":"done   A23_p10_s0  (2.7 min)\n"}
+,{"stream_name":"stdout","time":2919.730234188,"data":"start  A23_p10_s3  on GPU 0\n"}
+,{"stream_name":"stdout","time":3042.738818234,"data":"done   A23_p10_s2  (2.4 min)\n"}
+,{"stream_name":"stdout","time":3045.738518342,"data":"start  A23_p10_s4  on GPU 1\n"}
+,{"stream_name":"stdout","time":3078.740082546,"data":"done   A23_p10_s3  (2.7 min)\n"}
+,{"stream_name":"stdout","time":3081.742564446,"data":"start  A22_p10_s0  on GPU 0\n"}
+,{"stream_name":"stdout","time":3183.746905302,"data":"done   A22_p10_s0  (1.7 min)\n"}
+,{"stream_name":"stdout","time":3186.746813285,"data":"start  A22_p10_s1  on GPU 0\n"}
+,{"stream_name":"stdout","time":3192.745638961,"data":"done   A23_p10_s4  (2.5 min)\n"}
+,{"stream_name":"stdout","time":3195.751865448,"data":"start  A22_p10_s2  on GPU 1\n"}
+,{"stream_name":"stdout","time":3288.754324361,"data":"done   A22_p10_s1  (1.7 min)\n"}
+,{"stream_name":"stdout","time":3291.753605137,"data":"start  A22_p10_s3  on GPU 0\n"}
+,{"stream_name":"stdout","time":3291.753630704,"data":"done   A22_p10_s2  (1.6 min)\n"}
+,{"stream_name":"stdout","time":3294.7555064,"data":"start  A22_p10_s4  on GPU 1\n"}
+,{"stream_name":"stdout","time":3390.760873931,"data":"done   A22_p10_s4  (1.6 min)\n"}
+,{"stream_name":"stdout","time":3393.763503583,"data":"start  A23_p1_s0  on GPU 1\n"}
+,{"stream_name":"stdout","time":3393.763536424,"data":"done   A22_p10_s3  (1.7 min)\n"}
+,{"stream_name":"stdout","time":3396.763110203,"data":"start  A23_p1_s1  on GPU 0\n"}
+,{"stream_name":"stdout","time":3450.766408425,"data":"done   A23_p1_s0  (1.0 min)\n"}
+,{"stream_name":"stdout","time":3453.768129361,"data":"start  A23_p1_s2  on GPU 1\n"}
+,{"stream_name":"stdout","time":3456.765323325,"data":"done   A23_p1_s1  (1.0 min)\n"}
+,{"stream_name":"stdout","time":3459.76791359,"data":"start  A23_p1_s3  on GPU 0\n"}
+,{"stream_name":"stdout","time":3510.771907227,"data":"done   A23_p1_s2  (1.0 min)\n"}
+,{"stream_name":"stdout","time":3513.771714734,"data":"start  A23_p1_s4  on GPU 1\n"}
+,{"stream_name":"stdout","time":3519.770771514,"data":"done   A23_p1_s3  (1.0 min)\n"}
+,{"stream_name":"stdout","time":3522.776481025,"data":"start  A22_p1_s0  on GPU 0\n"}
+,{"stream_name":"stdout","time":3567.778928869,"data":"done   A22_p1_s0  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3570.777083476,"data":"start  A22_p1_s1  on GPU 0\n"}
+,{"stream_name":"stdout","time":3570.777120559,"data":"done   A23_p1_s4  (1.0 min)\n"}
+,{"stream_name":"stdout","time":3573.779899547,"data":"start  A22_p1_s2  on GPU 1\n"}
+,{"stream_name":"stdout","time":3615.78230184,"data":"done   A22_p1_s1  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3615.782334218,"data":"done   A22_p1_s2  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3618.785502123,"data":"start  A22_p1_s3  on GPU 0\n"}
+,{"stream_name":"stdout","time":3618.785535555,"data":"start  A22_p1_s4  on GPU 1\n"}
+,{"stream_name":"stdout","time":3660.786308644,"data":"done   A22_p1_s4  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3663.783731374,"data":"done   A22_p1_s3  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3666.592498749,"data":"total so far: 61.0 min\n"}
+,{"stream_name":"stdout","time":3666.798546515,"data":"results folders: ['/tmp/GainSplit/results/pass1', '/tmp/GainSplit/results/pass2b', '/tmp/GainSplit/results/pass7', '/tmp/GainSplit/results/pass8_mlm', '/kaggle/working/results/pass8_jepa']\n"}
+,{"stream_name":"stdout","time":3680.612819344,"data":"\n"}
+,{"stream_name":"stdout","time":3680.6128449,"data":"=== summary\n"}
+,{"stream_name":"stdout","time":3680.619894796,"data":"\n"}
+,{"stream_name":"stdout","time":3680.619915977,"data":"=== contrasts_f1\n"}
+,{"stream_name":"stdout","time":3680.623909347,"data":"\n"}
+,{"stream_name":"stdout","time":3680.623925994,"data":"=== seed_wins\n"}
+,{"stream_name":"stdout","time":3680.629288598,"data":"\n"}
+,{"stream_name":"stdout","time":3680.629306168,"data":"=== auc_contrasts\n"}
+,{"stream_name":"stdout","time":3680.632798882,"data":"\n"}
+,{"stream_name":"stdout","time":3680.632814391,"data":"=== contrasts_accuracy_100\n"}
+,{"stream_name":"stdout","time":3680.637387895,"data":"\n"}
+,{"stream_name":"stdout","time":3680.637404455,"data":"=== rerun_check\n"}
+,{"stream_name":"stdout","time":3680.644669525,"data":"\n"}
+,{"stream_name":"stdout","time":3680.644692913,"data":"=== pretrain\n"}
+,{"stream_name":"stdout","time":3680.681964255,"data":"H8b.1 A22-A1                     1%  +5.67 points [+4.72, +6.63]  p_holm 0.000  seeds ahead 5/5  -\u003e SUPPORTED   (JEPA-TAPT helps plain BERT at 1% labels)\n"}
+,{"stream_name":"stdout","time":3680.681981895,"data":"H8b.1 A22-A1                    10%  +1.63 points [+0.85, +2.42]  p_holm 0.000  seeds ahead 5/5  -\u003e SUPPORTED   (... and at 10%)\n"}
+,{"stream_name":"stdout","time":3680.681998153,"data":"H8b.2 A23-A7                     1%  +4.30 points [+3.39, +5.21]  p_holm 0.000  seeds ahead 5/5  -\u003e SUPPORTED   (it stacks with FGM at 1%)\n"}
+,{"stream_name":"stdout","time":3680.68200243,"data":"H8b.2 A23-A7                    10%  +0.23 points [-0.45, +0.93]  p_holm 0.496  seeds ahead 4/5  -\u003e not supported (no significant difference)   (... and at 10%)\n"}
+,{"stream_name":"stdout","time":3680.682006193,"data":"H8b.3 A22-A20 (JEPA vs MLM)      1%  -1.75 points [-2.59, -0.91]  p_holm 0.000  seeds ahead 0/5  -\u003e significant difference   (JEPA vs MLM, plain (no direction predicted))\n"}
+,{"stream_name":"stdout","time":3680.682025581,"data":"H8b.3 A22-A20 (JEPA vs MLM)     10%  -1.17 points [-1.84, -0.52]  p_holm 0.001  seeds ahead 0/5  -\u003e significant difference   (JEPA vs MLM, plain (no direction predicted))\n"}
+,{"stream_name":"stdout","time":3680.682029309,"data":"H8b.3 A23-A21 (JEPA vs MLM)      1%  -1.45 points [-2.25, -0.66]  p_holm 0.001  seeds ahead 0/5  -\u003e significant difference   (JEPA vs MLM, with FGM (no direction predicted))\n"}
+,{"stream_name":"stdout","time":3680.682033289,"data":"H8b.3 A23-A21 (JEPA vs MLM)     10%  -1.16 points [-1.78, -0.53]  p_holm 0.000  seeds ahead 0/5  -\u003e significant difference   (JEPA vs MLM, with FGM (no direction predicted))\n"}
+,{"stream_name":"stdout","time":3680.682037433,"data":"H8b.4 A23-A7 at 100%: no runs (skipped)\n"}
+,{"stream_name":"stdout","time":3680.682041226,"data":"\n"}
+,{"stream_name":"stdout","time":3680.682044576,"data":"accuracy at 100% (the number the seed paper reports):\n"}
+,{"stream_name":"stdout","time":3680.942983906,"data":"/kaggle/working/results_pass8_jepa.zip\n"}
+,{"stream_name":"stdout","time":3680.943003096,"data":"notebook time: 61.2 min\n"}
+,{"stream_name":"stderr","time":3683.959636883,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":3683.959657249,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":3684.139648144,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":3684.139671332,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":3684.92290157,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":3685.010069545,"data":"[NbConvertApp] Writing 68584 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":3687.441714512,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":3687.976433535,"data":"[NbConvertApp] Writing 348017 bytes to __results__.html\n"}
+]

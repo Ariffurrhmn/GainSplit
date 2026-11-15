@@ -1,0 +1,164 @@
+{
+  "run_id": "A27_p10_s0",
+  "config": {
+    "arm": "A27",
+    "budget": 10,
+    "seed": 0,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.3,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.5,
+    "tag": "",
+    "helper_variant": "",
+    "eval_masked": false,
+    "train_data": "headlines",
+    "gen_lr": 0.0,
+    "step_mult": 1,
+    "pair_batch": 32,
+    "explain": false,
+    "pair_weight": 1.0,
+    "cleaned_drop_pct": 0.0,
+    "pretrain_steps": 0,
+    "init_dir": "",
+    "cons_weight": 0.0
+  },
+  "n_labeled": 2280,
+  "n_unlabeled": 20520,
+  "uses_u": false,
+  "pairs": null,
+  "explain": null,
+  "pretrain": null,
+  "init": null,
+  "diffusion": null,
+  "steps": 720,
+  "minutes": 2.19,
+  "scores": {
+    "dev": {
+      "accuracy": 0.8747368421052631,
+      "macro_f1": 0.8743652354301272,
+      "f1_sarcastic": 0.8675324675324675,
+      "roc_auc": 0.9499964210344445,
+      "n": 2850
+    },
+    "test": {
+      "accuracy": 0.8972290424412487,
+      "macro_f1": 0.896980625881086,
+      "f1_sarcastic": 0.8919218000737735,
+      "roc_auc": 0.9556139866211496,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.6914285714285714,
+      "macro_f1": 0.5001834644029474,
+      "f1_sarcastic": 0.19101123595505617,
+      "roc_auc": 0.5649354166666667,
+      "n": 1400
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.45573,
+      "loss_adv": 1.09675,
+      "loss": 2.051,
+      "loss_sent": 0.85303,
+      "loss_emo": 0.80874
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.14755,
+      "loss_adv": 0.60143,
+      "loss": 1.01717,
+      "loss_sent": 0.45073,
+      "loss_emo": 0.44325
+    },
+    {
+      "step": 300,
+      "loss_sarc": 0.02497,
+      "loss_adv": 0.28773,
+      "loss": 0.45734,
+      "loss_sent": 0.21264,
+      "loss_emo": 0.26951
+    },
+    {
+      "step": 400,
+      "loss_sarc": 0.0055,
+      "loss_adv": 0.1627,
+      "loss": 0.24436,
+      "loss_sent": 0.10382,
+      "loss_emo": 0.15005
+    },
+    {
+      "step": 500,
+      "loss_sarc": 0.0042,
+      "loss_adv": 0.1021,
+      "loss": 0.14272,
+      "loss_sent": 0.05282,
+      "loss_emo": 0.06858
+    },
+    {
+      "step": 600,
+      "loss_sarc": 0.00246,
+      "loss_adv": 0.06302,
+      "loss": 0.08232,
+      "loss_sent": 0.02606,
+      "loss_emo": 0.03007
+    },
+    {
+      "step": 700,
+      "loss_sarc": 0.00195,
+      "loss_adv": 0.044,
+      "loss": 0.05622,
+      "loss_sent": 0.01466,
+      "loss_emo": 0.01958
+    },
+    {
+      "step": 720,
+      "loss_sarc": 0.00177,
+      "loss_adv": 0.04471,
+      "loss": 0.05595,
+      "loss_sent": 0.01337,
+      "loss_emo": 0.01818
+    }
+  ],
+  "pseudo": null,
+  "helper_label_counts": {
+    "sent": {
+      "negative": 7454,
+      "neutral": 12833,
+      "positive": 2513
+    },
+    "emo": {
+      "joy": 1941,
+      "sadness": 1081,
+      "anger": 658,
+      "fear": 276,
+      "neutral_other": 18844
+    }
+  },
+  "commit": "9aa0147c9607c00d682e4551149551755288ece8",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

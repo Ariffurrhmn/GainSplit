@@ -308,7 +308,7 @@ Why ([[Research Ideas]] "Beyond LLMs and beyond transformers"): no run so far us
 
 **Cost.** 8a and 8b about 1.5-2 h each on T4 x2 (pretraining 10-20 min on one GPU; the five 100% FGM runs about 21 min each); 8c about 30-40 min. About 8-9 GPU-h in total. 8c does not depend on 8a/8b; 8b's JEPA-vs-MLM rows need `results/pass8_mlm/` committed first (otherwise skipped and run later in a combined analysis).
 
-**Status:** written and tested locally (non-torch 174 passed, 11 skipped; torch suite 249 passed, the one failure is matplotlib missing in the local install); analysis and verdict cells dry-run on stand-in runs. Committed as 563c450; notebooks 15 and 17 running (owner, 2026-11-15).
+**Status:** written and tested locally (non-torch 174 passed, 11 skipped; torch suite 249 passed, the one failure is matplotlib missing in the local install); analysis and verdict cells dry-run on stand-in runs. Committed as 563c450; notebooks 15, 16 and 17 run 2026-11-15 (16 without `pass8_jepa_100`). Results: [[Pass 8 Results]].
 
 ## Pass 9 plan (written 2026-11-15, before running; owner chose the stacked recipe, [[Research Ideas]] "After Pass 6" item 2; design DELEGATED per [[Repo Rules]] rule 7)
 
@@ -338,7 +338,7 @@ Why ([[Research Ideas]] "Beyond LLMs and beyond transformers"): no run so far us
 
 **Cost.** About 1.5 h on T4 x2 for the 43 runs (self-training arms train two models; FGM doubles the work per step), plus about 1 h for the five 100% runs; about 4-5 GPU-h in total.
 
-**Status:** written and tested locally (non-torch 180 passed, 19 skipped; torch suite 263 passed, the one failure is matplotlib missing locally); tiny runs of A1, A2, A3, A6, A7, A8, A9 give byte-identical predictions with the committed code and the new code; analysis and verdict cells dry-run on stand-in runs (old runs relabelled as the new arms). Not run, not committed.
+**Status:** written and tested locally (non-torch 180 passed, 19 skipped; torch suite 263 passed, the one failure is matplotlib missing locally); tiny runs of A1, A2, A3, A6, A7, A8, A9 give byte-identical predictions with the committed code and the new code; analysis and verdict cells dry-run on stand-in runs (old runs relabelled as the new arms). Committed as b36c0d7; `pass9` run 2026-11-15 (notebook 18, 43/43, re-runs PASS), `pass9_100` not run. Results: [[Pass 9 Results]].
 
 ## Status
 Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].

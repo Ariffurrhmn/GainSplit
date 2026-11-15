@@ -1,0 +1,11 @@
+A23_p10_s4: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 3080.76it/s]
+  step 100/720  loss_sarc 0.4578  loss_adv 0.5613  loss 1.019
+  step 200/720  loss_sarc 0.1348  loss_adv 0.2508  loss 0.3855
+  step 300/720  loss_sarc 0.01603  loss_adv 0.07973  loss 0.09576
+  step 400/720  loss_sarc 0.00199  loss_adv 0.03313  loss 0.03512
+  step 500/720  loss_sarc 0.00037  loss_adv 0.01145  loss 0.01182
+  step 600/720  loss_sarc 0.00015  loss_adv 0.00448  loss 0.00462
+  step 700/720  loss_sarc 0.00011  loss_adv 0.00476  loss 0.00487
+  step 720/720  loss_sarc 0.00011  loss_adv 0.01605  loss 0.01616
+A23_p10_s4: done in 2.27 min; dev macro-F1 0.9023, test macro-F1 0.8978, isarc_test macro-F1 0.4781, test_cuemask macro-F1 0.8508, test_randmask macro-F1 0.8935

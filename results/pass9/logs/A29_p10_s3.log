@@ -1,0 +1,53 @@
+A29_p10_s3: |L|=2280 |U|=20520 steps=720 device=cuda
+  self-training teacher (A7 recipe):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2743.85it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/720  loss_sarc 0.4494  loss_adv 0.5743  loss 1.024
+  step 200/720  loss_sarc 0.1296  loss_adv 0.2736  loss 0.4032
+  step 300/720  loss_sarc 0.01828  loss_adv 0.1185  loss 0.1368
+  step 400/720  loss_sarc 0.00188  loss_adv 0.05109  loss 0.05297
+  step 500/720  loss_sarc 0.00078  loss_adv 0.05045  loss 0.05123
+  step 600/720  loss_sarc 0.00052  loss_adv 0.02723  loss 0.02776
+  step 700/720  loss_sarc 0.00021  loss_adv 0.00648  loss 0.0067
+  step 720/720  loss_sarc 0.0002  loss_adv 0.00164  loss 0.00184
+  A6 pseudo-labels kept: 18186 of 20520 (confident 19352, per class {'0': 10259, '1': 9093})
+  A6 student (fresh BERT):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 4549.11it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/720  loss_sarc 0.3716  loss_adv 0.4853  loss 0.8569
+  step 200/720  loss_sarc 0.108  loss_adv 0.2378  loss 0.3458
+  step 300/720  loss_sarc 0.05038  loss_adv 0.1619  loss 0.2122
+  step 400/720  loss_sarc 0.03199  loss_adv 0.1289  loss 0.1609
+  step 500/720  loss_sarc 0.03336  loss_adv 0.1208  loss 0.1542
+  step 600/720  loss_sarc 0.02046  loss_adv 0.09477  loss 0.1152
+  step 700/720  loss_sarc 0.00873  loss_adv 0.06725  loss 0.07598
+  step 720/720  loss_sarc 0.00685  loss_adv 0.06122  loss 0.06807
+A29_p10_s3: done in 5.83 min; dev macro-F1 0.8857, test macro-F1 0.9036, isarc_test macro-F1 0.4851

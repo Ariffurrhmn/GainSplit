@@ -7,6 +7,13 @@ updated: 2026-11-15
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-15 - Pass 8b (JEPA) and Pass 9 (stacked recipe) results filed
+- Owner downloaded notebooks 16 and 18 (Kaggle CLI) into `data/kaggle_out/nb16`, `nb18`. Filed in `results/pass8_jepa/` and `results/pass9/` (zip, unpacked runs and logs, analysis, logs renamed `notebook_16.log`, `notebook_18.log`); `diff -r` against the zips: identical. The JEPA encoder checkpoint stays in `data/kaggle_out/nb16/ckpt/` (git-ignored).
+- Checks: notebook 16 re-run (A1 100% s0) PASS; notebook 18 re-runs A2, A6, A7 at 1% s0 equal Pass 2 exactly.
+- Read in [[Pass 8 Results]] (8b): JEPA-TAPT +5.67 at 1%, +1.63 at 10% over A1; loses to MLM-TAPT by 1.2-1.7 at both budgets, 0/5 seeds ahead; frozen probe barely moves (76.2 -> 78.5). iSarcasmEval AUC +3 over MLM but still near chance.
+- Read in [[Pass 9 Results]]: H9.1, H9.2 supported; H9.3 right direction, not significant after Holm; H9.5 untested (`pass9_100` not run). Stack +4.17 at 1%, about 86% of the summed single gains; at 10% helpers add nothing on top of FGM. Self-training kept 17-19k pseudo-labels per run, teacher dev F1 rises with the teacher recipe.
+- Open: re-base the stack on the MLM encoder (discussion with the owner, no code changed); cue-mask gap bootstrap for the pretrained arms; a second pretraining seed.
+
 ## 2026-11-15 - Pass 8a (MLM) and 8c (diffusion) results filed
 - Owner downloaded notebooks 15 and 17 (Kaggle CLI) into `data/kaggle_out/` (git-ignored; holds the 424 MB MLM encoder). Filed in `results/pass8_mlm/` and `results/pass8_diff/` (zip, unpacked runs, logs renamed `notebook_15.log`, `notebook_17.log`); unpacked folders match the zips.
 - Read in [[Pass 8 Results]]: re-run checks PASS. MLM-TAPT +7.42 at 1%, +2.80 at 10% over A1; +5.75 / +1.39 over A7; -0.25 n.s. at 100%; probe 76.2 -> 86.4. Cue-mask gap smaller for TAPT arms (3.8 vs 6.1 at 1%). Diffusion: A24 ties A1 and A4; A25 -4.82 and A26 -3.99 at 1% (robust).

@@ -1,0 +1,16 @@
+| contrast | budget | seeds_ahead | n_seeds | per_seed_diff |
+|---|---|---|---|---|
+| A27-A7 (helpers on top of FGM) | 1 | 5 | 5 | +1.19 +0.62 +1.29 +1.69 +0.04 |
+| A27-A2 (FGM on top of helpers) | 1 | 4 | 5 | +0.84 +1.40 +1.07 +1.31 -0.05 |
+| A28-A2 (self-training on top of helpers) | 1 | 5 | 5 | +0.32 +1.78 +0.56 +0.92 +1.45 |
+| A29-A7 (self-training on top of FGM) | 1 | 5 | 5 | +2.50 +1.22 +1.47 +1.62 +2.48 |
+| A30-A27 (self-training on top of helpers+FGM) | 1 | 5 | 5 | +1.02 +1.82 +1.48 +1.44 +2.37 |
+| A30-A1 (whole stack vs BERT) | 1 | 5 | 5 | +4.01 +5.62 +2.76 +4.08 +4.39 |
+| A30-A7 (whole stack vs FGM alone) | 1 | 5 | 5 | +2.22 +2.44 +2.78 +3.13 +2.40 |
+| A27-A7 (helpers on top of FGM) | 10 | 1 | 5 | +0.08 -0.30 -0.52 -0.18 -0.48 |
+| A27-A2 (FGM on top of helpers) | 10 | 5 | 5 | +1.14 +1.21 +0.68 +0.89 +1.35 |
+| A28-A2 (self-training on top of helpers) | 10 | 5 | 5 | +0.06 +1.01 +0.71 +1.22 +1.02 |
+| A29-A7 (self-training on top of FGM) | 10 | 5 | 5 | +0.73 +0.63 +0.27 +0.36 +0.63 |
+| A30-A27 (self-training on top of helpers+FGM) | 10 | 5 | 5 | +0.05 +0.79 +0.47 +0.55 +0.16 |
+| A30-A1 (whole stack vs BERT) | 10 | 5 | 5 | +2.05 +1.82 +1.50 +1.88 +1.10 |
+| A30-A7 (whole stack vs FGM alone) | 10 | 3 | 5 | +0.13 +0.49 -0.05 +0.38 -0.32 |

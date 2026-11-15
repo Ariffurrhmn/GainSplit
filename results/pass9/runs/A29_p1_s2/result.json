@@ -1,0 +1,115 @@
+{
+  "run_id": "A29_p1_s2",
+  "config": {
+    "arm": "A29",
+    "budget": 1,
+    "seed": 2,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.0,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.5,
+    "tag": "",
+    "helper_variant": "",
+    "eval_masked": false,
+    "train_data": "headlines",
+    "gen_lr": 0.0,
+    "step_mult": 1,
+    "pair_batch": 32,
+    "explain": false,
+    "pair_weight": 1.0,
+    "cleaned_drop_pct": 0.0,
+    "pretrain_steps": 0,
+    "init_dir": "",
+    "cons_weight": 0.0
+  },
+  "n_labeled": 228,
+  "n_unlabeled": 22572,
+  "uses_u": true,
+  "pairs": null,
+  "explain": null,
+  "pretrain": null,
+  "init": null,
+  "diffusion": null,
+  "steps": 200,
+  "minutes": 1.95,
+  "scores": {
+    "dev": {
+      "accuracy": 0.8350877192982457,
+      "macro_f1": 0.8342715743891123,
+      "f1_sarcastic": 0.8226415094339623,
+      "roc_auc": 0.9110464154808773,
+      "n": 2850
+    },
+    "test": {
+      "accuracy": 0.8323395299894774,
+      "macro_f1": 0.8314336534512872,
+      "f1_sarcastic": 0.8190764572293717,
+      "roc_auc": 0.9161989166683111,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.7,
+      "macro_f1": 0.4630627339968953,
+      "f1_sarcastic": 0.10638297872340426,
+      "roc_auc": 0.41611458333333334,
+      "n": 1400
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.15601,
+      "loss_adv": 0.26248,
+      "loss": 0.41849
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.03652,
+      "loss_adv": 0.14778,
+      "loss": 0.1843
+    }
+  ],
+  "pseudo": {
+    "threshold": 0.9,
+    "n_unlabeled": 22572,
+    "n_confident": 21120,
+    "confident_class_counts": {
+      "0": 11992,
+      "1": 9128
+    },
+    "n_kept": 18256,
+    "kept_class_counts": {
+      "0": 9128,
+      "1": 9128
+    },
+    "fallback_l_only": false,
+    "teacher_dev_macro_f1": 0.8142,
+    "teacher_recipe": "A7"
+  },
+  "helper_label_counts": null,
+  "commit": "9aa0147c9607c00d682e4551149551755288ece8",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}
