@@ -148,6 +148,11 @@ def helper_losses(model, h, extra: dict, variant: str = "") -> dict:
     return losses
 
 
+def _n_helper_rows(extra: dict) -> int:
+    """How many leading rows of the batch carry helper targets (they always come first)."""
+    return next(iter(extra.values())).shape[0]
+
+
 def plain_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device) -> dict:
     """A1 / A3: BERT + linear heads. A3 adds the helper losses over the L and U rows together.
 
@@ -166,7 +171,9 @@ def plain_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device) -> 
         loss = loss_sarc
         stats = {"loss_sarc": loss_sarc.item()}
         if model.helpers:
-            hl = helper_losses(model, h, extra, cfg.helper_variant)  # helpers: every row has a teacher label
+            # helpers: rows with a helper target (L + U for A3/A8; L only for A2 and the Pass 9 stacks,
+            # whose pseudo-labeled rows join the sarcasm loss only); for every pre-Pass-9 arm this is every row
+            hl = helper_losses(model, h[:_n_helper_rows(extra)], extra, cfg.helper_variant)
             loss = loss_sarc + cfg.helper_weight * sum(hl.values())
             stats.update({k: v.item() for k, v in hl.items()})
     scaler.scale(loss).backward()
@@ -189,19 +196,31 @@ def fgm_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device) -> di
     2. Push the embeddings by r = epsilon * g / ||g||  (L2-normalised gradient).
     3. Adversarial loss on the pushed embeddings, backward: its gradients add to the clean ones.
     4. Put the embeddings back, then take one optimizer step on (clean + adversarial) loss.
+
+    Pass 9 (A27, A30: helper heads on L + FGM): FGM wraps the whole A2 training loss. The clean
+    loss is sarcasm + helper_weight * helper losses, the push r follows that loss's gradient, and the
+    adversarial loss is the same total on the pushed embeddings. Without helper heads (A7, A11, A29)
+    the computation is exactly the pre-Pass-9 one.
     """
-    ids, mask, y, _, w = batch
+    ids, mask, y, extra, w = batch
     emb = model.encoder.embeddings.word_embeddings.weight
 
-    def sarcasm_loss():
+    def train_loss():
+        """(total loss, sarcasm loss, helper losses)."""
         with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=use_fp16):
-            logits = model.head(model.dropout(model.encode(ids, mask)))
+            h = model.dropout(model.encode(ids, mask))
+            logits = model.head(h)
             if w is None:
-                return F.cross_entropy(logits, y[:n_l])
-            per_row = F.cross_entropy(logits, y[:n_l], reduction="none")
-            return (per_row * w).sum() / w.sum()
+                loss_sarc = F.cross_entropy(logits, y[:n_l])
+            else:
+                per_row = F.cross_entropy(logits, y[:n_l], reduction="none")
+                loss_sarc = (per_row * w).sum() / w.sum()
+            if not getattr(model, "helpers", False):   # models without helper heads (incl. test stand-ins)
+                return loss_sarc, loss_sarc, {}
+            hl = helper_losses(model, h[:_n_helper_rows(extra)], extra, cfg.helper_variant)
+            return loss_sarc + cfg.helper_weight * sum(hl.values()), loss_sarc, hl
 
-    loss_clean = sarcasm_loss()
+    loss_clean, loss_sarc, hl = train_loss()
     scaler.scale(loss_clean).backward()
     g = emb.grad
     norm = g.norm() if g is not None else None
@@ -210,7 +229,7 @@ def fgm_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device) -> di
         r = cfg.fgm_epsilon * g / norm  # computed before the next backward changes g
         backup = emb.data.clone()
         emb.data.add_(r)
-        loss_adv = sarcasm_loss()
+        loss_adv = train_loss()[0]
         scaler.scale(loss_adv).backward()
         emb.data.copy_(backup)
     scaler.unscale_(opt)
@@ -219,8 +238,10 @@ def fgm_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device) -> di
     scaler.update()
     sched.step()
     opt.zero_grad(set_to_none=True)
-    return {"loss_sarc": loss_clean.item(), "loss_adv": loss_adv.item(),
-            "loss": loss_clean.item() + loss_adv.item()}
+    stats = {"loss_sarc": loss_sarc.item(), "loss_adv": loss_adv.item(),
+             "loss": loss_clean.item() + loss_adv.item()}
+    stats.update({k: v.item() for k, v in hl.items()})
+    return stats
 
 
 def gan_step(model, cfg, opts, scheds, scaler, batch, n_l, use_fp16, device) -> dict:
@@ -389,7 +410,8 @@ def diffusion_consistency_step(model, cfg, opts, scheds, scaler, batch, n_l, use
 
 
 def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, helpers=False, fgm=False,
-        pool_groups=None, pool_batch=None, pool_is_pairs=False, model=None, diffusion=None):
+        pool_groups=None, pool_batch=None, pool_is_pairs=False, model=None, diffusion=None,
+        helpers_on_pool=True):
     """Train a fresh model for `steps` steps; return (model, training curve).
 
     `model` (Pass 6): continue training this model instead of a fresh one (stage 2 of the
@@ -405,6 +427,9 @@ def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, he
     to the pool rows' share of the sarcasm loss (1.0 = unweighted, identical to Pass 4). Never
     True for A6 (pseudo-labels keep weight 1, as in Pass 1-4) or the helper/GAN arms' U rows
     (which carry no sarcasm label at all, so no weight applies to them).
+    `helpers_on_pool` (Pass 9): False keeps the helper losses on the L rows only when a pool is
+    present (A28, A30: helpers on L plus pseudo-labeled U rows). True (default) is the pre-Pass-9
+    behaviour, where helper arms with a pool (A3, A8) train the helper heads on the pool rows too.
     """
     set_seed(cfg.seed)
     if model is None:
@@ -442,7 +467,7 @@ def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, he
     stream_u = None
     if pool is not None:  # its own seeded stream, so the pool's batch order does not disturb L's
         enc_u = encode(tokenizer, pool["text"], cfg.max_len)
-        extra_u = helper_targets(pool) if helpers else None
+        extra_u = helper_targets(pool) if helpers and helpers_on_pool else None
         y_pool = pool["label"] if "label" in pool else None
         if pool_groups is not None:
             stream_u = GroupBatchStream(enc_u, y_pool, pool_groups, pool_batch or cfg.batch_size, cfg.seed + 1000)
@@ -464,7 +489,8 @@ def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, he
         if stream_u is not None and stream_l is not None:  # append one pool batch after the L batch
             ids_u, mask_u, y_u, extra_u = next(stream_u)
             ids, mask = torch.cat([ids, ids_u]), torch.cat([mask, mask_u])
-            extra = {k: torch.cat([v, extra_u[k]]) for k, v in extra.items()}
+            if helpers_on_pool:  # Pass 9 stacks: helper targets stay on the L rows, which come first
+                extra = {k: torch.cat([v, extra_u[k]]) for k, v in extra.items()}
             if y_u is not None:  # pseudo-labels / pair labels are used like labels: one loss over all labeled rows
                 y = torch.cat([y, y_u])
                 if w is not None:  # pool rows get pair_weight (only set when pool_is_pairs and weight != 1)
@@ -600,14 +626,20 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
         pool, pool_groups, pool_batch = None, None, None
     if sw.get("pseudo"):
         # A6: the teacher is an A1 model (same seed, same steps). It labels U; the student trains on L + pseudo-labels.
-        print("  A6 teacher (plain A1 training):")
-        teacher, _ = fit(cfg, tokenizer, labeled, None, steps, device, use_fp16)
+        # Pass 9 stacks: the teacher uses the arm's own recipe minus self-training (helpers on L and/or FGM),
+        # so for A6 (neither) this is the unchanged A1 teacher.
+        fgm_on = bool(sw.get("fgm"))
+        recipe = "A1" if not (helpers or fgm_on) else {(True, False): "A2", (False, True): "A7",
+                                                       (True, True): "A2+A7"}[(helpers, fgm_on)]
+        print(f"  self-training teacher ({recipe} recipe):")
+        teacher, _ = fit(cfg, tokenizer, labeled, None, steps, device, use_fp16, helpers=helpers, fgm=fgm_on)
         p_u = (predict(teacher, encode(tokenizer, unlabeled["text"], cfg.max_len), device, fp16=use_fp16)
                if len(unlabeled) > 0 else np.zeros(0))
         p_dev = predict(teacher, encode(tokenizer, splits.dev["text"], cfg.max_len), device, fp16=use_fp16)
         del teacher
         idx, y_pseudo, pseudo_info = pick_pseudo_labels(p_u)
         pseudo_info["teacher_dev_macro_f1"] = round(scores(splits.dev["label"], p_dev)["macro_f1"], 4)
+        pseudo_info["teacher_recipe"] = recipe
         print(f"  A6 pseudo-labels kept: {pseudo_info['n_kept']} of {len(unlabeled)} "
               f"(confident {pseudo_info['n_confident']}, per class {pseudo_info['confident_class_counts']})"
               + ("; none kept, the student uses L only" if pseudo_info["fallback_l_only"] else ""))
@@ -619,7 +651,7 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
                            gan=gan, helpers=helpers, fgm=bool(sw.get("fgm")),
                            pool_groups=pool_groups, pool_batch=pool_batch,
                            pool_is_pairs=bool(sw.get("pairs")) and pool is not None, model=start_model,
-                           diffusion=diffusion)
+                           diffusion=diffusion, helpers_on_pool=not sw.get("l_only", False))
 
     diffusion_info = None
     if diffusion:

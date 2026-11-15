@@ -10,7 +10,9 @@ import math
 # `gan` and `helpers` are always present; the other keys are optional extra switches:
 #   l_only  helper losses use L rows only (no U batch)
 #   shuffle helper labels are permuted at random across L + U
-#   pseudo  one round of self-training (the A1 teacher labels U)
+#   pseudo  one round of self-training: a teacher trained with the arm's own recipe minus self-training
+#           (A1 for A6; A2, A7 or A2+A7 for the Pass 9 stacks) labels U, then a fresh student trains on
+#           L + the confident pseudo-labels
 #   fgm     adversarial step on the word embeddings
 #   tfidf   no neural network at all (scikit-learn, CPU)
 #   pairs   Pass 4: LLM-written headline pairs join every step as a labeled second batch;
@@ -57,6 +59,13 @@ ARMS = {
     "A24": {"gan": False, "helpers": False, "diffusion": "fake"},           # GAN-BERT with diffusion fakes
     "A25": {"gan": False, "helpers": False, "diffusion": "consistency"},    # U consistency via diffusion round trip
     "A26": {"gan": False, "helpers": False, "diffusion": "noise"},          # control: same noise, no denoising
+    # Pass 9: do the three ingredients that each gave about +1.6 at 1% stack? A 2x2x2 design over
+    # helper heads on L (A2), FGM (A7) and self-training (A6); A1, A2, A6, A7 exist already
+    # (vault: Experiment Plan, "Pass 9 plan"). Helper losses stay on the L rows only, as in A2.
+    "A27": {"gan": False, "helpers": True, "l_only": True, "fgm": True},                    # A2 + A7
+    "A28": {"gan": False, "helpers": True, "l_only": True, "pseudo": True},                 # A2 + A6
+    "A29": {"gan": False, "helpers": False, "fgm": True, "pseudo": True},                   # A7 + A6
+    "A30": {"gan": False, "helpers": True, "l_only": True, "fgm": True, "pseudo": True},    # all three
 }
 INIT_OBJECTIVES = ("mlm", "jepa")
 DIFFUSION_MODES = ("fake", "consistency", "noise")

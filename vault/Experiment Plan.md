@@ -308,7 +308,37 @@ Why ([[Research Ideas]] "Beyond LLMs and beyond transformers"): no run so far us
 
 **Cost.** 8a and 8b about 1.5-2 h each on T4 x2 (pretraining 10-20 min on one GPU; the five 100% FGM runs about 21 min each); 8c about 30-40 min. About 8-9 GPU-h in total. 8c does not depend on 8a/8b; 8b's JEPA-vs-MLM rows need `results/pass8_mlm/` committed first (otherwise skipped and run later in a combined analysis).
 
-**Status:** written and tested locally (non-torch 174 passed, 11 skipped; torch suite 249 passed, the one failure is matplotlib missing in the local install); analysis and verdict cells dry-run on stand-in runs. Not run, not committed.
+**Status:** written and tested locally (non-torch 174 passed, 11 skipped; torch suite 249 passed, the one failure is matplotlib missing in the local install); analysis and verdict cells dry-run on stand-in runs. Committed as 563c450; notebooks 15 and 17 running (owner, 2026-11-15).
+
+## Pass 9 plan (written 2026-11-15, before running; owner chose the stacked recipe, [[Research Ideas]] "After Pass 6" item 2; design DELEGATED per [[Repo Rules]] rule 7)
+
+**Question.** At 1% labels three ingredients each gave about +1.6 macro-F1 over A1, all robust ([[Bootstrap - All Passes]]): helper heads on L (A2), FGM (A7), self-training (A6). They were never combined. Do the gains add up (a label-efficiency claim) or overlap (they act through the same route)?
+
+**Design: 2x2x2.** H = helper heads on L, F = FGM, S = self-training. Existing cells A1 (none, Pass 1), A2 (H), A7 (F), A6 (S) (Passes 2a/2b) are reused; new cells A27 = H+F, A28 = H+S, A29 = F+S, A30 = H+F+S. 5 seeds at 1% and 10% (40 runs), plus A27 at 100% (5 runs, `pass9_100`; self-training needs U, so no 100% cell). Notebook 18.
+
+**Rules (fixed before running).**
+- Settings are the frozen ones of the single arms: helper weight 0.3, FGM epsilon 0.5, pseudo-label threshold 0.9 with class balancing; same steps rule.
+- Helper losses stay on the L rows only, as in A2: in A28/A30 the pseudo-labeled rows join the sarcasm loss but not the helper loss.
+- FGM wraps the whole training loss: in A27/A30 the push follows the gradient of sarcasm + 0.3 x helper losses, and the adversarial loss is that same total.
+- Self-training teacher = the arm's own recipe without self-training (A28: A2; A29: A7; A30: A2+A7). For A6 this is A1, unchanged. Recorded per run as `teacher_recipe`.
+- Re-runs: A2, A6, A7 at 1%, seed 0 (tag `rerun`): `plain_step`, `fgm_step` and the teacher code changed; each must equal its Pass 2 run.
+
+**Contrasts** (`src/gainsplit/analysis_pass9.py`; paired bootstrap, 10,000 resamples, mean over seeds 0-4; two Holm families):
+- `contrasts_f1` at 1% and 10%: A27-A7, A27-A2, A28-A2, A29-A7, A30-A27, A30-A1, A30-A7; plus A27-A7 at 100% (15 rows; accuracy at 100% too).
+- `interactions` at 1% and 10%: H x F = A27-A2-A7+A1, H x S = A28-A2-A6+A1, F x S = A29-A7-A6+A1, and A30 - A2 - A6 - A7 + 2 A1 (the stack against the sum of single gains). 0 = gains add exactly, negative = overlap (8 rows).
+- Reading aids without tests: `additivity` (each cell's gain over A1 next to the sum of its single gains), `seed_wins`, `pseudo_health` (teacher dev F1 and pseudo-labels kept).
+
+**Predictions (IDEA, fixed before running).**
+- H9.1: A30 > A1 at 1% and at 10%.
+- H9.2: A30 > A7 at 1% (the stack beats the best single ingredient; the "more gain" claim); no difference at 10%.
+- H9.3: helpers x FGM < 0 at 1% (both act as regularisers, Pass 3 shuffled-label result); the stack is below the sum of the single gains at 1%.
+- H9.4: helpers x self-training and FGM x self-training at 1%: no direction predicted (self-training adds data rather than regularising, so these may add up).
+- H9.5: A27 vs A7 at 100%: no difference.
+- Reading: if H9.2 holds, the paper can claim "the same F1 with fewer labels" from simple parts; if it fails while H9.1 holds, the three ingredients are interchangeable routes to the same +1.6, which supports the diagnostic framing ([[Paper Framing - Passes 1-7]]).
+
+**Cost.** About 1.5 h on T4 x2 for the 43 runs (self-training arms train two models; FGM doubles the work per step), plus about 1 h for the five 100% runs; about 4-5 GPU-h in total.
+
+**Status:** written and tested locally (non-torch 180 passed, 19 skipped; torch suite 263 passed, the one failure is matplotlib missing locally); tiny runs of A1, A2, A3, A6, A7, A8, A9 give byte-identical predictions with the committed code and the new code; analysis and verdict cells dry-run on stand-in runs (old runs relabelled as the new arms). Not run, not committed.
 
 ## Status
 Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].

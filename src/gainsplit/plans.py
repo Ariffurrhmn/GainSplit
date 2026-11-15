@@ -353,6 +353,38 @@ def pass8_diff() -> list[RunConfig]:
     return runs + [RunConfig("A1", 10, 0, eval_test=True, tag="rerun")]
 
 
+# ---------------------------------------------------------------------------- Pass 9
+
+PASS9_SEEDS = PASS1_SEEDS
+PASS9_ARMS = ("A27", "A28", "A29", "A30")
+PASS9_RERUNS = ("A2", "A6", "A7")   # the training paths of these three changed; each must equal its old run
+
+
+def _p9(arm, budget, seed, tag="") -> RunConfig:
+    """The frozen settings of the ingredient arms: helper weight 0.3 (A2), FGM epsilon 0.5 (A7)."""
+    sw = ARMS[arm]
+    return RunConfig(arm, budget, seed, helper_weight=PASS1_HELPER_WEIGHT if sw["helpers"] else 0.0,
+                     fgm_epsilon=PASS2_FGM_EPSILON if sw.get("fgm") else 0.0, eval_test=True, tag=tag)
+
+
+def pass9() -> list[RunConfig]:
+    """Pass 9 (vault: Experiment Plan, "Pass 9 plan"): do helper heads on L (A2), FGM (A7) and
+    self-training (A6) stack? The four missing cells of a 2x2x2 design, 5 seeds at 10% and 1%:
+    A27 = A2 + A7, A28 = A2 + A6, A29 = A7 + A6, A30 = all three. 40 runs, longest first, plus
+    one re-run each of A2, A6 and A7 at 1%, seed 0 (tag "rerun"): fgm_step, plain_step and the
+    self-training teacher changed, and each must reproduce its Pass 2 run exactly.
+    The other cells (A1, A2, A6, A7) are reused from Passes 1, 2a and 2b."""
+    order = ("A30", "A29", "A28", "A27")   # self-training + FGM runs are the longest
+    runs = [_p9(arm, b, s) for b in (10, 1) for arm in order for s in PASS9_SEEDS]
+    return runs + [_p9(arm, 1, 0, tag="rerun") for arm in PASS9_RERUNS]
+
+
+def pass9_100() -> list[RunConfig]:
+    """Pass 9 extension, every training label: A27 (helpers + FGM, no unlabeled data needed) at 100%,
+    5 seeds. Compared with Pass 7's A7 at 100%. Self-training needs U, so it has no 100% cell."""
+    return [_p9("A27", 100, s) for s in PASS9_SEEDS]
+
+
 PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "session2": session2, "pass1": pass1, "fgm_tuning": fgm_tuning,
          "pass2a": pass2a, "pass2b": pass2b, "pass3": pass3,
@@ -360,4 +392,5 @@ PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "pair_weight_tuning": pair_weight_tuning, "cleaned_drop_tuning": cleaned_drop_tuning, "pass5": pass5,
          "pass6": pass6, "pass7": pass7,
          "pass8_mlm": pass8_mlm, "pass8_mlm_100": pass8_mlm_100,
-         "pass8_jepa": pass8_jepa, "pass8_jepa_100": pass8_jepa_100, "pass8_diff": pass8_diff}
+         "pass8_jepa": pass8_jepa, "pass8_jepa_100": pass8_jepa_100, "pass8_diff": pass8_diff,
+         "pass9": pass9, "pass9_100": pass9_100}
