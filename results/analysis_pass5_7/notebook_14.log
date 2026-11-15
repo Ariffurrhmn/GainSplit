@@ -1,0 +1,28 @@
+[{"stream_name":"stderr","time":10.128017962,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":10.128084297000001,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":10.128092271,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":10.128097277,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":11.053123667,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":11.053173345,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":11.053185566,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":11.053191076,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":12.594948255,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stderr","time":12.798228912999999,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stderr","time":12.798281303,"data":"\n"}
+,{"stream_name":"stderr","time":12.798287651999999,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stdout","time":20.042285902,"data":"code commit: 485a8458adcf5c68040461dcb8eac669cc045f7b\n"}
+,{"stream_name":"stdout","time":20.877672383,"data":"data: /kaggle/input/datasets/arifurrhmn/gainsplit-processed | iSarcasmEval test items: 1400\n"}
+,{"stream_name":"stdout","time":21.078405933,"data":"391 runs loaded\n"}
+,{"stream_name":"stdout","time":21.4217968,"data":"re-runs identical: 41 rows, True\n"}
+,{"stream_name":"stdout","time":21.421844934,"data":"stage 1 equals A15: 25 rows, True\n"}
+,{"stream_name":"stdout","time":158.948727172,"data":"tables: ['summary', 'rerun_check', 'stage1_check', 'contrasts_f1', 'contrasts_accuracy_100', 'auc_contrasts', 'auc_vs_length', 'gap_contrasts']\n"}
+,{"stream_name":"stdout","time":158.948810195,"data":"/kaggle/working/analysis_pass5_7.zip\n"}
+,{"stream_name":"stderr","time":162.614221038,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":162.614273985,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":162.839833972,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":162.839867284,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":163.80449481,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":163.915213513,"data":"[NbConvertApp] Writing 74070 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":167.394848376,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":168.140347987,"data":"[NbConvertApp] Writing 327846 bytes to __results__.html\n"}
+]

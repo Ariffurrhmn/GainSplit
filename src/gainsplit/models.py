@@ -43,14 +43,27 @@ class Discriminator(nn.Module):
 
 class SarcasmClassifier(nn.Module):
     def __init__(self, model_name: str, n_classes: int = 2, dropout: float = 0.1,
-                 gan: bool = False, helpers: bool = False, noise_dim: int = 100):
+                 gan: bool = False, helpers: bool = False, noise_dim: int = 100, diffusion: str | None = None):
         super().__init__()
         # No pooling layer: we use the raw [CLS] vector, as GAN-BERT does.
+        # `model_name` may also be a TAPT checkpoint folder (Pass 8a/8b): same architecture, other weights.
         self.encoder = AutoModel.from_pretrained(model_name, add_pooling_layer=False)
         hidden = self.encoder.config.hidden_size  # 768 for bert-base; the tests use a small BERT
         self.n_classes, self.gan, self.helpers = n_classes, gan, helpers
+        self.diffusion_mode = diffusion
+        # k+1 discriminator in place of the sarcasm head: GAN-BERT, and Pass 8c's A24 (diffusion fakes)
+        self.kplus1 = gan or diffusion == "fake"
         self.dropout = nn.Dropout(dropout)
-        if gan:
+        if diffusion is not None:
+            # Pass 8c. Built only for the diffusion arms, so every older arm creates exactly the same
+            # modules in the same order as before (same random initialisation, same results).
+            from .diffusion import FeatureDiffusion, RunningStats
+            if diffusion == "fake":
+                self.disc = Discriminator(hidden, n_classes, dropout)
+            else:
+                self.head = nn.Linear(hidden, n_classes)
+            self.diff = FeatureDiffusion(hidden) if diffusion in ("fake", "consistency") else RunningStats(hidden)
+        elif gan:
             # the discriminator takes the place of the plain sarcasm head
             self.disc = Discriminator(hidden, n_classes, dropout)
             self.generator = Generator(hidden, noise_dim, dropout)
@@ -69,6 +82,6 @@ class SarcasmClassifier(nn.Module):
         """Two scores per headline (not sarcastic, sarcastic); softmax turns them into probabilities.
         GAN arms: only the first k discriminator scores, so the "fake" score never affects a prediction."""
         cls = self.encode(input_ids, attention_mask)
-        if self.gan:
+        if self.kplus1:
             return self.disc(cls)[0][:, :self.n_classes]
         return self.head(self.dropout(cls))

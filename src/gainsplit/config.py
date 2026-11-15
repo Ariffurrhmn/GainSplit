@@ -19,6 +19,10 @@ import math
 #   pretrain Pass 6: two stages. Stage 1 trains on the pairs only (exactly A15's training, for
 #           `pretrain_steps` steps); stage 2 keeps that model and fine-tunes it on L only (A1, or A7
 #           with `fgm`), with a fresh optimizer and the usual step count. The pairs never meet L.
+#   init    Pass 8a/8b: the encoder is loaded from `init_dir`, a task-adaptive pretraining on the
+#           training texts without labels ("mlm" or "jepa", ssl_pretrain.py); training is otherwise A1/A7
+#   diffusion Pass 8c: a diffusion model over [CLS] vectors (diffusion.py), reading U: "fake" fills
+#           the GAN generator's slot, "consistency" makes U augmentations, "noise" is its control
 ARMS = {
     "A0": {"gan": False, "helpers": False, "tfidf": True},    # TF-IDF + logistic regression (floor)
     "A1": {"gan": False, "helpers": False},                   # plain BERT on L
@@ -43,7 +47,19 @@ ARMS = {
     # Pass 6: two-stage training, pairs first, then gold labels only (vault: Experiment Plan, "Pass 6 plan")
     "A18": {"gan": False, "helpers": False, "pairs": "unfiltered", "pretrain": True},               # pairs -> A1
     "A19": {"gan": False, "helpers": False, "fgm": True, "pairs": "unfiltered", "pretrain": True},  # pairs -> A7
+    # Pass 8a/8b: the encoder starts from a task-adaptive pretraining on the training texts (no labels),
+    # made by ssl_pretrain.py; `init` names the objective (vault: Experiment Plan, "Pass 8 plan")
+    "A20": {"gan": False, "helpers": False, "init": "mlm"},                 # MLM-TAPT encoder -> A1
+    "A21": {"gan": False, "helpers": False, "fgm": True, "init": "mlm"},    # MLM-TAPT encoder -> A7
+    "A22": {"gan": False, "helpers": False, "init": "jepa"},                # JEPA-TAPT encoder -> A1
+    "A23": {"gan": False, "helpers": False, "fgm": True, "init": "jepa"},   # JEPA-TAPT encoder -> A7
+    # Pass 8c: a diffusion model over [CLS] vectors (diffusion.py); reads U like the GAN
+    "A24": {"gan": False, "helpers": False, "diffusion": "fake"},           # GAN-BERT with diffusion fakes
+    "A25": {"gan": False, "helpers": False, "diffusion": "consistency"},    # U consistency via diffusion round trip
+    "A26": {"gan": False, "helpers": False, "diffusion": "noise"},          # control: same noise, no denoising
 }
+INIT_OBJECTIVES = ("mlm", "jepa")
+DIFFUSION_MODES = ("fake", "consistency", "noise")
 IMPLEMENTED_ARMS = set(ARMS)
 
 # Pass 3: what the helper heads are trained on (helper arms only; "" = the original hard teacher labels)
@@ -92,6 +108,8 @@ class RunConfig:
     pair_weight: float = 1.0    # Pass 5: pair rows' share of the sarcasm loss (1.0 = same as Pass 4, full weight)
     cleaned_drop_pct: float = 0.0  # Pass 5: for pairs="cleaned", the % of worst-scoring seeds dropped (0-100)
     pretrain_steps: int = 0     # Pass 6: stage-1 steps on the pairs only (pretrain arms A18/A19; 0 for every other arm)
+    init_dir: str = ""          # Pass 8a/8b: folder of the TAPT encoder (A20-A23 only); the tokenizer stays model_name's
+    cons_weight: float = 0.0    # Pass 8c: weight of the U consistency loss (A25/A26 only; must be > 0 there)
 
     def __post_init__(self):
         if self.arm not in ARMS:
@@ -138,9 +156,27 @@ class RunConfig:
             raise ValueError(f"pretrain_steps is only used by the two-stage arms (A18, A19) (got {self.pretrain_steps} for {self.arm})")
         if pretrain and self.pair_weight != 1.0:
             raise ValueError("the two-stage arms train on the pairs alone in stage 1, so pair_weight must stay 1.0")
+        init = ARMS[self.arm].get("init")
+        if init is not None and init not in INIT_OBJECTIVES:
+            raise ValueError(f"unknown init objective {init!r} for {self.arm}")
+        if init and not self.init_dir:
+            raise ValueError(f"{self.arm} starts from a pretrained encoder: set init_dir (the ssl_pretrain output folder)")
+        if not init and self.init_dir:
+            raise ValueError(f"init_dir is only used by the TAPT arms (A20-A23) (got {self.init_dir!r} for {self.arm})")
+        if init and self.train_data != "headlines":
+            raise ValueError(f"{self.arm} uses a Headlines TAPT encoder; train_data must be 'headlines'")
+        diff = ARMS[self.arm].get("diffusion")
+        if diff is not None and diff not in DIFFUSION_MODES:
+            raise ValueError(f"unknown diffusion mode {diff!r} for {self.arm}")
+        if diff in ("consistency", "noise") and not self.cons_weight > 0:
+            raise ValueError(f"{self.arm} needs cons_weight > 0 (got {self.cons_weight})")
+        if diff not in ("consistency", "noise") and self.cons_weight != 0:
+            raise ValueError(f"cons_weight is only used by A25/A26 (got {self.cons_weight} for {self.arm})")
+        if diff and self.train_data != "headlines":
+            raise ValueError(f"{self.arm} reads U from Headlines; train_data must be 'headlines'")
         if self.explain and not self.eval_test:
             raise ValueError("explain needs eval_test=True (it reads the test set)")
-        if self.explain and (ARMS[self.arm]["gan"] or self.arm == "A0"):
+        if self.explain and (ARMS[self.arm]["gan"] or self.arm == "A0" or diff == "fake"):
             raise ValueError(f"explain is written for arms with a plain sarcasm head (got {self.arm})")
 
     @property

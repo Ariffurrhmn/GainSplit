@@ -1,6 +1,6 @@
 ---
 tags: [experiments, plan]
-updated: 2026-11-14
+updated: 2026-11-15
 status: Passes 1-4 done (Pass 4 results in [[Pass 4 Results]]); Pass 5 plan written, not run
 ---
 
@@ -277,6 +277,38 @@ Same method as [[Bootstrap - All Passes]] and Pass 4: paired bootstrap over test
 Checks first: 41 re-runs identical to their originals, 25 stage-1 models equal to A15 (both confirmed on the committed files with a structure check that printed row counts only).
 
 **Expectations (IDEA, from the seed-paired means):** A7-A1 at 100% (+0.56, 5/5) is significant before Holm, borderline after; A19-A7 at 100% is not. A18-A1 and A19-A7 at 10% are not significant; at 1% they are negative and significant. Only A15 (pairs only, 76.2) may sit clearly above word count (68.7); the arms with gold labels in Passes 5-7 do not.
+
+## Pass 8 plan (written 2026-11-15, before running; owner's request: try three avenues beyond LLM-written text; design DELEGATED per [[Repo Rules]] rule 7)
+Why ([[Research Ideas]] "Beyond LLMs and beyond transformers"): no run so far uses the 22,800 training headlines as plain text to adapt BERT, and the only non-LLM generative model tried is the GAN. Pass 5-7 bootstrap: [[Bootstrap - Passes 5-7]]. Three sub-passes, one Kaggle notebook each; each notebook ends with its own bootstrap and a verdict cell, so the outcome can be judged from the notebook output alone.
+
+| Sub-pass | Notebook | New arms | Baselines reused |
+|---|---|---|---|
+| 8a TAPT with masked-word prediction (MLM) | `15_pass8_mlm.ipynb`, plans `pass8_mlm` (20) + `pass8_mlm_100` (5) | A20 = MLM encoder -> A1 recipe; A21 = MLM encoder -> A7 (FGM) | A1 (Pass 1), A7 (Pass 2b, Pass 7) |
+| 8b TAPT with a JEPA objective | `16_pass8_jepa.ipynb`, plans `pass8_jepa` (20) + `pass8_jepa_100` (5) | A22 = JEPA encoder -> A1; A23 = JEPA encoder -> A7 | A1, A7, and A20/A21 from 8a |
+| 8c diffusion model over [CLS] vectors | `17_pass8_diffusion.ipynb`, plan `pass8_diff` (31) | A24 = GAN-BERT's k+1 discriminator with diffusion samples as fakes; A25 = plain BERT + KL consistency on U, augmentations made by a diffusion round trip; A26 = A25 with plain noise, no denoising (control) | A1, A4 (Pass 1), A7 |
+
+**Pretraining (8a, 8b; `src/gainsplit/ssl_pretrain.py`).** Texts: the `text` column of `headlines_train.csv` only (a test checks that changing every label leaves the pretrained weights unchanged); dev and test are never trained on. Same settings for both objectives: 10,000 steps, batch 64 (about 28 passes), lr 1e-4, 6% warm-up, max length 48, seed 0; one encoder per objective, shared by all fine-tuning seeds (as in Gururangan et al. 2020, who release one TAPT model; the spread over pretraining seeds is not measured, a stated limitation). MLM: 15% of words, 80/10/10. JEPA (I-JEPA adapted to text, our own adaptation; close to data2vec): 2 spans hiding about 25% of the words are removed from the context encoder's attention; a 2-layer transformer predictor fills them in; target = layer-normed last layer of an EMA target encoder on the full headline (momentum 0.996 -> 1.0); MSE loss; the target encoder is kept, as in I-JEPA. Receipts in `pretrain_info.json`: held-out dev loss before/after, a frozen linear probe (logistic regression on L at 1% and 10%, seeds 0-4, dev macro-F1) before/after, weight hashes, and for JEPA a collapse check (target spread; the notebook stops if it collapsed). Fine-tuning is unchanged: the encoder is loaded from the checkpoint, the tokenizer stays bert-base-uncased.
+
+**Diffusion (8c; `src/gainsplit/diffusion.py`).** DDPM with a cosine schedule, 100 noise levels, on standardized [CLS] vectors (running mean/sd); denoiser MLP width 1024 with a time embedding, own Adam optimizer (lr 1e-3), one denoising-loss step per training step on the batch's detached real vectors (L + U); never trained adversarially. A24: 10-step DDIM samples replace GAN-BERT's generator, discriminator loss exactly as A4. A25: U vectors noised to level 30 (about 0.46 sd) and denoised back in 3 DDIM steps; loss = CE on L + 1.0 x KL(p(x) || p(x~)) on U, target detached; gradients reach BERT through x~. A26: the same noise, no denoising. Consistency weight 1.0 fixed (UDA's default), not tuned. A1 at 10% seed 0 re-run checks that the changed training loop leaves old arms alone (tiny-model runs of A1, A3, A4, A5, A6, A7 were byte-identical between the committed and the new code, 2026-11-15).
+
+**Rules (DELEGATED).** Nothing tuned, nothing picked on test; every setting above is fixed in code before running. 5 seeds, 1% and 10% labels (+100% for the FGM arm of 8a/8b), test and masked tests scored. Analysis: `src/gainsplit/analysis_pass8.py`, paired bootstrap as in Passes 4-7, one Holm family per sub-pass; a prediction is supported only if the difference is positive and p_holm < 0.05.
+
+| Table (Holm family) | Contrasts |
+|---|---|
+| 8a `contrasts_f1` (7) | A20-A1, A21-A7, A21-A1 at 1% and 10%; A21-A7 at 100% (+ accuracy at 100%) |
+| 8b `contrasts_f1` (10) | A22-A1, A23-A7, A22-A20, A23-A21 at 1% and 10%; A23-A7, A23-A21 at 100% |
+| 8c `contrasts_f1` (10) | A24-A4, A24-A1, A25-A1, A25-A26, A26-A1 at 1% and 10% |
+| each `auc_contrasts` | iSarcasmEval AUC of the new arms minus their baselines at 10% |
+
+**Predictions (IDEA, written before running).**
+- H8a.1: A20 > A1 at 1% (about +1 to +3 points) and at 10% (smaller, +0.3 to +1). Why: TAPT helps most when labels are few and the domain (satirical headlines) is far from BERT's pretraining text. H8a.2: A21 > A7 at 1% and 10% (TAPT and FGM act on different things: initialisation vs robustness of fine-tuning). H8a.3: A21 - A7 at 100% small (0 to +0.4); passing 94% mean accuracy possible but not expected. Linear probe after MLM above before.
+- H8b.1: A22 > A1 at 1%; H8b.2: A23 > A7 at 1%. H8b.3 (JEPA vs MLM): no direction predicted. Risk: JEPA from a BERT start may drift the word vectors away from what fine-tuning expects (probe tells); MLM is the safer bet. A JEPA win at 1% would be the paper's novel method claim; a tie or loss is still a clean comparison of two self-supervised objectives under equal compute.
+- H8c.1 (A24 vs A4): no direction predicted. H8c.2: A24 does not beat A1 (bad-GAN theory, Dai et al. 2017: a generator that matches the data does not help a k+1 classifier). H8c.3: A25 > A1 at 1% (consistency on U, as in UDA). H8c.4: A25 > A26; if A25 ties A26, the gain is plain feature noise, not the generative model.
+- iSarcasmEval transfer: no arm moves it beyond 2-3 AUC points (the TAPT texts are Headlines only).
+
+**Cost.** 8a and 8b about 1.5-2 h each on T4 x2 (pretraining 10-20 min on one GPU; the five 100% FGM runs about 21 min each); 8c about 30-40 min. About 8-9 GPU-h in total. 8c does not depend on 8a/8b; 8b's JEPA-vs-MLM rows need `results/pass8_mlm/` committed first (otherwise skipped and run later in a combined analysis).
+
+**Status:** written and tested locally (non-torch 174 passed, 11 skipped; torch suite 249 passed, the one failure is matplotlib missing in the local install); analysis and verdict cells dry-run on stand-in runs. Not run, not committed.
 
 ## Status
 Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].

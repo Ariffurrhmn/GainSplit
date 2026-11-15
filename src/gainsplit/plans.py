@@ -292,9 +292,72 @@ def pass7() -> list[RunConfig]:
             + [RunConfig("A1", 100, 0, eval_test=True, eval_masked=True, tag="rerun")])
 
 
+# ---------------------------------------------------------------------------- Pass 8
+
+PASS8_SEEDS = PASS1_SEEDS
+# Where the notebooks save the TAPT encoders (outside the results folder: about 440 MB each, not zipped)
+PASS8_CKPT = {"mlm": "/kaggle/working/ckpt/mlm", "jepa": "/kaggle/working/ckpt/jepa"}
+PASS8_CONS_WEIGHT = 1.0   # A25/A26 consistency weight: fixed before running, not tuned (UDA's default weight is 1)
+
+
+def _p8_tapt(objective: str, init_dir: str | None = None, budgets=(10, 1)) -> list[RunConfig]:
+    """A1 and A7 recipes on a TAPT encoder, 5 seeds per budget, test and masked tests scored."""
+    plain, fgm = {"mlm": ("A20", "A21"), "jepa": ("A22", "A23")}[objective]
+    d = init_dir or PASS8_CKPT[objective]
+    runs = []
+    for b in budgets:
+        runs += [RunConfig(fgm, b, s, fgm_epsilon=PASS2_FGM_EPSILON, init_dir=d, eval_test=True, eval_masked=True)
+                 for s in PASS8_SEEDS]
+        runs += [RunConfig(plain, b, s, init_dir=d, eval_test=True, eval_masked=True) for s in PASS8_SEEDS]
+    return runs
+
+
+def pass8_mlm(init_dir: str | None = None) -> list[RunConfig]:
+    """Pass 8a (vault: Experiment Plan, "Pass 8 plan"): BERT after masked-word pretraining on the
+    22,800 training headlines (no labels), then the A1 and A7 recipes unchanged. 20 runs at 10% and 1%.
+    Baselines A1 (Pass 1) and A7 (Pass 2b) are reused (training is deterministic)."""
+    return _p8_tapt("mlm", init_dir)
+
+
+def pass8_jepa(init_dir: str | None = None) -> list[RunConfig]:
+    """Pass 8b: the same as pass8_mlm with the JEPA-pretrained encoder (A22, A23). 20 runs."""
+    return _p8_tapt("jepa", init_dir)
+
+
+def pass8_mlm_100(init_dir: str | None = None) -> list[RunConfig]:
+    """Pass 8a extension, every training label: A21 (MLM-TAPT + FGM) at 100%, 5 seeds (~21 min each).
+    Compared with Pass 7's A7 at 100% (93.90% accuracy). Does TAPT add on top of FGM with all labels?"""
+    return [r for r in _p8_tapt("mlm", init_dir, budgets=(100,)) if r.arm == "A21"]
+
+
+def pass8_jepa_100(init_dir: str | None = None) -> list[RunConfig]:
+    """Pass 8b extension: A23 (JEPA-TAPT + FGM) at 100%, 5 seeds."""
+    return [r for r in _p8_tapt("jepa", init_dir, budgets=(100,)) if r.arm == "A23"]
+
+
+def pass8_diff() -> list[RunConfig]:
+    """Pass 8c: the diffusion model over [CLS] vectors. 31 runs, all reading U:
+    - A24 (diffusion fakes in GAN-BERT's k+1 discriminator) at 10% and 1%: compare with A4 (GAN) and A1
+    - A25 (U consistency through the diffusion round trip) at 10% and 1%: compare with A1
+    - A26 (the same consistency with plain noise, no denoising) at 10% and 1%: A25 - A26 = what the
+      generative model adds
+    - A1 at 10%, seed 0, tag "rerun": must equal Pass 1's A1_p10_s0 exactly (the training loop changed)
+    Baselines A1 and A4 (Pass 1) and A7 (Pass 2b) are reused."""
+    runs = []
+    for b in (10, 1):
+        runs += [RunConfig("A24", b, s, eval_test=True, eval_masked=True) for s in PASS8_SEEDS]
+        runs += [RunConfig("A25", b, s, cons_weight=PASS8_CONS_WEIGHT, eval_test=True, eval_masked=True)
+                 for s in PASS8_SEEDS]
+        runs += [RunConfig("A26", b, s, cons_weight=PASS8_CONS_WEIGHT, eval_test=True, eval_masked=True)
+                 for s in PASS8_SEEDS]
+    return runs + [RunConfig("A1", 10, 0, eval_test=True, tag="rerun")]
+
+
 PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "session2": session2, "pass1": pass1, "fgm_tuning": fgm_tuning,
          "pass2a": pass2a, "pass2b": pass2b, "pass3": pass3,
          "gan_check": gan_check, "pass4": pass4, "pass4_full100": pass4_full100,
          "pair_weight_tuning": pair_weight_tuning, "cleaned_drop_tuning": cleaned_drop_tuning, "pass5": pass5,
-         "pass6": pass6, "pass7": pass7}
+         "pass6": pass6, "pass7": pass7,
+         "pass8_mlm": pass8_mlm, "pass8_mlm_100": pass8_mlm_100,
+         "pass8_jepa": pass8_jepa, "pass8_jepa_100": pass8_jepa_100, "pass8_diff": pass8_diff}

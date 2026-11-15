@@ -287,8 +287,109 @@ def gan_step(model, cfg, opts, scheds, scaler, batch, n_l, use_fp16, device) -> 
     return stats
 
 
+def diffusion_fake_step(model, cfg, opts, scheds, scaler, batch, n_l, use_fp16, device) -> dict:
+    """A24: GAN-BERT's discriminator update, with the fakes drawn from the diffusion model.
+
+    1. Discriminator + encoder: exactly gan_step's loss (L rows classified, real rows "not fake",
+       generated rows "fake"). The fakes are fresh DDIM samples (no gradient; they are data here).
+    2. Diffusion model: one denoising-loss step on this batch's real [CLS] vectors (detached), with
+       its own optimizer. It is never trained to fool the discriminator."""
+    opt_d, opt_diff = opts
+    ids, mask, y, _extra, _w = batch
+    k = model.n_classes
+    d_params = [p for n, p in model.named_parameters() if not n.startswith("diff.")]
+    with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=use_fp16):
+        real = model.encode(ids, mask)
+    real = real.float()
+    model.diff.update_stats(real.detach())
+    fake = model.diff.sample(real.shape[0], device)
+    logits_real, _ = model.disc(real)
+    logits_fake, _ = model.disc(fake)
+    logp_real = F.log_softmax(logits_real, dim=-1)
+    p_fake_real = logp_real.exp()[:, k]
+    p_fake_fake = F.softmax(logits_fake, dim=-1)[:, k]
+    loss_sup = -logp_real[:n_l].gather(1, y[:, None]).mean()
+    loss_unsup_real = -torch.log(1 - p_fake_real + EPS).mean()
+    loss_unsup_fake = -torch.log(p_fake_fake + EPS).mean()
+    loss_d = loss_sup + loss_unsup_real + loss_unsup_fake
+    scaler.scale(loss_d).backward()
+    scaler.unscale_(opt_d)
+    torch.nn.utils.clip_grad_norm_(d_params, 1.0)
+    scaler.step(opt_d)
+    scaler.update()
+    opt_d.zero_grad(set_to_none=True)
+    scheds[0].step()
+
+    loss_diff = model.diff.loss(real.detach())
+    opt_diff.zero_grad(set_to_none=True)
+    loss_diff.backward()
+    torch.nn.utils.clip_grad_norm_(model.diff.parameters(), 1.0)
+    opt_diff.step()
+    opt_diff.zero_grad(set_to_none=True)
+    with torch.no_grad():  # how far the fakes are from the real vectors, in the real vectors' spread
+        gap = ((fake.mean(0) - real.mean(0)) / model.diff.sd).pow(2).mean().sqrt().item()
+    return {"loss_sarc": loss_sup.item(), "loss_unsup_real": loss_unsup_real.item(),
+            "loss_unsup_fake": loss_unsup_fake.item(), "p_fake_real": p_fake_real.mean().item(),
+            "p_fake_fake": p_fake_fake.mean().item(), "loss_diff": loss_diff.item(),
+            "fake_mean_gap_sd": gap, "loss": loss_d.item()}
+
+
+def diffusion_consistency_step(model, cfg, opts, scheds, scaler, batch, n_l, use_fp16, device) -> dict:
+    """A25 / A26: plain BERT on L, plus a consistency loss on the U rows.
+
+    Each U row's [CLS] vector x gets a nearby version x~: A25 by the diffusion round trip (noise to
+    level CONS_T, denoise back), A26 by the same noise without denoising. The head's prediction on x
+    (no dropout, detached) is the target; the loss is KL(p(x) || p(x~)) on x~, times cons_weight.
+    Gradients reach the encoder through x~. A25 then takes one denoising-loss step on all real
+    vectors of the batch (detached; its own optimizer)."""
+    from .diffusion import noise_only
+    opt, opt_diff = opts
+    ids, mask, y, _extra, _w = batch
+    main_params = [p for n, p in model.named_parameters() if not n.startswith("diff.")]
+    with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=use_fp16):
+        cls = model.encode(ids, mask)
+    cls = cls.float()
+    model.diff.update_stats(cls.detach())
+    loss_sarc = F.cross_entropy(model.head(model.dropout(cls[:n_l])), y)
+    x_u = cls[n_l:]
+    stats = {"loss_sarc": loss_sarc.item()}
+    loss = loss_sarc
+    if x_u.shape[0] > 0:
+        with torch.no_grad():
+            p_target = F.softmax(model.head(x_u), dim=-1)
+        if model.diffusion_mode == "consistency":
+            x_aug = model.diff.round_trip(x_u)
+        else:
+            x_aug = noise_only(x_u, model.diff.mu, model.diff.sd)
+        logq = F.log_softmax(model.head(x_aug), dim=-1)
+        loss_cons = (p_target * (torch.log(p_target + EPS) - logq)).sum(-1).mean()
+        loss = loss_sarc + cfg.cons_weight * loss_cons
+        with torch.no_grad():
+            stats.update(loss_cons=loss_cons.item(),
+                         aug_shift_sd=((x_aug - x_u) / model.diff.sd).pow(2).mean().sqrt().item(),
+                         flip_rate=(logq.argmax(-1) != p_target.argmax(-1)).float().mean().item())
+    scaler.scale(loss).backward()
+    scaler.unscale_(opt)
+    torch.nn.utils.clip_grad_norm_(main_params, 1.0)
+    scaler.step(opt)
+    scaler.update()
+    scheds[0].step()
+    opt.zero_grad(set_to_none=True)
+    for p in model.diff.parameters():  # the consistency loss also put gradients here; drop them
+        p.grad = None
+    if opt_diff is not None:
+        loss_diff = model.diff.loss(cls.detach())
+        loss_diff.backward()
+        torch.nn.utils.clip_grad_norm_(model.diff.parameters(), 1.0)
+        opt_diff.step()
+        opt_diff.zero_grad(set_to_none=True)
+        stats["loss_diff"] = loss_diff.item()
+    stats["loss"] = loss.item()
+    return stats
+
+
 def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, helpers=False, fgm=False,
-        pool_groups=None, pool_batch=None, pool_is_pairs=False, model=None):
+        pool_groups=None, pool_batch=None, pool_is_pairs=False, model=None, diffusion=None):
     """Train a fresh model for `steps` steps; return (model, training curve).
 
     `model` (Pass 6): continue training this model instead of a fresh one (stage 2 of the
@@ -307,10 +408,18 @@ def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, he
     """
     set_seed(cfg.seed)
     if model is None:
-        model = SarcasmClassifier(cfg.model_name, gan=gan, helpers=helpers).to(device)
-    elif gan or helpers:
+        # Pass 8a/8b: the TAPT arms load their encoder from init_dir (empty for every other arm)
+        model = SarcasmClassifier(cfg.init_dir or cfg.model_name, gan=gan, helpers=helpers,
+                                  diffusion=diffusion).to(device)
+    elif gan or helpers or diffusion:
         raise ValueError("continuing an existing model is only written for plain (non-GAN, non-helper) arms")
-    if gan:
+    if diffusion:
+        from .diffusion import DENOISER_LR
+        opt, sched = make_optimizer(((n, p) for n, p in model.named_parameters() if not n.startswith("diff.")),
+                                    cfg, steps)
+        opt_diff = (torch.optim.Adam(model.diff.parameters(), lr=DENOISER_LR)
+                    if diffusion in ("fake", "consistency") else None)
+    elif gan:
         # one optimizer for BERT + discriminator (+ helper heads), a separate one for the generator
         opt_d, sched_d = make_optimizer(((n, p) for n, p in model.named_parameters()
                                          if not n.startswith("generator.")), cfg, steps)
@@ -363,7 +472,12 @@ def fit(cfg, tokenizer, labeled, pool, steps, device, use_fp16, *, gan=False, he
         n_l = y.shape[0]  # rows that have a sarcasm label (L rows, plus the pseudo-labeled rows for A6)
         batch = (ids.to(device), mask.to(device), y.to(device), {k: v.to(device) for k, v in extra.items()},
                 None if w is None else w.to(device))
-        if gan:
+        if diffusion == "fake":
+            stats = diffusion_fake_step(model, cfg, (opt, opt_diff), (sched,), scaler, batch, n_l, use_fp16, device)
+        elif diffusion:
+            stats = diffusion_consistency_step(model, cfg, (opt, opt_diff), (sched,), scaler, batch, n_l,
+                                               use_fp16, device)
+        elif gan:
             stats = gan_step(model, cfg, (opt_d, opt_g), (sched_d, sched_g), scaler, batch, n_l, use_fp16, device)
         elif fgm:
             stats = fgm_step(model, cfg, opt, sched, scaler, batch, n_l, use_fp16, device)
@@ -428,8 +542,22 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
     else:
         splits = load_splits(data_dir, cfg.budget, cfg.seed)
     labeled, unlabeled = splits.labeled, splits.unlabeled
-    # A3/A4/A5/A8 also read U (no sarcasm labels); A1, A2, A7 never do (A6 builds its own pool below)
-    use_u = (gan or helpers) and not sw.get("l_only", False) and len(unlabeled) > 0
+    # A3/A4/A5/A8 and the diffusion arms A24-A26 also read U (no sarcasm labels); A1, A2, A7 never do
+    # (A6 builds its own pool below)
+    diffusion = sw.get("diffusion")
+    use_u = (gan or helpers or bool(diffusion)) and not sw.get("l_only", False) and len(unlabeled) > 0
+    init_info = None
+    if sw.get("init"):
+        # Pass 8a/8b: the TAPT encoder must exist, be finished, and use the objective this arm names
+        info_path = Path(cfg.init_dir) / "pretrain_info.json"
+        if not info_path.exists():
+            raise FileNotFoundError(f"{info_path} not found: run ssl_pretrain for {sw['init']} first")
+        info = json.loads(info_path.read_text())
+        if info["objective"] != sw["init"]:
+            raise ValueError(f"{cfg.arm} needs a {sw['init']} encoder, but {cfg.init_dir} holds {info['objective']}")
+        init_info = {k: info[k] for k in ("objective", "minutes", "dev_before", "dev_after", "probe_before",
+                                          "probe_after", "collapsed", "weights_sha256", "commit") if k in info}
+        init_info["steps"] = info["config"]["steps"]
     if helpers:
         labeled, unlabeled = load_helper_labels(data_dir, labeled, unlabeled)
     if helpers:
@@ -490,8 +618,13 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
     model, train_log = fit(cfg, tokenizer, fit_labeled, pool, steps, device, use_fp16,
                            gan=gan, helpers=helpers, fgm=bool(sw.get("fgm")),
                            pool_groups=pool_groups, pool_batch=pool_batch,
-                           pool_is_pairs=bool(sw.get("pairs")) and pool is not None, model=start_model)
+                           pool_is_pairs=bool(sw.get("pairs")) and pool is not None, model=start_model,
+                           diffusion=diffusion)
 
+    diffusion_info = None
+    if diffusion:
+        from .diffusion import SETTINGS
+        diffusion_info = {"mode": diffusion, "cons_weight": cfg.cons_weight, **SETTINGS}
     out_dir.mkdir(parents=True, exist_ok=True)
     results = {}
     for name, df in eval_sets.items():
@@ -518,6 +651,8 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
         "pairs": pair_info,       # Pass 4 pair arms: which pair set, its size and file hashes
         "explain": explain_info,  # Pass 4 explain runs: IG summary (details in explain.csv)
         "pretrain": pretrain_info,  # Pass 6 two-stage arms: stage-1 steps, curve and dev scores
+        "init": init_info,          # Pass 8a/8b TAPT arms: which encoder, its pretraining summary and hashes
+        "diffusion": diffusion_info,  # Pass 8c diffusion arms: mode and the diffusion settings
         "steps": steps,
         "minutes": round((time.time() - t0) / 60, 2),
         "scores": results,

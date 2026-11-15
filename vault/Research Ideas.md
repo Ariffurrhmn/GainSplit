@@ -1,6 +1,6 @@
 ---
 tags: [ideas]
-updated: 2026-11-13
+updated: 2026-11-15
 ---
 
 # Research Ideas
@@ -60,3 +60,12 @@ Owner's reading: the generated pairs are not helping the case. Agreed for in-dom
 4. **Pair-ranking loss** (last pair-salvage method): sarcastic side must score above its serious side, no absolute labels on generated text; with length-matched pairs only. Run only if item 1 shows a real residual.
 5. **Contribution reframe:** the shortcut audit (length 0.785, word-tic model cv_auc 0.951, near-absent from real headlines) as a reusable check for LLM-generated augmentation data.
 Parked (too costly before 20 Dec): regenerating pairs with an avoid-words prompt; new datasets (SemEval-2018, SARC).
+
+## Beyond LLMs and beyond transformers (2026-11-15; TAPT-MLM, JEPA-TAPT and the diffusion arms adopted as Pass 8, see [[Experiment Plan]] "Pass 8 plan")
+Owner asked whether generative AI offers more than LLMs, what lies beyond transformers, and what JEPA is. Gaps found: no run so far uses the unlabeled pool U through plain self-supervised pretraining, contrastive learning or consistency training; only the GAN, helper heads and self-training touch U.
+- **IDEA, cheapest, highest expected gain: task-adaptive pretraining (TAPT) on U.** Continue masked-LM pretraining of bert-base on the train headlines (no labels), then run A1/A7 on top. Standard way to use unlabeled in-domain text (Gururangan et al. 2020, "Don't Stop Pretraining", UNVERIFIED here, not re-read). Story: the GAN uses U badly; plain self-supervision on U uses it well. Gain size on Headlines UNVERIFIED.
+- **IDEA, novel twist on the same slot: JEPA-style TAPT.** JEPA (joint-embedding predictive architecture; LeCun 2022 position paper; I-JEPA, Assran et al. 2023; V-JEPA 2024/2025) predicts the *embedding* of a masked part from the context, with an EMA target encoder, instead of predicting the masked tokens. It is a self-supervised training objective, not a new architecture (I-JEPA uses ViT backbones). A text version exists (LLM-JEPA, 2025, UNVERIFIED, not read). Arm: MLM-TAPT vs JEPA-TAPT vs MLM+JEPA on U, same steps. Novelty for short-text classification UNVERIFIED; engineering risk medium.
+- **IDEA, generative AI that is not an LLM: diffusion generator in the GAN's slot.** Replace GAN-BERT's generator with a small diffusion model over [CLS] vectors (feature-space augmentation). Same narrative as the seed paper, different generative family; avoids the text-register shortcut of the LLM pairs because nothing is written as text. Other non-LLM families: VAEs (Kingma et al. 2014 M2 semi-supervised model), normalizing flows, energy-based models, text diffusion LMs. Engineering risk high for the deadline.
+- **IDEA: consistency / contrastive training on U.** UDA (Xie et al. 2020), VAT on U (already listed above), SimCSE-style contrastive TAPT, supervised contrastive loss next to FGM (Gunel et al. 2021). All UNVERIFIED for this dataset.
+- **IDEA: minimal-edit augmentation instead of free LLM rewriting.** Masked-LM word replacement keeps the text in the real headline register, which is exactly where the LLM pairs failed ([[Pass 4 Results]] shortcut audit).
+- **Low value here: non-transformer backbones** (state-space models such as Mamba/S4, RWKV, xLSTM). Their advantage is long sequences; headlines are about 10 words. It would be a benchmark row, not a method contribution (INFERRED).

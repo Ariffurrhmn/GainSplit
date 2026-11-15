@@ -1,11 +1,23 @@
 ---
 tags: [log]
-updated: 2026-11-14
+updated: 2026-11-15
 ---
 
 # Session Log
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
+
+## 2026-11-15 - Notebook 14 filed; Pass 8 (TAPT-MLM, TAPT-JEPA, diffusion) planned and coded
+- Owner downloaded notebook 14's output (Kaggle CLI). Filed in `results/analysis_pass5_7/`: folder flattened to match `analysis_pass4/`, unpacked tables match the zip, log renamed `notebook_14.log`. Read in [[Bootstrap - Passes 5-7]]: checks PASS; FGM at 100% +0.56 F1 (p 0.017, Holm 0.12); two-stage arms tie at 10%, lose at 1%; zero-label pairs (A15) stay 7.5 AUC points above word count on iSarcasmEval (robust), A11 4-5 points; the arms that recover in-domain accuracy lose that residual.
+- Owner asked to try all three new avenues. Pass 8 designed, coded and tested ([[Experiment Plan]] "Pass 8 plan", predictions fixed before running): `ssl_pretrain.py` (MLM and JEPA pretraining on train texts, no labels, with linear probe and collapse check), `diffusion.py` (DDPM over [CLS] vectors), arms A20-A26, plans `pass8_mlm`, `pass8_mlm_100`, `pass8_jepa`, `pass8_jepa_100`, `pass8_diff`, `analysis_pass8.py`, `tests/test_pass8.py`, notebooks 15, 16, 17 (each ends with its own bootstrap and verdict cell).
+- Tests: non-torch 174 passed, 11 skipped; torch suite (scratch CPU install) 249 passed, 1 failed (matplotlib missing locally). Tiny-model runs of A1, A3-A7 byte-identical between the committed code and the new code. Analysis and verdict cells of notebooks 15 and 17 dry-run on stand-in runs.
+- Not committed. Next (owner): commit and push; run notebook 15 (about 1.5-2 h), commit `results/pass8_mlm/`, then notebook 16; notebook 17 any time (about 40 min). Send each `results_<plan>.zip` and the log.
+
+## 2026-11-15 - Avenues beyond LLMs and transformers (discussion)
+- Owner asked whether a meaningful contribution is still possible, whether generative AI offers more than LLMs, and what JEPA is.
+- Reading: the diagnostic paper ([[Paper Framing - Passes 1-7]] option A) is already a contribution; what is missing is a method headline. Gap found: U has never been used through self-supervised pretraining, contrastive or consistency training.
+- Candidates written to [[Research Ideas]] "Beyond LLMs and beyond transformers": TAPT on U (cheapest), JEPA-style TAPT (novel twist), diffusion generator in the GAN slot, consistency/contrastive on U, minimal-edit augmentation; non-transformer backbones judged low value for headlines.
+- Nothing decided; no code written.
 
 ## 2026-11-14 - Pass 7 results read, bootstrap for Passes 5-7 written, framing drafted
 - Owner ran notebook 13 as a commit (commit e21d7c4, 11/11 runs, 127.8 min, 231 tests passed). Zip and log moved from Downloads into `results/pass7/` (log as `notebook_13.log`); 78 unpacked files match the zip. `download (6).txt` was an exact copy of the log and stays in Downloads. No receipt missing for this pass.
