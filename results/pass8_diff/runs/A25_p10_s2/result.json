@@ -1,0 +1,188 @@
+{
+  "run_id": "A25_p10_s2",
+  "config": {
+    "arm": "A25",
+    "budget": 10,
+    "seed": 2,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.0,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.0,
+    "tag": "",
+    "helper_variant": "",
+    "eval_masked": true,
+    "train_data": "headlines",
+    "gen_lr": 0.0,
+    "step_mult": 1,
+    "pair_batch": 32,
+    "explain": false,
+    "pair_weight": 1.0,
+    "cleaned_drop_pct": 0.0,
+    "pretrain_steps": 0,
+    "init_dir": "",
+    "cons_weight": 1.0
+  },
+  "n_labeled": 2280,
+  "n_unlabeled": 20520,
+  "uses_u": true,
+  "pairs": null,
+  "explain": null,
+  "pretrain": null,
+  "init": null,
+  "diffusion": {
+    "mode": "consistency",
+    "cons_weight": 1.0,
+    "T_STEPS": 100,
+    "SAMPLE_STEPS": 10,
+    "CONS_T": 30,
+    "CONS_STEPS": 3,
+    "DENOISER_WIDTH": 1024,
+    "DENOISER_LR": 0.001,
+    "STAT_MOMENTUM": 0.99,
+    "Z_CLIP": 5.0
+  },
+  "steps": 720,
+  "minutes": 2.26,
+  "scores": {
+    "dev": {
+      "accuracy": 0.8726315789473684,
+      "macro_f1": 0.8724380805898366,
+      "f1_sarcastic": 0.8674698795180723,
+      "roc_auc": 0.9404852583642894,
+      "n": 2850
+    },
+    "test": {
+      "accuracy": 0.86741494212557,
+      "macro_f1": 0.8672279256530198,
+      "f1_sarcastic": 0.8622448979591837,
+      "roc_auc": 0.9403706316474929,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.6585714285714286,
+      "macro_f1": 0.47760541566746606,
+      "f1_sarcastic": 0.1701388888888889,
+      "roc_auc": 0.5094416666666667,
+      "n": 1400
+    },
+    "test_cuemask": {
+      "accuracy": 0.8179586110136794,
+      "macro_f1": 0.8176135932921023,
+      "f1_sarcastic": 0.8096809680968097,
+      "roc_auc": 0.8998759299090316,
+      "n": 2851
+    },
+    "test_randmask": {
+      "accuracy": 0.8537355313924938,
+      "macro_f1": 0.853467207062167,
+      "f1_sarcastic": 0.8471967753755955,
+      "roc_auc": 0.9247284270971052,
+      "n": 2851
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.46285,
+      "loss_cons": 0.00117,
+      "aug_shift_sd": 0.51967,
+      "flip_rate": 0.04375,
+      "loss_diff": 0.97936,
+      "loss": 0.46402
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.15392,
+      "loss_cons": 0.00078,
+      "aug_shift_sd": 0.51197,
+      "flip_rate": 0.00531,
+      "loss_diff": 0.93048,
+      "loss": 0.1547
+    },
+    {
+      "step": 300,
+      "loss_sarc": 0.03526,
+      "loss_cons": 0.00042,
+      "aug_shift_sd": 0.5015,
+      "flip_rate": 0.00469,
+      "loss_diff": 0.88371,
+      "loss": 0.03567
+    },
+    {
+      "step": 400,
+      "loss_sarc": 0.02187,
+      "loss_cons": 0.00042,
+      "aug_shift_sd": 0.49272,
+      "flip_rate": 0.00094,
+      "loss_diff": 0.84588,
+      "loss": 0.02228
+    },
+    {
+      "step": 500,
+      "loss_sarc": 0.02237,
+      "loss_cons": 0.00045,
+      "aug_shift_sd": 0.48659,
+      "flip_rate": 0.00094,
+      "loss_diff": 0.81921,
+      "loss": 0.02281
+    },
+    {
+      "step": 600,
+      "loss_sarc": 0.01148,
+      "loss_cons": 0.00045,
+      "aug_shift_sd": 0.48138,
+      "flip_rate": 0.00313,
+      "loss_diff": 0.79972,
+      "loss": 0.01193
+    },
+    {
+      "step": 700,
+      "loss_sarc": 0.00277,
+      "loss_cons": 0.00041,
+      "aug_shift_sd": 0.47603,
+      "flip_rate": 0.00281,
+      "loss_diff": 0.77881,
+      "loss": 0.00318
+    },
+    {
+      "step": 720,
+      "loss_sarc": 0.00085,
+      "loss_cons": 0.00037,
+      "aug_shift_sd": 0.47427,
+      "flip_rate": 0.00469,
+      "loss_diff": 0.77373,
+      "loss": 0.00122
+    }
+  ],
+  "pseudo": null,
+  "helper_label_counts": null,
+  "commit": "563c450355b452af9041e08aad2501f4f6db993f",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351",
+    "helper_sent_alt.csv": "51fe4d278fe0580deeb9a742f3e1b94fb88e5c4dc69b7b2cc996725259709cd7",
+    "cue_words.json": "79d355bb2c288b59385113de31a2d5227c0c189be8a14a288fe1a9f754f91fb6",
+    "headlines_test_cuemask.csv": "7502bb2ec444c83fb87d4ab020d89a7823c28d51978203ef280464f6b1b787bc",
+    "headlines_test_randmask.csv": "dc4396f80d655aa9b3657edc1e9701964718f0f393b8f05531ef77c41a58982b"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

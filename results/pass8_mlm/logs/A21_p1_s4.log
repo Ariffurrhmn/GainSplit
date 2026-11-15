@@ -1,0 +1,5 @@
+A21_p1_s4: |L|=228 |U|=22572 steps=200 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2675.01it/s]
+  step 100/200  loss_sarc 0.127  loss_adv 0.1624  loss 0.2894
+  step 200/200  loss_sarc 0.00015  loss_adv 0.0002  loss 0.00035
+A21_p1_s4: done in 0.8 min; dev macro-F1 0.8686, test macro-F1 0.8736, isarc_test macro-F1 0.4656, test_cuemask macro-F1 0.8322, test_randmask macro-F1 0.8652

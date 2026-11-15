@@ -1,0 +1,26 @@
+A25_p10_s0: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2754.85it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/720  loss_sarc 0.4377  loss_cons 0.0011  aug_shift_sd 0.5191  flip_rate 0.03562  loss_diff 0.9801  loss 0.4389
+  step 200/720  loss_sarc 0.1474  loss_cons 0.00075  aug_shift_sd 0.5121  flip_rate 0.00531  loss_diff 0.9294  loss 0.1481
+  step 300/720  loss_sarc 0.04873  loss_cons 0.00056  aug_shift_sd 0.5036  flip_rate 0.00313  loss_diff 0.8869  loss 0.04929
+  step 400/720  loss_sarc 0.02389  loss_cons 0.00044  aug_shift_sd 0.4951  flip_rate 0.00406  loss_diff 0.8523  loss 0.02433
+  step 500/720  loss_sarc 0.03443  loss_cons 0.00056  aug_shift_sd 0.4891  flip_rate 0.00344  loss_diff 0.8236  loss 0.03498
+  step 600/720  loss_sarc 0.00514  loss_cons 0.00047  aug_shift_sd 0.4833  flip_rate 0.00156  loss_diff 0.803  loss 0.00562
+  step 700/720  loss_sarc 0.00498  loss_cons 0.00042  aug_shift_sd 0.4782  flip_rate 0.00156  loss_diff 0.7837  loss 0.0054
+  step 720/720  loss_sarc 0.00039  loss_cons 0.00037  aug_shift_sd 0.475  flip_rate 0.00313  loss_diff 0.7754  loss 0.00076
+A25_p10_s0: done in 2.27 min; dev macro-F1 0.8573, test macro-F1 0.8707, isarc_test macro-F1 0.4851, test_cuemask macro-F1 0.8149, test_randmask macro-F1 0.8496

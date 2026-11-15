@@ -1,0 +1,26 @@
+A24_p10_s2: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2683.42it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/720  loss_sarc 0.6179  loss_unsup_real 0.09708  loss_unsup_fake 0.8455  p_fake_real 0.08457  p_fake_fake 0.4585  loss_diff 0.98  fake_mean_gap_sd 1.541  loss 1.561
+  step 200/720  loss_sarc 0.2017  loss_unsup_real 0.00875  loss_unsup_fake 0.2217  p_fake_real 0.0087  p_fake_fake 0.8133  loss_diff 0.9292  fake_mean_gap_sd 1.418  loss 0.4321
+  step 300/720  loss_sarc 0.06012  loss_unsup_real 0.00656  loss_unsup_fake 0.1139  p_fake_real 0.00654  p_fake_fake 0.8994  loss_diff 0.8799  fake_mean_gap_sd 1.203  loss 0.1806
+  step 400/720  loss_sarc 0.02644  loss_unsup_real 0.0076  loss_unsup_fake 0.06031  p_fake_real 0.00756  p_fake_fake 0.944  loss_diff 0.8408  fake_mean_gap_sd 1.118  loss 0.09434
+  step 500/720  loss_sarc 0.01948  loss_unsup_real 0.00848  loss_unsup_fake 0.04057  p_fake_real 0.00844  p_fake_fake 0.9612  loss_diff 0.8097  fake_mean_gap_sd 1.038  loss 0.06853
+  step 600/720  loss_sarc 0.01455  loss_unsup_real 0.00921  loss_unsup_fake 0.03215  p_fake_real 0.00916  p_fake_fake 0.9689  loss_diff 0.787  fake_mean_gap_sd 0.8959  loss 0.05591
+  step 700/720  loss_sarc 0.02234  loss_unsup_real 0.0089  loss_unsup_fake 0.0287  p_fake_real 0.00885  p_fake_fake 0.9721  loss_diff 0.7642  fake_mean_gap_sd 0.7642  loss 0.05993
+  step 720/720  loss_sarc 0.0088  loss_unsup_real 0.00904  loss_unsup_fake 0.02984  p_fake_real 0.00899  p_fake_fake 0.971  loss_diff 0.7493  fake_mean_gap_sd 0.6966  loss 0.04769
+A24_p10_s2: done in 2.16 min; dev macro-F1 0.8609, test macro-F1 0.8747, isarc_test macro-F1 0.4923, test_cuemask macro-F1 0.8128, test_randmask macro-F1 0.8478

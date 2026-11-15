@@ -1,0 +1,58 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/202 [00:00<?, ?it/s]Loading weights: 100%|██████████| 202/202 [00:00<00:00, 2756.08it/s]
+[transformers] [1mBertForMaskedLM LOAD REPORT[0m from: bert-base-uncased
+Key                         | Status     |  | 
+----------------------------+------------+--+-
+cls.seq_relationship.weight | UNEXPECTED |  | 
+bert.pooler.dense.weight    | UNEXPECTED |  | 
+bert.pooler.dense.bias      | UNEXPECTED |  | 
+cls.seq_relationship.bias   | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/ssl_pretrain.py:348: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+before pretraining: dev {'loss': 5.85272}; probe {'p1': {'dev_macro_f1_mean': 76.158, 'dev_macro_f1_sd': 0.687, 'per_seed': [76.407, 76.211, 74.965, 76.616, 76.591]}, 'p10': {'dev_macro_f1_mean': 80.627, 'dev_macro_f1_sd': 0.616, 'per_seed': [81.226, 80.734, 80.224, 79.789, 81.161]}}
+  step 250/10000  loss 4.413
+  step 500/10000  loss 3.824
+  step 750/10000  loss 3.651
+  step 1000/10000  loss 3.527
+  step 1250/10000  loss 3.408
+  step 1500/10000  loss 3.333
+  step 1750/10000  loss 3.208
+  step 2000/10000  loss 3.057
+  step 2250/10000  loss 3.024
+  step 2500/10000  loss 2.928
+  step 2750/10000  loss 2.786
+  step 3000/10000  loss 2.692
+  step 3250/10000  loss 2.661
+  step 3500/10000  loss 2.551
+  step 3750/10000  loss 2.475
+  step 4000/10000  loss 2.445
+  step 4250/10000  loss 2.381
+  step 4500/10000  loss 2.269
+  step 4750/10000  loss 2.222
+  step 5000/10000  loss 2.194
+  step 5250/10000  loss 2.108
+  step 5500/10000  loss 2.04
+  step 5750/10000  loss 2.009
+  step 6000/10000  loss 1.946
+  step 6250/10000  loss 1.876
+  step 6500/10000  loss 1.82
+  step 6750/10000  loss 1.848
+  step 7000/10000  loss 1.799
+  step 7250/10000  loss 1.732
+  step 7500/10000  loss 1.702
+  step 7750/10000  loss 1.653
+  step 8000/10000  loss 1.628
+  step 8250/10000  loss 1.619
+  step 8500/10000  loss 1.591
+  step 8750/10000  loss 1.537
+  step 9000/10000  loss 1.554
+  step 9250/10000  loss 1.523
+  step 9500/10000  loss 1.533
+  step 9750/10000  loss 1.46
+  step 10000/10000  loss 1.443
+after pretraining: dev {'loss': 3.6836}; probe {'p1': {'dev_macro_f1_mean': 86.388, 'dev_macro_f1_sd': 0.462, 'per_seed': [87.032, 86.463, 85.87, 86.557, 86.016]}, 'p10': {'dev_macro_f1_mean': 87.231, 'dev_macro_f1_sd': 0.454, 'per_seed': [86.524, 87.401, 87.756, 87.334, 87.141]}}
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  2.30it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  2.30it/s]
+saved mlm encoder to /kaggle/working/ckpt/mlm (35.15 min)

@@ -7,6 +7,11 @@ updated: 2026-11-15
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-15 - Pass 8a (MLM) and 8c (diffusion) results filed
+- Owner downloaded notebooks 15 and 17 (Kaggle CLI) into `data/kaggle_out/` (git-ignored; holds the 424 MB MLM encoder). Filed in `results/pass8_mlm/` and `results/pass8_diff/` (zip, unpacked runs, logs renamed `notebook_15.log`, `notebook_17.log`); unpacked folders match the zips.
+- Read in [[Pass 8 Results]]: re-run checks PASS. MLM-TAPT +7.42 at 1%, +2.80 at 10% over A1; +5.75 / +1.39 over A7; -0.25 n.s. at 100%; probe 76.2 -> 86.4. Cue-mask gap smaller for TAPT arms (3.8 vs 6.1 at 1%). Diffusion: A24 ties A1 and A4; A25 -4.82 and A26 -3.99 at 1% (robust).
+- Not committed. Next (owner): commit and push (Pass 9 commit b36c0d7 is also unpushed), then run notebook 16. Open: whether Pass 9 should use the MLM encoder.
+
 ## 2026-11-15 - Pass 8 running; Pass 9 (stacked recipe) planned and coded; how researchers find questions
 - Pass 8 code committed as 563c450. Owner is running notebooks 15 (MLM) and 17 (diffusion) in parallel on Kaggle; notebook 16 (JEPA) was stopped and will run after `results/pass8_mlm/` is pushed.
 - Owner proposed working on the helper heads. From [[Bootstrap - All Passes]] and [[Pass 3 Results]]: the gain is +1.6 at 1% with helpers on L only, about 70% of it survives shuffled labels. Candidate Pass 9 (not designed yet): stack helpers-on-L with FGM and self-training; a gradient-conflict fix (PCGrad or uncertainty weighting) for helpers on L + U; an R-Drop or label-smoothing control. Explained why most passes use 1-30% labels (U is empty at 100%).

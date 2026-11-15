@@ -1,0 +1,22 @@
+A24_p1_s4: |L|=228 |U|=22572 steps=200 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2812.98it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:321: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  scheds[0].step()
+  step 100/200  loss_sarc 0.2866  loss_unsup_real 0.05943  loss_unsup_fake 0.5167  p_fake_real 0.05138  p_fake_fake 0.6274  loss_diff 0.9806  fake_mean_gap_sd 1.554  loss 0.8627
+  step 200/200  loss_sarc 0.014  loss_unsup_real 0.00853  loss_unsup_fake 0.2187  p_fake_real 0.00849  p_fake_fake 0.8155  loss_diff 0.9242  fake_mean_gap_sd 1.157  loss 0.2413
+A24_p1_s4: done in 0.75 min; dev macro-F1 0.8036, test macro-F1 0.8125, isarc_test macro-F1 0.4682, test_cuemask macro-F1 0.7594, test_randmask macro-F1 0.7872

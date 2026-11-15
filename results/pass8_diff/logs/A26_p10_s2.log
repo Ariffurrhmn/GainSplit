@@ -1,0 +1,26 @@
+A26_p10_s2: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2420.45it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/720  loss_sarc 0.4503  loss_cons 0.00111  aug_shift_sd 0.5207  flip_rate 0.04063  loss 0.4515
+  step 200/720  loss_sarc 0.1635  loss_cons 0.00074  aug_shift_sd 0.5204  flip_rate 0.00656  loss 0.1643
+  step 300/720  loss_sarc 0.04719  loss_cons 0.00059  aug_shift_sd 0.5203  flip_rate 0.00406  loss 0.04777
+  step 400/720  loss_sarc 0.0258  loss_cons 0.00035  aug_shift_sd 0.5205  flip_rate 0.00219  loss 0.02615
+  step 500/720  loss_sarc 0.03375  loss_cons 0.00042  aug_shift_sd 0.5203  flip_rate 0.00313  loss 0.03417
+  step 600/720  loss_sarc 0.01108  loss_cons 0.00047  aug_shift_sd 0.52  flip_rate 0.00156  loss 0.01155
+  step 700/720  loss_sarc 0.00641  loss_cons 0.00051  aug_shift_sd 0.5202  flip_rate 0.00187  loss 0.00693
+  step 720/720  loss_sarc 0.00053  loss_cons 0.00048  aug_shift_sd 0.5207  flip_rate 0.00313  loss 0.00101
+A26_p10_s2: done in 2.05 min; dev macro-F1 0.8559, test macro-F1 0.8710, isarc_test macro-F1 0.5024, test_cuemask macro-F1 0.8086, test_randmask macro-F1 0.8508
