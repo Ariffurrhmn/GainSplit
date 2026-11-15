@@ -7,6 +7,12 @@ updated: 2026-11-15
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-15 - Paper draft v2 ("Just Keep Pretraining")
+- Owner picked the title "Just Keep Pretraining: Unlabeled Headlines Beat GANs, Helper Tasks and LLM Data for Low-Label Sarcasm Detection" and asked for a full draft beside the first one. Written in `paper/v2/` ([[Paper Draft]] "Version 2"); `paper/main.tex` and its files untouched.
+- Two new figures from committed tables (`paper/v2/figures/make_figures.py`); two tables in the text. Every number checked against the result tables; wording softened where a claim was inferred (LLM-pair failure reason, cross-notebook comparisons).
+- Compiles to 5 pages (tectonic), no overfull boxes; BibTeX comments moved out of entries (they had broken the seed-paper entry).
+- Open: polarity-flip check (red PENDING paragraph), CHECK items in `refs.bib`. Not committed.
+
 ## 2026-11-15 - Pass 10 notebook 21 (shortcuts, transfer) filed; Pass 10 complete
 - Owner ran notebook 21 (CPU, commit 4342e20) and downloaded `analysis_pass10.zip` and the log to Downloads. Filed in `results/analysis_pass10/` (zip moved in, tables unpacked and matching the zip, log as `notebook_21.log`); `download (8).txt` is an exact copy of the log and stays in Downloads.
 - Read in [[Pass 10 Results]]: H10.9 not supported (cue-mask gap of every pretrained arm equals BERT's; Pass 8 reading withdrawn); H10.10 supported (all pretrained arms 11-21 AUC points below word count on iSarcasmEval). Q1-Q3 verdicts unchanged.

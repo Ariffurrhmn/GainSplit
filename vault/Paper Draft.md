@@ -1,7 +1,7 @@
 ---
 tags: [paper]
 created: 2026-11-11
-updated: 2026-11-11
+updated: 2026-11-15
 ---
 
 # Paper Draft
@@ -24,3 +24,18 @@ Open items before submission:
 - iSarcasmEval is cited as the SemEval-2022 task paper; [[iSarcasmEval]] says "Findings EMNLP 2022" (conflict, UNVERIFIED).
 - Similarity check (<= 20%) not run.
 - Instructor feedback.
+
+## Version 2 (2026-11-15): "Just Keep Pretraining"
+Owner chose the title "Just Keep Pretraining: Unlabeled Headlines Beat GANs, Helper Tasks and LLM Data for Low-Label Sarcasm Detection" and asked for a new draft beside the first one (the first draft in `paper/` is unchanged).
+
+Files in `paper/v2/`: `main.tex` (IEEEtran, anonymous), `refs.bib` (copy of the first draft's, plus Gururangan 2020, Shi 2023, I-JEPA, DDPM, UDA; the seed paper now has title and DOI), `figures/make_figures.py` (reads only committed result tables), `figures/fig_methods.pdf` (gain over BERT for ten routes at 1% and 10%), `figures/fig_curve.pdf` (label curve, BERT vs MLM, with the two extra pretraining seeds), `draft_v2_preview.pdf`, `gainsplit_v2_overleaf.zip` (four files; upload as a new Overleaf project, pdfLaTeX).
+
+Status: compiles with tectonic to **5 pages including references**, no overfull boxes, no BibTeX errors. Numbers checked against the committed tables 2026-11-15 ([[Pass 10 Results]], [[Pass 8 Results]], [[Pass 9 Results]], [[Pass 4 Results]], [[Bootstrap - All Passes]], [[Pass 3 Results]]).
+
+Structure: abstract; I Introduction (Q1-Q3, three contributions); II Related work (semi-supervised, TAPT and Shi 2023, affect and sarcasm, shortcuts); III Design (data, ten routes, training and statistics, pre-registered predictions); IV Results: Q1 routes (Table I, Fig. 1), Q2 stability and label efficiency (Fig. 2), stacking on the pretrained encoder (Table II), why helper tasks barely help (incl. the polarity-flip check), Q3 outlet words and transfer; V Discussion with limitations; VI Conclusion.
+
+Open items:
+- **Polarity-flip check not run**: the paragraph shows a red PENDING marker (helper-head arms vs A1/A20 on the 107 sarcastic test headlines with positive teacher sentiment; CPU analysis on existing predictions, exploratory). From [[Proposal B]] / PolarityTax, see Session Log 2026-11-15.
+- Bibliography items marked CHECK in `refs.bib` (entered from memory or secondary sources), incl. the seed paper's authors and its 70% labeled share (comment in `main.tex`).
+- The 5-page length leaves room for a model figure or a JEPA/MLM pretraining table if the instructor wants one.
+- Similarity check not run; instructor feedback pending.
