@@ -385,6 +385,59 @@ def pass9_100() -> list[RunConfig]:
     return [_p9("A27", 100, s) for s in PASS9_SEEDS]
 
 
+# ---------------------------------------------------------------------------- Pass 10
+
+PASS10_SEEDS = PASS1_SEEDS
+PASS10_STACK_ARMS = ("A31", "A32", "A33", "A34", "A35", "A36")
+PASS10_PRETRAIN_SEEDS = (1, 2)           # Q2: extra MLM pretrainings; seed 0 is Pass 8a's encoder
+PASS10_LONG_STEPS = 20000                # Q5 (optional): twice Pass 8a's 10,000 pretraining steps
+# Where notebook 20 saves its new encoders (the seed-0 encoder comes from notebook 15's output, found and
+# hash-checked by ssl_pretrain.find_encoder)
+PASS10_CKPT = {"pt1": "/kaggle/working/ckpt/mlm_s1", "pt2": "/kaggle/working/ckpt/mlm_s2",
+               "pt20k": "/kaggle/working/ckpt/mlm_20k"}
+
+
+def _p10(arm, budget, seed, init_dir, tag="") -> RunConfig:
+    """Frozen ingredient settings (helper weight 0.3, FGM epsilon 0.5) on a TAPT encoder; masked tests scored."""
+    sw = ARMS[arm]
+    return RunConfig(arm, budget, seed, helper_weight=PASS1_HELPER_WEIGHT if sw["helpers"] else 0.0,
+                     fgm_epsilon=PASS2_FGM_EPSILON if sw.get("fgm") else 0.0, init_dir=init_dir,
+                     eval_test=True, eval_masked=True, tag=tag)
+
+
+def pass10_stack(init_dir: str = PASS8_CKPT["mlm"]) -> list[RunConfig]:
+    """Pass 10 Q1 (vault: Experiment Plan, "Pass 10 plan"): the Pass 9 2x2x2 (helper heads on L, FGM,
+    self-training) on the MLM-TAPT encoder of Pass 8a. The six new cells A31-A36 at 10% and 1%, 5 seeds
+    (60 runs, longest first), plus A20 and A21 at 1% seed 0 again (tag "rerun"): with the reused encoder
+    they must equal Pass 8a exactly. A20 and A21 themselves are reused from Pass 8a."""
+    order = ("A36", "A35", "A34", "A32", "A33", "A31")   # self-training + FGM runs are the longest
+    runs = [_p10(arm, b, s, init_dir) for b in (10, 1) for arm in order for s in PASS10_SEEDS]
+    return runs + [_p10(arm, 1, 0, init_dir, tag="rerun") for arm in ("A20", "A21")]
+
+
+def pass10_seeds(ckpt: dict | None = None) -> list[RunConfig]:
+    """Pass 10 Q2: A20 fine-tuned from the MLM encoders pretrained with seeds 1 and 2, at 10% and 1%,
+    5 seeds each (20 runs, tags "pt1", "pt2"). Compared with A1 and with Pass 8a's seed-0 A20."""
+    ckpt = ckpt or PASS10_CKPT
+    return [_p10("A20", b, s, ckpt[f"pt{k}"], tag=f"pt{k}")
+            for b in (10, 1) for k in PASS10_PRETRAIN_SEEDS for s in PASS10_SEEDS]
+
+
+def pass10_curve(init_dir: str = PASS8_CKPT["mlm"]) -> list[RunConfig]:
+    """Pass 10 Q3: A20 (seed-0 encoder) at 30% and 5% labels, 5 seeds (10 runs). A1 exists at every budget."""
+    return [_p10("A20", b, s, init_dir) for b in (30, 5) for s in PASS10_SEEDS]
+
+
+def pass10_curve_100(init_dir: str = PASS8_CKPT["mlm"]) -> list[RunConfig]:
+    """Pass 10 Q3 extension: A20 with every label (100%), 5 seeds. Compared with Pass 1's A1 at 100%."""
+    return [_p10("A20", 100, s, init_dir) for s in PASS10_SEEDS]
+
+
+def pass10_long(init_dir: str = PASS10_CKPT["pt20k"]) -> list[RunConfig]:
+    """Pass 10 Q5 (optional): A20 from a 20,000-step MLM encoder at 10% and 1%, 5 seeds (tag "pt20k")."""
+    return [_p10("A20", b, s, init_dir, tag="pt20k") for b in (10, 1) for s in PASS10_SEEDS]
+
+
 PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "session2": session2, "pass1": pass1, "fgm_tuning": fgm_tuning,
          "pass2a": pass2a, "pass2b": pass2b, "pass3": pass3,
@@ -393,4 +446,6 @@ PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "pass6": pass6, "pass7": pass7,
          "pass8_mlm": pass8_mlm, "pass8_mlm_100": pass8_mlm_100,
          "pass8_jepa": pass8_jepa, "pass8_jepa_100": pass8_jepa_100, "pass8_diff": pass8_diff,
-         "pass9": pass9, "pass9_100": pass9_100}
+         "pass9": pass9, "pass9_100": pass9_100,
+         "pass10_stack": pass10_stack, "pass10_seeds": pass10_seeds, "pass10_curve": pass10_curve,
+         "pass10_curve_100": pass10_curve_100, "pass10_long": pass10_long}

@@ -631,6 +631,8 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
         fgm_on = bool(sw.get("fgm"))
         recipe = "A1" if not (helpers or fgm_on) else {(True, False): "A2", (False, True): "A7",
                                                        (True, True): "A2+A7"}[(helpers, fgm_on)]
+        if sw.get("init"):  # Pass 10: the teacher starts from the same TAPT encoder, e.g. "mlm:A1" for A32
+            recipe = f"{sw['init']}:{recipe}"
         print(f"  self-training teacher ({recipe} recipe):")
         teacher, _ = fit(cfg, tokenizer, labeled, None, steps, device, use_fp16, helpers=helpers, fgm=fgm_on)
         p_u = (predict(teacher, encode(tokenizer, unlabeled["text"], cfg.max_len), device, fp16=use_fp16)
@@ -643,6 +645,9 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
         print(f"  A6 pseudo-labels kept: {pseudo_info['n_kept']} of {len(unlabeled)} "
               f"(confident {pseudo_info['n_confident']}, per class {pseudo_info['confident_class_counts']})"
               + ("; none kept, the student uses L only" if pseudo_info["fallback_l_only"] else ""))
+        # which U headlines got which pseudo-label (ids only; their true labels are never read here,
+        # the analysis scores them afterwards against headlines_train.csv)
+        pseudo_kept = pd.DataFrame({"id": unlabeled["id"].iloc[idx].to_numpy(), "pseudo_label": y_pseudo})
         if len(idx) > 0:
             pool = unlabeled.iloc[idx].reset_index(drop=True)
             pool["label"] = y_pseudo
@@ -658,6 +663,8 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
         from .diffusion import SETTINGS
         diffusion_info = {"mode": diffusion, "cons_weight": cfg.cons_weight, **SETTINGS}
     out_dir.mkdir(parents=True, exist_ok=True)
+    if pseudo_info is not None:
+        pseudo_kept.to_csv(out_dir / "pseudo_labels.csv", index=False)
     results = {}
     for name, df in eval_sets.items():
         p = predict(model, encode(tokenizer, df["text"], cfg.max_len), device, fp16=use_fp16)

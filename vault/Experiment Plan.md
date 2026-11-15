@@ -340,6 +340,50 @@ Why ([[Research Ideas]] "Beyond LLMs and beyond transformers"): no run so far us
 
 **Status:** written and tested locally (non-torch 180 passed, 19 skipped; torch suite 263 passed, the one failure is matplotlib missing locally); tiny runs of A1, A2, A3, A6, A7, A8, A9 give byte-identical predictions with the committed code and the new code; analysis and verdict cells dry-run on stand-in runs (old runs relabelled as the new arms). Committed as b36c0d7; `pass9` run 2026-11-15 (notebook 18, 43/43, re-runs PASS), `pass9_100` not run. Results: [[Pass 9 Results]].
 
+## Pass 10 plan (written 2026-11-15, before running; owner chose to go all in on MLM task-adaptive pretraining after [[Pass 8 Results]] and [[Pass 9 Results]]; design DELEGATED per [[Repo Rules]] rule 7)
+
+**Question.** MLM-TAPT (A20) is the largest gain in the study (+7.4 at 1%, +2.8 at 10%). Four questions a reviewer would ask: (Q1) does anything add on top of it; (Q2) is it stable across pretraining runs; (Q3) how many labels does it save; (Q4) does it learn sarcasm or shortcuts?
+
+**Q1: the Pass 9 2x2x2 on the MLM encoder (notebook 19).** Same three ingredients (H = helper heads on L, F = FGM, S = self-training) and the same frozen settings (helper weight 0.3, epsilon 0.5, threshold 0.9), but every model starts from the Pass 8a MLM encoder (seed 0, reused from notebook 15's output; its weight hashes must equal `results/pass8_mlm/pretrain_info.json`). Cells: A20 (none, Pass 8a), A21 (F, Pass 8a), new A31 = H, A32 = S, A33 = H+F, A34 = H+S, A35 = F+S, A36 = H+F+S. The self-training teacher also starts from the MLM encoder (recorded as `teacher_recipe` "mlm:A1", "mlm:A2", ...). 6 arms x 2 budgets (1%, 10%) x 5 seeds = 60 runs, plus re-runs of A20 and A21 at 1% seed 0 (must equal Pass 8a: proves the encoder and code are the same). Masked test sets scored.
+
+**Q2: pretraining seeds (notebook 20).** Two more MLM pretrainings with seeds 1 and 2 (every other setting as Pass 8a), run in parallel on the two GPUs. A20 fine-tuned from each at 1% and 10%, 5 seeds (tags `pt1`, `pt2`): 20 runs. With Pass 8a's seed 0 this gives three encoders.
+
+**Q3: the label curve (notebook 20).** A20 (seed-0 encoder) at 5%, 30% and 100%, 5 seeds: 15 runs. A1 at every budget exists (Passes 1, 2a). The 100% runs can be switched off (`RUN_FULL100`).
+
+**Q5 (optional, off by default, notebook 20).** One MLM pretraining with 20,000 steps (seed 0), then A20 at 1% and 10% (tag `pt20k`, 10 runs). A dose check, not a selection: the paper's numbers stay on the 10,000-step encoder whatever this shows.
+
+**Q4: shortcuts and transfer (notebook 21, CPU, after 19 and 20 are committed).** No new training. (a) Cue-mask shortcut gap, defined as in Passes 4-7 (random-mask minus cue-mask macro-F1), of A20, A21, A22, A23, A20[pt1], A20[pt2] and A36, minus the gap of A1 (A7 for the FGM arms), using the masked re-runs of A1/A7 as references; (b) iSarcasmEval AUC minus word count alone for A20, A21, A22, A23, A36 at 1% and 10%.
+
+**Rules (DELEGATED).** Nothing tuned, nothing picked on test; all settings are the frozen ones of earlier passes. Analysis in `src/gainsplit/analysis_pass10.py`: paired bootstrap over test headlines, 10,000 resamples, mean over seeds 0-4, Holm within each table. A cross-budget contrast (e.g. A20 at 1% vs A1 at 10%) pairs the test items as usual; the two arms' seeds draw different labeled sets, which the bootstrap does not model (it resamples test items only), so these rows are a reading aid with the same caveat as every other row.
+
+| Table (Holm family) | Contrasts |
+|---|---|
+| `stack_f1` (Q1, 16) | A31-A20 (H on MLM), A21-A20 (F on MLM), A32-A20 (S on MLM), A33-A20, A34-A20, A35-A20, A36-A20, A36-A30 (MLM under the full stack), at 1% and 10% |
+| `stack_interactions` (Q1, 14) | within MLM: H x F, H x S, F x S, all three vs sum, at 1% and 10%; pretraining x ingredient: (A31-A20)-(A2-A1), (A21-A20)-(A7-A1), (A32-A20)-(A6-A1), at 1% and 10% |
+| `seeds_f1` (Q2, 6) | A20[pt1]-A1, A20[pt2]-A1, mean of the three encoders - A1, at 1% and 10% |
+| `curve_f1` (Q3, 7) | A20-A1 at 5%, 30%, 100%; A20@1% - A1@10%, A20@5% - A1@30%, A20@10% - A1@30%, A20@30% - A1@100% |
+| `gap_contrasts` (Q4, 14) | gap(arm) - gap(A1 or A7) at 1% and 10% |
+| `auc_vs_length` (Q4, 10) | AUC(arm) - AUC(word count) at 1% and 10% |
+
+Reading aids without tests: `additivity` (within MLM), `pseudo_health` (teacher dev F1, pseudo-labels kept, and their accuracy against the hidden training labels), `seed_spread` (per-encoder mean F1 and the spread), `curve` (mean F1 per budget, and the A1 budget each A20 budget matches by log-linear interpolation), pretraining receipts per encoder.
+
+**Predictions (IDEA, fixed before running).**
+- H10.1: S adds on top of MLM at 1% (A32 > A20): self-training adds data, and the MLM teacher is stronger, so its pseudo-labels are better. No direction at 10%.
+- H10.2: H and F add nothing on top of MLM (A31 - A20 and A21 - A20: no difference at 1% and 10%). Why: Pass 8 means already show A21 = A20; both are regularisers and TAPT already makes fine-tuning stable.
+- H10.3: the full stack beats MLM alone at 1% (A36 > A20), carried by S. No direction at 10%.
+- H10.4: pretraining shrinks the gains of H and F (pretraining x H < 0, pretraining x F < 0 at 1%). Pretraining x S: no direction.
+- H10.5: MLM still adds under the full stack (A36 > A30 at 1% and 10%).
+- H10.6: every pretraining seed helps (A20[pt1] > A1 and A20[pt2] > A1 at 1% and 10%); the three encoders' mean F1 at 1% differ by less than 1.5 points (descriptive).
+- H10.7: A20 > A1 at 5% and 30%; no difference at 100% (as A21 vs A7 in Pass 8a).
+- H10.8: label efficiency: A20@1% vs A1@10% and A20@10% vs A1@30%: no significant difference (MLM with ten or three times fewer labels matches plain BERT). "No significant difference" is not proof of equality; the interval is reported.
+- H10.9: the pretrained arms lean less on outlet cue words: gap(A20) < gap(A1) at 1% and 10%.
+- H10.10: no arm's iSarcasmEval AUC reaches word count alone (AUC minus word count < 0): Headlines-only pretraining does not transfer.
+
+**Cost.** Notebook 19: about 1.5-2 h on T4 x2 (60 runs; self-training and FGM arms are the slow ones; no pretraining). Notebook 20: about 40 min for the two pretrainings in parallel, then about 1-1.5 h of runs (the five 100% runs dominate); +1.5 h with Q5. Notebook 21: CPU, about 10-20 min. Both GPU notebooks need notebook 15's output attached as an input (the seed-0 encoder).
+
+**Status:** written 2026-11-15, before any run. Code: arms A31-A36 (`config.py`); plans `pass10_stack`, `pass10_seeds`, `pass10_curve`, `pass10_curve_100`, `pass10_long`; `ssl_pretrain.find_encoder` (finds notebook 15's encoder under `/kaggle/input`, refuses it if its weights differ from the committed receipt); `train.py`: the self-training teacher's recipe is recorded as "mlm:..." for the TAPT arms, and every self-training run saves `pseudo_labels.csv` (ids of the kept U headlines and their pseudo-labels; the true labels are only read by the analysis); `analysis_pass10.py`; `tests/test_pass10.py`; notebooks `19_pass10_stack.ipynb`, `20_pass10_seeds_curve.ipynb`, `21_pass10_shortcuts.ipynb`. Tiny-model runs of A1, A2, A6, A7, A20, A21, A28, A29, A30 give byte-identical predictions with commit 8fcf9b2 and the new code. Analysis dry-run on the committed runs and on stand-in runs (old runs relabelled as the new arms): every planned row computes.
+- Seen in the dry run on committed runs, after the predictions above were written: H10.9's gap contrast for A20 is about 0 (see [[Pass 8 Results]] caveat), and every pretrained arm is 11-20 AUC points below word count (H10.10). These rows use runs that already exist; notebook 21 only adds the receipt and the Pass 10 arms.
+
 ## Status
 Code rolled back 2026-11-09 by the owner's decision: `src/`, `experiments/` and `tests/` are empty again and the implementation will be rebuilt from scratch. The design above (arms, budgets, protocol) still stands unless changed in [[Decisions]]. Earlier implementation notes (split sizes, A5 reading, smoke tests) were discarded with the code. Log runs in [[Session Log]].
 

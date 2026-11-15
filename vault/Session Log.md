@@ -7,6 +7,14 @@ updated: 2026-11-15
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-15 - Pass 10 (all in on MLM pretraining) planned and coded
+- Explained the terms in plain words to the owner (pretraining, MLM, JEPA, self-training, helper heads, FGM, seed). Proposed direction: MLM task-adaptive pretraining as the paper's method, all else as supporting evidence. Owner chose to go all in on MLM and test it completely.
+- Plan with predictions fixed before running: [[Experiment Plan]] "Pass 10 plan"; decision in [[Decisions]]. Q1 = Pass 9's 2x2x2 on the MLM encoder (A31-A36, 60 runs + 2 re-runs, notebook 19); Q2 = MLM pretraining seeds 1 and 2 (20 runs) and Q3 = A20 at 5/30/100% (15 runs), notebook 20; Q4 = cue-mask gap and AUC net of word count, CPU notebook 21; Q5 = 20,000-step pretraining, optional, off.
+- Code: arms in `config.py`, plans in `plans.py`, `ssl_pretrain.find_encoder` (reuses notebook 15's encoder, hash-checked against the committed receipt; the local download matches it), `train.py` (teacher recipe "mlm:..."; self-training runs save `pseudo_labels.csv` so the analysis can score pseudo-label accuracy), `analysis_pass10.py`, `tests/test_pass10.py`, notebooks 19-21.
+- Checks: non-torch suite 188 passed, 27 skipped; torch suite (CPU install) 260 passed, test_analysis.py deselected there (matplotlib missing in that install; it passes in the non-torch run). Tiny runs of A1, A2, A6, A7, A20, A21, A28, A29, A30 byte-identical with commit 8fcf9b2. Analysis dry-run on committed and stand-in runs: every planned row computes.
+- Found in the dry run (INFERRED, not a receipt): with the random-mask control, A20's cue-mask gap equals A1's, so the Pass 8 "leans less on cue words" reading is withdrawn until notebook 21 ([[Pass 8 Results]] caveat). Pretrained arms stay 11-20 AUC points below word count on iSarcasmEval.
+- Not committed. Next (owner): commit and push; on Kaggle attach notebook 15's output to notebooks 19 and 20 and run both (they can run in parallel); then commit `results/pass10_stack/` and `results/pass10_seeds/`, push, run notebook 21 (CPU). Send zips and logs.
+
 ## 2026-11-15 - Pass 8b (JEPA) and Pass 9 (stacked recipe) results filed
 - Owner downloaded notebooks 16 and 18 (Kaggle CLI) into `data/kaggle_out/nb16`, `nb18`. Filed in `results/pass8_jepa/` and `results/pass9/` (zip, unpacked runs and logs, analysis, logs renamed `notebook_16.log`, `notebook_18.log`); `diff -r` against the zips: identical. The JEPA encoder checkpoint stays in `data/kaggle_out/nb16/ckpt/` (git-ignored).
 - Checks: notebook 16 re-run (A1 100% s0) PASS; notebook 18 re-runs A2, A6, A7 at 1% s0 equal Pass 2 exactly.

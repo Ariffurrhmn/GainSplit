@@ -66,6 +66,14 @@ ARMS = {
     "A28": {"gan": False, "helpers": True, "l_only": True, "pseudo": True},                 # A2 + A6
     "A29": {"gan": False, "helpers": False, "fgm": True, "pseudo": True},                   # A7 + A6
     "A30": {"gan": False, "helpers": True, "l_only": True, "fgm": True, "pseudo": True},    # all three
+    # Pass 10 Q1: the same 2x2x2 on the MLM-TAPT encoder (vault: Experiment Plan, "Pass 10 plan").
+    # A20 (none) and A21 (FGM) exist from Pass 8a; the self-training teacher also starts from the encoder.
+    "A31": {"gan": False, "helpers": True, "l_only": True, "init": "mlm"},                              # A20 + H
+    "A32": {"gan": False, "helpers": False, "pseudo": True, "init": "mlm"},                             # A20 + S
+    "A33": {"gan": False, "helpers": True, "l_only": True, "fgm": True, "init": "mlm"},                 # A20 + H + F
+    "A34": {"gan": False, "helpers": True, "l_only": True, "pseudo": True, "init": "mlm"},              # A20 + H + S
+    "A35": {"gan": False, "helpers": False, "fgm": True, "pseudo": True, "init": "mlm"},                # A20 + F + S
+    "A36": {"gan": False, "helpers": True, "l_only": True, "fgm": True, "pseudo": True, "init": "mlm"},  # all three
 }
 INIT_OBJECTIVES = ("mlm", "jepa")
 DIFFUSION_MODES = ("fake", "consistency", "noise")
@@ -171,7 +179,7 @@ class RunConfig:
         if init and not self.init_dir:
             raise ValueError(f"{self.arm} starts from a pretrained encoder: set init_dir (the ssl_pretrain output folder)")
         if not init and self.init_dir:
-            raise ValueError(f"init_dir is only used by the TAPT arms (A20-A23) (got {self.init_dir!r} for {self.arm})")
+            raise ValueError(f"init_dir is only used by the TAPT arms (A20-A23, A31-A36) (got {self.init_dir!r} for {self.arm})")
         if init and self.train_data != "headlines":
             raise ValueError(f"{self.arm} uses a Headlines TAPT encoder; train_data must be 'headlines'")
         diff = ARMS[self.arm].get("diffusion")

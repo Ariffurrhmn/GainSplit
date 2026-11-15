@@ -246,6 +246,37 @@ def _sha256_dir(folder: Path) -> dict:
             and p.name != "pretrain_info.json"}
 
 
+def find_encoder(root, objective: str, seed: int = 0, steps: int = 10000, expected_sha256: dict | None = None) -> Path:
+    """Pass 10: find a finished TAPT encoder under `root` (e.g. /kaggle/input, where an earlier notebook's
+    output is attached) by its pretrain_info.json, and check its weights against a committed receipt.
+
+    `expected_sha256` maps file name -> sha256 (the `weights_sha256` of a committed pretrain_info.json);
+    only the files present in both are compared, and model.safetensors must be one of them. Raises
+    FileNotFoundError if no matching encoder is found, ValueError if its weights differ from the receipt."""
+    found = []
+    for info_path in sorted(Path(root).rglob("pretrain_info.json")):
+        try:
+            info = json.loads(info_path.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        c = info.get("config", {})
+        if (info.get("objective") == objective and c.get("seed") == seed and c.get("steps") == steps
+                and (info_path.parent / "config.json").exists()):
+            found.append(info_path.parent)
+    if not found:
+        raise FileNotFoundError(f"no {objective} encoder (seed {seed}, {steps} steps) with config.json under {root}")
+    folder = found[0]
+    if expected_sha256 is not None:
+        actual = _sha256_dir(folder)
+        shared = sorted(set(actual) & set(expected_sha256))
+        if "model.safetensors" not in shared:
+            raise ValueError(f"{folder}: model.safetensors missing or not in the receipt")
+        bad = [n for n in shared if actual[n] != expected_sha256[n]]
+        if bad:
+            raise ValueError(f"{folder}: {bad} differ from the committed receipt; this is not the same encoder")
+    return folder
+
+
 def pretrain(cfg: PretrainConfig, data_dir, out_dir, probe: bool = True) -> dict:
     """Run one pretraining; save the encoder to out_dir; return (and write) pretrain_info.json."""
     torch = _torch()
