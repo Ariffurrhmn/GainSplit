@@ -7,6 +7,11 @@ updated: 2026-11-15
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-15 - Novelty check for MLM pretraining
+- Owner worried the MLM result is too good to be true and asked whether it was already published. A delegated literature search, with the key leads re-checked in this session, is filed in [[Novelty Check - MLM Pretraining]].
+- Verdict: the method (Gururangan 2020) and "TAPT beats self-training at low labels" (Shi et al. 2023, incl. TAPT then self-training in general) are published. Not found: TAPT on sarcasm or the Headlines dataset, a low-label sweep on Headlines, and the controlled multi-method comparison. Pass 10 is not moot; the paper must frame its contribution as the controlled comparison and avoid "first" claims listed in the note.
+- Pass 10 code still not committed.
+
 ## 2026-11-15 - Pass 10 (all in on MLM pretraining) planned and coded
 - Explained the terms in plain words to the owner (pretraining, MLM, JEPA, self-training, helper heads, FGM, seed). Proposed direction: MLM task-adaptive pretraining as the paper's method, all else as supporting evidence. Owner chose to go all in on MLM and test it completely.
 - Plan with predictions fixed before running: [[Experiment Plan]] "Pass 10 plan"; decision in [[Decisions]]. Q1 = Pass 9's 2x2x2 on the MLM encoder (A31-A36, 60 runs + 2 re-runs, notebook 19); Q2 = MLM pretraining seeds 1 and 2 (20 runs) and Q3 = A20 at 5/30/100% (15 runs), notebook 20; Q4 = cue-mask gap and AUC net of word count, CPU notebook 21; Q5 = 20,000-step pretraining, optional, off.
