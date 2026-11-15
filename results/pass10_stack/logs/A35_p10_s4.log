@@ -1,0 +1,25 @@
+A35_p10_s4: |L|=2280 |U|=20520 steps=720 device=cuda
+  self-training teacher (mlm:A7 recipe):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2571.46it/s]
+/tmp/GainSplit/src/gainsplit/train.py:239: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.4043  loss_adv 0.539  loss 0.9433
+  step 200/720  loss_sarc 0.1079  loss_adv 0.2327  loss 0.3406
+  step 300/720  loss_sarc 0.01126  loss_adv 0.0767  loss 0.08796
+  step 400/720  loss_sarc 0.00176  loss_adv 0.03347  loss 0.03523
+  step 500/720  loss_sarc 0.0004  loss_adv 0.02429  loss 0.02469
+  step 600/720  loss_sarc 0.00021  loss_adv 0.01048  loss 0.01069
+  step 700/720  loss_sarc 0.00014  loss_adv 0.00293  loss 0.00307
+  step 720/720  loss_sarc 0.00013  loss_adv 0.00842  loss 0.00855
+  A6 pseudo-labels kept: 17962 of 20520 (confident 19441, per class {'0': 10460, '1': 8981})
+  A6 student (fresh BERT):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2479.65it/s]
+  step 100/720  loss_sarc 0.3252  loss_adv 0.4476  loss 0.7728
+  step 200/720  loss_sarc 0.08454  loss_adv 0.1901  loss 0.2747
+  step 300/720  loss_sarc 0.02711  loss_adv 0.1138  loss 0.1409
+  step 400/720  loss_sarc 0.01997  loss_adv 0.09507  loss 0.115
+  step 500/720  loss_sarc 0.01787  loss_adv 0.09097  loss 0.1088
+  step 600/720  loss_sarc 0.01502  loss_adv 0.07649  loss 0.09152
+  step 700/720  loss_sarc 0.00317  loss_adv 0.0377  loss 0.04087
+  step 720/720  loss_sarc 0.00283  loss_adv 0.04308  loss 0.04592
+A35_p10_s4: done in 6.29 min; dev macro-F1 0.9098, test macro-F1 0.9147, isarc_test macro-F1 0.4938, test_cuemask macro-F1 0.8624, test_randmask macro-F1 0.9077

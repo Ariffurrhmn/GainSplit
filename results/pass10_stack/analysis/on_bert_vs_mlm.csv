@@ -1,0 +1,17 @@
+budget,cell,bert_arm,on_bert,mlm_arm,on_mlm,mlm_gain
+1,none,A1,80.42,A20,87.84,7.42
+1,helpers,A2,82.05,A31,88.32,6.27
+1,FGM,A7,82.0,A21,87.75,5.75
+1,self-training,A6,82.04,A32,88.19,6.15
+1,helpers+FGM,A27,82.97,A33,88.27,5.3
+1,helpers+self-training,A28,83.06,A34,88.89,5.83
+1,FGM+self-training,A29,83.86,A35,88.5,4.64
+1,all three,A30,84.6,A36,88.81,4.21
+10,none,A1,88.21,A20,91.02,2.8
+10,helpers,A2,88.43,A31,91.09,2.66
+10,FGM,A7,89.76,A21,91.15,1.39
+10,self-training,A6,88.81,A32,91.05,2.24
+10,helpers+FGM,A27,89.48,A33,91.26,1.78
+10,helpers+self-training,A28,89.23,A34,91.13,1.9
+10,FGM+self-training,A29,90.28,A35,91.48,1.2
+10,all three,A30,89.88,A36,91.6,1.71

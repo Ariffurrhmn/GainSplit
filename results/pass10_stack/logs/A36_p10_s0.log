@@ -1,0 +1,26 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+A36_p10_s0: |L|=2280 |U|=20520 steps=720 device=cuda
+  self-training teacher (mlm:A2+A7 recipe):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2356.48it/s]
+/tmp/GainSplit/src/gainsplit/train.py:239: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.3821  loss_adv 1.058  loss 1.971  loss_sent 0.8991  loss_emo 0.8696
+  step 200/720  loss_sarc 0.08837  loss_adv 0.5185  loss 0.8908  loss_sent 0.4951  loss_emo 0.4515
+  step 300/720  loss_sarc 0.01137  loss_adv 0.2222  loss 0.3616  loss_sent 0.1933  loss_emo 0.2333
+  step 400/720  loss_sarc 0.00414  loss_adv 0.1125  loss 0.1716  loss_sent 0.07166  loss_emo 0.1114
+  step 500/720  loss_sarc 0.00301  loss_adv 0.06966  loss 0.09681  loss_sent 0.03617  loss_emo 0.0443
+  step 600/720  loss_sarc 0.00202  loss_adv 0.03802  loss 0.05083  loss_sent 0.0148  loss_emo 0.02115
+  step 700/720  loss_sarc 0.00156  loss_adv 0.02528  loss 0.03398  loss_sent 0.01015  loss_emo 0.01364
+  step 720/720  loss_sarc 0.00152  loss_adv 0.02251  loss 0.03084  loss_sent 0.00908  loss_emo 0.01362
+  A6 pseudo-labels kept: 17856 of 20520 (confident 18697, per class {'0': 9769, '1': 8928})
+  A6 student (fresh BERT):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2665.40it/s]
+  step 100/720  loss_sarc 0.3094  loss_adv 0.9542  loss 1.787  loss_sent 0.8843  loss_emo 0.8592
+  step 200/720  loss_sarc 0.0717  loss_adv 0.4826  loss 0.8091  loss_sent 0.4374  loss_emo 0.4119
+  step 300/720  loss_sarc 0.02713  loss_adv 0.2602  loss 0.4003  loss_sent 0.1682  loss_emo 0.2082
+  step 400/720  loss_sarc 0.01699  loss_adv 0.1688  loss 0.2383  loss_sent 0.07174  loss_emo 0.1035
+  step 500/720  loss_sarc 0.0181  loss_adv 0.1323  loss 0.1755  loss_sent 0.03642  loss_emo 0.04739
+  step 600/720  loss_sarc 0.01136  loss_adv 0.09377  loss 0.1194  loss_sent 0.01972  loss_emo 0.02795
+  step 700/720  loss_sarc 0.0041  loss_adv 0.05518  loss 0.07027  loss_sent 0.01482  loss_emo 0.02178
+  step 720/720  loss_sarc 0.00415  loss_adv 0.05717  loss 0.071  loss_sent 0.01461  loss_emo 0.01765
+A36_p10_s0: done in 6.3 min; dev macro-F1 0.9094, test macro-F1 0.9158, isarc_test macro-F1 0.5009, test_cuemask macro-F1 0.8709, test_randmask macro-F1 0.9039

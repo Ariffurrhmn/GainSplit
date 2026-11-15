@@ -1,0 +1,27 @@
+A20_p30_s0: |L|=6840 |U|=15960 steps=2140 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2804.54it/s]
+/tmp/GainSplit/src/gainsplit/train.py:184: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/2140  loss_sarc 0.4658  loss 0.4658
+  step 200/2140  loss_sarc 0.2412  loss 0.2412
+  step 300/2140  loss_sarc 0.1589  loss 0.1589
+  step 400/2140  loss_sarc 0.1519  loss 0.1519
+  step 500/2140  loss_sarc 0.06776  loss 0.06776
+  step 600/2140  loss_sarc 0.04118  loss 0.04118
+  step 700/2140  loss_sarc 0.01846  loss 0.01846
+  step 800/2140  loss_sarc 0.01801  loss 0.01801
+  step 900/2140  loss_sarc 0.00508  loss 0.00508
+  step 1000/2140  loss_sarc 0.00726  loss 0.00726
+  step 1100/2140  loss_sarc 0.00295  loss 0.00295
+  step 1200/2140  loss_sarc 0.00467  loss 0.00467
+  step 1300/2140  loss_sarc 0.00062  loss 0.00062
+  step 1400/2140  loss_sarc 0.00257  loss 0.00257
+  step 1500/2140  loss_sarc 7e-05  loss 7e-05
+  step 1600/2140  loss_sarc 0.00017  loss 0.00017
+  step 1700/2140  loss_sarc 0.00044  loss 0.00044
+  step 1800/2140  loss_sarc 0.00083  loss 0.00083
+  step 1900/2140  loss_sarc 6e-05  loss 6e-05
+  step 2000/2140  loss_sarc 0.00016  loss 0.00016
+  step 2100/2140  loss_sarc 0.00224  loss 0.00224
+  step 2140/2140  loss_sarc 3e-05  loss 3e-05
+A20_p30_s0: done in 3.88 min; dev macro-F1 0.9116, test macro-F1 0.9167, isarc_test macro-F1 0.5108, test_cuemask macro-F1 0.8775, test_randmask macro-F1 0.9061

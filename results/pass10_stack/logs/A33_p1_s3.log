@@ -1,0 +1,5 @@
+A33_p1_s3: |L|=228 |U|=22572 steps=200 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2755.45it/s]
+  step 100/200  loss_sarc 0.1117  loss_adv 0.3725  loss 0.7074  loss_sent 0.3884  loss_emo 0.3554
+  step 200/200  loss_sarc 0.00172  loss_adv 0.00896  loss 0.01639  loss_sent 0.00828  loss_emo 0.01075
+A33_p1_s3: done in 0.81 min; dev macro-F1 0.8690, test macro-F1 0.8809, isarc_test macro-F1 0.4721, test_cuemask macro-F1 0.8551, test_randmask macro-F1 0.8739

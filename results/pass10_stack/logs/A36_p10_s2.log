@@ -1,0 +1,23 @@
+A36_p10_s2: |L|=2280 |U|=20520 steps=720 device=cuda
+  self-training teacher (mlm:A2+A7 recipe):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2542.83it/s]
+  step 100/720  loss_sarc 0.3691  loss_adv 1.023  loss 1.9  loss_sent 0.8972  loss_emo 0.7955
+  step 200/720  loss_sarc 0.08771  loss_adv 0.5225  loss 0.8924  loss_sent 0.4999  loss_emo 0.4408
+  step 300/720  loss_sarc 0.01192  loss_adv 0.2378  loss 0.381  loss_sent 0.214  loss_emo 0.2234
+  step 400/720  loss_sarc 0.00444  loss_adv 0.1211  loss 0.185  loss_sent 0.08757  loss_emo 0.1108
+  step 500/720  loss_sarc 0.00304  loss_adv 0.06627  loss 0.09356  loss_sent 0.03011  loss_emo 0.05074
+  step 600/720  loss_sarc 0.00215  loss_adv 0.03777  loss 0.04995  loss_sent 0.01471  loss_emo 0.01874
+  step 700/720  loss_sarc 0.00173  loss_adv 0.02286  loss 0.03113  loss_sent 0.00976  loss_emo 0.01204
+  step 720/720  loss_sarc 0.00171  loss_adv 0.0247  loss 0.03294  loss_sent 0.00924  loss_emo 0.01255
+  A6 pseudo-labels kept: 17646 of 20520 (confident 18821, per class {'0': 9998, '1': 8823})
+  A6 student (fresh BERT):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2696.38it/s]
+  step 100/720  loss_sarc 0.2957  loss_adv 0.9168  loss 1.712  loss_sent 0.8888  loss_emo 0.7778
+  step 200/720  loss_sarc 0.06855  loss_adv 0.4668  loss 0.7908  loss_sent 0.4459  loss_emo 0.4056
+  step 300/720  loss_sarc 0.02182  loss_adv 0.2451  loss 0.3791  loss_sent 0.1798  loss_emo 0.1941
+  step 400/720  loss_sarc 0.01616  loss_adv 0.1648  loss 0.2359  loss_sent 0.07596  loss_emo 0.1074
+  step 500/720  loss_sarc 0.01391  loss_adv 0.1252  loss 0.1642  loss_sent 0.03532  loss_emo 0.04834
+  step 600/720  loss_sarc 0.00886  loss_adv 0.08483  loss 0.1077  loss_sent 0.0197  loss_emo 0.02717
+  step 700/720  loss_sarc 0.00404  loss_adv 0.05227  loss 0.06559  loss_sent 0.01291  loss_emo 0.01805
+  step 720/720  loss_sarc 0.00378  loss_adv 0.04447  loss 0.05766  loss_sent 0.01424  loss_emo 0.01715
+A36_p10_s2: done in 6.25 min; dev macro-F1 0.9122, test macro-F1 0.9193, isarc_test macro-F1 0.5180, test_cuemask macro-F1 0.8737, test_randmask macro-F1 0.9087

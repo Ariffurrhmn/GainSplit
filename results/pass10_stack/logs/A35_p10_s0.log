@@ -1,0 +1,27 @@
+A35_p10_s0: |L|=2280 |U|=20520 steps=720 device=cuda
+  self-training teacher (mlm:A7 recipe):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2417.69it/s]
+/tmp/GainSplit/src/gainsplit/train.py:239: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.3703  loss_adv 0.5103  loss 0.8806
+  step 200/720  loss_sarc 0.08221  loss_adv 0.2031  loss 0.2853
+  step 300/720  loss_sarc 0.01101  loss_adv 0.07897  loss 0.08998
+  step 400/720  loss_sarc 0.00107  loss_adv 0.03561  loss 0.03668
+  step 500/720  loss_sarc 0.00032  loss_adv 0.0261  loss 0.02642
+  step 600/720  loss_sarc 0.00017  loss_adv 0.00586  loss 0.00603
+  step 700/720  loss_sarc 0.00011  loss_adv 0.00263  loss 0.00274
+  step 720/720  loss_sarc 0.0001  loss_adv 0.01079  loss 0.01089
+  A6 pseudo-labels kept: 18370 of 20520 (confident 19571, per class {'0': 10386, '1': 9185})
+  A6 student (fresh BERT):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2591.39it/s]
+/tmp/GainSplit/src/gainsplit/train.py:239: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.2941  loss_adv 0.4114  loss 0.7055
+  step 200/720  loss_sarc 0.06873  loss_adv 0.1825  loss 0.2513
+  step 300/720  loss_sarc 0.03649  loss_adv 0.1309  loss 0.1674
+  step 400/720  loss_sarc 0.02238  loss_adv 0.1069  loss 0.1292
+  step 500/720  loss_sarc 0.01747  loss_adv 0.09404  loss 0.1115
+  step 600/720  loss_sarc 0.01719  loss_adv 0.08712  loss 0.1043
+  step 700/720  loss_sarc 0.0044  loss_adv 0.04443  loss 0.04882
+  step 720/720  loss_sarc 0.00364  loss_adv 0.04791  loss 0.05154
+A35_p10_s0: done in 6.3 min; dev macro-F1 0.9031, test macro-F1 0.9165, isarc_test macro-F1 0.5209, test_cuemask macro-F1 0.8712, test_randmask macro-F1 0.9088

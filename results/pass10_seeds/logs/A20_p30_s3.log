@@ -1,0 +1,25 @@
+A20_p30_s3: |L|=6840 |U|=15960 steps=2140 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2316.35it/s]
+  step 100/2140  loss_sarc 0.4393  loss 0.4393
+  step 200/2140  loss_sarc 0.2452  loss 0.2452
+  step 300/2140  loss_sarc 0.1706  loss 0.1706
+  step 400/2140  loss_sarc 0.1342  loss 0.1342
+  step 500/2140  loss_sarc 0.06936  loss 0.06936
+  step 600/2140  loss_sarc 0.03093  loss 0.03093
+  step 700/2140  loss_sarc 0.02556  loss 0.02556
+  step 800/2140  loss_sarc 0.01475  loss 0.01475
+  step 900/2140  loss_sarc 0.0041  loss 0.0041
+  step 1000/2140  loss_sarc 0.0046  loss 0.0046
+  step 1100/2140  loss_sarc 0.0023  loss 0.0023
+  step 1200/2140  loss_sarc 0.00139  loss 0.00139
+  step 1300/2140  loss_sarc 0.00267  loss 0.00267
+  step 1400/2140  loss_sarc 0.00264  loss 0.00264
+  step 1500/2140  loss_sarc 0.00013  loss 0.00013
+  step 1600/2140  loss_sarc 4e-05  loss 4e-05
+  step 1700/2140  loss_sarc 0.00011  loss 0.00011
+  step 1800/2140  loss_sarc 3e-05  loss 3e-05
+  step 1900/2140  loss_sarc 3e-05  loss 3e-05
+  step 2000/2140  loss_sarc 0.00051  loss 0.00051
+  step 2100/2140  loss_sarc 0.00035  loss 0.00035
+  step 2140/2140  loss_sarc 2e-05  loss 2e-05
+A20_p30_s3: done in 3.87 min; dev macro-F1 0.9110, test macro-F1 0.9199, isarc_test macro-F1 0.5238, test_cuemask macro-F1 0.8810, test_randmask macro-F1 0.9065

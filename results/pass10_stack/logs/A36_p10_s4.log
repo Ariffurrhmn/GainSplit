@@ -1,0 +1,27 @@
+A36_p10_s4: |L|=2280 |U|=20520 steps=720 device=cuda
+  self-training teacher (mlm:A2+A7 recipe):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2846.58it/s]
+/tmp/GainSplit/src/gainsplit/train.py:239: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.4186  loss_adv 1.085  loss 2.026  loss_sent 0.9099  loss_emo 0.832
+  step 200/720  loss_sarc 0.1221  loss_adv 0.5692  loss 0.9919  loss_sent 0.53  loss_emo 0.4721
+  step 300/720  loss_sarc 0.01571  loss_adv 0.2383  loss 0.3903  loss_sent 0.2172  loss_emo 0.2369
+  step 400/720  loss_sarc 0.00479  loss_adv 0.1209  loss 0.1845  loss_sent 0.09045  loss_emo 0.1055
+  step 500/720  loss_sarc 0.00349  loss_adv 0.07191  loss 0.1008  loss_sent 0.03572  loss_emo 0.04912
+  step 600/720  loss_sarc 0.00217  loss_adv 0.03783  loss 0.05167  loss_sent 0.01639  loss_emo 0.02249
+  step 700/720  loss_sarc 0.00185  loss_adv 0.0271  loss 0.03712  loss_sent 0.01093  loss_emo 0.0163
+  step 720/720  loss_sarc 0.00153  loss_adv 0.02165  loss 0.02961  loss_sent 0.00886  loss_emo 0.01255
+  A6 pseudo-labels kept: 17726 of 20520 (confident 18819, per class {'0': 9956, '1': 8863})
+  A6 student (fresh BERT):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2448.43it/s]
+/tmp/GainSplit/src/gainsplit/train.py:239: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/720  loss_sarc 0.325  loss_adv 0.9593  loss 1.796  loss_sent 0.8832  loss_emo 0.8222
+  step 200/720  loss_sarc 0.07675  loss_adv 0.4729  loss 0.8087  loss_sent 0.454  loss_emo 0.4095
+  step 300/720  loss_sarc 0.02596  loss_adv 0.2469  loss 0.3844  loss_sent 0.1724  loss_emo 0.1992
+  step 400/720  loss_sarc 0.02431  loss_adv 0.1758  loss 0.2504  loss_sent 0.06894  loss_emo 0.09872
+  step 500/720  loss_sarc 0.01635  loss_adv 0.1276  loss 0.1696  loss_sent 0.03321  loss_emo 0.05224
+  step 600/720  loss_sarc 0.01047  loss_adv 0.08721  loss 0.1115  loss_sent 0.01848  loss_emo 0.02764
+  step 700/720  loss_sarc 0.0054  loss_adv 0.05785  loss 0.07413  loss_sent 0.01628  loss_emo 0.01998
+  step 720/720  loss_sarc 0.00379  loss_adv 0.04841  loss 0.06142  loss_sent 0.01391  loss_emo 0.01685
+A36_p10_s4: done in 6.24 min; dev macro-F1 0.9076, test macro-F1 0.9182, isarc_test macro-F1 0.5097, test_cuemask macro-F1 0.8688, test_randmask macro-F1 0.9042

@@ -1,0 +1,11 @@
+A36_p1_s1: |L|=228 |U|=22572 steps=200 device=cuda
+  self-training teacher (mlm:A2+A7 recipe):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2669.34it/s]
+  step 100/200  loss_sarc 0.1098  loss_adv 0.3702  loss 0.6968  loss_sent 0.3794  loss_emo 0.3433
+  step 200/200  loss_sarc 0.00179  loss_adv 0.00962  loss 0.01758  loss_sent 0.00885  loss_emo 0.01172
+  A6 pseudo-labels kept: 17872 of 22572 (confident 19493, per class {'0': 10557, '1': 8936})
+  A6 student (fresh BERT):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2805.96it/s]
+  step 100/200  loss_sarc 0.1088  loss_adv 0.4085  loss 0.734  loss_sent 0.3762  loss_emo 0.3463
+  step 200/200  loss_sarc 0.01373  loss_adv 0.09658  loss 0.1227  loss_sent 0.01766  loss_emo 0.02367
+A36_p1_s1: done in 2.16 min; dev macro-F1 0.8795, test macro-F1 0.8905, isarc_test macro-F1 0.4834, test_cuemask macro-F1 0.8478, test_randmask macro-F1 0.8788

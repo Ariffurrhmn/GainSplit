@@ -7,6 +7,12 @@ updated: 2026-11-15
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-15 - Pass 10 notebooks 19 and 20 filed
+- Owner downloaded notebook 20 (Kaggle slug `notebook6d64711193`) into `data/kaggle_out/`; filed in `results/pass10_seeds/` (zip, runs, logs, pretraining receipts, analysis, log as `notebook_20.log`); `diff -r` against the zip: identical. Encoder check PASS (notebook 15's encoder matched the receipt). The two new encoders stay in `data/kaggle_out/notebook6d64711193/ckpt/` (git-ignored).
+- Read in [[Pass 10 Results]]: H10.6, H10.7, H10.8 hold. Gain stable across three pretraining seeds (+6.9 to +7.7 at 1%); +3.5 at 5%, +1.0 at 30%, none at 100%; MLM-1% vs BERT-10% -0.38 n.s.
+- Notebook 19 (`notebookd630829dea`) filed in `results/pass10_stack/` (log as `notebook_19.log`; zip match; encoder check and re-run check PASS). Read in [[Pass 10 Results]]: ingredients add nothing significant on top of MLM alone (H10.1 not supported, H10.2 holds); full stack +0.97 at 1% (H10.3), MLM + helpers + self-training +1.05; pretraining shrinks every ingredient's gain (H10.4); pseudo-labels 92-96% correct.
+- Not committed. Next (owner): commit and push both results folders, then run notebook 21.
+
 ## 2026-11-15 - Novelty check for MLM pretraining
 - Owner worried the MLM result is too good to be true and asked whether it was already published. A delegated literature search, with the key leads re-checked in this session, is filed in [[Novelty Check - MLM Pretraining]].
 - Verdict: the method (Gururangan 2020) and "TAPT beats self-training at low labels" (Shi et al. 2023, incl. TAPT then self-training in general) are published. Not found: TAPT on sarcasm or the Headlines dataset, a low-label sweep on Headlines, and the controlled multi-method comparison. Pass 10 is not moot; the paper must frame its contribution as the controlled comparison and avoid "first" claims listed in the note.

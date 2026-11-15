@@ -1,0 +1,11 @@
+A31_p10_s0: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2868.18it/s]
+  step 100/720  loss_sarc 0.3869  loss_sent 0.9134  loss_emo 0.8886  loss 0.9275
+  step 200/720  loss_sarc 0.08377  loss_sent 0.5279  loss_emo 0.475  loss 0.3846
+  step 300/720  loss_sarc 0.01553  loss_sent 0.2299  loss_emo 0.2592  loss 0.1623
+  step 400/720  loss_sarc 0.0049  loss_sent 0.1063  loss_emo 0.1318  loss 0.07634
+  step 500/720  loss_sarc 0.00337  loss_sent 0.04139  loss_emo 0.05775  loss 0.03311
+  step 600/720  loss_sarc 0.00223  loss_sent 0.01569  loss_emo 0.02425  loss 0.01421
+  step 700/720  loss_sarc 0.00176  loss_sent 0.01116  loss_emo 0.01399  loss 0.00931
+  step 720/720  loss_sarc 0.00162  loss_sent 0.00984  loss_emo 0.01738  loss 0.00978
+A31_p10_s0: done in 1.49 min; dev macro-F1 0.9008, test macro-F1 0.9107, isarc_test macro-F1 0.5073, test_cuemask macro-F1 0.8611, test_randmask macro-F1 0.8977

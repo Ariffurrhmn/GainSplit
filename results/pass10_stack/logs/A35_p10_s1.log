@@ -1,0 +1,23 @@
+A35_p10_s1: |L|=2280 |U|=20520 steps=720 device=cuda
+  self-training teacher (mlm:A7 recipe):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2706.78it/s]
+  step 100/720  loss_sarc 0.331  loss_adv 0.4807  loss 0.8117
+  step 200/720  loss_sarc 0.0827  loss_adv 0.2094  loss 0.2921
+  step 300/720  loss_sarc 0.00625  loss_adv 0.07021  loss 0.07646
+  step 400/720  loss_sarc 0.00106  loss_adv 0.04172  loss 0.04278
+  step 500/720  loss_sarc 0.00033  loss_adv 0.01994  loss 0.02027
+  step 600/720  loss_sarc 0.00016  loss_adv 0.01141  loss 0.01157
+  step 700/720  loss_sarc 0.00012  loss_adv 0.00704  loss 0.00716
+  step 720/720  loss_sarc 0.00012  loss_adv 0.02079  loss 0.02091
+  A6 pseudo-labels kept: 18124 of 20520 (confident 19466, per class {'0': 10404, '1': 9062})
+  A6 student (fresh BERT):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2543.51it/s]
+  step 100/720  loss_sarc 0.2625  loss_adv 0.3888  loss 0.6513
+  step 200/720  loss_sarc 0.06736  loss_adv 0.1709  loss 0.2383
+  step 300/720  loss_sarc 0.0244  loss_adv 0.1132  loss 0.1376
+  step 400/720  loss_sarc 0.02042  loss_adv 0.1018  loss 0.1223
+  step 500/720  loss_sarc 0.02064  loss_adv 0.09635  loss 0.117
+  step 600/720  loss_sarc 0.01389  loss_adv 0.07503  loss 0.08892
+  step 700/720  loss_sarc 0.00345  loss_adv 0.04272  loss 0.04617
+  step 720/720  loss_sarc 0.00261  loss_adv 0.03946  loss 0.04207
+A35_p10_s1: done in 6.23 min; dev macro-F1 0.9076, test macro-F1 0.9158, isarc_test macro-F1 0.4886, test_cuemask macro-F1 0.8744, test_randmask macro-F1 0.9105

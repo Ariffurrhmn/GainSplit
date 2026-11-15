@@ -1,0 +1,23 @@
+A32_p10_s4: |L|=2280 |U|=20520 steps=720 device=cuda
+  self-training teacher (mlm:A1 recipe):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2832.61it/s]
+  step 100/720  loss_sarc 0.4054  loss 0.4054
+  step 200/720  loss_sarc 0.1006  loss 0.1006
+  step 300/720  loss_sarc 0.01191  loss 0.01191
+  step 400/720  loss_sarc 0.00226  loss 0.00226
+  step 500/720  loss_sarc 0.00185  loss 0.00185
+  step 600/720  loss_sarc 0.00013  loss 0.00013
+  step 700/720  loss_sarc 9e-05  loss 9e-05
+  step 720/720  loss_sarc 0.0001  loss 0.0001
+  A6 pseudo-labels kept: 18804 of 20520 (confident 19989, per class {'0': 10587, '1': 9402})
+  A6 student (fresh BERT):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 3402.98it/s]
+  step 100/720  loss_sarc 0.3369  loss 0.3369
+  step 200/720  loss_sarc 0.08456  loss 0.08456
+  step 300/720  loss_sarc 0.04682  loss 0.04682
+  step 400/720  loss_sarc 0.02903  loss 0.02903
+  step 500/720  loss_sarc 0.02485  loss 0.02485
+  step 600/720  loss_sarc 0.0221  loss 0.0221
+  step 700/720  loss_sarc 0.00454  loss 0.00454
+  step 720/720  loss_sarc 0.00806  loss 0.00806
+A32_p10_s4: done in 3.83 min; dev macro-F1 0.9048, test macro-F1 0.9126, isarc_test macro-F1 0.4927, test_cuemask macro-F1 0.8667, test_randmask macro-F1 0.9010

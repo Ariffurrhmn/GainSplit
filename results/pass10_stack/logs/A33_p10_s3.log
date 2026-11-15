@@ -1,0 +1,11 @@
+A33_p10_s3: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 3118.02it/s]
+  step 100/720  loss_sarc 0.3512  loss_adv 0.9942  loss 1.841  loss_sent 0.8853  loss_emo 0.7658
+  step 200/720  loss_sarc 0.09285  loss_adv 0.5118  loss 0.8727  loss_sent 0.4586  loss_emo 0.4352
+  step 300/720  loss_sarc 0.01279  loss_adv 0.2292  loss 0.3693  loss_sent 0.1886  loss_emo 0.2359
+  step 400/720  loss_sarc 0.0042  loss_adv 0.1128  loss 0.1735  loss_sent 0.07507  loss_emo 0.1133
+  step 500/720  loss_sarc 0.00285  loss_adv 0.06556  loss 0.09091  loss_sent 0.03507  loss_emo 0.03991
+  step 600/720  loss_sarc 0.00205  loss_adv 0.03371  loss 0.04568  loss_sent 0.01424  loss_emo 0.01882
+  step 700/720  loss_sarc 0.00152  loss_adv 0.02411  loss 0.03243  loss_sent 0.00985  loss_emo 0.01282
+  step 720/720  loss_sarc 0.00159  loss_adv 0.02191  loss 0.02923  loss_sent 0.00858  loss_emo 0.01053
+A33_p10_s3: done in 2.34 min; dev macro-F1 0.9025, test macro-F1 0.9142, isarc_test macro-F1 0.4958, test_cuemask macro-F1 0.8740, test_randmask macro-F1 0.9030

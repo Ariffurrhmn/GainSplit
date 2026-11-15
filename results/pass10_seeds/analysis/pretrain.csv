@@ -1,0 +1,4 @@
+objective,seed,steps,minutes,dev_loss_before,dev_loss_after,collapsed,probe_p1_before,probe_p10_before,probe_p1_after,probe_p10_after
+mlm,0,10000,35.15,5.85272,3.6836,,76.158,80.627,86.388,87.231
+mlm,1,10000,33.14,5.85272,3.6622,,76.158,80.627,86.145,87.294
+mlm,2,10000,32.71,5.85272,3.68582,,76.158,80.627,84.213,85.613

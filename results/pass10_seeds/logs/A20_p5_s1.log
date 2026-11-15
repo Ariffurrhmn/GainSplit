@@ -1,0 +1,7 @@
+A20_p5_s1: |L|=1140 |U|=21660 steps=360 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2446.60it/s]
+  step 100/360  loss_sarc 0.2325  loss 0.2325
+  step 200/360  loss_sarc 0.00792  loss 0.00792
+  step 300/360  loss_sarc 0.0002  loss 0.0002
+  step 360/360  loss_sarc 0.00015  loss 0.00015
+A20_p5_s1: done in 0.8 min; dev macro-F1 0.8948, test macro-F1 0.9104, isarc_test macro-F1 0.5099, test_cuemask macro-F1 0.8674, test_randmask macro-F1 0.8984
