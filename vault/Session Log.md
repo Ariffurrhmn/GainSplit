@@ -7,6 +7,11 @@ updated: 2026-11-16
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-19 (later still) - Pass 11c: CPU analyses (notebook 24)
+- Done: `analysis_pass11_cpu.py` (polarity difference-in-differences, seed-aware bootstrap), tests, notebook `24_pass11_cpu.ipynb` (commit e277a55); pushed to Kaggle as a private CPU notebook (`arifurrhmn/notebook-24`), ran in 0.8 min. Receipts in `results/pass11_cpu/`; results in [[Pass 11 Results]].
+- Findings: A20 - A1 keeps its interval above 0 when seeds are resampled (1%: +7.42 [6.18, 8.68]); A36 - A5 excludes 0 at 1, 5, 10 and 30% (1%: +10.68 [8.57, 13.36]); single-route +1.6 gains stay positive (FGM ahead on 4 of 5 seeds); JEPA below MLM on every seed. Polarity DiD: A2 vs A1 +2.6 and +2.8 points (positive, raw intervals just exclude 0, not significant after Holm); no DiD on the MLM encoder. H11.4 not supported (intervals not 2x wider for all three, none includes 0).
+- Next: E1 (in-domain iSarcasmEval), paper rewrite per `PLAN.md` section C.
+
 ## 2026-11-19 (later) - Pass 11b: whole-dataset scoring (notebook 23)
 - Done: `RunConfig.eval_train` (saves predictions for every training row), plan `pass11_full`, analysis `run_full`, notebook `23_pass11_full.ipynb` (commit 03429aa, 293 tests); predictions addendum H11.24-28 frozen before the run. Owner ran it: 16/16 runs, 103 min. Receipts in `results/pass11_full/`; results added to [[Pass 11 Results]].
 - Findings: all 16 re-runs reproduce the originals exactly (closes the re-run gap). Accuracy on all rows is 3.9-4.0 points above test at 70% labels (A1 96.67, A5 96.48 vs 92.76, 92.51) and 5.3 above at full labels (98.62 vs 93.35); labeled rows are fit at 100%. The seed paper's 93.88 lies between our held-out and all-rows figures, so it cannot be read as held-out accuracy; its BERT (92.04) looks less fit than ours.

@@ -68,6 +68,39 @@ Run by the owner on Kaggle (`arifurrhmn/notebook-23`, code commit `03429aa`, pre
 - **H11.28:** A1 at 70% SUPPORTED (U 92.39 vs test 92.76). A5 at 70% not supported by a margin of 0.05: U 91.76 vs test 92.51 is a 0.75 gap against the 0.7 predicted. The unlabeled rows score level with, or slightly below, held-out rows for both arms: the GAN reading U as unlabeled text does not give A5 an advantage on U.
 - **What it means for the paper:** evaluating over all rows raises accuracy by about 4 points at 70% labels and 5 at full labels because the training rows are memorized (L accuracy 100%). A number computed over all headlines cannot be compared with held-out accuracy, and "beating 93.88" is not a meaningful target. Our models would score 96.5-98.6 under that protocol; this is a statement about the protocol, not a result to report as an improvement.
 
+## Notebook 24: CPU analyses on existing predictions (2026-11-19)
+Pushed to Kaggle as a private CPU notebook (`arifurrhmn/notebook-24`, code commit `e277a55`, predictions FROZEN, 3 tests passed, 0.8 min). Raw files in `results/pass11_cpu/` (zip, analysis tables, notebook log). Sanity check inside the notebook: A20 - A1 at 1% reproduces +7.42. Numbers VERIFIED from `results/pass11_cpu/analysis/`; 10,000 resamples, Holm within each table.
+
+**Polarity-flip difference-in-differences** (error rate in points, positive-surface sarcastic headlines [n = 107] minus other sarcastic [n = 1,248]; helper arm minus base arm; Holm over 4 rows):
+| Contrast | Budget | DiD [95% CI] | p / p_holm | error on positive group: base -> helper | error on other sarcastic: base -> helper |
+|---|---|---|---|---|---|
+| A2 vs A1 | 1% | +2.59 [0.03, 5.12] | 0.047 / 0.141 | 23.2 -> 20.0 | 26.7 -> 20.9 |
+| A2 vs A1 | 10% | +2.76 [0.58, 5.14] | 0.016 / 0.064 | 14.2 -> 15.1 | 15.4 -> 13.5 |
+| A31 vs A20 | 1% | +0.98 [-1.09, 2.84] | 0.329 / 0.658 | 17.6 -> 15.7 | 15.0 -> 12.1 |
+| A31 vs A20 | 10% | -0.65 [-2.62, 1.15] | 0.503 / 0.658 | 11.4 -> 10.1 | 9.5 -> 8.9 |
+- **H11.1 not supported after Holm** (direction positive at both budgets; raw intervals just exclude 0, Holm p 0.141 and 0.064). Reading (INFERRED, exploratory): helper heads help the positive-surface sarcastic headlines less than the others; at 1% their error still falls (23.2 to 20.0), at 10% it rises slightly (14.2 to 15.1) while the others fall. No evidence that the helpers push the encoder the wrong way in absolute terms at 1%.
+- **H11.2 SUPPORTED:** no difference-in-differences on the MLM encoder.
+
+**Seed-aware (two-level) bootstrap** (`cluster_bootstrap`; seeds resampled, then test headlines; "ratio" = cluster width / test-only width):
+| Contrast | Budget | Diff | Test-only 95% | Cluster 95% | Ratio | Seeds ahead |
+|---|---|---|---|---|---|---|
+| A20 - A1 | 1% | +7.42 | [6.53, 8.30] | [6.18, 8.68] | 1.41 | 5/5 |
+| A20 - A1 | 10% | +2.80 | [2.09, 3.53] | [1.96, 3.64] | 1.16 | 5/5 |
+| A2 - A1 | 1% | +1.63 | [1.12, 2.16] | [0.63, 2.58] | 1.89 | 5/5 |
+| A6 - A1 | 1% | +1.62 | [1.10, 2.15] | [0.80, 2.45] | 1.57 | 5/5 |
+| A7 - A1 | 1% | +1.58 | [1.03, 2.15] | [0.46, 2.82] | 2.12 | 4/5 |
+| A30 - A1 | 1% | +4.17 | [3.44, 4.90] | [2.99, 5.35] | 1.63 | 5/5 |
+| A22 - A20 | 1% / 10% | -1.75 / -1.17 | [-2.60, -0.92] / [-1.83, -0.52] | [-2.88, -0.65] / [-2.01, -0.34] | 1.34 / 1.27 | 0/5 both |
+| A36 - A5 | 1% | +10.68 | [9.54, 11.82] | [8.57, 13.36] | 2.10 | 5/5 |
+| A36 - A5 | 5% | +3.99 | [3.14, 4.85] | [2.91, 5.09] | 1.28 | 5/5 |
+| A36 - A5 | 10% | +3.15 | [2.38, 3.94] | [2.21, 4.09] | 1.21 | 5/5 |
+| A36 - A5 | 30% | +1.64 | [1.01, 2.27] | [0.84, 2.45] | 1.27 | 5/5 |
+| A20@1% - A1@10% | | -0.38 | [-1.14, 0.37] | [-1.43, 0.65] | 1.38 | 2/5 |
+- **H11.3 SUPPORTED:** the MLM gain over BERT keeps its interval above 0 at 1% and 10% (+7.42 [6.18, 8.68], +2.80 [1.96, 3.64]).
+- **H11.23 SUPPORTED:** A36 - A5 excludes 0 at every budget, 1% to 30% (+10.68 [8.57, 13.36] at 1%; one seed gives +15.2).
+- **H11.4 not supported:** the cluster intervals of the three single routes are 1.6-2.1 times as wide as the test-only ones (predicted at least 2 for all three: 1.89, 1.57, 2.12), and none of them includes 0 (predicted at least one would). The +1.6 gains stay positive when training splits are resampled; FGM (A7) is ahead on 4 of 5 seeds (seed 2: -0.01).
+- JEPA stays below MLM on every seed at both budgets; MLM at 1% vs BERT at 10% stays level (-0.38 [-1.43, 0.65]).
+
 ## Gaps
 - The byte-identical re-run check is closed by notebook 23 (see above).
 - Single long-GAN configuration; no diagnosis of the instability (generator loss, p_fake curves are in `runs/A4_p1_s*_long35/result.json` train_log).

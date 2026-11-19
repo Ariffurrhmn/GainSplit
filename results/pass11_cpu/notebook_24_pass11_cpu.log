@@ -1,0 +1,68 @@
+[{"stream_name":"stderr","time":5.994093806,"data":"/usr/local/lib/python3.13/dist-packages/nbformat/validator.py:434: MissingIDFieldWarning: Cell is missing an id field, this will become a hard error in future nbformat versions. You may want to use `normalize()` on your notebooks before validations (available since nbformat 5.1.4). Previous versions of nbformat are fixing this issue transparently, and will stop doing so in the future.\n"}
+,{"stream_name":"stderr","time":5.994134725,"data":"  _validate(nbdict, ref, version, version_minor, relax_add_props)\n"}
+,{"stream_name":"stderr","time":6.850491975,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":6.850528615,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":6.850533205,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":6.8505367249999995,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":7.405113574,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":7.405157794,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":7.405162214,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":7.405165744,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":8.450700261,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stderr","time":8.65351583,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stderr","time":8.65354706,"data":"\n"}
+,{"stream_name":"stderr","time":8.65355164,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stdout","time":23.181126387,"data":"code commit: e277a5567fae3f2a7db3630b97b4f7d8d77936f9\n"}
+,{"stream_name":"stdout","time":28.771444434,"data":"...                                                                      [100%]\n"}
+,{"stream_name":"stdout","time":28.771478974,"data":"3 passed in 2.32s\n"}
+,{"stream_name":"stdout","time":28.771483904,"data":" \n"}
+,{"stream_name":"stdout","time":28.780283969,"data":"predictions status: ['FROZEN']\n"}
+,{"stream_name":"stdout","time":29.749274401,"data":"data: /kaggle/input/datasets/arifurrhmn/gainsplit-processed - all files match manifest.json\n"}
+,{"stream_name":"stdout","time":29.950399411,"data":"results folders: all found\n"}
+,{"stream_name":"stdout","time":53.413749480999996,"data":"sanity check passed: A20 - A1 at 1% = 7.42\n"}
+,{"stream_name":"stdout","time":53.413797791,"data":"\n"}
+,{"stream_name":"stdout","time":53.413804371,"data":"=== polarity_did\n"}
+,{"stream_name":"stdout","time":53.413808751,"data":"         contrast  budget  mean_diff  ci_low  ci_high      p  n_seeds  n_pos  n_rest  err_pos_base  err_pos_helper  err_rest_base  err_rest_helper  p_holm\n"}
+,{"stream_name":"stdout","time":53.413813001,"data":"0    DiD A2 vs A1       1      2.592   0.033    5.118  0.047        5    107    1248        23.178          20.000         26.715           20.946   0.141\n"}
+,{"stream_name":"stdout","time":53.413817151,"data":"1    DiD A2 vs A1      10      2.762   0.582    5.143  0.016        5    107    1248        14.206          15.140         15.369           13.542   0.064\n"}
+,{"stream_name":"stdout","time":53.413821341,"data":"2  DiD A31 vs A20       1      0.983  -1.094    2.837  0.329        5    107    1248        17.570          15.701         14.952           12.099   0.658\n"}
+,{"stream_name":"stdout","time":53.413838691,"data":"3  DiD A31 vs A20      10     -0.651  -2.617    1.148  0.503        5    107    1248        11.402          10.093          9.535            8.878   0.658\n"}
+,{"stream_name":"stdout","time":53.413842011,"data":"\n"}
+,{"stream_name":"stdout","time":53.413844561,"data":"=== cluster_bootstrap\n"}
+,{"stream_name":"stdout","time":53.413847051,"data":"         contrast  budget  budget_b  mean_diff  test_only_low  test_only_high  cluster_low  cluster_high  cluster_p  width_ratio seeds_ahead                          seed_diffs  cluster_p_holm\n"}
+,{"stream_name":"stdout","time":53.413850771,"data":"0          A20-A1       1         1       7.42           6.53            8.30         6.18          8.68     0.0002         1.41         5/5      [8.42, 8.17, 6.92, 6.26, 7.31]          0.0026\n"}
+,{"stream_name":"stdout","time":53.413853771,"data":"1          A20-A1      10        10       2.80           2.09            3.53         1.96          3.64     0.0002         1.16         5/5      [3.04, 2.94, 2.64, 2.39, 2.99]          0.0026\n"}
+,{"stream_name":"stdout","time":53.413856581,"data":"2           A2-A1       1         1       1.63           1.12            2.16         0.63          2.58     0.0018         1.89         5/5       [2.15, 2.4, 0.21, 1.33, 2.07]          0.0090\n"}
+,{"stream_name":"stdout","time":53.413859391,"data":"3           A6-A1       1         1       1.62           1.10            2.15         0.80          2.45     0.0004         1.57         5/5       [1.87, 2.18, 1.4, 0.64, 1.99]          0.0026\n"}
+,{"stream_name":"stdout","time":53.413862211,"data":"4           A7-A1       1         1       1.58           1.03            2.15         0.46          2.82     0.0080         2.12         4/5      [1.8, 3.18, -0.01, 0.94, 1.99]          0.0240\n"}
+,{"stream_name":"stdout","time":53.413866231,"data":"5          A30-A1       1         1       4.17           3.44            4.90         2.99          5.35     0.0002         1.63         5/5      [4.01, 5.62, 2.76, 4.08, 4.39]          0.0026\n"}
+,{"stream_name":"stdout","time":53.413869181,"data":"6         A22-A20       1         1      -1.75          -2.60           -0.92        -2.88         -0.65     0.0030         1.34         0/5  [-1.66, -1.1, -2.97, -1.98, -1.03]          0.0120\n"}
+,{"stream_name":"stdout","time":53.413872081,"data":"7         A22-A20      10        10      -1.17          -1.83           -0.52        -2.01         -0.34     0.0086         1.27         0/5  [-0.68, -1.58, -1.07, -0.8, -1.72]          0.0240\n"}
+,{"stream_name":"stdout","time":53.413874971,"data":"8          A36-A5       1         1      10.68           9.54           11.82         8.57         13.36     0.0002         2.10         5/5     [8.83, 10.61, 9.25, 9.52, 15.2]          0.0026\n"}
+,{"stream_name":"stdout","time":53.413877831,"data":"9          A36-A5       5         5       3.99           3.14            4.85         2.91          5.09     0.0002         1.28         5/5        [5.01, 4.36, 3.6, 3.2, 3.77]          0.0026\n"}
+,{"stream_name":"stdout","time":53.413880671,"data":"10         A36-A5      10        10       3.15           2.38            3.94         2.21          4.09     0.0002         1.21         5/5      [3.64, 2.55, 3.61, 2.72, 3.25]          0.0026\n"}
+,{"stream_name":"stdout","time":53.413883461,"data":"11         A36-A5      30        30       1.64           1.01            2.27         0.84          2.45     0.0002         1.27         5/5       [1.82, 1.99, 1.25, 2.1, 1.05]          0.0026\n"}
+,{"stream_name":"stdout","time":53.413886321,"data":"12  A20@1%-A1@10%       1        10      -0.38          -1.14            0.37        -1.43          0.65     0.4662         1.38         2/5   [0.16, -0.99, 0.41, -0.42, -1.03]          0.4662\n"}
+,{"stream_name":"stdout","time":53.413889211,"data":"\n"}
+,{"stream_name":"stdout","time":53.413895211,"data":"=== verdicts\n"}
+,{"stream_name":"stdout","time":53.413898201,"data":"  hypothesis                                                                                                  check                                                                                                                    value                              verdict\n"}
+,{"stream_name":"stdout","time":53.413901681,"data":"0      H11.1                    DiD A2 vs A1 at 1% (positive-surface sarcastic minus other sarcastic, error points)                                                                                       +2.59 [+0.03, +5.12], p_holm 0.141  not supported (interval includes 0)\n"}
+,{"stream_name":"stdout","time":53.413904861,"data":"1      H11.2                  DiD A31 vs A20 at 1% (positive-surface sarcastic minus other sarcastic, error points)                                                                                       +0.98 [-1.09, +2.84], p_holm 0.658       SUPPORTED (no significant DiD)\n"}
+,{"stream_name":"stdout","time":53.413907861,"data":"2      H11.1                   DiD A2 vs A1 at 10% (positive-surface sarcastic minus other sarcastic, error points)                                                                                       +2.76 [+0.58, +5.14], p_holm 0.064  not supported (interval includes 0)\n"}
+,{"stream_name":"stdout","time":53.413910961,"data":"3      H11.2                 DiD A31 vs A20 at 10% (positive-surface sarcastic minus other sarcastic, error points)                                                                                       -0.65 [-2.62, +1.15], p_holm 0.658       SUPPORTED (no significant DiD)\n"}
+,{"stream_name":"stdout","time":53.413913931,"data":"4      H11.3                                                                 A20-A1 at 1%: cluster interval above 0                                                                                                     +7.42 [+6.18, +8.68]                            SUPPORTED\n"}
+,{"stream_name":"stdout","time":53.413916981,"data":"5      H11.3                                                                A20-A1 at 10%: cluster interval above 0                                                                                                     +2.80 [+1.96, +3.64]                            SUPPORTED\n"}
+,{"stream_name":"stdout","time":53.413919931,"data":"6      H11.4  A2, A6, A7 vs A1 at 1%: cluster interval at least 2x the test-only width, and at least one includes 0  width ratios [np.float64(1.89), np.float64(1.57), np.float64(2.12)]; cluster intervals include 0: [False, False, False]                        not supported\n"}
+,{"stream_name":"stdout","time":53.413923021,"data":"7     H11.23                                                              A36-A5 at 1%: cluster interval excludes 0                                                                                                   +10.68 [+8.57, +13.36]                            SUPPORTED\n"}
+,{"stream_name":"stdout","time":53.413926381,"data":"8     H11.23                                                             A36-A5 at 10%: cluster interval excludes 0                                                                                                     +3.15 [+2.21, +4.09]                            SUPPORTED\n"}
+,{"stream_name":"stdout","time":53.450573609,"data":"/kaggle/working/results_pass11_cpu.zip\n"}
+,{"stream_name":"stdout","time":53.450602289,"data":"notebook time: 0.8 min\n"}
+,{"stream_name":"stderr","time":60.129773887,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":60.129829807,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":60.257652771,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":60.257686981,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":60.943947852,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":61.008877813,"data":"[NbConvertApp] Writing 17215 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":63.38417934,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":63.839577555,"data":"[NbConvertApp] Writing 298875 bytes to __results__.html\n"}
+]
