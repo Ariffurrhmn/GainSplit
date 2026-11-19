@@ -1,0 +1,6 @@
+pretraining_steps,gain_over_A1,share_of_full_gain,H11.5_rises_within_0.5,H11.6_100_steps_1.5_to_60pct,H11.7_3000_steps_at_least_85pct
+100,-0.36,-0.05,True,False,False
+350,1.66,0.22,True,False,False
+1000,3.08,0.42,True,False,False
+3000,5.24,0.71,True,False,False
+10000,7.42,1.0,True,False,False

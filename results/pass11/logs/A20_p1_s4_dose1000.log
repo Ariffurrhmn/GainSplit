@@ -1,0 +1,5 @@
+A20_p1_s4_dose1000: |L|=228 |U|=22572 steps=200 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2529.23it/s]
+  step 100/200  loss_sarc 0.1391  loss 0.1391
+  step 200/200  loss_sarc 0.00263  loss 0.00263
+A20_p1_s4_dose1000: done in 0.44 min; dev macro-F1 0.7999, test macro-F1 0.8031, isarc_test macro-F1 0.4718

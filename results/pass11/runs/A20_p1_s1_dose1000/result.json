@@ -1,0 +1,163 @@
+{
+  "run_id": "A20_p1_s1_dose1000",
+  "config": {
+    "arm": "A20",
+    "budget": 1,
+    "seed": 1,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.0,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.0,
+    "tag": "dose1000",
+    "helper_variant": "",
+    "eval_masked": false,
+    "train_data": "headlines",
+    "gen_lr": 0.0,
+    "step_mult": 1,
+    "pair_batch": 32,
+    "explain": false,
+    "pair_weight": 1.0,
+    "cleaned_drop_pct": 0.0,
+    "pretrain_steps": 0,
+    "init_dir": "/kaggle/working/ckpt/mlm_dose1000",
+    "cons_weight": 0.0
+  },
+  "n_labeled": 228,
+  "n_unlabeled": 22572,
+  "uses_u": false,
+  "pairs": null,
+  "explain": null,
+  "pretrain": null,
+  "init": {
+    "objective": "mlm",
+    "minutes": 4.03,
+    "dev_before": {
+      "loss": 5.85272
+    },
+    "dev_after": {
+      "loss": 3.4601
+    },
+    "probe_before": {
+      "p1": {
+        "dev_macro_f1_mean": 76.158,
+        "dev_macro_f1_sd": 0.687,
+        "per_seed": [
+          76.407,
+          76.211,
+          74.965,
+          76.616,
+          76.591
+        ]
+      },
+      "p10": {
+        "dev_macro_f1_mean": 80.627,
+        "dev_macro_f1_sd": 0.616,
+        "per_seed": [
+          81.226,
+          80.734,
+          80.224,
+          79.789,
+          81.161
+        ]
+      }
+    },
+    "probe_after": {
+      "p1": {
+        "dev_macro_f1_mean": 81.245,
+        "dev_macro_f1_sd": 0.423,
+        "per_seed": [
+          81.192,
+          80.861,
+          80.865,
+          81.863,
+          81.443
+        ]
+      },
+      "p10": {
+        "dev_macro_f1_mean": 84.038,
+        "dev_macro_f1_sd": 0.372,
+        "per_seed": [
+          83.923,
+          83.705,
+          84.619,
+          83.769,
+          84.177
+        ]
+      }
+    },
+    "collapsed": null,
+    "weights_sha256": {
+      "config.json": "df52e357acc71cccfbf75f2d4083c1c1e564d2abafdcf22dbfe57debb3bc8441",
+      "model.safetensors": "df75a54f9c1896ee2d3a0bfc0b7004cc4114f68da156c863bb5e4f53c87300cc",
+      "tokenizer.json": "11ba3839d32ab3fcdba2614768990d23a89fd9023d2f1f70ee913efeb02237aa",
+      "tokenizer_config.json": "e1c2a61a99bda00f6c55303a210b30e2f92dcf8b555e215812e2eb583e177ffd"
+    },
+    "commit": "c1c2a18679862fd897930846871a64f210f83651",
+    "steps": 1000
+  },
+  "diffusion": null,
+  "steps": 200,
+  "minutes": 0.47,
+  "scores": {
+    "dev": {
+      "accuracy": 0.8301754385964912,
+      "macro_f1": 0.828772224605558,
+      "f1_sarcastic": 0.8132716049382716,
+      "roc_auc": 0.9117190141801084,
+      "n": 2850
+    },
+    "test": {
+      "accuracy": 0.8439144159943879,
+      "macro_f1": 0.8426457008941832,
+      "f1_sarcastic": 0.8285163776493256,
+      "roc_auc": 0.9216592339720189,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.6971428571428572,
+      "macro_f1": 0.4651847527200257,
+      "f1_sarcastic": 0.11297071129707113,
+      "roc_auc": 0.48339166666666666,
+      "n": 1400
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.11657,
+      "loss": 0.11657
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.00019,
+      "loss": 0.00019
+    }
+  ],
+  "pseudo": null,
+  "helper_label_counts": null,
+  "commit": "c1c2a18679862fd897930846871a64f210f83651",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

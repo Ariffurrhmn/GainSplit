@@ -1,0 +1,15 @@
+A36_p5_s4: |L|=1140 |U|=21660 steps=360 device=cuda
+  self-training teacher (mlm:A2+A7 recipe):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2534.15it/s]
+  step 100/360  loss_sarc 0.2861  loss_adv 0.8921  loss 1.642  loss_sent 0.825  loss_emo 0.7204
+  step 200/360  loss_sarc 0.01415  loss_adv 0.2282  loss 0.3918  loss_sent 0.2346  loss_emo 0.2636
+  step 300/360  loss_sarc 0.00481  loss_adv 0.07514  loss 0.1172  loss_sent 0.04796  loss_emo 0.07619
+  step 360/360  loss_sarc 0.00303  loss_adv 0.03379  loss 0.05305  loss_sent 0.02229  loss_emo 0.03181
+  A6 pseudo-labels kept: 17950 of 21660 (confident 19322, per class {'0': 10347, '1': 8975})
+  A6 student (fresh BERT):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2541.41it/s]
+  step 100/360  loss_sarc 0.2386  loss_adv 0.8148  loss 1.507  loss_sent 0.8058  loss_emo 0.7054
+  step 200/360  loss_sarc 0.02572  loss_adv 0.2584  loss 0.4238  loss_sent 0.2155  loss_emo 0.2504
+  step 300/360  loss_sarc 0.01347  loss_adv 0.1299  loss 0.1855  loss_sent 0.05233  loss_emo 0.08805
+  step 360/360  loss_sarc 0.01077  loss_adv 0.1001  loss 0.1338  loss_sent 0.02974  loss_emo 0.0466
+A36_p5_s4: done in 3.02 min; dev macro-F1 0.8953, test macro-F1 0.9045, isarc_test macro-F1 0.5039

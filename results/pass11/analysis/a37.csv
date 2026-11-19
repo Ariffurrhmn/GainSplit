@@ -1,0 +1,5 @@
+contrast,budget,mean_diff,ci_low,ci_high,p,n_seeds,p_holm
+A37-A20 (seed recipe on the MLM encoder vs MLM alone),1,-1.1957016038620139,-1.699884298489724,-0.6903500115600143,0.0,5,0.0
+A37-A5 (seed recipe on the MLM encoder vs on plain BERT),1,8.517481437346305,7.584551317272181,9.485951213815154,0.0,5,0.0
+A37-A20 (seed recipe on the MLM encoder vs MLM alone),10,-0.40345978584769066,-0.8237895935663153,0.011852295985983587,0.0586,5,0.0586
+A37-A5 (seed recipe on the MLM encoder vs on plain BERT),10,2.1691653028142954,1.4670397110808344,2.887301270640214,0.0,5,0.0

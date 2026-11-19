@@ -1,0 +1,286 @@
+{
+  "run_id": "A37_p10_s2",
+  "config": {
+    "arm": "A37",
+    "budget": 10,
+    "seed": 2,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.3,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.0,
+    "tag": "",
+    "helper_variant": "",
+    "eval_masked": false,
+    "train_data": "headlines",
+    "gen_lr": 0.0,
+    "step_mult": 1,
+    "pair_batch": 32,
+    "explain": false,
+    "pair_weight": 1.0,
+    "cleaned_drop_pct": 0.0,
+    "pretrain_steps": 0,
+    "init_dir": "/kaggle/input/notebooks/arifurrhmn/notebook-15/ckpt/mlm",
+    "cons_weight": 0.0
+  },
+  "n_labeled": 2280,
+  "n_unlabeled": 20520,
+  "uses_u": true,
+  "pairs": null,
+  "explain": null,
+  "pretrain": null,
+  "init": {
+    "objective": "mlm",
+    "minutes": 35.15,
+    "dev_before": {
+      "loss": 5.85272
+    },
+    "dev_after": {
+      "loss": 3.6836
+    },
+    "probe_before": {
+      "p1": {
+        "dev_macro_f1_mean": 76.158,
+        "dev_macro_f1_sd": 0.687,
+        "per_seed": [
+          76.407,
+          76.211,
+          74.965,
+          76.616,
+          76.591
+        ]
+      },
+      "p10": {
+        "dev_macro_f1_mean": 80.627,
+        "dev_macro_f1_sd": 0.616,
+        "per_seed": [
+          81.226,
+          80.734,
+          80.224,
+          79.789,
+          81.161
+        ]
+      }
+    },
+    "probe_after": {
+      "p1": {
+        "dev_macro_f1_mean": 86.388,
+        "dev_macro_f1_sd": 0.462,
+        "per_seed": [
+          87.032,
+          86.463,
+          85.87,
+          86.557,
+          86.016
+        ]
+      },
+      "p10": {
+        "dev_macro_f1_mean": 87.231,
+        "dev_macro_f1_sd": 0.454,
+        "per_seed": [
+          86.524,
+          87.401,
+          87.756,
+          87.334,
+          87.141
+        ]
+      }
+    },
+    "collapsed": null,
+    "weights_sha256": {
+      "config.json": "df52e357acc71cccfbf75f2d4083c1c1e564d2abafdcf22dbfe57debb3bc8441",
+      "model.safetensors": "05c6d20022af96d63a09c54a2cb3cc922eed86ff22fe74ae5db34fa1e5260ded",
+      "tokenizer.json": "11ba3839d32ab3fcdba2614768990d23a89fd9023d2f1f70ee913efeb02237aa",
+      "tokenizer_config.json": "e1c2a61a99bda00f6c55303a210b30e2f92dcf8b555e215812e2eb583e177ffd"
+    },
+    "commit": "563c450355b452af9041e08aad2501f4f6db993f",
+    "steps": 10000
+  },
+  "diffusion": null,
+  "steps": 720,
+  "minutes": 2.0,
+  "scores": {
+    "dev": {
+      "accuracy": 0.8975438596491228,
+      "macro_f1": 0.8974322821354199,
+      "f1_sarcastic": 0.8940493468795355,
+      "roc_auc": 0.9586328351577831,
+      "n": 2850
+    },
+    "test": {
+      "accuracy": 0.90529638723255,
+      "macro_f1": 0.9052160537607716,
+      "f1_sarcastic": 0.9024566473988439,
+      "roc_auc": 0.9651338378357045,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.7221428571428572,
+      "macro_f1": 0.5211680475068823,
+      "f1_sarcastic": 0.21095334685598377,
+      "roc_auc": 0.5771833333333334,
+      "n": 1400
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.50985,
+      "loss_unsup_real": 0.0929,
+      "loss_unsup_fake": 1.24542,
+      "p_fake_real": 0.08286,
+      "p_fake_fake": 0.29006,
+      "loss_sent": 0.89246,
+      "loss_emo": 0.77794,
+      "loss_g_unsup": 0.35367,
+      "loss_g_fm": 0.05504,
+      "loss_d": 2.34929,
+      "loss_g": 0.4087,
+      "loss": 2.34929
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.11709,
+      "loss_unsup_real": 0.01671,
+      "loss_unsup_fake": 0.80661,
+      "p_fake_real": 0.01651,
+      "p_fake_fake": 0.46117,
+      "loss_sent": 0.58126,
+      "loss_emo": 0.52149,
+      "loss_g_unsup": 0.70855,
+      "loss_g_fm": 0.07382,
+      "loss_d": 1.27124,
+      "loss_g": 0.78236,
+      "loss": 1.27124
+    },
+    {
+      "step": 300,
+      "loss_sarc": 0.02271,
+      "loss_unsup_real": 0.00743,
+      "loss_unsup_fake": 0.50833,
+      "p_fake_real": 0.00739,
+      "p_fake_fake": 0.60378,
+      "loss_sent": 0.40068,
+      "loss_emo": 0.36148,
+      "loss_g_unsup": 1.01126,
+      "loss_g_fm": 0.10639,
+      "loss_d": 0.76712,
+      "loss_g": 1.11765,
+      "loss": 0.76712
+    },
+    {
+      "step": 400,
+      "loss_sarc": 0.01209,
+      "loss_unsup_real": 0.00904,
+      "loss_unsup_fake": 0.55762,
+      "p_fake_real": 0.00897,
+      "p_fake_fake": 0.57518,
+      "loss_sent": 0.3508,
+      "loss_emo": 0.31207,
+      "loss_g_unsup": 0.91547,
+      "loss_g_fm": 0.10408,
+      "loss_d": 0.7776,
+      "loss_g": 1.01955,
+      "loss": 0.7776
+    },
+    {
+      "step": 500,
+      "loss_sarc": 0.01377,
+      "loss_unsup_real": 0.01361,
+      "loss_unsup_fake": 0.45803,
+      "p_fake_real": 0.01346,
+      "p_fake_fake": 0.63492,
+      "loss_sent": 0.30991,
+      "loss_emo": 0.26618,
+      "loss_g_unsup": 1.05742,
+      "loss_g_fm": 0.10037,
+      "loss_d": 0.65824,
+      "loss_g": 1.15779,
+      "loss": 0.65824
+    },
+    {
+      "step": 600,
+      "loss_sarc": 0.01329,
+      "loss_unsup_real": 0.0139,
+      "loss_unsup_fake": 0.43671,
+      "p_fake_real": 0.01374,
+      "p_fake_fake": 0.64781,
+      "loss_sent": 0.31014,
+      "loss_emo": 0.27508,
+      "loss_g_unsup": 1.07417,
+      "loss_g_fm": 0.09846,
+      "loss_d": 0.63946,
+      "loss_g": 1.17263,
+      "loss": 0.63946
+    },
+    {
+      "step": 700,
+      "loss_sarc": 0.0138,
+      "loss_unsup_real": 0.01511,
+      "loss_unsup_fake": 0.48421,
+      "p_fake_real": 0.01491,
+      "p_fake_fake": 0.61752,
+      "loss_sent": 0.23403,
+      "loss_emo": 0.22539,
+      "loss_g_unsup": 0.97299,
+      "loss_g_fm": 0.09751,
+      "loss_d": 0.65095,
+      "loss_g": 1.0705,
+      "loss": 0.65095
+    },
+    {
+      "step": 720,
+      "loss_sarc": 0.0142,
+      "loss_unsup_real": 0.01601,
+      "loss_unsup_fake": 0.48888,
+      "p_fake_real": 0.0158,
+      "p_fake_fake": 0.61461,
+      "loss_sent": 0.1988,
+      "loss_emo": 0.20995,
+      "loss_g_unsup": 0.95902,
+      "loss_g_fm": 0.09631,
+      "loss_d": 0.64171,
+      "loss_g": 1.05532,
+      "loss": 0.64171
+    }
+  ],
+  "pseudo": null,
+  "helper_label_counts": {
+    "sent": {
+      "negative": 7454,
+      "neutral": 12833,
+      "positive": 2513
+    },
+    "emo": {
+      "joy": 1941,
+      "sadness": 1081,
+      "anger": 658,
+      "fear": 276,
+      "neutral_other": 18844
+    }
+  },
+  "commit": "c1c2a18679862fd897930846871a64f210f83651",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

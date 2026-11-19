@@ -1,0 +1,53 @@
+A20_p70_s2: |L|=15960 |U|=6840 steps=4990 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2560.40it/s]
+  step 100/4990  loss_sarc 0.523  loss 0.523
+  step 200/4990  loss_sarc 0.2705  loss 0.2705
+  step 300/4990  loss_sarc 0.2495  loss 0.2495
+  step 400/4990  loss_sarc 0.2232  loss 0.2232
+  step 500/4990  loss_sarc 0.2237  loss 0.2237
+  step 600/4990  loss_sarc 0.1393  loss 0.1393
+  step 700/4990  loss_sarc 0.1424  loss 0.1424
+  step 800/4990  loss_sarc 0.1354  loss 0.1354
+  step 900/4990  loss_sarc 0.1415  loss 0.1415
+  step 1000/4990  loss_sarc 0.1416  loss 0.1416
+  step 1100/4990  loss_sarc 0.03432  loss 0.03432
+  step 1200/4990  loss_sarc 0.03629  loss 0.03629
+  step 1300/4990  loss_sarc 0.0488  loss 0.0488
+  step 1400/4990  loss_sarc 0.04502  loss 0.04502
+  step 1500/4990  loss_sarc 0.05  loss 0.05
+  step 1600/4990  loss_sarc 0.01612  loss 0.01612
+  step 1700/4990  loss_sarc 0.02526  loss 0.02526
+  step 1800/4990  loss_sarc 0.01923  loss 0.01923
+  step 1900/4990  loss_sarc 0.0085  loss 0.0085
+  step 2000/4990  loss_sarc 0.02233  loss 0.02233
+  step 2100/4990  loss_sarc 0.00129  loss 0.00129
+  step 2200/4990  loss_sarc 0.01717  loss 0.01717
+  step 2300/4990  loss_sarc 0.00968  loss 0.00968
+  step 2400/4990  loss_sarc 0.00632  loss 0.00632
+  step 2500/4990  loss_sarc 0.01526  loss 0.01526
+  step 2600/4990  loss_sarc 0.00592  loss 0.00592
+  step 2700/4990  loss_sarc 0.00186  loss 0.00186
+  step 2800/4990  loss_sarc 0.00821  loss 0.00821
+  step 2900/4990  loss_sarc 0.00134  loss 0.00134
+  step 3000/4990  loss_sarc 0.00514  loss 0.00514
+  step 3100/4990  loss_sarc 0.00111  loss 0.00111
+  step 3200/4990  loss_sarc 0.00512  loss 0.00512
+  step 3300/4990  loss_sarc 0.00072  loss 0.00072
+  step 3400/4990  loss_sarc 0.00071  loss 0.00071
+  step 3500/4990  loss_sarc 0.00217  loss 0.00217
+  step 3600/4990  loss_sarc 0.00235  loss 0.00235
+  step 3700/4990  loss_sarc 0.00093  loss 0.00093
+  step 3800/4990  loss_sarc 0.00014  loss 0.00014
+  step 3900/4990  loss_sarc 0.00415  loss 0.00415
+  step 4000/4990  loss_sarc 0.00352  loss 0.00352
+  step 4100/4990  loss_sarc 0.00124  loss 0.00124
+  step 4200/4990  loss_sarc 7e-05  loss 7e-05
+  step 4300/4990  loss_sarc 3e-05  loss 3e-05
+  step 4400/4990  loss_sarc 1e-05  loss 1e-05
+  step 4500/4990  loss_sarc 2e-05  loss 2e-05
+  step 4600/4990  loss_sarc 0.0018  loss 0.0018
+  step 4700/4990  loss_sarc 8e-05  loss 8e-05
+  step 4800/4990  loss_sarc 0.0007  loss 0.0007
+  step 4900/4990  loss_sarc 0.00055  loss 0.00055
+  step 4990/4990  loss_sarc 1e-05  loss 1e-05
+A20_p70_s2: done in 8.6 min; dev macro-F1 0.9233, test macro-F1 0.9297, isarc_test macro-F1 0.5166

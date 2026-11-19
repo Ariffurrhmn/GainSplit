@@ -1,0 +1,17 @@
+A36_p5_s0: |L|=1140 |U|=21660 steps=360 device=cuda
+  self-training teacher (mlm:A2+A7 recipe):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2639.39it/s]
+  step 100/360  loss_sarc 0.256  loss_adv 0.8525  loss 1.574  loss_sent 0.8099  loss_emo 0.7416
+  step 200/360  loss_sarc 0.00872  loss_adv 0.1969  loss 0.3314  loss_sent 0.2019  loss_emo 0.2176
+  step 300/360  loss_sarc 0.0037  loss_adv 0.05788  loss 0.0898  loss_sent 0.04004  loss_emo 0.05403
+  step 360/360  loss_sarc 0.00269  loss_adv 0.03121  loss 0.04679  loss_sent 0.01745  loss_emo 0.02554
+  A6 pseudo-labels kept: 18390 of 21660 (confident 19196, per class {'0': 10001, '1': 9195})
+  A6 student (fresh BERT):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2458.48it/s]
+/tmp/GainSplit/src/gainsplit/train.py:239: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/360  loss_sarc 0.2136  loss_adv 0.7779  loss 1.439  loss_sent 0.7802  loss_emo 0.7114
+  step 200/360  loss_sarc 0.02119  loss_adv 0.2289  loss 0.3627  loss_sent 0.177  loss_emo 0.1981
+  step 300/360  loss_sarc 0.01591  loss_adv 0.1313  loss 0.1801  loss_sent 0.04548  loss_emo 0.06411
+  step 360/360  loss_sarc 0.01366  loss_adv 0.1048  loss 0.1385  loss_sent 0.02596  loss_emo 0.04106
+A36_p5_s0: done in 3.2 min; dev macro-F1 0.8929, test macro-F1 0.9080, isarc_test macro-F1 0.4820

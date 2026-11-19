@@ -1,0 +1,437 @@
+{
+  "run_id": "A1_p1_s0_long35",
+  "config": {
+    "arm": "A1",
+    "budget": 1,
+    "seed": 0,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.0,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.0,
+    "tag": "long35",
+    "helper_variant": "",
+    "eval_masked": false,
+    "train_data": "headlines",
+    "gen_lr": 0.0,
+    "step_mult": 35,
+    "pair_batch": 32,
+    "explain": false,
+    "pair_weight": 1.0,
+    "cleaned_drop_pct": 0.0,
+    "pretrain_steps": 0,
+    "init_dir": "",
+    "cons_weight": 0.0
+  },
+  "n_labeled": 228,
+  "n_unlabeled": 22572,
+  "uses_u": false,
+  "pairs": null,
+  "explain": null,
+  "pretrain": null,
+  "init": null,
+  "diffusion": null,
+  "steps": 7000,
+  "minutes": 11.93,
+  "scores": {
+    "dev": {
+      "accuracy": 0.8101754385964912,
+      "macro_f1": 0.8081476973430848,
+      "f1_sarcastic": 0.7884239342980055,
+      "roc_auc": 0.8893324612175888,
+      "n": 2850
+    },
+    "test": {
+      "accuracy": 0.8190108733777622,
+      "macro_f1": 0.8173111312454548,
+      "f1_sarcastic": 0.7996894409937888,
+      "roc_auc": 0.8992230203050693,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.7271428571428571,
+      "macro_f1": 0.5065983703353802,
+      "f1_sarcastic": 0.17672413793103448,
+      "roc_auc": 0.46724166666666667,
+      "n": 1400
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.52511,
+      "loss": 0.52511
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.02393,
+      "loss": 0.02393
+    },
+    {
+      "step": 300,
+      "loss_sarc": 0.00043,
+      "loss": 0.00043
+    },
+    {
+      "step": 400,
+      "loss_sarc": 0.00015,
+      "loss": 0.00015
+    },
+    {
+      "step": 500,
+      "loss_sarc": 0.00055,
+      "loss": 0.00055
+    },
+    {
+      "step": 600,
+      "loss_sarc": 5e-05,
+      "loss": 5e-05
+    },
+    {
+      "step": 700,
+      "loss_sarc": 3e-05,
+      "loss": 3e-05
+    },
+    {
+      "step": 800,
+      "loss_sarc": 3e-05,
+      "loss": 3e-05
+    },
+    {
+      "step": 900,
+      "loss_sarc": 2e-05,
+      "loss": 2e-05
+    },
+    {
+      "step": 1000,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 1100,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 1200,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 1300,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 1400,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 1500,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 1600,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 1700,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 1800,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 1900,
+      "loss_sarc": 0.00161,
+      "loss": 0.00161
+    },
+    {
+      "step": 2000,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 2100,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 2200,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 2300,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 2400,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 2500,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 2600,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 2700,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 2800,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 2900,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 3000,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 3100,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 3200,
+      "loss_sarc": 0.03778,
+      "loss": 0.03778
+    },
+    {
+      "step": 3300,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 3400,
+      "loss_sarc": 0.01743,
+      "loss": 0.01743
+    },
+    {
+      "step": 3500,
+      "loss_sarc": 0.003,
+      "loss": 0.003
+    },
+    {
+      "step": 3600,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 3700,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 3800,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 3900,
+      "loss_sarc": 1e-05,
+      "loss": 1e-05
+    },
+    {
+      "step": 4000,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 4100,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 4200,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 4300,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 4400,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 4500,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 4600,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 4700,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 4800,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 4900,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 5000,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 5100,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 5200,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 5300,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 5400,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 5500,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 5600,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 5700,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 5800,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 5900,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 6000,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 6100,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 6200,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 6300,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 6400,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 6500,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 6600,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 6700,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 6800,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 6900,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    },
+    {
+      "step": 7000,
+      "loss_sarc": 0.0,
+      "loss": 0.0
+    }
+  ],
+  "pseudo": null,
+  "helper_label_counts": null,
+  "commit": "c1c2a18679862fd897930846871a64f210f83651",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

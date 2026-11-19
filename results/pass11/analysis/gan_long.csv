@@ -1,0 +1,4 @@
+contrast,budget,mean_diff,ci_low,ci_high,p,n_seeds,p_holm
+A4[long35]-A1[long35] (GAN vs BERT at 35x steps),1,-7.916802041437357,-8.91694358207525,-6.941788341081552,0.0,5,0.0
+A1[long35]-A1 (BERT at 35x steps vs normal steps),1,0.945805653915508,0.3102513524512926,1.5873901247104933,0.0026,5,0.0026
+A4[long35]-A4 (GAN at 35x steps vs normal steps),1,-7.070366174519208,-7.963093925476315,-6.210269923486299,0.0,5,0.0

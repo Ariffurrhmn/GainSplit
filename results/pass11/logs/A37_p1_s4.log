@@ -1,0 +1,5 @@
+A37_p1_s4: |L|=228 |U|=22572 steps=200 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2447.86it/s]
+  step 100/200  loss_sarc 0.2337  loss_unsup_real 0.06603  loss_unsup_fake 1.109  p_fake_real 0.05834  p_fake_fake 0.3351  loss_sent 0.7225  loss_emo 0.6425  loss_g_unsup 0.4288  loss_g_fm 0.05836  loss_d 1.818  loss_g 0.4872  loss 1.818
+  step 200/200  loss_sarc 0.02056  loss_unsup_real 0.01403  loss_unsup_fake 0.8957  p_fake_real 0.01391  p_fake_fake 0.4095  loss_sent 0.325  loss_emo 0.3447  loss_g_unsup 0.5398  loss_g_fm 0.07177  loss_d 1.131  loss_g 0.6116  loss 1.131
+A37_p1_s4: done in 0.67 min; dev macro-F1 0.8427, test macro-F1 0.8449, isarc_test macro-F1 0.4555

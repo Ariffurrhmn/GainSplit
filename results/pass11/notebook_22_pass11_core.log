@@ -1,0 +1,279 @@
+[{"stream_name":"stderr","time":8.493467255,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.493512141,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.493518755,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.493523061,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":9.15967804,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.159719681,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.159726397,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.159730107,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":10.323659666,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stderr","time":10.526007867,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stderr","time":10.526036346,"data":"\n"}
+,{"stream_name":"stderr","time":10.526041463,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stderr","time":23.179219514,"data":"Updating files:  95% (4295/4480)\rUpdating files:  96% (4301/4480)\rUpdating files:  97% (4346/4480)\rUpdating files:  98% (4391/4480)\rUpdating files:  99% (4436/4480)\rUpdating files: 100% (4480/4480)\rUpdating files: 100% (4480/4480), done.\n"}
+,{"stream_name":"stdout","time":23.195018388,"data":"code commit: c1c2a18679862fd897930846871a64f210f83651\n"}
+,{"stream_name":"stderr","time":23.196148565,"data":"Updating files:  95% (4295/4480)\rUpdating files:  96% (4301/4480)\rUpdating files:  97% (4346/4480)\rUpdating files:  98% (4391/4480)\rUpdating files:  99% (4436/4480)\rUpdating files: 100% (4480/4480)\rUpdating files: 100% (4480/4480), done.\n"}
+,{"stream_name":"stderr","time":23.19618578,"data":"\n"}
+,{"stream_name":"stderr","time":23.196190535,"data":"Updating files:  95% (4295/4480)\rUpdating files:  96% (4301/4480)\rUpdating files:  97% (4346/4480)\rUpdating files:  98% (4391/4480)\rUpdating files:  99% (4436/4480)\rUpdating files: 100% (4480/4480)\rUpdating files: 100% (4480/4480), done.\n"}
+,{"stream_name":"stdout","time":143.121726466,"data":"........................................................................ [ 24%]\n"}
+,{"stream_name":"stdout","time":143.121771889,"data":"........................................................................ [ 49%]\n"}
+,{"stream_name":"stdout","time":143.121778313,"data":"........................................................................ [ 74%]\n"}
+,{"stream_name":"stdout","time":143.121783438,"data":"........................................................................ [ 99%]\n"}
+,{"stream_name":"stdout","time":143.121788353,"data":".                                                                        [100%]\n"}
+,{"stream_name":"stdout","time":143.121792979,"data":"=============================== warnings summary ===============================\n"}
+,{"stream_name":"stdout","time":143.121797634,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":143.121802096,"data":"  /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:64: PyparsingDeprecationWarning: 'oneOf' deprecated - use 'one_of'\n"}
+,{"stream_name":"stdout","time":143.12180791,"data":"    prop = Group((name + Suppress(\"=\") + comma_separated(value)) | oneOf(_CONSTANTS))\n"}
+,{"stream_name":"stdout","time":143.121812969,"data":"\n"}
+,{"stream_name":"stdout","time":143.121829938,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":143.121833903,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":143.121837581,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":143.121841322,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":143.121845255,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":143.121848754,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":143.121852227,"data":"  /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:85: PyparsingDeprecationWarning: 'parseString' deprecated - use 'parse_string'\n"}
+,{"stream_name":"stdout","time":143.121857064,"data":"    parse = parser.parseString(pattern)\n"}
+,{"stream_name":"stdout","time":143.121861011,"data":"\n"}
+,{"stream_name":"stdout","time":143.12186444,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":143.121868084,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":143.121871953,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":143.121875563,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":143.121879095,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":143.121882519,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":143.121886076,"data":"  /usr/local/lib/python3.13/dist-packages/matplotlib/_fontconfig_pattern.py:89: PyparsingDeprecationWarning: 'resetCache' deprecated - use 'reset_cache'\n"}
+,{"stream_name":"stdout","time":143.121890169,"data":"    parser.resetCache()\n"}
+,{"stream_name":"stdout","time":143.121893748,"data":"\n"}
+,{"stream_name":"stdout","time":143.121897623,"data":"tests/test_analysis.py::test_save_tables_and_figures\n"}
+,{"stream_name":"stdout","time":143.121901097,"data":"  /usr/local/lib/python3.13/dist-packages/matplotlib/_mathtext.py:45: PyparsingDeprecationWarning: 'enablePackrat' deprecated - use 'enable_packrat'\n"}
+,{"stream_name":"stdout","time":143.121904925,"data":"    ParserElement.enablePackrat()\n"}
+,{"stream_name":"stdout","time":143.121908246,"data":"\n"}
+,{"stream_name":"stdout","time":143.121911577,"data":"tests/test_analysis.py: 215 warnings\n"}
+,{"stream_name":"stdout","time":143.121916451,"data":"tests/test_masking.py: 2 warnings\n"}
+,{"stream_name":"stdout","time":143.121921015,"data":"tests/test_pass4.py: 148 warnings\n"}
+,{"stream_name":"stdout","time":143.121924977,"data":"tests/test_pass4_train.py: 102 warnings\n"}
+,{"stream_name":"stdout","time":143.121929251,"data":"tests/test_pass8.py: 40 warnings\n"}
+,{"stream_name":"stdout","time":143.121933137,"data":"tests/test_tfidf_plans.py: 8 warnings\n"}
+,{"stream_name":"stdout","time":143.121936743,"data":"  /usr/local/lib/python3.13/dist-packages/sklearn/linear_model/_logistic.py:451: DeprecationWarning: scipy.optimize: The `disp` and `iprint` options of the L-BFGS-B solver are deprecated and will be removed in SciPy 1.18.0.\n"}
+,{"stream_name":"stdout","time":143.121945402,"data":"    opt_res = optimize.minimize(\n"}
+,{"stream_name":"stdout","time":143.121948733,"data":"\n"}
+,{"stream_name":"stdout","time":143.121952133,"data":"tests/test_pass4.py::test_pass4_analysis_end_to_end\n"}
+,{"stream_name":"stdout","time":143.121956284,"data":"  /tmp/GainSplit/src/gainsplit/analysis_pass4.py:179: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.\n"}
+,{"stream_name":"stdout","time":143.121966374,"data":"    \"median_rel_completeness_gap\": g.apply(\n"}
+,{"stream_name":"stdout","time":143.121970439,"data":"\n"}
+,{"stream_name":"stdout","time":143.121973911,"data":"tests/test_pass5_7.py::test_pass5_7_analysis_end_to_end\n"}
+,{"stream_name":"stdout","time":143.121977675,"data":"  /tmp/GainSplit/src/gainsplit/analysis_pass4.py:266: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.\n"}
+,{"stream_name":"stdout","time":143.12198257,"data":"    return pd.concat(out, ignore_index=True)\n"}
+,{"stream_name":"stdout","time":143.121986207,"data":"\n"}
+,{"stream_name":"stdout","time":143.121989409,"data":"-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n"}
+,{"stream_name":"stdout","time":143.121992709,"data":"289 passed, 531 warnings in 113.72s (0:01:53)\n"}
+,{"stream_name":"stdout","time":143.121996069,"data":" \n"}
+,{"stream_name":"stdout","time":143.239122948,"data":"predictions status: ['FROZEN']\n"}
+,{"stream_name":"stdout","time":148.511739991,"data":"MLM encoder (seed 0, 10,000 steps): /kaggle/input/notebooks/arifurrhmn/notebook-15/ckpt/mlm - weights match the Pass 8a receipt\n"}
+,{"stream_name":"stdout","time":152.074577965,"data":"data: /kaggle/input/datasets/arifurrhmn/gainsplit-processed - all files match manifest.json\n"}
+,{"stream_name":"stdout","time":152.285811617,"data":"seed 0: 70% -\u003e |L|=15960 |U|=6840, sarcastic share of L 0.475\n"}
+,{"stream_name":"stdout","time":152.285846499,"data":"seed 1: 70% -\u003e |L|=15960 |U|=6840, sarcastic share of L 0.475\n"}
+,{"stream_name":"stdout","time":152.285851435,"data":"seed 2: 70% -\u003e |L|=15960 |U|=6840, sarcastic share of L 0.475\n"}
+,{"stream_name":"stdout","time":152.69343285,"data":"seed 3: 70% -\u003e |L|=15960 |U|=6840, sarcastic share of L 0.475\n"}
+,{"stream_name":"stdout","time":152.69346193,"data":"seed 4: 70% -\u003e |L|=15960 |U|=6840, sarcastic share of L 0.475\n"}
+,{"stream_name":"stdout","time":152.695087112,"data":"GPUs: ['Tesla T4', 'Tesla T4']\n"}
+,{"stream_name":"stdout","time":152.901855482,"data":"A5_p70_s0                arm=A5   labels= 70% seed=0 step_mult=1 init=-\n"}
+,{"stream_name":"stdout","time":152.901898153,"data":"A5_p70_s1                arm=A5   labels= 70% seed=1 step_mult=1 init=-\n"}
+,{"stream_name":"stdout","time":152.901904971,"data":"A5_p70_s2                arm=A5   labels= 70% seed=2 step_mult=1 init=-\n"}
+,{"stream_name":"stdout","time":152.901909138,"data":"A20_p1_s2_dose3000       arm=A20  labels=  1% seed=2 step_mult=1 init=/kaggle/working/ckpt/mlm_dose3000\n"}
+,{"stream_name":"stdout","time":152.901914033,"data":"A20_p1_s3_dose3000       arm=A20  labels=  1% seed=3 step_mult=1 init=/kaggle/working/ckpt/mlm_dose3000\n"}
+,{"stream_name":"stdout","time":152.901918796,"data":"A20_p1_s4_dose3000       arm=A20  labels=  1% seed=4 step_mult=1 init=/kaggle/working/ckpt/mlm_dose3000\n"}
+,{"stream_name":"stdout","time":152.901923813,"data":"70 runs\n"}
+,{"stream_name":"stdout","time":823.615689535,"data":"dose100: 1.41 min; dev MLM loss 5.85272 -\u003e 3.77698; probe 1% 76.16 -\u003e 76.61\n"}
+,{"stream_name":"stdout","time":823.615770485,"data":"dose350: 2.01 min; dev MLM loss 5.85272 -\u003e 3.56678; probe 1% 76.16 -\u003e 78.10\n"}
+,{"stream_name":"stdout","time":823.615778444,"data":"dose1000: 4.03 min; dev MLM loss 5.85272 -\u003e 3.4601; probe 1% 76.16 -\u003e 81.25\n"}
+,{"stream_name":"stdout","time":823.615783073,"data":"dose3000: 10.96 min; dev MLM loss 5.85272 -\u003e 3.42332; probe 1% 76.16 -\u003e 84.15\n"}
+,{"stream_name":"stdout","time":823.615787743,"data":"pretraining: 11.1 min\n"}
+,{"stream_name":"stdout","time":823.814711575,"data":"70 runs, 0 already done, 70 to run on GPU [0, 1]\n"}
+,{"stream_name":"stdout","time":823.814778224,"data":"start  A5_p70_s0  on GPU 0\n"}
+,{"stream_name":"stdout","time":823.814784441,"data":"start  A5_p70_s1  on GPU 1\n"}
+,{"stream_name":"stdout","time":1612.880865256,"data":"done   A5_p70_s0  (13.2 min)\n"}
+,{"stream_name":"stdout","time":1615.882857527,"data":"start  A5_p70_s2  on GPU 0\n"}
+,{"stream_name":"stdout","time":1657.882953383,"data":"done   A5_p70_s1  (13.9 min)\n"}
+,{"stream_name":"stdout","time":1660.885378737,"data":"start  A5_p70_s3  on GPU 1\n"}
+,{"stream_name":"stdout","time":2410.919658305,"data":"done   A5_p70_s2  (13.3 min)\n"}
+,{"stream_name":"stdout","time":2413.920978356,"data":"start  A5_p70_s4  on GPU 0\n"}
+,{"stream_name":"stdout","time":2494.925433076,"data":"done   A5_p70_s3  (13.9 min)\n"}
+,{"stream_name":"stdout","time":2497.92937531,"data":"start  A7_p70_s0  on GPU 1\n"}
+,{"stream_name":"stdout","time":3208.961001204,"data":"done   A5_p70_s4  (13.3 min)\n"}
+,{"stream_name":"stdout","time":3211.960390784,"data":"start  A7_p70_s1  on GPU 0\n"}
+,{"stream_name":"stdout","time":3388.973454893,"data":"done   A7_p70_s0  (14.9 min)\n"}
+,{"stream_name":"stdout","time":3391.971774681,"data":"start  A7_p70_s2  on GPU 1\n"}
+,{"stream_name":"stdout","time":4067.003738349,"data":"done   A7_p70_s1  (14.3 min)\n"}
+,{"stream_name":"stdout","time":4070.003836931,"data":"start  A7_p70_s3  on GPU 0\n"}
+,{"stream_name":"stdout","time":4280.016994016,"data":"done   A7_p70_s2  (14.8 min)\n"}
+,{"stream_name":"stdout","time":4283.016821625,"data":"start  A7_p70_s4  on GPU 1\n"}
+,{"stream_name":"stdout","time":4922.046094881,"data":"done   A7_p70_s3  (14.2 min)\n"}
+,{"stream_name":"stdout","time":4925.048043234,"data":"start  A4_p1_s0_long35  on GPU 0\n"}
+,{"stream_name":"stdout","time":5171.061198527,"data":"done   A7_p70_s4  (14.8 min)\n"}
+,{"stream_name":"stdout","time":5174.060070564,"data":"start  A4_p1_s1_long35  on GPU 1\n"}
+,{"stream_name":"stdout","time":6020.100468748,"data":"done   A4_p1_s0_long35  (18.3 min)\n"}
+,{"stream_name":"stdout","time":6023.099817982,"data":"start  A4_p1_s2_long35  on GPU 0\n"}
+,{"stream_name":"stdout","time":6329.116381469,"data":"done   A4_p1_s1_long35  (19.3 min)\n"}
+,{"stream_name":"stdout","time":6332.117072646,"data":"start  A4_p1_s3_long35  on GPU 1\n"}
+,{"stream_name":"stdout","time":7124.157111959,"data":"done   A4_p1_s2_long35  (18.4 min)\n"}
+,{"stream_name":"stdout","time":7127.161846751,"data":"start  A4_p1_s4_long35  on GPU 0\n"}
+,{"stream_name":"stdout","time":7490.17737395,"data":"done   A4_p1_s3_long35  (19.3 min)\n"}
+,{"stream_name":"stdout","time":7493.179825706,"data":"start  A36_p30_s0  on GPU 1\n"}
+,{"stream_name":"stdout","time":8222.211322043,"data":"done   A4_p1_s4_long35  (18.3 min)\n"}
+,{"stream_name":"stdout","time":8225.214719244,"data":"start  A36_p30_s1  on GPU 0\n"}
+,{"stream_name":"stdout","time":8507.227592438,"data":"done   A36_p30_s0  (16.9 min)\n"}
+,{"stream_name":"stdout","time":8510.22777923,"data":"start  A36_p30_s2  on GPU 1\n"}
+,{"stream_name":"stdout","time":9191.261785154,"data":"done   A36_p30_s1  (16.1 min)\n"}
+,{"stream_name":"stdout","time":9194.261455764,"data":"start  A36_p30_s3  on GPU 0\n"}
+,{"stream_name":"stdout","time":9524.279729146,"data":"done   A36_p30_s2  (16.9 min)\n"}
+,{"stream_name":"stdout","time":9527.279442254,"data":"start  A36_p30_s4  on GPU 1\n"}
+,{"stream_name":"stdout","time":10157.312344966,"data":"done   A36_p30_s3  (16.1 min)\n"}
+,{"stream_name":"stdout","time":10160.311804685,"data":"start  A1_p1_s0_long35  on GPU 0\n"}
+,{"stream_name":"stdout","time":10544.332740558,"data":"done   A36_p30_s4  (17.0 min)\n"}
+,{"stream_name":"stdout","time":10547.33300726,"data":"start  A1_p1_s1_long35  on GPU 1\n"}
+,{"stream_name":"stdout","time":10886.349769843,"data":"done   A1_p1_s0_long35  (12.1 min)\n"}
+,{"stream_name":"stdout","time":10889.350376019,"data":"start  A1_p1_s2_long35  on GPU 0\n"}
+,{"stream_name":"stdout","time":11297.370750049,"data":"done   A1_p1_s1_long35  (12.5 min)\n"}
+,{"stream_name":"stdout","time":11300.372007398,"data":"start  A1_p1_s3_long35  on GPU 1\n"}
+,{"stream_name":"stdout","time":11618.388125447,"data":"done   A1_p1_s2_long35  (12.2 min)\n"}
+,{"stream_name":"stdout","time":11621.388062274,"data":"start  A1_p1_s4_long35  on GPU 0\n"}
+,{"stream_name":"stdout","time":12050.40991277,"data":"done   A1_p1_s3_long35  (12.5 min)\n"}
+,{"stream_name":"stdout","time":12053.410397444,"data":"start  A1_p70_s0  on GPU 1\n"}
+,{"stream_name":"stdout","time":12353.42675261,"data":"done   A1_p1_s4_long35  (12.2 min)\n"}
+,{"stream_name":"stdout","time":12356.426762147,"data":"start  A1_p70_s1  on GPU 0\n"}
+,{"stream_name":"stdout","time":12596.439512129,"data":"done   A1_p70_s0  (9.1 min)\n"}
+,{"stream_name":"stdout","time":12599.442698214,"data":"start  A1_p70_s2  on GPU 1\n"}
+,{"stream_name":"stdout","time":12884.4588159,"data":"done   A1_p70_s1  (8.8 min)\n"}
+,{"stream_name":"stdout","time":12887.4544107,"data":"start  A1_p70_s3  on GPU 0\n"}
+,{"stream_name":"stdout","time":13142.470518939,"data":"done   A1_p70_s2  (9.1 min)\n"}
+,{"stream_name":"stdout","time":13145.471745636,"data":"start  A1_p70_s4  on GPU 1\n"}
+,{"stream_name":"stdout","time":13415.486144705,"data":"done   A1_p70_s3  (8.8 min)\n"}
+,{"stream_name":"stdout","time":13418.483481911,"data":"start  A20_p70_s0  on GPU 0\n"}
+,{"stream_name":"stdout","time":13688.497768745,"data":"done   A1_p70_s4  (9.1 min)\n"}
+,{"stream_name":"stdout","time":13691.494987957,"data":"start  A20_p70_s1  on GPU 1\n"}
+,{"stream_name":"stdout","time":13946.511753887,"data":"done   A20_p70_s0  (8.8 min)\n"}
+,{"stream_name":"stdout","time":13949.513701811,"data":"start  A20_p70_s2  on GPU 0\n"}
+,{"stream_name":"stdout","time":14237.527489294,"data":"done   A20_p70_s1  (9.1 min)\n"}
+,{"stream_name":"stdout","time":14240.531935919,"data":"start  A20_p70_s3  on GPU 1\n"}
+,{"stream_name":"stdout","time":14477.539981813,"data":"done   A20_p70_s2  (8.8 min)\n"}
+,{"stream_name":"stdout","time":14480.539047343,"data":"start  A20_p70_s4  on GPU 0\n"}
+,{"stream_name":"stdout","time":14786.56007551,"data":"done   A20_p70_s3  (9.1 min)\n"}
+,{"stream_name":"stdout","time":14789.554501651,"data":"start  A36_p5_s0  on GPU 1\n"}
+,{"stream_name":"stdout","time":14993.567973065,"data":"done   A36_p5_s0  (3.4 min)\n"}
+,{"stream_name":"stdout","time":14996.565505658,"data":"start  A36_p5_s1  on GPU 1\n"}
+,{"stream_name":"stdout","time":15008.565330892,"data":"done   A20_p70_s4  (8.8 min)\n"}
+,{"stream_name":"stdout","time":15011.569316284,"data":"start  A36_p5_s2  on GPU 0\n"}
+,{"stream_name":"stdout","time":15200.586876268,"data":"done   A36_p5_s1  (3.4 min)\n"}
+,{"stream_name":"stdout","time":15203.585196245,"data":"start  A36_p5_s3  on GPU 1\n"}
+,{"stream_name":"stdout","time":15203.585242277,"data":"done   A36_p5_s2  (3.2 min)\n"}
+,{"stream_name":"stdout","time":15206.588758945,"data":"start  A36_p5_s4  on GPU 0\n"}
+,{"stream_name":"stdout","time":15398.602751137,"data":"done   A36_p5_s4  (3.2 min)\n"}
+,{"stream_name":"stdout","time":15401.597378032,"data":"start  A37_p10_s0  on GPU 0\n"}
+,{"stream_name":"stdout","time":15407.596140687,"data":"done   A36_p5_s3  (3.4 min)\n"}
+,{"stream_name":"stdout","time":15410.601421496,"data":"start  A37_p10_s1  on GPU 1\n"}
+,{"stream_name":"stdout","time":15533.608737333,"data":"done   A37_p10_s0  (2.2 min)\n"}
+,{"stream_name":"stdout","time":15536.606797971,"data":"start  A37_p10_s2  on GPU 0\n"}
+,{"stream_name":"stdout","time":15548.604437904,"data":"done   A37_p10_s1  (2.3 min)\n"}
+,{"stream_name":"stdout","time":15551.607850944,"data":"start  A37_p10_s3  on GPU 1\n"}
+,{"stream_name":"stdout","time":15668.616980531,"data":"done   A37_p10_s2  (2.2 min)\n"}
+,{"stream_name":"stdout","time":15671.614664065,"data":"start  A37_p10_s4  on GPU 0\n"}
+,{"stream_name":"stdout","time":15689.613951606,"data":"done   A37_p10_s3  (2.3 min)\n"}
+,{"stream_name":"stdout","time":15692.618763506,"data":"start  A37_p1_s0  on GPU 1\n"}
+,{"stream_name":"stdout","time":15746.623430702,"data":"done   A37_p1_s0  (0.9 min)\n"}
+,{"stream_name":"stdout","time":15749.626426169,"data":"start  A37_p1_s1  on GPU 1\n"}
+,{"stream_name":"stdout","time":15803.627361099,"data":"done   A37_p10_s4  (2.2 min)\n"}
+,{"stream_name":"stdout","time":15803.627397541,"data":"done   A37_p1_s1  (0.9 min)\n"}
+,{"stream_name":"stdout","time":15806.634801418,"data":"start  A37_p1_s2  on GPU 0\n"}
+,{"stream_name":"stdout","time":15806.634834378,"data":"start  A37_p1_s3  on GPU 1\n"}
+,{"stream_name":"stdout","time":15857.632461455,"data":"done   A37_p1_s2  (0.9 min)\n"}
+,{"stream_name":"stdout","time":15860.631801827,"data":"start  A37_p1_s4  on GPU 0\n"}
+,{"stream_name":"stdout","time":15860.631833554,"data":"done   A37_p1_s3  (0.9 min)\n"}
+,{"stream_name":"stdout","time":15863.633376234,"data":"start  A20_p1_s0_dose100  on GPU 1\n"}
+,{"stream_name":"stdout","time":15902.637781818,"data":"done   A20_p1_s0_dose100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":15905.635671084,"data":"start  A20_p1_s1_dose100  on GPU 1\n"}
+,{"stream_name":"stdout","time":15911.634426105,"data":"done   A37_p1_s4  (0.9 min)\n"}
+,{"stream_name":"stdout","time":15914.63737073,"data":"start  A20_p1_s2_dose100  on GPU 0\n"}
+,{"stream_name":"stdout","time":15944.64634526,"data":"done   A20_p1_s1_dose100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":15947.641963571,"data":"start  A20_p1_s3_dose100  on GPU 1\n"}
+,{"stream_name":"stdout","time":15953.638852691,"data":"done   A20_p1_s2_dose100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":15956.645919275,"data":"start  A20_p1_s4_dose100  on GPU 0\n"}
+,{"stream_name":"stdout","time":15986.647770044,"data":"done   A20_p1_s3_dose100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":15989.645780521,"data":"start  A20_p1_s0_dose350  on GPU 1\n"}
+,{"stream_name":"stdout","time":15995.644270011,"data":"done   A20_p1_s4_dose100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":15998.648650232,"data":"start  A20_p1_s1_dose350  on GPU 0\n"}
+,{"stream_name":"stdout","time":16028.652903247,"data":"done   A20_p1_s0_dose350  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16031.650430976,"data":"start  A20_p1_s2_dose350  on GPU 1\n"}
+,{"stream_name":"stdout","time":16037.649250358,"data":"done   A20_p1_s1_dose350  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16040.654928022,"data":"start  A20_p1_s3_dose350  on GPU 0\n"}
+,{"stream_name":"stdout","time":16070.657695309,"data":"done   A20_p1_s2_dose350  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16073.656365545,"data":"start  A20_p1_s4_dose350  on GPU 1\n"}
+,{"stream_name":"stdout","time":16079.654213602,"data":"done   A20_p1_s3_dose350  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16082.656686952,"data":"start  A20_p1_s0_dose1000  on GPU 0\n"}
+,{"stream_name":"stdout","time":16112.66344116,"data":"done   A20_p1_s4_dose350  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16115.66043608,"data":"start  A20_p1_s1_dose1000  on GPU 1\n"}
+,{"stream_name":"stdout","time":16121.658862832,"data":"done   A20_p1_s0_dose1000  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16124.661489901,"data":"start  A20_p1_s2_dose1000  on GPU 0\n"}
+,{"stream_name":"stdout","time":16154.672075902,"data":"done   A20_p1_s1_dose1000  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16157.671393281,"data":"start  A20_p1_s3_dose1000  on GPU 1\n"}
+,{"stream_name":"stdout","time":16163.664425841,"data":"done   A20_p1_s2_dose1000  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16166.668431587,"data":"start  A20_p1_s4_dose1000  on GPU 0\n"}
+,{"stream_name":"stdout","time":16196.673116919,"data":"done   A20_p1_s3_dose1000  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16199.671350204,"data":"start  A20_p1_s0_dose3000  on GPU 1\n"}
+,{"stream_name":"stdout","time":16205.668586966,"data":"done   A20_p1_s4_dose1000  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16208.675004614,"data":"start  A20_p1_s1_dose3000  on GPU 0\n"}
+,{"stream_name":"stdout","time":16238.677113004,"data":"done   A20_p1_s0_dose3000  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16241.679398679,"data":"start  A20_p1_s2_dose3000  on GPU 1\n"}
+,{"stream_name":"stdout","time":16247.672993953,"data":"done   A20_p1_s1_dose3000  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16250.677360571,"data":"start  A20_p1_s3_dose3000  on GPU 0\n"}
+,{"stream_name":"stdout","time":16280.682487901,"data":"done   A20_p1_s2_dose3000  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16283.679688516,"data":"start  A20_p1_s4_dose3000  on GPU 1\n"}
+,{"stream_name":"stdout","time":16289.678116085,"data":"done   A20_p1_s3_dose3000  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16322.686256682,"data":"done   A20_p1_s4_dose3000  (0.7 min)\n"}
+,{"stream_name":"stdout","time":16325.496772433,"data":"total so far: 271.9 min\n"}
+,{"stream_name":"stdout","time":16325.699358978,"data":"results folders: ['/tmp/GainSplit/results/pass1', '/tmp/GainSplit/results/pass2a', '/tmp/GainSplit/results/pass2b', '/tmp/GainSplit/results/pass8_mlm', '/tmp/GainSplit/results/pass10_stack', '/tmp/GainSplit/results/pass10_seeds', '/kaggle/working/results/pass11_core']\n"}
+,{"stream_name":"stdout","time":16346.745694395,"data":"\n"}
+,{"stream_name":"stdout","time":16346.745753172,"data":"=== summary\n"}
+,{"stream_name":"stdout","time":16346.75845611,"data":"\n"}
+,{"stream_name":"stdout","time":16346.758476157,"data":"=== ours_vs_seed\n"}
+,{"stream_name":"stdout","time":16346.767404292,"data":"\n"}
+,{"stream_name":"stdout","time":16346.767420739,"data":"=== seed_parts\n"}
+,{"stream_name":"stdout","time":16346.778192132,"data":"\n"}
+,{"stream_name":"stdout","time":16346.778208114,"data":"=== high_f1\n"}
+,{"stream_name":"stdout","time":16346.788115559,"data":"\n"}
+,{"stream_name":"stdout","time":16346.788130373,"data":"=== high_accuracy\n"}
+,{"stream_name":"stdout","time":16346.795554027,"data":"\n"}
+,{"stream_name":"stdout","time":16346.795571827,"data":"=== gan_long\n"}
+,{"stream_name":"stdout","time":16346.802287276,"data":"\n"}
+,{"stream_name":"stdout","time":16346.802331661,"data":"=== dose\n"}
+,{"stream_name":"stdout","time":16346.808854659,"data":"\n"}
+,{"stream_name":"stdout","time":16346.808887539,"data":"=== a37\n"}
+,{"stream_name":"stdout","time":16346.814605939,"data":"\n"}
+,{"stream_name":"stdout","time":16346.814621403,"data":"=== dose_summary\n"}
+,{"stream_name":"stdout","time":16346.82008073,"data":"\n"}
+,{"stream_name":"stdout","time":16346.820098658,"data":"=== high_summary\n"}
+,{"stream_name":"stdout","time":16346.862683848,"data":"H11.18 A36-A5 (our recipe vs the seed recipe)                           1%  +10.68 [+9.58, +11.84]  p_holm 0.000  -\u003e SUPPORTED\n"}
+,{"stream_name":"stdout","time":16346.862703024,"data":"H11.18 A36-A5 (our recipe vs the seed recipe)                          10%  +3.15 [+2.37, +3.93]  p_holm 0.000  -\u003e SUPPORTED\n"}
+,{"stream_name":"stdout","time":16346.86270806,"data":"H11.19 A36-A5 (our recipe vs the seed recipe)                           5%  +3.99 [+3.14, +4.82]  p_holm 0.000  -\u003e SUPPORTED\n"}
+,{"stream_name":"stdout","time":16346.862712456,"data":"H11.19 A36-A5 (our recipe vs the seed recipe)                          30%  +1.64 [+1.01, +2.26]  p_holm 0.000  -\u003e SUPPORTED\n"}
+,{"stream_name":"stdout","time":16346.862717222,"data":"H11.20 A5-A1 (at 70% labels)                                           70%  -0.25 [-0.61, +0.11]  p_holm 0.357  -\u003e SUPPORTED (not better)\n"}
+,{"stream_name":"stdout","time":16346.862721646,"data":"H11.20 A5-A7 (at 70% labels)                                           70%  -0.89 [-1.38, -0.42]  p_holm 0.002  -\u003e SUPPORTED (not better)\n"}
+,{"stream_name":"stdout","time":16346.862726116,"data":"H11.20 A5-A20 (at 70% labels)                                          70%  -0.66 [-1.18, -0.14]  p_holm 0.054  -\u003e SUPPORTED (not better)\n"}
+,{"stream_name":"stdout","time":16346.862730619,"data":"H11.21 A5-A1 (seed recipe vs BERT)                                      1%  -2.30 [-2.99, -1.63]  p_holm 0.000  -\u003e SUPPORTED (not better)\n"}
+,{"stream_name":"stdout","time":16346.86273487,"data":"H11.21 A5-A1 (seed recipe vs BERT)                                      5%  +0.00 [-0.45, +0.46]  p_holm 1.000  -\u003e SUPPORTED (not better)\n"}
+,{"stream_name":"stdout","time":16346.862738862,"data":"H11.21 A5-A1 (seed recipe vs BERT)                                     10%  +0.23 [-0.19, +0.65]  p_holm 1.000  -\u003e SUPPORTED (not better)\n"}
+,{"stream_name":"stdout","time":16346.862742937,"data":"H11.21 A5-A1 (seed recipe vs BERT)                                     30%  -0.08 [-0.46, +0.30]  p_holm 1.000  -\u003e SUPPORTED (not better)\n"}
+,{"stream_name":"stdout","time":16346.862747018,"data":"H11.21 A5-A1 (seed recipe vs BERT)                                     70%  -0.25 [-0.61, +0.11]  p_holm 1.000  -\u003e SUPPORTED (not better)\n"}
+,{"stream_name":"stdout","time":16346.862751109,"data":"H11.16 A4[long35]-A1[long35] (GAN vs BERT at 35x steps)                 1%  -7.92 [-8.92, -6.94]  p_holm 0.000  -\u003e not supported (significant difference)\n"}
+,{"stream_name":"stdout","time":16346.862755033,"data":"H11.22 A37-A20 (seed recipe on the MLM encoder vs MLM alone)            1%  -1.20 [-1.70, -0.69]  p_holm 0.000  -\u003e SUPPORTED (not better)\n"}
+,{"stream_name":"stdout","time":16346.862758871,"data":"H11.22 A37-A20 (seed recipe on the MLM encoder vs MLM alone)           10%  -0.40 [-0.82, +0.01]  p_holm 0.059  -\u003e SUPPORTED (not better)\n"}
+,{"stream_name":"stdout","time":16347.4771409,"data":"/kaggle/working/results_pass11_core.zip\n"}
+,{"stream_name":"stdout","time":16347.477168822,"data":"notebook time: 272.3 min\n"}
+,{"stream_name":"stderr","time":16350.749309954,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":16350.749333175,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":16350.944855229,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":16350.944887036,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":16351.782848793,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":16351.891148299,"data":"[NbConvertApp] Writing 93097 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":16354.500937458,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":16355.072825661,"data":"[NbConvertApp] Writing 368444 bytes to __results__.html\n"}
+]

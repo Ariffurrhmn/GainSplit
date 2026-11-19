@@ -1,0 +1,51 @@
+A36_p30_s4: |L|=6840 |U|=15960 steps=2140 device=cuda
+  self-training teacher (mlm:A2+A7 recipe):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2476.12it/s]
+  step 100/2140  loss_sarc 0.513  loss_adv 1.217  loss 2.309  loss_sent 0.9808  loss_emo 0.9503
+  step 200/2140  loss_sarc 0.2589  loss_adv 0.8337  loss 1.485  loss_sent 0.7366  loss_emo 0.5714
+  step 300/2140  loss_sarc 0.1554  loss_adv 0.641  loss 1.086  loss_sent 0.5087  loss_emo 0.4576
+  step 400/2140  loss_sarc 0.1426  loss_adv 0.5875  loss 0.9836  loss_sent 0.4684  loss_emo 0.3762
+  step 500/2140  loss_sarc 0.07035  loss_adv 0.4041  loss 0.6567  loss_sent 0.3297  loss_emo 0.2777
+  step 600/2140  loss_sarc 0.03532  loss_adv 0.3216  loss 0.5  loss_sent 0.2435  loss_emo 0.2335
+  step 700/2140  loss_sarc 0.02106  loss_adv 0.25  loss 0.3845  loss_sent 0.1846  loss_emo 0.1936
+  step 800/2140  loss_sarc 0.00794  loss_adv 0.1962  loss 0.2921  loss_sent 0.1274  loss_emo 0.1656
+  step 900/2140  loss_sarc 0.00571  loss_adv 0.1599  loss 0.2336  loss_sent 0.0961  loss_emo 0.1304
+  step 1000/2140  loss_sarc 0.00342  loss_adv 0.1225  loss 0.1736  loss_sent 0.07457  loss_emo 0.08431
+  step 1100/2140  loss_sarc 0.00282  loss_adv 0.1088  loss 0.1483  loss_sent 0.05596  loss_emo 0.06625
+  step 1200/2140  loss_sarc 0.002  loss_adv 0.0796  loss 0.1044  loss_sent 0.03448  loss_emo 0.04162
+  step 1300/2140  loss_sarc 0.00186  loss_adv 0.07662  loss 0.09701  loss_sent 0.03147  loss_emo 0.03029
+  step 1400/2140  loss_sarc 0.00181  loss_adv 0.05844  loss 0.07269  loss_sent 0.01904  loss_emo 0.02241
+  step 1500/2140  loss_sarc 0.00139  loss_adv 0.05865  loss 0.0723  loss_sent 0.02159  loss_emo 0.01931
+  step 1600/2140  loss_sarc 0.00114  loss_adv 0.03935  loss 0.04678  loss_sent 0.01089  loss_emo 0.01007
+  step 1700/2140  loss_sarc 0.00091  loss_adv 0.04208  loss 0.04953  loss_sent 0.01073  loss_emo 0.01108
+  step 1800/2140  loss_sarc 0.00092  loss_adv 0.02946  loss 0.0348  loss_sent 0.00724  loss_emo 0.0075
+  step 1900/2140  loss_sarc 0.00088  loss_adv 0.02875  loss 0.03382  loss_sent 0.00748  loss_emo 0.00647
+  step 2000/2140  loss_sarc 0.00075  loss_adv 0.02412  loss 0.02818  loss_sent 0.00545  loss_emo 0.00562
+  step 2100/2140  loss_sarc 0.00079  loss_adv 0.01899  loss 0.0229  loss_sent 0.0051  loss_emo 0.00529
+  step 2140/2140  loss_sarc 0.00104  loss_adv 0.02248  loss 0.02653  loss_sent 0.005  loss_emo 0.00504
+  A6 pseudo-labels kept: 14136 of 15960 (confident 15070, per class {'0': 8002, '1': 7068})
+  A6 student (fresh BERT):
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2288.83it/s]
+  step 100/2140  loss_sarc 0.4486  loss_adv 1.129  loss 2.151  loss_sent 0.9746  loss_emo 0.9355
+  step 200/2140  loss_sarc 0.1604  loss_adv 0.6901  loss 1.229  loss_sent 0.704  loss_emo 0.5568
+  step 300/2140  loss_sarc 0.1028  loss_adv 0.5437  loss 0.9171  loss_sent 0.4835  loss_emo 0.4181
+  step 400/2140  loss_sarc 0.09088  loss_adv 0.4891  loss 0.8165  loss_sent 0.432  loss_emo 0.3564
+  step 500/2140  loss_sarc 0.04521  loss_adv 0.3415  loss 0.5543  loss_sent 0.3041  loss_emo 0.2545
+  step 600/2140  loss_sarc 0.02716  loss_adv 0.2719  loss 0.421  loss_sent 0.1999  loss_emo 0.2068
+  step 700/2140  loss_sarc 0.02283  loss_adv 0.231  loss 0.3507  loss_sent 0.1596  loss_emo 0.1634
+  step 800/2140  loss_sarc 0.01374  loss_adv 0.1771  loss 0.2598  loss_sent 0.1041  loss_emo 0.1259
+  step 900/2140  loss_sarc 0.00815  loss_adv 0.1458  loss 0.2055  loss_sent 0.08105  loss_emo 0.09088
+  step 1000/2140  loss_sarc 0.00401  loss_adv 0.1117  loss 0.1517  loss_sent 0.05784  loss_emo 0.06184
+  step 1100/2140  loss_sarc 0.00327  loss_adv 0.09622  loss 0.128  loss_sent 0.04277  loss_emo 0.05238
+  step 1200/2140  loss_sarc 0.00304  loss_adv 0.07555  loss 0.0961  loss_sent 0.03038  loss_emo 0.02795
+  step 1300/2140  loss_sarc 0.0026  loss_adv 0.07329  loss 0.09092  loss_sent 0.02779  loss_emo 0.02231
+  step 1400/2140  loss_sarc 0.00183  loss_adv 0.05422  loss 0.06526  loss_sent 0.01695  loss_emo 0.01373
+  step 1500/2140  loss_sarc 0.00199  loss_adv 0.0591  loss 0.06979  loss_sent 0.01549  loss_emo 0.01352
+  step 1600/2140  loss_sarc 0.00134  loss_adv 0.04171  loss 0.04884  loss_sent 0.00816  loss_emo 0.01114
+  step 1700/2140  loss_sarc 0.00142  loss_adv 0.04499  loss 0.05148  loss_sent 0.00767  loss_emo 0.00925
+  step 1800/2140  loss_sarc 0.00127  loss_adv 0.03427  loss 0.03947  loss_sent 0.006  loss_emo 0.0071
+  step 1900/2140  loss_sarc 0.00099  loss_adv 0.03369  loss 0.0385  loss_sent 0.00608  loss_emo 0.00664
+  step 2000/2140  loss_sarc 0.00095  loss_adv 0.02699  loss 0.03105  loss_sent 0.00529  loss_emo 0.00509
+  step 2100/2140  loss_sarc 0.00088  loss_adv 0.02523  loss 0.02896  loss_sent 0.0048  loss_emo 0.00468
+  step 2140/2140  loss_sarc 0.00081  loss_adv 0.02321  loss 0.02713  loss_sent 0.00502  loss_emo 0.00537
+A36_p30_s4: done in 16.74 min; dev macro-F1 0.9167, test macro-F1 0.9185, isarc_test macro-F1 0.5008

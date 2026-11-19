@@ -1,0 +1,387 @@
+{
+  "run_id": "A7_p70_s4",
+  "config": {
+    "arm": "A7",
+    "budget": 70,
+    "seed": 4,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.0,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.5,
+    "tag": "",
+    "helper_variant": "",
+    "eval_masked": false,
+    "train_data": "headlines",
+    "gen_lr": 0.0,
+    "step_mult": 1,
+    "pair_batch": 32,
+    "explain": false,
+    "pair_weight": 1.0,
+    "cleaned_drop_pct": 0.0,
+    "pretrain_steps": 0,
+    "init_dir": "",
+    "cons_weight": 0.0
+  },
+  "n_labeled": 15960,
+  "n_unlabeled": 6840,
+  "uses_u": false,
+  "pairs": null,
+  "explain": null,
+  "pretrain": null,
+  "init": null,
+  "diffusion": null,
+  "steps": 4990,
+  "minutes": 14.64,
+  "scores": {
+    "dev": {
+      "accuracy": 0.9266666666666666,
+      "macro_f1": 0.9263891248937978,
+      "f1_sarcastic": 0.9218691588785046,
+      "roc_auc": 0.980673586000074,
+      "n": 2850
+    },
+    "test": {
+      "accuracy": 0.9326552086987022,
+      "macro_f1": 0.9324177370846112,
+      "f1_sarcastic": 0.9284116331096197,
+      "roc_auc": 0.9812005446257671,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.7621428571428571,
+      "macro_f1": 0.5133606611280388,
+      "f1_sarcastic": 0.16541353383458646,
+      "roc_auc": 0.5517812499999999,
+      "n": 1400
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.6176,
+      "loss_adv": 0.69897,
+      "loss": 1.31657
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.37129,
+      "loss_adv": 0.5297,
+      "loss": 0.90099
+    },
+    {
+      "step": 300,
+      "loss_sarc": 0.33461,
+      "loss_adv": 0.49231,
+      "loss": 0.82692
+    },
+    {
+      "step": 400,
+      "loss_sarc": 0.28309,
+      "loss_adv": 0.44719,
+      "loss": 0.73027
+    },
+    {
+      "step": 500,
+      "loss_sarc": 0.27168,
+      "loss_adv": 0.42457,
+      "loss": 0.69626
+    },
+    {
+      "step": 600,
+      "loss_sarc": 0.16498,
+      "loss_adv": 0.31531,
+      "loss": 0.48029
+    },
+    {
+      "step": 700,
+      "loss_sarc": 0.16456,
+      "loss_adv": 0.30578,
+      "loss": 0.47034
+    },
+    {
+      "step": 800,
+      "loss_sarc": 0.16344,
+      "loss_adv": 0.30024,
+      "loss": 0.46368
+    },
+    {
+      "step": 900,
+      "loss_sarc": 0.16718,
+      "loss_adv": 0.29934,
+      "loss": 0.46652
+    },
+    {
+      "step": 1000,
+      "loss_sarc": 0.16378,
+      "loss_adv": 0.30863,
+      "loss": 0.47241
+    },
+    {
+      "step": 1100,
+      "loss_sarc": 0.04185,
+      "loss_adv": 0.14822,
+      "loss": 0.19007
+    },
+    {
+      "step": 1200,
+      "loss_sarc": 0.04391,
+      "loss_adv": 0.15285,
+      "loss": 0.19676
+    },
+    {
+      "step": 1300,
+      "loss_sarc": 0.05241,
+      "loss_adv": 0.15758,
+      "loss": 0.20999
+    },
+    {
+      "step": 1400,
+      "loss_sarc": 0.0419,
+      "loss_adv": 0.14432,
+      "loss": 0.18623
+    },
+    {
+      "step": 1500,
+      "loss_sarc": 0.03986,
+      "loss_adv": 0.14603,
+      "loss": 0.1859
+    },
+    {
+      "step": 1600,
+      "loss_sarc": 0.0107,
+      "loss_adv": 0.0825,
+      "loss": 0.0932
+    },
+    {
+      "step": 1700,
+      "loss_sarc": 0.01046,
+      "loss_adv": 0.09267,
+      "loss": 0.10313
+    },
+    {
+      "step": 1800,
+      "loss_sarc": 0.00881,
+      "loss_adv": 0.08094,
+      "loss": 0.08975
+    },
+    {
+      "step": 1900,
+      "loss_sarc": 0.01248,
+      "loss_adv": 0.09813,
+      "loss": 0.11061
+    },
+    {
+      "step": 2000,
+      "loss_sarc": 0.01078,
+      "loss_adv": 0.08991,
+      "loss": 0.10069
+    },
+    {
+      "step": 2100,
+      "loss_sarc": 0.00353,
+      "loss_adv": 0.05716,
+      "loss": 0.06069
+    },
+    {
+      "step": 2200,
+      "loss_sarc": 0.0017,
+      "loss_adv": 0.05493,
+      "loss": 0.05663
+    },
+    {
+      "step": 2300,
+      "loss_sarc": 0.00305,
+      "loss_adv": 0.07013,
+      "loss": 0.07319
+    },
+    {
+      "step": 2400,
+      "loss_sarc": 0.00294,
+      "loss_adv": 0.06364,
+      "loss": 0.06657
+    },
+    {
+      "step": 2500,
+      "loss_sarc": 0.00177,
+      "loss_adv": 0.05042,
+      "loss": 0.0522
+    },
+    {
+      "step": 2600,
+      "loss_sarc": 0.00046,
+      "loss_adv": 0.03822,
+      "loss": 0.03868
+    },
+    {
+      "step": 2700,
+      "loss_sarc": 0.00064,
+      "loss_adv": 0.04256,
+      "loss": 0.0432
+    },
+    {
+      "step": 2800,
+      "loss_sarc": 0.00044,
+      "loss_adv": 0.03749,
+      "loss": 0.03793
+    },
+    {
+      "step": 2900,
+      "loss_sarc": 0.00068,
+      "loss_adv": 0.05106,
+      "loss": 0.05175
+    },
+    {
+      "step": 3000,
+      "loss_sarc": 0.00068,
+      "loss_adv": 0.04102,
+      "loss": 0.04171
+    },
+    {
+      "step": 3100,
+      "loss_sarc": 0.00052,
+      "loss_adv": 0.03888,
+      "loss": 0.03941
+    },
+    {
+      "step": 3200,
+      "loss_sarc": 0.00034,
+      "loss_adv": 0.02798,
+      "loss": 0.02832
+    },
+    {
+      "step": 3300,
+      "loss_sarc": 0.00022,
+      "loss_adv": 0.02967,
+      "loss": 0.02989
+    },
+    {
+      "step": 3400,
+      "loss_sarc": 0.0003,
+      "loss_adv": 0.03505,
+      "loss": 0.03535
+    },
+    {
+      "step": 3500,
+      "loss_sarc": 0.00074,
+      "loss_adv": 0.02396,
+      "loss": 0.02471
+    },
+    {
+      "step": 3600,
+      "loss_sarc": 0.00011,
+      "loss_adv": 0.02343,
+      "loss": 0.02354
+    },
+    {
+      "step": 3700,
+      "loss_sarc": 0.0001,
+      "loss_adv": 0.021,
+      "loss": 0.02109
+    },
+    {
+      "step": 3800,
+      "loss_sarc": 0.0001,
+      "loss_adv": 0.02377,
+      "loss": 0.02387
+    },
+    {
+      "step": 3900,
+      "loss_sarc": 8e-05,
+      "loss_adv": 0.01538,
+      "loss": 0.01546
+    },
+    {
+      "step": 4000,
+      "loss_sarc": 6e-05,
+      "loss_adv": 0.01193,
+      "loss": 0.012
+    },
+    {
+      "step": 4100,
+      "loss_sarc": 5e-05,
+      "loss_adv": 0.01513,
+      "loss": 0.01518
+    },
+    {
+      "step": 4200,
+      "loss_sarc": 5e-05,
+      "loss_adv": 0.01589,
+      "loss": 0.01595
+    },
+    {
+      "step": 4300,
+      "loss_sarc": 4e-05,
+      "loss_adv": 0.0091,
+      "loss": 0.00914
+    },
+    {
+      "step": 4400,
+      "loss_sarc": 4e-05,
+      "loss_adv": 0.00685,
+      "loss": 0.00689
+    },
+    {
+      "step": 4500,
+      "loss_sarc": 4e-05,
+      "loss_adv": 0.01154,
+      "loss": 0.01158
+    },
+    {
+      "step": 4600,
+      "loss_sarc": 3e-05,
+      "loss_adv": 0.00785,
+      "loss": 0.00789
+    },
+    {
+      "step": 4700,
+      "loss_sarc": 3e-05,
+      "loss_adv": 0.00792,
+      "loss": 0.00795
+    },
+    {
+      "step": 4800,
+      "loss_sarc": 3e-05,
+      "loss_adv": 0.00804,
+      "loss": 0.00807
+    },
+    {
+      "step": 4900,
+      "loss_sarc": 3e-05,
+      "loss_adv": 0.00622,
+      "loss": 0.00625
+    },
+    {
+      "step": 4990,
+      "loss_sarc": 0.0001,
+      "loss_adv": 0.00562,
+      "loss": 0.00572
+    }
+  ],
+  "pseudo": null,
+  "helper_label_counts": null,
+  "commit": "c1c2a18679862fd897930846871a64f210f83651",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

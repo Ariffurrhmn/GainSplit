@@ -1,0 +1,11 @@
+A37_p10_s0: |L|=2280 |U|=20520 steps=720 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 18428.48it/s]
+  step 100/720  loss_sarc 0.5302  loss_unsup_real 0.09396  loss_unsup_fake 1.256  p_fake_real 0.08441  p_fake_fake 0.2862  loss_sent 0.9001  loss_emo 0.8065  loss_g_unsup 0.3465  loss_g_fm 0.04428  loss_d 2.392  loss_g 0.3907  loss 2.392
+  step 200/720  loss_sarc 0.133  loss_unsup_real 0.01812  loss_unsup_fake 0.7933  p_fake_real 0.01789  p_fake_fake 0.467  loss_sent 0.5682  loss_emo 0.5204  loss_g_unsup 0.718  loss_g_fm 0.07506  loss_d 1.271  loss_g 0.7931  loss 1.271
+  step 300/720  loss_sarc 0.03365  loss_unsup_real 0.00909  loss_unsup_fake 0.5451  p_fake_real 0.00904  p_fake_fake 0.5826  loss_sent 0.4127  loss_emo 0.3893  loss_g_unsup 0.9526  loss_g_fm 0.1001  loss_d 0.8285  loss_g 1.053  loss 0.8285
+  step 400/720  loss_sarc 0.01761  loss_unsup_real 0.01007  loss_unsup_fake 0.5461  p_fake_real 0.00999  p_fake_fake 0.5814  loss_sent 0.3436  loss_emo 0.3184  loss_g_unsup 0.9289  loss_g_fm 0.09981  loss_d 0.7724  loss_g 1.029  loss 0.7724
+  step 500/720  loss_sarc 0.01407  loss_unsup_real 0.01208  loss_unsup_fake 0.4436  p_fake_real 0.01196  p_fake_fake 0.6438  loss_sent 0.311  loss_emo 0.2834  loss_g_unsup 1.078  loss_g_fm 0.09964  loss_d 0.6481  loss_g 1.178  loss 0.6481
+  step 600/720  loss_sarc 0.01382  loss_unsup_real 0.0145  loss_unsup_fake 0.4729  p_fake_real 0.01433  p_fake_fake 0.6247  loss_sent 0.2963  loss_emo 0.2601  loss_g_unsup 1.008  loss_g_fm 0.0911  loss_d 0.6681  loss_g 1.099  loss 0.6681
+  step 700/720  loss_sarc 0.01496  loss_unsup_real 0.01614  loss_unsup_fake 0.4783  p_fake_real 0.01591  p_fake_fake 0.621  loss_sent 0.2337  loss_emo 0.2191  loss_g_unsup 0.9829  loss_g_fm 0.0857  loss_d 0.6452  loss_g 1.069  loss 0.6452
+  step 720/720  loss_sarc 0.01539  loss_unsup_real 0.01677  loss_unsup_fake 0.4812  p_fake_real 0.01653  p_fake_fake 0.6192  loss_sent 0.204  loss_emo 0.1913  loss_g_unsup 0.9726  loss_g_fm 0.08327  loss_d 0.632  loss_g 1.056  loss 0.632
+A37_p10_s0: done in 2.0 min; dev macro-F1 0.8879, test macro-F1 0.9011, isarc_test macro-F1 0.5011

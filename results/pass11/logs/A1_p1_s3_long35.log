@@ -1,0 +1,88 @@
+A1_p1_s3_long35: |L|=228 |U|=22572 steps=7000 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2615.77it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/7000  loss_sarc 0.5685  loss 0.5685
+  step 200/7000  loss_sarc 0.03758  loss 0.03758
+  step 300/7000  loss_sarc 0.0004  loss 0.0004
+  step 400/7000  loss_sarc 0.00015  loss 0.00015
+  step 500/7000  loss_sarc 8e-05  loss 8e-05
+  step 600/7000  loss_sarc 5e-05  loss 5e-05
+  step 700/7000  loss_sarc 0.00945  loss 0.00945
+  step 800/7000  loss_sarc 0.01608  loss 0.01608
+  step 900/7000  loss_sarc 0.00243  loss 0.00243
+  step 1000/7000  loss_sarc 2e-05  loss 2e-05
+  step 1100/7000  loss_sarc 0.00063  loss 0.00063
+  step 1200/7000  loss_sarc 0.00299  loss 0.00299
+  step 1300/7000  loss_sarc 1e-05  loss 1e-05
+  step 1400/7000  loss_sarc 1e-05  loss 1e-05
+  step 1500/7000  loss_sarc 1e-05  loss 1e-05
+  step 1600/7000  loss_sarc 1e-05  loss 1e-05
+  step 1700/7000  loss_sarc 1e-05  loss 1e-05
+  step 1800/7000  loss_sarc 1e-05  loss 1e-05
+  step 1900/7000  loss_sarc 1e-05  loss 1e-05
+  step 2000/7000  loss_sarc 1e-05  loss 1e-05
+  step 2100/7000  loss_sarc 0  loss 0
+  step 2200/7000  loss_sarc 0  loss 0
+  step 2300/7000  loss_sarc 0  loss 0
+  step 2400/7000  loss_sarc 0  loss 0
+  step 2500/7000  loss_sarc 0  loss 0
+  step 2600/7000  loss_sarc 0  loss 0
+  step 2700/7000  loss_sarc 0  loss 0
+  step 2800/7000  loss_sarc 0  loss 0
+  step 2900/7000  loss_sarc 0  loss 0
+  step 3000/7000  loss_sarc 0  loss 0
+  step 3100/7000  loss_sarc 0  loss 0
+  step 3200/7000  loss_sarc 0  loss 0
+  step 3300/7000  loss_sarc 0  loss 0
+  step 3400/7000  loss_sarc 0  loss 0
+  step 3500/7000  loss_sarc 0.00031  loss 0.00031
+  step 3600/7000  loss_sarc 0.02882  loss 0.02882
+  step 3700/7000  loss_sarc 0.00285  loss 0.00285
+  step 3800/7000  loss_sarc 1e-05  loss 1e-05
+  step 3900/7000  loss_sarc 1e-05  loss 1e-05
+  step 4000/7000  loss_sarc 1e-05  loss 1e-05
+  step 4100/7000  loss_sarc 1e-05  loss 1e-05
+  step 4200/7000  loss_sarc 1e-05  loss 1e-05
+  step 4300/7000  loss_sarc 0  loss 0
+  step 4400/7000  loss_sarc 0  loss 0
+  step 4500/7000  loss_sarc 0  loss 0
+  step 4600/7000  loss_sarc 0  loss 0
+  step 4700/7000  loss_sarc 0  loss 0
+  step 4800/7000  loss_sarc 0  loss 0
+  step 4900/7000  loss_sarc 0  loss 0
+  step 5000/7000  loss_sarc 0  loss 0
+  step 5100/7000  loss_sarc 0  loss 0
+  step 5200/7000  loss_sarc 0  loss 0
+  step 5300/7000  loss_sarc 0  loss 0
+  step 5400/7000  loss_sarc 0  loss 0
+  step 5500/7000  loss_sarc 0  loss 0
+  step 5600/7000  loss_sarc 0  loss 0
+  step 5700/7000  loss_sarc 0  loss 0
+  step 5800/7000  loss_sarc 0  loss 0
+  step 5900/7000  loss_sarc 0  loss 0
+  step 6000/7000  loss_sarc 0  loss 0
+  step 6100/7000  loss_sarc 0  loss 0
+  step 6200/7000  loss_sarc 0  loss 0
+  step 6300/7000  loss_sarc 0  loss 0
+  step 6400/7000  loss_sarc 0  loss 0
+  step 6500/7000  loss_sarc 0  loss 0
+  step 6600/7000  loss_sarc 0  loss 0
+  step 6700/7000  loss_sarc 0  loss 0
+  step 6800/7000  loss_sarc 0  loss 0
+  step 6900/7000  loss_sarc 0  loss 0
+  step 7000/7000  loss_sarc 0  loss 0
+A1_p1_s3_long35: done in 12.33 min; dev macro-F1 0.8115, test macro-F1 0.8193, isarc_test macro-F1 0.4759

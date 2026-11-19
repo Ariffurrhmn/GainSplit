@@ -1,0 +1,88 @@
+A4_p1_s4_long35: |L|=228 |U|=22572 steps=7000 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2532.82it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+  step 100/7000  loss_sarc 0.8841  loss_unsup_real 0.2249  loss_unsup_fake 1.098  p_fake_real 0.1879  p_fake_fake 0.334  loss_g_unsup 0.4074  loss_g_fm 0.04427  loss_d 2.207  loss_g 0.4517  loss 2.207
+  step 200/7000  loss_sarc 0.12  loss_unsup_real 0.02018  loss_unsup_fake 1.179  p_fake_real 0.01995  p_fake_fake 0.308  loss_g_unsup 0.3714  loss_g_fm 0.07274  loss_d 1.319  loss_g 0.4441  loss 1.319
+  step 300/7000  loss_sarc 0.01578  loss_unsup_real 0.01248  loss_unsup_fake 1.001  p_fake_real 0.01238  p_fake_fake 0.3686  loss_g_unsup 0.4711  loss_g_fm 0.07815  loss_d 1.029  loss_g 0.5493  loss 1.029
+  step 400/7000  loss_sarc 0.01311  loss_unsup_real 0.00744  loss_unsup_fake 0.9465  p_fake_real 0.0074  p_fake_fake 0.389  loss_g_unsup 0.5143  loss_g_fm 0.07986  loss_d 0.967  loss_g 0.5941  loss 0.967
+  step 500/7000  loss_sarc 0.00878  loss_unsup_real 0.00637  loss_unsup_fake 0.6804  p_fake_real 0.00635  p_fake_fake 0.5099  loss_g_unsup 0.7671  loss_g_fm 0.09623  loss_d 0.6955  loss_g 0.8633  loss 0.6955
+  step 600/7000  loss_sarc 0.03184  loss_unsup_real 0.0054  loss_unsup_fake 0.6183  p_fake_real 0.00538  p_fake_fake 0.5443  loss_g_unsup 0.8582  loss_g_fm 0.1081  loss_d 0.6555  loss_g 0.9663  loss 0.6555
+  step 700/7000  loss_sarc 0.01982  loss_unsup_real 0.0079  loss_unsup_fake 0.37  p_fake_real 0.00786  p_fake_fake 0.7065  loss_g_unsup 1.461  loss_g_fm 0.1101  loss_d 0.3977  loss_g 1.571  loss 0.3977
+  step 800/7000  loss_sarc 0.00659  loss_unsup_real 0.00221  loss_unsup_fake 0.2786  p_fake_real 0.0022  p_fake_fake 0.7612  loss_g_unsup 1.639  loss_g_fm 0.1324  loss_d 0.2874  loss_g 1.771  loss 0.2874
+  step 900/7000  loss_sarc 0.00508  loss_unsup_real 0.00339  loss_unsup_fake 0.2692  p_fake_real 0.00338  p_fake_fake 0.7672  loss_g_unsup 1.653  loss_g_fm 0.1283  loss_d 0.2776  loss_g 1.781  loss 0.2776
+  step 1000/7000  loss_sarc 0.00347  loss_unsup_real 0.00248  loss_unsup_fake 0.1249  p_fake_real 0.00248  p_fake_fake 0.8835  loss_g_unsup 2.375  loss_g_fm 0.1376  loss_d 0.1308  loss_g 2.512  loss 0.1308
+  step 1100/7000  loss_sarc 0.00302  loss_unsup_real 0.00202  loss_unsup_fake 0.2041  p_fake_real 0.00202  p_fake_fake 0.8172  loss_g_unsup 1.899  loss_g_fm 0.0967  loss_d 0.2092  loss_g 1.996  loss 0.2092
+  step 1200/7000  loss_sarc 0.0028  loss_unsup_real 0.00173  loss_unsup_fake 0.1406  p_fake_real 0.00173  p_fake_fake 0.8701  loss_g_unsup 2.284  loss_g_fm 0.1246  loss_d 0.1451  loss_g 2.408  loss 0.1451
+  step 1300/7000  loss_sarc 0.0026  loss_unsup_real 0.00171  loss_unsup_fake 0.1038  p_fake_real 0.0017  p_fake_fake 0.9019  loss_g_unsup 2.538  loss_g_fm 0.116  loss_d 0.1081  loss_g 2.654  loss 0.1081
+  step 1400/7000  loss_sarc 0.00287  loss_unsup_real 0.00182  loss_unsup_fake 0.1052  p_fake_real 0.00182  p_fake_fake 0.9006  loss_g_unsup 2.504  loss_g_fm 0.08799  loss_d 0.1099  loss_g 2.592  loss 0.1099
+  step 1500/7000  loss_sarc 0.00205  loss_unsup_real 0.00124  loss_unsup_fake 0.09604  p_fake_real 0.00124  p_fake_fake 0.9089  loss_g_unsup 2.611  loss_g_fm 0.1011  loss_d 0.09932  loss_g 2.712  loss 0.09932
+  step 1600/7000  loss_sarc 0.00247  loss_unsup_real 0.00171  loss_unsup_fake 0.07777  p_fake_real 0.0017  p_fake_fake 0.9255  loss_g_unsup 2.8  loss_g_fm 0.09693  loss_d 0.08194  loss_g 2.897  loss 0.08194
+  step 1700/7000  loss_sarc 0.0025  loss_unsup_real 0.00175  loss_unsup_fake 0.07044  p_fake_real 0.00175  p_fake_fake 0.9322  loss_g_unsup 2.867  loss_g_fm 0.09036  loss_d 0.07469  loss_g 2.957  loss 0.07469
+  step 1800/7000  loss_sarc 0.00215  loss_unsup_real 0.00142  loss_unsup_fake 0.06525  p_fake_real 0.00142  p_fake_fake 0.937  loss_g_unsup 2.944  loss_g_fm 0.0873  loss_d 0.06883  loss_g 3.031  loss 0.06883
+  step 1900/7000  loss_sarc 0.00223  loss_unsup_real 0.00158  loss_unsup_fake 0.05527  p_fake_real 0.00157  p_fake_fake 0.9464  loss_g_unsup 3.098  loss_g_fm 0.08649  loss_d 0.05908  loss_g 3.185  loss 0.05908
+  step 2000/7000  loss_sarc 0.00598  loss_unsup_real 0.00165  loss_unsup_fake 0.05239  p_fake_real 0.00165  p_fake_fake 0.9491  loss_g_unsup 3.137  loss_g_fm 0.08651  loss_d 0.06002  loss_g 3.224  loss 0.06002
+  step 2100/7000  loss_sarc 0.01274  loss_unsup_real 0.00161  loss_unsup_fake 0.04754  p_fake_real 0.00161  p_fake_fake 0.9537  loss_g_unsup 3.233  loss_g_fm 0.09126  loss_d 0.06189  loss_g 3.325  loss 0.06189
+  step 2200/7000  loss_sarc 0.00893  loss_unsup_real 0.00215  loss_unsup_fake 0.04396  p_fake_real 0.00214  p_fake_fake 0.9571  loss_g_unsup 3.303  loss_g_fm 0.09341  loss_d 0.05504  loss_g 3.396  loss 0.05504
+  step 2300/7000  loss_sarc 0.0139  loss_unsup_real 0.00166  loss_unsup_fake 0.03732  p_fake_real 0.00166  p_fake_fake 0.9634  loss_g_unsup 3.464  loss_g_fm 0.08548  loss_d 0.05288  loss_g 3.549  loss 0.05288
+  step 2400/7000  loss_sarc 0.0023  loss_unsup_real 0.00194  loss_unsup_fake 0.03403  p_fake_real 0.00194  p_fake_fake 0.9666  loss_g_unsup 3.558  loss_g_fm 0.08104  loss_d 0.03826  loss_g 3.639  loss 0.03826
+  step 2500/7000  loss_sarc 0.00157  loss_unsup_real 0.00135  loss_unsup_fake 0.03075  p_fake_real 0.00135  p_fake_fake 0.9698  loss_g_unsup 3.642  loss_g_fm 0.08847  loss_d 0.03368  loss_g 3.73  loss 0.03368
+  step 2600/7000  loss_sarc 0.01574  loss_unsup_real 0.00152  loss_unsup_fake 0.0292  p_fake_real 0.00152  p_fake_fake 0.9712  loss_g_unsup 3.686  loss_g_fm 0.09021  loss_d 0.04647  loss_g 3.776  loss 0.04647
+  step 2700/7000  loss_sarc 0.0053  loss_unsup_real 0.00142  loss_unsup_fake 0.02658  p_fake_real 0.00142  p_fake_fake 0.9738  loss_g_unsup 3.779  loss_g_fm 0.095  loss_d 0.0333  loss_g 3.874  loss 0.0333
+  step 2800/7000  loss_sarc 0.00138  loss_unsup_real 0.00122  loss_unsup_fake 0.023  p_fake_real 0.00122  p_fake_fake 0.9773  loss_g_unsup 3.915  loss_g_fm 0.09522  loss_d 0.0256  loss_g 4.01  loss 0.0256
+  step 2900/7000  loss_sarc 0.02742  loss_unsup_real 0.00138  loss_unsup_fake 0.02309  p_fake_real 0.00138  p_fake_fake 0.9772  loss_g_unsup 3.912  loss_g_fm 0.08922  loss_d 0.05189  loss_g 4.001  loss 0.05189
+  step 3000/7000  loss_sarc 0.0014  loss_unsup_real 0.00128  loss_unsup_fake 0.0205  p_fake_real 0.00128  p_fake_fake 0.9797  loss_g_unsup 4.025  loss_g_fm 0.0888  loss_d 0.02318  loss_g 4.114  loss 0.02318
+  step 3100/7000  loss_sarc 0.00137  loss_unsup_real 0.00119  loss_unsup_fake 0.01807  p_fake_real 0.00119  p_fake_fake 0.9821  loss_g_unsup 4.152  loss_g_fm 0.1036  loss_d 0.02063  loss_g 4.256  loss 0.02063
+  step 3200/7000  loss_sarc 0.00113  loss_unsup_real 0.00102  loss_unsup_fake 0.01572  p_fake_real 0.00102  p_fake_fake 0.9844  loss_g_unsup 4.283  loss_g_fm 0.09622  loss_d 0.01786  loss_g 4.38  loss 0.01786
+  step 3300/7000  loss_sarc 0.00096  loss_unsup_real 0.00085  loss_unsup_fake 0.01485  p_fake_real 0.00085  p_fake_fake 0.9853  loss_g_unsup 4.342  loss_g_fm 0.09973  loss_d 0.01666  loss_g 4.442  loss 0.01666
+  step 3400/7000  loss_sarc 0.00103  loss_unsup_real 0.0009  loss_unsup_fake 0.01464  p_fake_real 0.0009  p_fake_fake 0.9855  loss_g_unsup 4.354  loss_g_fm 0.09508  loss_d 0.01657  loss_g 4.449  loss 0.01657
+  step 3500/7000  loss_sarc 0.00432  loss_unsup_real 0.00108  loss_unsup_fake 0.01337  p_fake_real 0.00108  p_fake_fake 0.9867  loss_g_unsup 4.44  loss_g_fm 0.09461  loss_d 0.01877  loss_g 4.534  loss 0.01877
+  step 3600/7000  loss_sarc 0.00116  loss_unsup_real 0.00097  loss_unsup_fake 0.01218  p_fake_real 0.00097  p_fake_fake 0.9879  loss_g_unsup 4.536  loss_g_fm 0.1  loss_d 0.0143  loss_g 4.636  loss 0.0143
+  step 3700/7000  loss_sarc 0.00096  loss_unsup_real 0.00078  loss_unsup_fake 0.01123  p_fake_real 0.00078  p_fake_fake 0.9888  loss_g_unsup 4.606  loss_g_fm 0.09831  loss_d 0.01297  loss_g 4.704  loss 0.01297
+  step 3800/7000  loss_sarc 0.00383  loss_unsup_real 0.00071  loss_unsup_fake 0.01053  p_fake_real 0.00071  p_fake_fake 0.9895  loss_g_unsup 4.671  loss_g_fm 0.09762  loss_d 0.01507  loss_g 4.769  loss 0.01507
+  step 3900/7000  loss_sarc 0.01679  loss_unsup_real 0.00108  loss_unsup_fake 0.01076  p_fake_real 0.00108  p_fake_fake 0.9893  loss_g_unsup 4.651  loss_g_fm 0.08417  loss_d 0.02863  loss_g 4.735  loss 0.02863
+  step 4000/7000  loss_sarc 0.00118  loss_unsup_real 0.00095  loss_unsup_fake 0.01014  p_fake_real 0.00095  p_fake_fake 0.9899  loss_g_unsup 4.705  loss_g_fm 0.08739  loss_d 0.01227  loss_g 4.792  loss 0.01227
+  step 4100/7000  loss_sarc 0.00102  loss_unsup_real 0.00079  loss_unsup_fake 0.00911  p_fake_real 0.00078  p_fake_fake 0.9909  loss_g_unsup 4.806  loss_g_fm 0.08927  loss_d 0.01091  loss_g 4.895  loss 0.01091
+  step 4200/7000  loss_sarc 0.0009  loss_unsup_real 0.00069  loss_unsup_fake 0.00821  p_fake_real 0.00069  p_fake_fake 0.9918  loss_g_unsup 4.912  loss_g_fm 0.08725  loss_d 0.0098  loss_g 4.999  loss 0.0098
+  step 4300/7000  loss_sarc 0.00086  loss_unsup_real 0.00063  loss_unsup_fake 0.00744  p_fake_real 0.00063  p_fake_fake 0.9926  loss_g_unsup 5.011  loss_g_fm 0.08564  loss_d 0.00893  loss_g 5.097  loss 0.00893
+  step 4400/7000  loss_sarc 0.00082  loss_unsup_real 0.00058  loss_unsup_fake 0.00704  p_fake_real 0.00058  p_fake_fake 0.993  loss_g_unsup 5.065  loss_g_fm 0.08346  loss_d 0.00845  loss_g 5.148  loss 0.00845
+  step 4500/7000  loss_sarc 0.00082  loss_unsup_real 0.00057  loss_unsup_fake 0.00699  p_fake_real 0.00057  p_fake_fake 0.993  loss_g_unsup 5.066  loss_g_fm 0.08468  loss_d 0.00837  loss_g 5.151  loss 0.00837
+  step 4600/7000  loss_sarc 0.00079  loss_unsup_real 0.00056  loss_unsup_fake 0.00673  p_fake_real 0.00056  p_fake_fake 0.9933  loss_g_unsup 5.103  loss_g_fm 0.08729  loss_d 0.00808  loss_g 5.19  loss 0.00808
+  step 4700/7000  loss_sarc 0.00076  loss_unsup_real 0.00054  loss_unsup_fake 0.00639  p_fake_real 0.00054  p_fake_fake 0.9936  loss_g_unsup 5.152  loss_g_fm 0.09104  loss_d 0.00769  loss_g 5.243  loss 0.00769
+  step 4800/7000  loss_sarc 0.00072  loss_unsup_real 0.00052  loss_unsup_fake 0.00584  p_fake_real 0.00052  p_fake_fake 0.9942  loss_g_unsup 5.246  loss_g_fm 0.09763  loss_d 0.00708  loss_g 5.344  loss 0.00708
+  step 4900/7000  loss_sarc 0.00064  loss_unsup_real 0.00046  loss_unsup_fake 0.00523  p_fake_real 0.00046  p_fake_fake 0.9948  loss_g_unsup 5.351  loss_g_fm 0.102  loss_d 0.00633  loss_g 5.452  loss 0.00633
+  step 5000/7000  loss_sarc 0.0006  loss_unsup_real 0.00043  loss_unsup_fake 0.00482  p_fake_real 0.00043  p_fake_fake 0.9952  loss_g_unsup 5.426  loss_g_fm 0.1024  loss_d 0.00585  loss_g 5.528  loss 0.00585
+  step 5100/7000  loss_sarc 0.00059  loss_unsup_real 0.00042  loss_unsup_fake 0.00451  p_fake_real 0.00042  p_fake_fake 0.9955  loss_g_unsup 5.487  loss_g_fm 0.1027  loss_d 0.00552  loss_g 5.59  loss 0.00552
+  step 5200/7000  loss_sarc 0.00067  loss_unsup_real 0.00041  loss_unsup_fake 0.00437  p_fake_real 0.00041  p_fake_fake 0.9956  loss_g_unsup 5.528  loss_g_fm 0.1021  loss_d 0.00545  loss_g 5.63  loss 0.00545
+  step 5300/7000  loss_sarc 0.00057  loss_unsup_real 0.00041  loss_unsup_fake 0.00427  p_fake_real 0.00041  p_fake_fake 0.9957  loss_g_unsup 5.557  loss_g_fm 0.09769  loss_d 0.00525  loss_g 5.654  loss 0.00525
+  step 5400/7000  loss_sarc 0.00054  loss_unsup_real 0.00039  loss_unsup_fake 0.00414  p_fake_real 0.00039  p_fake_fake 0.9959  loss_g_unsup 5.578  loss_g_fm 0.09531  loss_d 0.00507  loss_g 5.673  loss 0.00507
+  step 5500/7000  loss_sarc 0.00054  loss_unsup_real 0.00038  loss_unsup_fake 0.00406  p_fake_real 0.00038  p_fake_fake 0.996  loss_g_unsup 5.597  loss_g_fm 0.09429  loss_d 0.00498  loss_g 5.691  loss 0.00498
+  step 5600/7000  loss_sarc 0.00052  loss_unsup_real 0.00037  loss_unsup_fake 0.00397  p_fake_real 0.00037  p_fake_fake 0.996  loss_g_unsup 5.622  loss_g_fm 0.0931  loss_d 0.00486  loss_g 5.715  loss 0.00486
+  step 5700/7000  loss_sarc 0.00052  loss_unsup_real 0.00036  loss_unsup_fake 0.00383  p_fake_real 0.00036  p_fake_fake 0.9962  loss_g_unsup 5.652  loss_g_fm 0.09294  loss_d 0.00471  loss_g 5.745  loss 0.00471
+  step 5800/7000  loss_sarc 0.0005  loss_unsup_real 0.00035  loss_unsup_fake 0.0037  p_fake_real 0.00035  p_fake_fake 0.9963  loss_g_unsup 5.678  loss_g_fm 0.09519  loss_d 0.00455  loss_g 5.774  loss 0.00455
+  step 5900/7000  loss_sarc 0.0005  loss_unsup_real 0.00035  loss_unsup_fake 0.00355  p_fake_real 0.00035  p_fake_fake 0.9965  loss_g_unsup 5.724  loss_g_fm 0.09714  loss_d 0.0044  loss_g 5.821  loss 0.0044
+  step 6000/7000  loss_sarc 0.00048  loss_unsup_real 0.00033  loss_unsup_fake 0.00341  p_fake_real 0.00033  p_fake_fake 0.9966  loss_g_unsup 5.752  loss_g_fm 0.09916  loss_d 0.00422  loss_g 5.851  loss 0.00422
+  step 6100/7000  loss_sarc 0.00045  loss_unsup_real 0.00032  loss_unsup_fake 0.00325  p_fake_real 0.00032  p_fake_fake 0.9968  loss_g_unsup 5.796  loss_g_fm 0.09998  loss_d 0.00402  loss_g 5.896  loss 0.00402
+  step 6200/7000  loss_sarc 0.00043  loss_unsup_real 0.00031  loss_unsup_fake 0.0031  p_fake_real 0.00031  p_fake_fake 0.9969  loss_g_unsup 5.853  loss_g_fm 0.1035  loss_d 0.00384  loss_g 5.956  loss 0.00384
+  step 6300/7000  loss_sarc 0.00042  loss_unsup_real 0.00029  loss_unsup_fake 0.00297  p_fake_real 0.00029  p_fake_fake 0.997  loss_g_unsup 5.886  loss_g_fm 0.1077  loss_d 0.00368  loss_g 5.993  loss 0.00368
+  step 6400/7000  loss_sarc 0.0004  loss_unsup_real 0.00028  loss_unsup_fake 0.00287  p_fake_real 0.00028  p_fake_fake 0.9971  loss_g_unsup 5.924  loss_g_fm 0.1088  loss_d 0.00355  loss_g 6.033  loss 0.00355
+  step 6500/7000  loss_sarc 0.00038  loss_unsup_real 0.00027  loss_unsup_fake 0.00278  p_fake_real 0.00027  p_fake_fake 0.9972  loss_g_unsup 5.957  loss_g_fm 0.11  loss_d 0.00343  loss_g 6.067  loss 0.00343
+  step 6600/7000  loss_sarc 0.00037  loss_unsup_real 0.00026  loss_unsup_fake 0.00271  p_fake_real 0.00026  p_fake_fake 0.9973  loss_g_unsup 5.98  loss_g_fm 0.1098  loss_d 0.00333  loss_g 6.09  loss 0.00333
+  step 6700/7000  loss_sarc 0.00036  loss_unsup_real 0.00025  loss_unsup_fake 0.00261  p_fake_real 0.00025  p_fake_fake 0.9974  loss_g_unsup 6.009  loss_g_fm 0.1103  loss_d 0.00323  loss_g 6.119  loss 0.00323
+  step 6800/7000  loss_sarc 0.00035  loss_unsup_real 0.00024  loss_unsup_fake 0.00254  p_fake_real 0.00024  p_fake_fake 0.9975  loss_g_unsup 6.037  loss_g_fm 0.1109  loss_d 0.00313  loss_g 6.148  loss 0.00313
+  step 6900/7000  loss_sarc 0.00034  loss_unsup_real 0.00024  loss_unsup_fake 0.00249  p_fake_real 0.00024  p_fake_fake 0.9975  loss_g_unsup 6.054  loss_g_fm 0.1115  loss_d 0.00307  loss_g 6.165  loss 0.00307
+  step 7000/7000  loss_sarc 0.00033  loss_unsup_real 0.00024  loss_unsup_fake 0.00247  p_fake_real 0.00024  p_fake_fake 0.9975  loss_g_unsup 6.06  loss_g_fm 0.1104  loss_d 0.00304  loss_g 6.17  loss 0.00304
+A4_p1_s4_long35: done in 18.07 min; dev macro-F1 0.7738, test macro-F1 0.7861, isarc_test macro-F1 0.4831

@@ -1,0 +1,19 @@
+Loading weights:   0%|          | 0/202 [00:00<?, ?it/s]Loading weights: 100%|██████████| 202/202 [00:00<00:00, 2639.39it/s]
+[transformers] [1mBertForMaskedLM LOAD REPORT[0m from: bert-base-uncased
+Key                         | Status     |  | 
+----------------------------+------------+--+-
+bert.pooler.dense.bias      | UNEXPECTED |  | 
+cls.seq_relationship.bias   | UNEXPECTED |  | 
+bert.pooler.dense.weight    | UNEXPECTED |  | 
+cls.seq_relationship.weight | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/ssl_pretrain.py:379: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+before pretraining: dev {'loss': 5.85272}; probe {'p1': {'dev_macro_f1_mean': 76.158, 'dev_macro_f1_sd': 0.687, 'per_seed': [76.407, 76.211, 74.965, 76.616, 76.591]}, 'p10': {'dev_macro_f1_mean': 80.627, 'dev_macro_f1_sd': 0.616, 'per_seed': [81.226, 80.734, 80.224, 79.789, 81.161]}}
+  step 250/350  loss 4.083
+  step 350/350  loss 3.852
+after pretraining: dev {'loss': 3.56678}; probe {'p1': {'dev_macro_f1_mean': 78.101, 'dev_macro_f1_sd': 0.883, 'per_seed': [78.881, 78.071, 76.733, 78.884, 77.938]}, 'p10': {'dev_macro_f1_mean': 82.675, 'dev_macro_f1_sd': 0.475, 'per_seed': [83.075, 82.268, 82.242, 82.514, 83.277]}}
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  2.15it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  2.15it/s]
+saved mlm encoder to /kaggle/working/ckpt/mlm_dose350 (2.01 min)

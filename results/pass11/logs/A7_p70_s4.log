@@ -1,0 +1,70 @@
+A7_p70_s4: |L|=15960 |U|=6840 steps=4990 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2574.55it/s]
+[transformers] [1mBertModel LOAD REPORT[0m from: bert-base-uncased
+Key                                        | Status     |  | 
+-------------------------------------------+------------+--+-
+cls.seq_relationship.weight                | UNEXPECTED |  | 
+cls.predictions.bias                       | UNEXPECTED |  | 
+cls.predictions.transform.dense.bias       | UNEXPECTED |  | 
+cls.predictions.transform.dense.weight     | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.bias   | UNEXPECTED |  | 
+cls.predictions.transform.LayerNorm.weight | UNEXPECTED |  | 
+bert.pooler.dense.weight                   | UNEXPECTED |  | 
+bert.pooler.dense.bias                     | UNEXPECTED |  | 
+cls.seq_relationship.bias                  | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/train.py:239: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/4990  loss_sarc 0.6176  loss_adv 0.699  loss 1.317
+  step 200/4990  loss_sarc 0.3713  loss_adv 0.5297  loss 0.901
+  step 300/4990  loss_sarc 0.3346  loss_adv 0.4923  loss 0.8269
+  step 400/4990  loss_sarc 0.2831  loss_adv 0.4472  loss 0.7303
+  step 500/4990  loss_sarc 0.2717  loss_adv 0.4246  loss 0.6963
+  step 600/4990  loss_sarc 0.165  loss_adv 0.3153  loss 0.4803
+  step 700/4990  loss_sarc 0.1646  loss_adv 0.3058  loss 0.4703
+  step 800/4990  loss_sarc 0.1634  loss_adv 0.3002  loss 0.4637
+  step 900/4990  loss_sarc 0.1672  loss_adv 0.2993  loss 0.4665
+  step 1000/4990  loss_sarc 0.1638  loss_adv 0.3086  loss 0.4724
+  step 1100/4990  loss_sarc 0.04185  loss_adv 0.1482  loss 0.1901
+  step 1200/4990  loss_sarc 0.04391  loss_adv 0.1529  loss 0.1968
+  step 1300/4990  loss_sarc 0.05241  loss_adv 0.1576  loss 0.21
+  step 1400/4990  loss_sarc 0.0419  loss_adv 0.1443  loss 0.1862
+  step 1500/4990  loss_sarc 0.03986  loss_adv 0.146  loss 0.1859
+  step 1600/4990  loss_sarc 0.0107  loss_adv 0.0825  loss 0.0932
+  step 1700/4990  loss_sarc 0.01046  loss_adv 0.09267  loss 0.1031
+  step 1800/4990  loss_sarc 0.00881  loss_adv 0.08094  loss 0.08975
+  step 1900/4990  loss_sarc 0.01248  loss_adv 0.09813  loss 0.1106
+  step 2000/4990  loss_sarc 0.01078  loss_adv 0.08991  loss 0.1007
+  step 2100/4990  loss_sarc 0.00353  loss_adv 0.05716  loss 0.06069
+  step 2200/4990  loss_sarc 0.0017  loss_adv 0.05493  loss 0.05663
+  step 2300/4990  loss_sarc 0.00305  loss_adv 0.07013  loss 0.07319
+  step 2400/4990  loss_sarc 0.00294  loss_adv 0.06364  loss 0.06657
+  step 2500/4990  loss_sarc 0.00177  loss_adv 0.05042  loss 0.0522
+  step 2600/4990  loss_sarc 0.00046  loss_adv 0.03822  loss 0.03868
+  step 2700/4990  loss_sarc 0.00064  loss_adv 0.04256  loss 0.0432
+  step 2800/4990  loss_sarc 0.00044  loss_adv 0.03749  loss 0.03793
+  step 2900/4990  loss_sarc 0.00068  loss_adv 0.05106  loss 0.05175
+  step 3000/4990  loss_sarc 0.00068  loss_adv 0.04102  loss 0.04171
+  step 3100/4990  loss_sarc 0.00052  loss_adv 0.03888  loss 0.03941
+  step 3200/4990  loss_sarc 0.00034  loss_adv 0.02798  loss 0.02832
+  step 3300/4990  loss_sarc 0.00022  loss_adv 0.02967  loss 0.02989
+  step 3400/4990  loss_sarc 0.0003  loss_adv 0.03505  loss 0.03535
+  step 3500/4990  loss_sarc 0.00074  loss_adv 0.02396  loss 0.02471
+  step 3600/4990  loss_sarc 0.00011  loss_adv 0.02343  loss 0.02354
+  step 3700/4990  loss_sarc 0.0001  loss_adv 0.021  loss 0.02109
+  step 3800/4990  loss_sarc 0.0001  loss_adv 0.02377  loss 0.02387
+  step 3900/4990  loss_sarc 8e-05  loss_adv 0.01538  loss 0.01546
+  step 4000/4990  loss_sarc 6e-05  loss_adv 0.01193  loss 0.012
+  step 4100/4990  loss_sarc 5e-05  loss_adv 0.01513  loss 0.01518
+  step 4200/4990  loss_sarc 5e-05  loss_adv 0.01589  loss 0.01595
+  step 4300/4990  loss_sarc 4e-05  loss_adv 0.0091  loss 0.00914
+  step 4400/4990  loss_sarc 4e-05  loss_adv 0.00685  loss 0.00689
+  step 4500/4990  loss_sarc 4e-05  loss_adv 0.01154  loss 0.01158
+  step 4600/4990  loss_sarc 3e-05  loss_adv 0.00785  loss 0.00789
+  step 4700/4990  loss_sarc 3e-05  loss_adv 0.00792  loss 0.00795
+  step 4800/4990  loss_sarc 3e-05  loss_adv 0.00804  loss 0.00807
+  step 4900/4990  loss_sarc 3e-05  loss_adv 0.00622  loss 0.00625
+  step 4990/4990  loss_sarc 0.0001  loss_adv 0.00562  loss 0.00572
+A7_p70_s4: done in 14.64 min; dev macro-F1 0.9264, test macro-F1 0.9324, isarc_test macro-F1 0.5134
