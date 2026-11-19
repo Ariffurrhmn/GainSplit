@@ -69,17 +69,75 @@ class Splits:
     isarc_test: pd.DataFrame  # iSarcasmEval English Task A test, for zero-shot transfer (RQ3)
 
 
+EXTRA_BUDGETS_ENV = "GAINSPLIT_EXTRA_BUDGETS"   # path of a budgets file for budgets that budgets.json lacks (Pass 11: 70%)
+
+
+def budget_ids(data_dir: Path, budget: int, seed: int) -> list:
+    """Ids of the train rows that keep their label. Looks in budgets.json (the frozen file) first; a budget that
+    is not there (Pass 11's 70%) is read from the file named by GAINSPLIT_EXTRA_BUDGETS, if set."""
+    data_dir = Path(data_dir)
+    key = str(budget)
+    budgets = json.loads((data_dir / "budgets.json").read_text())
+    if key in budgets[str(seed)]:
+        return budgets[str(seed)][key]
+    extra = os.environ.get(EXTRA_BUDGETS_ENV)
+    if extra:
+        eb = json.loads(Path(extra).read_text())
+        if key in eb.get(str(seed), {}):
+            return eb[str(seed)][key]
+    raise KeyError(f"budget {budget}% (seed {seed}) is not in budgets.json; set {EXTRA_BUDGETS_ENV} to a file made "
+                   f"by make_extra_budgets")
+
+
+def nested_budget_ids(train: pd.DataFrame, seed: int, budgets) -> dict:
+    """The procedure of experiments/01_preprocess.ipynb (3.7): per class, one seeded permutation of the ids; a
+    budget of p% takes the first round(len * p / 100) of each class. Nested by construction."""
+    rng = np.random.default_rng(seed)
+    order = {c: rng.permutation(g["id"].to_numpy()) for c, g in train.groupby("label")}
+    out = {}
+    for p in sorted(budgets):
+        ids = []
+        for c, perm in order.items():
+            k = max(1, int(round(len(perm) * p / 100)))
+            ids.extend(int(i) for i in perm[:k])
+        out[str(p)] = sorted(ids)
+    return out
+
+
+def make_extra_budgets(data_dir: Path, budgets=(70,), seeds=(0, 1, 2, 3, 4)) -> dict:
+    """Nested label sets for budgets that budgets.json lacks, drawn with the same procedure and seeds.
+
+    Checks that the procedure reproduces the frozen file (the 30% sets must be identical to budgets.json's) and
+    that each new set contains the 30% set and lies inside the 100% set, so the new budget extends the old ones
+    instead of being a different draw. Returns {seed: {budget: sorted ids}} (not written anywhere)."""
+    data_dir = Path(data_dir)
+    train = pd.read_csv(data_dir / "headlines_train.csv", keep_default_na=False)
+    frozen = json.loads((data_dir / "budgets.json").read_text())
+    out = {}
+    for s in seeds:
+        both = nested_budget_ids(train, s, sorted(set(budgets) | {30}))
+        if both["30"] != sorted(frozen[str(s)]["30"]):
+            raise ValueError(f"seed {s}: the procedure does not reproduce budgets.json's 30% set; do not use these budgets")
+        new = {str(p): both[str(p)] for p in budgets}
+        for p, ids in new.items():
+            if str(p) in frozen[str(s)]:
+                raise ValueError(f"budget {p}% is already in budgets.json")
+            if not (set(frozen[str(s)]["30"]) <= set(ids) <= set(frozen[str(s)]["100"])):
+                raise ValueError(f"seed {s}: {p}% is not nested between the 30% and 100% sets")
+        out[str(s)] = new
+    return out
+
+
 def load_splits(data_dir: Path, budget: int, seed: int) -> Splits:
     """Build L and U for one budget and seed from budgets.json."""
     data_dir = Path(data_dir)
     read = lambda name: pd.read_csv(data_dir / name, keep_default_na=False)
     train = read("headlines_train.csv")
-    budgets = json.loads((data_dir / "budgets.json").read_text())
-    ids = set(budgets[str(seed)][str(budget)])
+    ids = set(budget_ids(data_dir, budget, seed))
 
     in_l = train["id"].isin(ids)
     if in_l.sum() != len(ids):
-        raise ValueError("budgets.json lists ids that are not in headlines_train.csv")
+        raise ValueError("the budget file lists ids that are not in headlines_train.csv")
     labeled = train[in_l].reset_index(drop=True)
     # U keeps no sarcasm label at all, so no later code can read one by mistake.
     unlabeled = train[~in_l].drop(columns=["label"]).reset_index(drop=True)

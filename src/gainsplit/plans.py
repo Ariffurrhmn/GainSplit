@@ -438,6 +438,67 @@ def pass10_long(init_dir: str = PASS10_CKPT["pt20k"]) -> list[RunConfig]:
     return [_p10("A20", b, s, init_dir, tag="pt20k") for b in (10, 1) for s in PASS10_SEEDS]
 
 
+# ---------------------------------------------------------------------------- Pass 11
+
+PASS11_SEEDS = PASS1_SEEDS
+PASS11_HIGH_BUDGET = 70                 # the seed paper's regime: 70% of the training split labeled (needs the extra budgets file)
+PASS11_LONG_MULT = 35                   # E3: 35 x 200 = 7,000 steps at 1%, about 9.9 passes over U
+PASS11_DOSE_STEPS = {"dose100": 100, "dose350": 350, "dose1000": 1000, "dose3000": 3000}   # E2: MLM pretraining steps
+PASS11_CKPT = {tag: f"/kaggle/working/ckpt/mlm_{tag}" for tag in PASS11_DOSE_STEPS}
+
+
+def _p11(arm, budget, seed, init_dir="", tag="", **kw) -> RunConfig:
+    """Frozen ingredient settings (helper weight 0.3, FGM epsilon 0.5); test scored, masked tests not."""
+    sw = ARMS[arm]
+    return RunConfig(arm, budget, seed, helper_weight=PASS1_HELPER_WEIGHT if sw["helpers"] else 0.0,
+                     fgm_epsilon=PASS2_FGM_EPSILON if sw.get("fgm") else 0.0,
+                     init_dir=init_dir if sw.get("init") else "", eval_test=True, tag=tag, **kw)
+
+
+def pass11_high(init_dir: str = PASS8_CKPT["mlm"]) -> list[RunConfig]:
+    """E6, the seed paper's regime: A5 (the seed recipe), A7 (FGM), A1 and A20 at 70% labels, 5 seeds (20 runs,
+    longest first). Needs the extra budgets file (data.make_extra_budgets)."""
+    b = PASS11_HIGH_BUDGET
+    return ([_p11("A5", b, s) for s in PASS11_SEEDS] + [_p11("A7", b, s) for s in PASS11_SEEDS]
+            + [_p11("A1", b, s) for s in PASS11_SEEDS] + [_p11("A20", b, s, init_dir) for s in PASS11_SEEDS])
+
+
+def pass11_ours(init_dir: str = PASS8_CKPT["mlm"]) -> list[RunConfig]:
+    """E6: our recipe (A36, MLM + helpers + FGM + self-training) at 30% and 5% labels, 5 seeds (10 runs). A36 at 1% and
+    10% is Pass 10; A5, A1, A20 at 5% and 30% exist (Passes 2a, 10)."""
+    return [_p11("A36", b, s, init_dir) for b in (30, 5) for s in PASS11_SEEDS]
+
+
+def pass11_ganlong() -> list[RunConfig]:
+    """E3: GAN-BERT (A4) and plain BERT (A1) at 1% labels with 35x the steps (tag "long35"), 5 seeds (10 runs).
+    step_mult also multiplies the passes over L, so the control is A1 at the same step count: the contrast is
+    A4 - A1 at matched steps."""
+    return ([_p11("A4", 1, s, tag="long35", step_mult=PASS11_LONG_MULT) for s in PASS11_SEEDS]
+            + [_p11("A1", 1, s, tag="long35", step_mult=PASS11_LONG_MULT) for s in PASS11_SEEDS])
+
+
+def pass11_dose(ckpt: dict | None = None) -> list[RunConfig]:
+    """E2: A20 at 1% labels from MLM encoders pretrained for 100, 350, 1,000 and 3,000 steps (seed 0, everything else
+    as Pass 8a), 5 seeds each (20 runs, tags dose100 ... dose3000). 10,000 steps is Pass 8a's A20."""
+    ckpt = ckpt or PASS11_CKPT
+    return [_p11("A20", 1, s, ckpt[tag], tag=tag) for tag in PASS11_DOSE_STEPS for s in PASS11_SEEDS]
+
+
+def pass11_a37(init_dir: str = PASS8_CKPT["mlm"]) -> list[RunConfig]:
+    """The seed recipe (GAN + helper heads) on the MLM encoder, 10% and 1% labels, 5 seeds (10 runs)."""
+    return [_p11("A37", b, s, init_dir) for b in (10, 1) for s in PASS11_SEEDS]
+
+
+def pass11_all(init_dir: str = PASS8_CKPT["mlm"], ckpt: dict | None = None) -> list[RunConfig]:
+    """Everything of Pass 11's core notebook in one list (70 runs), longest runs first so the two GPUs stay busy."""
+    high = pass11_high(init_dir)
+    ours = pass11_ours(init_dir)
+    long_ = pass11_ganlong()
+    by = lambda rs, arm, b=None: [r for r in rs if r.arm == arm and (b is None or r.budget == b)]
+    return (by(high, "A5") + by(high, "A7") + by(long_, "A4") + by(ours, "A36", 30) + by(long_, "A1")
+            + by(high, "A1") + by(high, "A20") + by(ours, "A36", 5) + pass11_a37(init_dir) + pass11_dose(ckpt))
+
+
 PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "session2": session2, "pass1": pass1, "fgm_tuning": fgm_tuning,
          "pass2a": pass2a, "pass2b": pass2b, "pass3": pass3,
@@ -448,4 +509,6 @@ PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "pass8_jepa": pass8_jepa, "pass8_jepa_100": pass8_jepa_100, "pass8_diff": pass8_diff,
          "pass9": pass9, "pass9_100": pass9_100,
          "pass10_stack": pass10_stack, "pass10_seeds": pass10_seeds, "pass10_curve": pass10_curve,
-         "pass10_curve_100": pass10_curve_100, "pass10_long": pass10_long}
+         "pass10_curve_100": pass10_curve_100, "pass10_long": pass10_long,
+         "pass11_high": pass11_high, "pass11_ours": pass11_ours, "pass11_ganlong": pass11_ganlong,
+         "pass11_dose": pass11_dose, "pass11_a37": pass11_a37, "pass11_all": pass11_all}

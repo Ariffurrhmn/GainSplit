@@ -74,6 +74,9 @@ ARMS = {
     "A34": {"gan": False, "helpers": True, "l_only": True, "pseudo": True, "init": "mlm"},              # A20 + H + S
     "A35": {"gan": False, "helpers": False, "fgm": True, "pseudo": True, "init": "mlm"},                # A20 + F + S
     "A36": {"gan": False, "helpers": True, "l_only": True, "fgm": True, "pseudo": True, "init": "mlm"},  # all three
+    # Pass 11: the seed recipe (GAN-BERT + helper heads on L + U, as A5) on the MLM-TAPT encoder: does it add anything
+    # once the encoder is pretrained? Compare with A20 (and A5 on plain BERT).
+    "A37": {"gan": True,  "helpers": True, "init": "mlm"},
 }
 INIT_OBJECTIVES = ("mlm", "jepa")
 DIFFUSION_MODES = ("fake", "consistency", "noise")
@@ -179,7 +182,7 @@ class RunConfig:
         if init and not self.init_dir:
             raise ValueError(f"{self.arm} starts from a pretrained encoder: set init_dir (the ssl_pretrain output folder)")
         if not init and self.init_dir:
-            raise ValueError(f"init_dir is only used by the TAPT arms (A20-A23, A31-A36) (got {self.init_dir!r} for {self.arm})")
+            raise ValueError(f"init_dir is only used by the TAPT arms (A20-A23, A31-A37) (got {self.init_dir!r} for {self.arm})")
         if init and self.train_data != "headlines":
             raise ValueError(f"{self.arm} uses a Headlines TAPT encoder; train_data must be 'headlines'")
         diff = ARMS[self.arm].get("diffusion")
