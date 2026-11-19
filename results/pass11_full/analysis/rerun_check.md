@@ -1,0 +1,18 @@
+| run_id | status | max_abs_diff |
+|---|---|---|
+| A1_p1_s0_rerun11 | PASS | 0.00 |
+| A1_p70_s0_full | PASS | 0.00 |
+| A1_p70_s1_full | PASS | 0.00 |
+| A1_p70_s2_full | PASS | 0.00 |
+| A1_p70_s3_full | PASS | 0.00 |
+| A1_p70_s4_full | PASS | 0.00 |
+| A1_p100_s0_full | PASS | 0.00 |
+| A1_p100_s1_full | PASS | 0.00 |
+| A1_p100_s2_full | PASS | 0.00 |
+| A1_p100_s3_full | PASS | 0.00 |
+| A1_p100_s4_full | PASS | 0.00 |
+| A5_p70_s0_full | PASS | 0.00 |
+| A5_p70_s1_full | PASS | 0.00 |
+| A5_p70_s2_full | PASS | 0.00 |
+| A5_p70_s3_full | PASS | 0.00 |
+| A5_p70_s4_full | PASS | 0.00 |

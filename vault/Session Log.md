@@ -7,6 +7,11 @@ updated: 2026-11-16
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-19 (later) - Pass 11b: whole-dataset scoring (notebook 23)
+- Done: `RunConfig.eval_train` (saves predictions for every training row), plan `pass11_full`, analysis `run_full`, notebook `23_pass11_full.ipynb` (commit 03429aa, 293 tests); predictions addendum H11.24-28 frozen before the run. Owner ran it: 16/16 runs, 103 min. Receipts in `results/pass11_full/`; results added to [[Pass 11 Results]].
+- Findings: all 16 re-runs reproduce the originals exactly (closes the re-run gap). Accuracy on all rows is 3.9-4.0 points above test at 70% labels (A1 96.67, A5 96.48 vs 92.76, 92.51) and 5.3 above at full labels (98.62 vs 93.35); labeled rows are fit at 100%. The seed paper's 93.88 lies between our held-out and all-rows figures, so it cannot be read as held-out accuracy; its BERT (92.04) looks less fit than ours.
+- Next: E1 (in-domain iSarcasmEval), CPU analyses, paper rewrite.
+
 ## 2026-11-19 - Review triage, Pass 11 planned, coded and run (notebook 22)
 - Done: read both Draft v2 reviews (Google, Consensus) and checked each claim against code, configs and results; wrote `PLAN.md` (triage table, experiments, session schedule, risks) and froze `vault/Pass 11 Predictions.md` (commit c1c2a18). Read the seed paper PDF in full (kept outside the repo, licensed copy). Pass 11 coded (70% budget support, arm A37, plans, `analysis_pass11.py`, tests, notebook `22_pass11_core.ipynb`; commit cd14168; 289 tests pass). Owner ran notebook 22: 70/70 runs, 4.5 h. Results filed in `results/pass11/`, note [[Pass 11 Results]].
 - Review triage ([[Review - Draft v2]], `PLAN.md` section A): helper heads on L + U (A3) was already run and is missing from the paper; Google's "200:1 synthetic mix" refuted (1:1 per step); "200 words per outlet" in the paper is wrong (100 per class); Holm was post hoc for Passes 1-3; Consensus's ULMFiT "10x" is wrong (100x); Li et al. 2021 author list in the Google review is wrong; outlet-balanced evaluation is a no-op.

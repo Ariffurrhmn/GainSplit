@@ -52,7 +52,23 @@ Run by the owner on Kaggle: notebook 22 (`arifurrhmn/notebook-22`, code commit `
 - **The exposure objection does not rescue the GAN.** With 35x the steps the GAN gets worse (training became unstable, large seed spread), while MLM's gain grows steadily with exposure and is zero at the GAN's exposure. So exposure matters for MLM, and the GAN's null is not a short-training artefact. Caveat: one long schedule, one learning rate; the instability is not diagnosed.
 - **The "we match the seed paper's 93.88" line does not hold at 70%.** The earlier plan expected all arms near 93.4-93.9 there; they are at 92.5-93.4. The seed paper's reported 93.88 is not comparable: its Table II support is 28,619 for every model (the whole dataset), its BERT baseline scores 92.04, and it ran about 25 epochs for GAN-BERT vs about 10 for BERT (VERIFIED from the PDF; see `PLAN.md` section F). The supportable statement is that the recipe adds nothing over plain fine-tuning on a held-out test set.
 
+## Notebook 23: whole-dataset scoring (2026-11-19)
+Run by the owner on Kaggle (`arifurrhmn/notebook-23`, code commit `03429aa`, predictions FROZEN with the H11.24-28 addendum, 293 tests passed, 16/16 runs, 103 min). Raw files in `results/pass11_full/`. Training is exactly that of the untagged runs (tag `full`); only the scoring differs: each run is also scored on every training row (L and U), dev, test, and on all rows together (28,501 rows in our dataset). Accuracy at the 0.5 threshold. Numbers VERIFIED from `results/pass11_full/analysis/`.
+
+| Arm | Labels | L | U | all training rows | dev | test | **all rows** | all rows - test |
+|---|---|---|---|---|---|---|---|---|
+| A1 | 70% | 100.00 | 92.39 | 97.72 | 92.22 | 92.76 | 96.67 | +3.91 |
+| A5 | 70% | 100.00 | 91.76 | 97.53 | 92.04 | 92.51 | 96.48 | +3.97 |
+| A1 | 100% | 100.00 | - | 100.00 | 92.84 | 93.35 | 98.62 | +5.27 |
+
+- **Exact reproduction (H11.27 SUPPORTED):** all 16 runs reproduce the originals' test probabilities exactly (max absolute difference at most 1e-6), including the A1 re-run at 1%, seed 0. This closes the re-run gap listed under notebook 22: Pass 1, Pass 11 and the current code give identical predictions.
+- **H11.24 SUPPORTED:** accuracy on all rows is 3.97 points above test accuracy for A5 at 70%.
+- **H11.25 SUPPORTED, with a reading rule:** A5's all-rows accuracy is 96.48, above 93.88. So 93.88 is not what an all-rows evaluation of a well-fit model of this kind gives either; it lies between our held-out (92.5) and all-rows (96.5) figures for the same recipe. The seed paper's figure therefore cannot be placed on a held-out scale (INFERRED); it is not "explained" by the all-rows protocol. The paper must not say that it is.
+- **H11.26 (descriptive):** a fully trained BERT scores 98.62 on all rows and 93.35 on test; the seed paper's BERT scores 92.04. That is below our held-out figure and far below our all-rows figure, so its BERT baseline was less fit (their Fig. 4 shows training accuracy of about 0.94-0.95) or scored differently (INFERRED).
+- **H11.28:** A1 at 70% SUPPORTED (U 92.39 vs test 92.76). A5 at 70% not supported by a margin of 0.05: U 91.76 vs test 92.51 is a 0.75 gap against the 0.7 predicted. The unlabeled rows score level with, or slightly below, held-out rows for both arms: the GAN reading U as unlabeled text does not give A5 an advantage on U.
+- **What it means for the paper:** evaluating over all rows raises accuracy by about 4 points at 70% labels and 5 at full labels because the training rows are memorized (L accuracy 100%). A number computed over all headlines cannot be compared with held-out accuracy, and "beating 93.88" is not a meaningful target. Our models would score 96.5-98.6 under that protocol; this is a statement about the protocol, not a result to report as an improvement.
+
 ## Gaps
-- The byte-identical re-run check planned in `PLAN.md` D.3 (A1 and A20 at 1%, seed 0, reproducing Passes 1 and 8a after the data-loading change) was not part of notebook 22. The only re-run in the results is Pass 10's A20 rerun. The change in `data.py` (budget lookup) is covered by tests; an exact-match check is still open.
+- The byte-identical re-run check is closed by notebook 23 (see above).
 - Single long-GAN configuration; no diagnosis of the instability (generator loss, p_fake curves are in `runs/A4_p1_s*_long35/result.json` train_log).
 - 70% regime: A36 was not run at 70% (self-training needs U; cost).
