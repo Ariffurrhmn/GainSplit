@@ -600,6 +600,8 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
         eval_sets.update(test=splits.test, isarc_test=splits.isarc_test)
         if cfg.eval_masked:  # Pass 3: the same test headlines with cue words / random words masked
             eval_sets.update(load_masked_tests(data_dir))
+        if cfg.eval_train:  # Pass 11: every training row (L and U) with its true label, scored after training only
+            eval_sets["train"] = pd.read_csv(data_dir / "headlines_train.csv", keep_default_na=False)
 
     steps = cfg.steps(len(labeled))
     print(f"{cfg.run_id}: |L|={len(labeled)} |U|={len(unlabeled)} steps={steps} device={device}")

@@ -489,6 +489,19 @@ def pass11_a37(init_dir: str = PASS8_CKPT["mlm"]) -> list[RunConfig]:
     return [_p11("A37", b, s, init_dir) for b in (10, 1) for s in PASS11_SEEDS]
 
 
+def pass11_full() -> list[RunConfig]:
+    """Whole-dataset scoring (vault: Pass 11 Predictions, addendum): A5 and A1 at 70% labels and A1 with every label,
+    5 seeds, tag "full", with predictions saved for every training row as well (the seed paper's Table II covers all
+    headlines). The same training as the untagged runs, so test predictions must reproduce them exactly. Plus an A1
+    re-run at 1%, seed 0 (tag "rerun11") as an exact-match check of Pass 1 after the data-loading change.
+    16 runs, longest first. Needs the extra budgets file for 70%."""
+    kw = dict(tag="full", eval_train=True)
+    return ([_p11("A5", PASS11_HIGH_BUDGET, s, **kw) for s in PASS11_SEEDS]
+            + [_p11("A1", 100, s, **kw) for s in PASS11_SEEDS]
+            + [_p11("A1", PASS11_HIGH_BUDGET, s, **kw) for s in PASS11_SEEDS]
+            + [_p11("A1", 1, 0, tag="rerun11")])
+
+
 def pass11_all(init_dir: str = PASS8_CKPT["mlm"], ckpt: dict | None = None) -> list[RunConfig]:
     """Everything of Pass 11's core notebook in one list (70 runs), longest runs first so the two GPUs stay busy."""
     high = pass11_high(init_dir)
@@ -511,4 +524,5 @@ PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "pass10_stack": pass10_stack, "pass10_seeds": pass10_seeds, "pass10_curve": pass10_curve,
          "pass10_curve_100": pass10_curve_100, "pass10_long": pass10_long,
          "pass11_high": pass11_high, "pass11_ours": pass11_ours, "pass11_ganlong": pass11_ganlong,
-         "pass11_dose": pass11_dose, "pass11_a37": pass11_a37, "pass11_all": pass11_all}
+         "pass11_dose": pass11_dose, "pass11_a37": pass11_a37, "pass11_all": pass11_all,
+         "pass11_full": pass11_full}

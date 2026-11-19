@@ -166,3 +166,108 @@ def run_all(results_dirs, out_dir, n=10000, rng_seed=0) -> dict:
         if t is not None and len(t):
             an.save_table(t, out_dir, name, default_decimals=3)
     return tables
+
+
+# ---------------------------------------------------------------- whole-dataset scoring (notebook 23)
+# The seed paper's Table II has support 28,619 for every model (the whole dataset). This part scores the same trained
+# models on the labeled rows L, the unlabeled rows U, the dev and test rows, and on all rows together, to show how much
+# of an "all headlines" accuracy is training data. Accuracy at the 0.5 threshold, as everywhere in this repo.
+SEED_PAPER_ACCURACY = {"GAN-BERT + MTL": 93.88, "BERT": 92.04}   # Table II of the seed paper (all 28,619 headlines)
+
+
+def run_scores(train: pd.DataFrame, dev: pd.DataFrame, test: pd.DataFrame, labeled_ids) -> dict:
+    """Accuracy (points) of one run on L, U, all training rows, dev, test and all rows together.
+
+    Each frame has columns id, label and p_sarcastic (probability of sarcastic); `train` has every training row and
+    `labeled_ids` says which of them kept their label (L); the rest are U (their labels were never used in training)."""
+    def correct(df):
+        return (df["p_sarcastic"].to_numpy() >= 0.5).astype(int) == df["label"].to_numpy().astype(int)
+    in_l = train["id"].isin(set(labeled_ids)).to_numpy()
+    c_tr, c_dev, c_te = correct(train), correct(dev), correct(test)
+    return {"acc_L": 100 * c_tr[in_l].mean(), "acc_U": 100 * c_tr[~in_l].mean() if (~in_l).any() else np.nan,
+            "acc_train": 100 * c_tr.mean(), "acc_dev": 100 * c_dev.mean(), "acc_test": 100 * c_te.mean(),
+            "acc_all": 100 * (c_tr.sum() + c_dev.sum() + c_te.sum()) / (len(c_tr) + len(c_dev) + len(c_te)),
+            "n_all": int(len(c_tr) + len(c_dev) + len(c_te))}
+
+
+def full_table(runs, data_dir) -> pd.DataFrame:
+    """One row per run tagged "full": the scores of `run_scores` (needs preds_train/dev/test.csv in the run folder)."""
+    from pathlib import Path
+    from .data import budget_ids
+    rows = []
+    for _, r in runs[runs["tag"] == "full"].iterrows():
+        d = Path(r["run_dir"])
+        s = run_scores(pd.read_csv(d / "preds_train.csv"), pd.read_csv(d / "preds_dev.csv"), pd.read_csv(d / "preds_test.csv"),
+                       budget_ids(data_dir, int(r["budget"]), int(r["seed"])))
+        rows.append({"arm": r["arm"], "budget": int(r["budget"]), "seed": int(r["seed"]), **s})
+    return pd.DataFrame(rows)
+
+
+def full_summary(per_run: pd.DataFrame) -> pd.DataFrame:
+    """Mean and s.d. over seeds, per arm and budget, plus the all-rows minus test gap."""
+    if per_run.empty:
+        return pd.DataFrame()
+    cols = ["acc_L", "acc_U", "acc_train", "acc_dev", "acc_test", "acc_all"]
+    g = per_run.groupby(["arm", "budget"])[cols]
+    out = g.mean().round(2).add_suffix("_mean").join(g.std(ddof=1).round(2).add_suffix("_sd")).join(g.size().rename("n_seeds"))
+    out["all_minus_test"] = (out["acc_all_mean"] - out["acc_test_mean"]).round(2)
+    return out.reset_index()
+
+
+def rerun_check(runs, tags=("full", "rerun11"), tol=1e-6) -> pd.DataFrame:
+    """Every run with one of these tags must give the same test probabilities as the untagged original (same arm,
+    budget and seed): training is deterministic and the extra scoring changes nothing."""
+    from pathlib import Path
+    rows = []
+    for _, r in runs[runs["tag"].isin(tags)].iterrows():
+        orig = runs[(runs["tag"] == "") & (runs["arm"] == r["arm"]) & (runs["budget"] == r["budget"]) & (runs["seed"] == r["seed"])]
+        if orig.empty:
+            rows.append({"run_id": r["run_id"], "status": "no original found", "max_abs_diff": np.nan})
+            continue
+        a = pd.read_csv(Path(r["run_dir"]) / "preds_test.csv").sort_values("id").reset_index(drop=True)
+        b = pd.read_csv(Path(orig.iloc[0]["run_dir"]) / "preds_test.csv").sort_values("id").reset_index(drop=True)
+        same_rows = a["id"].equals(b["id"]) and a["label"].equals(b["label"])
+        diff = float(np.abs(a["p_sarcastic"] - b["p_sarcastic"]).max()) if same_rows else float("inf")
+        rows.append({"run_id": r["run_id"], "status": "PASS" if diff <= tol else "FAIL", "max_abs_diff": diff})
+    return pd.DataFrame(rows, columns=["run_id", "status", "max_abs_diff"])
+
+
+def full_verdicts(summary: pd.DataFrame, check: pd.DataFrame) -> pd.DataFrame:
+    """H11.24-H11.28 (vault/Pass 11 Predictions.md, addendum): descriptive checks, no bootstrap."""
+    def row(arm, b):
+        hit = summary[(summary["arm"] == arm) & (summary["budget"] == b)] if len(summary) else summary
+        return hit.iloc[0] if len(hit) else None
+    rows = []
+    a5, a1_70, a1_100 = row("A5", HIGH), row("A1", HIGH), row("A1", 100)
+    if a5 is not None:
+        rows.append({"hypothesis": "H11.24", "check": "A5@70: accuracy on all rows minus test accuracy >= 2.0",
+                     "value": a5["all_minus_test"], "verdict": "SUPPORTED" if a5["all_minus_test"] >= 2.0 else "not supported"})
+        rows.append({"hypothesis": "H11.25", "check": "A5@70: accuracy on all rows >= 93.88 (the seed paper's figure)",
+                     "value": a5["acc_all_mean"], "verdict": "SUPPORTED" if a5["acc_all_mean"] >= 93.88 else "not supported"})
+    if a1_100 is not None:
+        rows.append({"hypothesis": "H11.26", "check": "A1@100 (their BERT setting): accuracy on all rows (their BERT: 92.04), descriptive",
+                     "value": a1_100["acc_all_mean"], "verdict": "descriptive"})
+    for name, r in (("A5@70", a5), ("A1@70", a1_70)):
+        if r is not None:
+            ok = abs(r["acc_U_mean"] - r["acc_test_mean"]) <= 0.7 and r["acc_L_mean"] - r["acc_test_mean"] >= 2.0
+            rows.append({"hypothesis": "H11.28", "check": f"{name}: U accuracy within 0.7 of test, L accuracy at least 2.0 above test",
+                         "value": f"U {r['acc_U_mean']:.2f}, test {r['acc_test_mean']:.2f}, L {r['acc_L_mean']:.2f}",
+                         "verdict": "SUPPORTED" if ok else "not supported"})
+    if len(check):
+        n_pass = int((check["status"] == "PASS").sum())
+        rows.append({"hypothesis": "H11.27", "check": f"all {len(check)} re-runs reproduce the originals' test probabilities exactly",
+                     "value": f"{n_pass} of {len(check)} PASS", "verdict": "SUPPORTED" if n_pass == len(check) else "not supported"})
+    return pd.DataFrame(rows, columns=["hypothesis", "check", "value", "verdict"])
+
+
+def run_full(results_dirs, data_dir, out_dir) -> dict:
+    """Write the whole-dataset tables to out_dir and return them."""
+    runs = an.load_runs(*results_dirs)
+    per_run = full_table(runs, data_dir)
+    summ = full_summary(per_run)
+    check = rerun_check(runs)
+    tables = {"full_per_run": per_run, "full_summary": summ, "rerun_check": check, "full_verdicts": full_verdicts(summ, check)}
+    for name, t in tables.items():
+        if t is not None and len(t):
+            an.save_table(t, out_dir, name, default_decimals=2)
+    return tables

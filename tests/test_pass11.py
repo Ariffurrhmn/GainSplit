@@ -181,3 +181,59 @@ def test_step_mult_makes_a_long_run_with_the_same_settings(fake_data, tiny_bert,
     a = train_run(RunConfig("A1", 10, 0, **base), fake_data, tmp_path / "r")
     b = train_run(RunConfig("A1", 10, 0, tag="long", step_mult=3, **base), fake_data, tmp_path / "r")
     assert b["steps"] == 3 * a["steps"]
+
+
+# ---------------------------------------------------------------- whole-dataset scoring (notebook 23)
+
+def test_pass11_full_plan_and_guard():
+    full = plans.pass11_full()
+    assert len(full) == 16
+    assert [(r.arm, r.budget, r.tag) for r in full[::5][:3]] == [("A5", 70, "full"), ("A1", 100, "full"), ("A1", 70, "full")]
+    assert all(r.eval_train and r.eval_test for r in full if r.tag == "full")
+    rerun = [r for r in full if r.tag == "rerun11"]
+    assert len(rerun) == 1 and (rerun[0].arm, rerun[0].budget, rerun[0].seed) == ("A1", 1, 0) and not rerun[0].eval_train
+    ids = [r.run_id for r in full]
+    older = {r.run_id for n in plans.PLANS if n != "pass11_full" for r in plans.PLANS[n]()}
+    assert len(ids) == len(set(ids)) and not (set(ids) & older)
+    with pytest.raises(ValueError, match="eval_test"):
+        RunConfig("A1", 10, 0, eval_train=True)
+    with pytest.raises(ValueError, match="Headlines"):
+        RunConfig("A1", 100, 0, eval_train=True, eval_test=True, train_data="isarcasm")
+
+
+def test_run_scores_splits_l_u_test_and_all():
+    from gainsplit.analysis_pass11 import run_scores
+    # train rows 0-9 (0-5 labeled); the model is right on every labeled row, wrong on half of U; dev/test 4 rows each
+    train = pd.DataFrame({"id": range(10), "label": [1, 0] * 5, "p_sarcastic": [0.9, 0.1] * 3 + [0.9, 0.9, 0.1, 0.1]})
+    dev = pd.DataFrame({"id": range(10, 14), "label": [1, 1, 0, 0], "p_sarcastic": [0.9, 0.1, 0.1, 0.9]})
+    test = pd.DataFrame({"id": range(14, 18), "label": [1, 1, 0, 0], "p_sarcastic": [0.9, 0.9, 0.9, 0.1]})
+    s = run_scores(train, dev, test, [0, 1, 2, 3, 4, 5])
+    assert s["acc_L"] == pytest.approx(100.0) and s["acc_U"] == pytest.approx(50.0)
+    assert s["acc_train"] == pytest.approx(80.0) and s["acc_dev"] == pytest.approx(50.0) and s["acc_test"] == pytest.approx(75.0)
+    assert s["acc_all"] == pytest.approx(100 * (8 + 2 + 3) / 18) and s["n_all"] == 18
+
+
+def test_rerun_check_flags_a_difference(tmp_path):
+    from gainsplit.analysis_pass11 import rerun_check
+    rows = []
+    for name, tag, shift in (("orig", "", 0.0), ("same", "full", 0.0), ("other", "rerun11", 0.01)):
+        d = tmp_path / name
+        d.mkdir()
+        pd.DataFrame({"id": [1, 2, 3], "label": [0, 1, 1], "p_sarcastic": [0.2 + shift, 0.7, 0.9]}).to_csv(d / "preds_test.csv", index=False)
+        rows.append({"run_id": name, "arm": "A1", "budget": 1, "seed": 0, "tag": tag, "run_dir": str(d)})
+    t = rerun_check(pd.DataFrame(rows)).set_index("run_id")
+    assert t.loc["same", "status"] == "PASS" and t.loc["other", "status"] == "FAIL"
+
+
+@torch_only
+def test_eval_train_saves_every_training_row_and_changes_nothing_else(fake_data, tiny_bert, tmp_path):
+    from gainsplit.train import train_run
+    base = dict(model_name=tiny_bert, max_len=16, batch_size=8, passes=1, min_steps=5, fp16=False, eval_test=True)
+    a = train_run(RunConfig("A1", 10, 0, **base), fake_data, tmp_path / "r")
+    b = train_run(RunConfig("A1", 10, 0, tag="full", eval_train=True, **base), fake_data, tmp_path / "r")
+    n_train = len(pd.read_csv(fake_data / "headlines_train.csv"))
+    ptr = pd.read_csv(tmp_path / "r" / "runs" / b["run_id"] / "preds_train.csv")
+    assert len(ptr) == n_train and "train" in b["scores"] and "train" not in a["scores"]
+    pa = pd.read_csv(tmp_path / "r" / "runs" / a["run_id"] / "preds_test.csv")
+    pb = pd.read_csv(tmp_path / "r" / "runs" / b["run_id"] / "preds_test.csv")
+    assert pa.equals(pb)                                               # same training, same test probabilities

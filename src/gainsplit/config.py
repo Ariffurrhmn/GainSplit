@@ -130,6 +130,7 @@ class RunConfig:
     pretrain_steps: int = 0     # Pass 6: stage-1 steps on the pairs only (pretrain arms A18/A19; 0 for every other arm)
     init_dir: str = ""          # Pass 8a/8b: folder of the TAPT encoder (A20-A23 only); the tokenizer stays model_name's
     cons_weight: float = 0.0    # Pass 8c: weight of the U consistency loss (A25/A26 only; must be > 0 there)
+    eval_train: bool = False    # Pass 11: also score and save predictions for every training row (L and U); needs eval_test
 
     def __post_init__(self):
         if self.arm not in ARMS:
@@ -194,6 +195,10 @@ class RunConfig:
             raise ValueError(f"cons_weight is only used by A25/A26 (got {self.cons_weight} for {self.arm})")
         if diff and self.train_data != "headlines":
             raise ValueError(f"{self.arm} reads U from Headlines; train_data must be 'headlines'")
+        if self.eval_train and not self.eval_test:
+            raise ValueError("eval_train needs eval_test=True (the whole-dataset table uses the dev and test predictions too)")
+        if self.eval_train and self.train_data != "headlines":
+            raise ValueError("eval_train scores the Headlines training rows; train_data must be 'headlines'")
         if self.explain and not self.eval_test:
             raise ValueError("explain needs eval_test=True (it reads the test set)")
         if self.explain and (ARMS[self.arm]["gan"] or self.arm == "A0" or diff == "fake"):

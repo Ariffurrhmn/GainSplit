@@ -76,3 +76,11 @@ Reading rule written in advance: if H11.20 fails because A5 is clearly above the
 
 ### E-CPU headline contrast
 - **H11.23** A36 - A5 on the existing predictions, paired bootstrap over test items with the seed-aware interval of E0b: the interval excludes 0 at 1% and 10%.
+
+## Addendum 2026-11-19, before notebook 23 (whole-dataset scoring; dated entry, frozen with this commit)
+Context: notebook 22 results ([[Pass 11 Results]]) showed no arm reaching the seed paper's 93.88% at 70% labels on a held-out test set. The seed paper's Table II has support 28,619 for every model (the whole dataset). Notebook 23 trains A5 and A1 at 70% labels and A1 with all labels (5 seeds, tag `full`, exactly the training of the untagged runs) and scores them on L, U, dev, test and all rows together (our dataset: 28,501 rows). Plus an A1 re-run at 1%, seed 0 (tag `rerun11`). Accuracy at the 0.5 threshold. These are descriptive checks (no bootstrap); "all rows" = train + dev + test.
+- **H11.24** A5 at 70%: accuracy on all rows is at least 2.0 points above its test accuracy (the training rows are fit much better than held-out rows).
+- **H11.25** A5 at 70%: accuracy on all rows is at least 93.88 (the seed paper's figure), although its held-out test accuracy is 92.5. If this fails, an all-rows evaluation does not explain the seed paper's number and the paper must not suggest it does.
+- **H11.26** A1 with all labels (the seed paper's BERT setting; their reported BERT accuracy: 92.04): descriptive only, no direction. Reading rule: if our all-rows accuracy for a fully trained BERT is far above 92.04, the seed paper's BERT was either less fit or not scored this way, and the paper says only that its numbers cannot be compared with held-out accuracy.
+- **H11.27** Every `full` and `rerun11` run reproduces the original run's test probabilities exactly (max absolute difference at most 1e-6). If not, stop: training is no longer identical to Passes 1 and 11 and no earlier comparison with these runs is valid.
+- **H11.28** For A5 and A1 at 70%: accuracy on U (the 30% that never had labels) is within 0.7 points of test accuracy, and accuracy on L is at least 2.0 points above test accuracy.
