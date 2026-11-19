@@ -120,7 +120,9 @@ class RunConfig:
     tag: str = ""               # extra label for tuning runs, e.g. "lr3e-05"
     helper_variant: str = ""    # Pass 3: how the helper labels are changed (see HELPER_VARIANTS)
     eval_masked: bool = False   # Pass 3: also score the cue-masked and random-masked test sets (needs eval_test)
-    train_data: str = "headlines"  # "isarcasm": train on the iSarcasmEval training set (A1 only, budget 100)
+    train_data: str = "headlines"  # "isarcasm": train on the iSarcasmEval training set (A1, and A20 from any encoder). budget 100 =
+                                   # every non-dev tweet (Pass 3); any other budget is a label COUNT N (Pass 11 E1: 228, 780, 3120)
+                                   # read from the file named by GAINSPLIT_ISARC_BUDGETS (data.make_isarc_budgets)
     gen_lr: float = 0.0         # GAN arms only: learning rate of the generator's optimizer (0 = same as lr)
     step_mult: int = 1          # multiplies the step count from steps() (1 = the usual rule)
     pair_batch: int = 32        # Pass 4: generated rows per step (16 whole pairs); fixed 2026-11-13, not tuned
@@ -146,8 +148,8 @@ class RunConfig:
             raise ValueError(f"helper_variant {self.helper_variant!r} needs a helper arm (got {self.arm})")
         if self.train_data not in TRAIN_DATA:
             raise ValueError(f"unknown train_data {self.train_data!r}; choose from {list(TRAIN_DATA)}")
-        if self.train_data == "isarcasm" and (self.arm != "A1" or self.budget != 100):
-            raise ValueError(f"train_data='isarcasm' is only for A1 at budget 100 (got {self.arm} at {self.budget})")
+        if self.train_data == "isarcasm" and self.arm not in ("A1", "A20"):
+            raise ValueError(f"train_data='isarcasm' is only for A1 and A20 (got {self.arm})")
 
         if self.gen_lr < 0:
             raise ValueError(f"gen_lr must be >= 0 (got {self.gen_lr})")
@@ -184,8 +186,6 @@ class RunConfig:
             raise ValueError(f"{self.arm} starts from a pretrained encoder: set init_dir (the ssl_pretrain output folder)")
         if not init and self.init_dir:
             raise ValueError(f"init_dir is only used by the TAPT arms (A20-A23, A31-A37) (got {self.init_dir!r} for {self.arm})")
-        if init and self.train_data != "headlines":
-            raise ValueError(f"{self.arm} uses a Headlines TAPT encoder; train_data must be 'headlines'")
         diff = ARMS[self.arm].get("diffusion")
         if diff is not None and diff not in DIFFUSION_MODES:
             raise ValueError(f"unknown diffusion mode {diff!r} for {self.arm}")

@@ -564,7 +564,9 @@ def train_run(cfg: RunConfig, data_dir, out_root) -> dict:
     if masked or cfg.explain or cfg.helper_variant in ("vader", "teacher2"):
         manifest["outputs"].update(verify_pass3(data_dir)["outputs"])
     if cfg.train_data == "isarcasm":
-        splits = load_isarcasm_splits(data_dir)
+        manifest["outputs"].update(verify_pass3(data_dir)["outputs"])   # isarcasm_train.csv is in the Pass 3 manifest
+        # budget 100 = every non-dev tweet (Pass 3); any other budget is a label count from the E1 budget file
+        splits = load_isarcasm_splits(data_dir, None if cfg.budget == 100 else cfg.budget, cfg.seed)
     else:
         splits = load_splits(data_dir, cfg.budget, cfg.seed)
     labeled, unlabeled = splits.labeled, splits.unlabeled

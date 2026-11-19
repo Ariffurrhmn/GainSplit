@@ -27,6 +27,7 @@ Writes <out>/pretrain_info.json last; if it exists, the pretraining is skipped (
 """
 import argparse
 import copy
+import hashlib
 import json
 import math
 import time
@@ -54,6 +55,9 @@ class PretrainConfig:
     model_name: str = "bert-base-uncased"
     fp16: bool = True
     log_every: int = 250
+    text_source: str = "headlines"     # Pass 11 E1: "headlines" (all of them), "headlines_subset", or "isarc" (see pretrain_texts)
+    subset_n: int = 3120               # headlines_subset: how many headlines (the size of the iSarcasmEval pool)
+    subset_seed: int = 20261119        # headlines_subset: fixed, so the subset is the same whatever the pretraining seed
     # mlm
     mask_prob: float = 0.15            # BERT's 15%, with the usual 80/10/10 replacement
     # jepa
@@ -67,6 +71,8 @@ class PretrainConfig:
     def __post_init__(self):
         if self.objective not in OBJECTIVES:
             raise ValueError(f"objective must be one of {OBJECTIVES} (got {self.objective!r})")
+        if self.text_source not in ("headlines", "headlines_subset", "isarc"):
+            raise ValueError(f"text_source must be headlines, headlines_subset or isarc (got {self.text_source!r})")
         if not 0 < self.mask_prob < 1 or not 0 < self.target_ratio < 1:
             raise ValueError("mask_prob and target_ratio must be between 0 and 1")
         if self.steps < 1 or self.batch_size < 2 or self.n_spans < 1:
@@ -277,6 +283,29 @@ def find_encoder(root, objective: str, seed: int = 0, steps: int = 10000, expect
     return folder
 
 
+def pretrain_texts(cfg: PretrainConfig, data_dir):
+    """(ids, texts, dev texts) the pretraining reads: text only, no label is ever returned.
+
+    headlines         every Headlines training headline (Pass 8 and later)
+    headlines_subset  a random `subset_n` of them (fixed `subset_seed`): the size-matched control of Pass 11 E1
+    isarc             the iSarcasmEval training tweets minus the held-out dev split (Pass 11 E1); dev gives the held-out loss
+    Test headlines and test tweets are never read, and neither is any dev row for training."""
+    data_dir = Path(data_dir)
+    if cfg.text_source == "isarc":
+        from .data import load_isarcasm_splits, verify_pass3
+        verify_pass3(data_dir)   # isarcasm_train.csv is in the Pass 3 manifest
+        sp = load_isarcasm_splits(data_dir)
+        return sp.labeled["id"].to_numpy(), sp.labeled["text"].reset_index(drop=True), sp.dev["text"].reset_index(drop=True)
+    train = pd.read_csv(data_dir / "headlines_train.csv", usecols=["id", "text"], keep_default_na=False)
+    dev = pd.read_csv(data_dir / "headlines_dev.csv", usecols=["text"], keep_default_na=False)["text"]
+    if cfg.text_source == "headlines_subset":
+        if not 0 < cfg.subset_n <= len(train):
+            raise ValueError(f"subset_n must be between 1 and {len(train)} (got {cfg.subset_n})")
+        keep = np.sort(np.random.default_rng(cfg.subset_seed).choice(len(train), cfg.subset_n, replace=False))
+        train = train.iloc[keep].reset_index(drop=True)
+    return train["id"].to_numpy(), train["text"], dev
+
+
 def pretrain(cfg: PretrainConfig, data_dir, out_dir, probe: bool = True) -> dict:
     """Run one pretraining; save the encoder to out_dir; return (and write) pretrain_info.json."""
     torch = _torch()
@@ -293,8 +322,9 @@ def pretrain(cfg: PretrainConfig, data_dir, out_dir, probe: bool = True) -> dict
     t0 = time.time()
     data_dir = Path(data_dir)
     manifest = verify(data_dir)
-    texts = pd.read_csv(data_dir / "headlines_train.csv", usecols=["text"], keep_default_na=False)["text"]
-    dev_texts = pd.read_csv(data_dir / "headlines_dev.csv", usecols=["text"], keep_default_na=False)["text"]
+    text_ids, texts, dev_texts = pretrain_texts(cfg, data_dir)
+    if cfg.text_source == "isarc":
+        probe = False   # the frozen probe is written for the Headlines labels and budgets
 
     import random
     random.seed(cfg.seed)
@@ -404,6 +434,8 @@ def pretrain(cfg: PretrainConfig, data_dir, out_dir, probe: bool = True) -> dict
         # collapse check: per-dimension spread of the target vectors (layer-normed, so ~1 when healthy)
         collapsed = bool(dev_after.get("target_std", 1.0) < 0.05)
     info = {"config": asdict(cfg), "objective": cfg.objective, "n_texts": int(len(texts)),
+            "text_source": cfg.text_source,
+            "text_ids_sha256": hashlib.sha256(",".join(str(i) for i in sorted(text_ids)).encode()).hexdigest(),
             "minutes": round((time.time() - t0) / 60, 2), "train_log": log,
             "dev_before": dev_before, "dev_after": dev_after,
             "probe_before": probe_before, "probe_after": probe_after, "collapsed": collapsed,

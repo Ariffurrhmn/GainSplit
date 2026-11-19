@@ -502,6 +502,38 @@ def pass11_full() -> list[RunConfig]:
             + [_p11("A1", 1, 0, tag="rerun11")])
 
 
+PASS11_E1_BUDGETS = (228, 780, 3120)    # iSarcasmEval label counts: 228 = Headlines 1%, 3,120 = every non-dev tweet
+PASS11_E1_SEEDS = tuple(range(10))       # runs are small and the test set has only 200 positives
+PASS11_E1_STEPS = {"isc28": 1400, "isc100": 4900, "hsub": 1400}   # MLM pretraining steps at batch 64: about 28.7 / 100 / 28.7 passes
+PASS11_E1_CKPT = {tag: f"/kaggle/working/ckpt/mlm_{tag}" for tag in PASS11_E1_STEPS}
+
+
+def pass11_isarc(hs_encoder: str = PASS8_CKPT["mlm"], ckpt: dict | None = None) -> list[RunConfig]:
+    """E1 (vault: Pass 11 Predictions, H11.8-H11.12): does the MLM label-efficiency gain replicate when the label is
+    not the outlet? 120 runs, longest first.
+
+    iSarcasmEval (author-labeled), label counts N = 228 / 780 / 3,120, seeds 0-9, scored on the iSarcasmEval test set:
+    - A1, tag "isc": BERT on N labeled tweets
+    - A20, tag "isc28": MLM pretrained on the iSarcasmEval training tweets minus dev, 1,400 steps (about 28.7 passes)
+    - A20, tag "isc100": the same with 4,900 steps (about 100 passes), N = 228 and 780 only (sensitivity)
+    - A20, tag "hs": the Headlines MLM encoder of Pass 8a (cross-domain control)
+    Size-matched control on Headlines (tag "hsub"): A20 at 1% and 10% labels, seeds 0-4, from an MLM encoder pretrained on a
+    random 3,120-headline subset for 1,400 steps. Baselines A1 and A20 on Headlines exist (Passes 1 and 8a).
+    Needs the iSarcasmEval budget file (data.make_isarc_budgets)."""
+    ckpt = ckpt or PASS11_E1_CKPT
+    def isc(arm, n, s, tag, init=""):
+        return RunConfig(arm, n, s, train_data="isarcasm", init_dir=init, eval_test=True, tag=tag)
+    runs = []
+    for n in sorted(PASS11_E1_BUDGETS, reverse=True):
+        for s in PASS11_E1_SEEDS:
+            runs += [isc("A1", n, s, "isc"), isc("A20", n, s, "isc28", ckpt["isc28"]), isc("A20", n, s, "hs", hs_encoder)]
+            if n != 3120:
+                runs.append(isc("A20", n, s, "isc100", ckpt["isc100"]))
+    runs += [RunConfig("A20", b, s, init_dir=ckpt["hsub"], eval_test=True, tag="hsub")
+             for b in (10, 1) for s in PASS11_SEEDS]
+    return runs
+
+
 def pass11_all(init_dir: str = PASS8_CKPT["mlm"], ckpt: dict | None = None) -> list[RunConfig]:
     """Everything of Pass 11's core notebook in one list (70 runs), longest runs first so the two GPUs stay busy."""
     high = pass11_high(init_dir)
@@ -525,4 +557,4 @@ PLANS = {"lr_tuning": lr_tuning, "w_tuning": w_tuning, "gan_pilot": gan_pilot,
          "pass10_curve_100": pass10_curve_100, "pass10_long": pass10_long,
          "pass11_high": pass11_high, "pass11_ours": pass11_ours, "pass11_ganlong": pass11_ganlong,
          "pass11_dose": pass11_dose, "pass11_a37": pass11_a37, "pass11_all": pass11_all,
-         "pass11_full": pass11_full}
+         "pass11_full": pass11_full, "pass11_isarc": pass11_isarc}

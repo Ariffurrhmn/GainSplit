@@ -30,8 +30,7 @@ def test_a9_is_a2_with_shuffled_labels():
     dict(arm="A4", helper_variant="vader"),
     dict(arm="A3", helper_variant="nonsense"),
     dict(arm="A3", train_data="somewhere"),
-    dict(arm="A3", train_data="isarcasm", budget=100),           # isarcasm is A1 only
-    dict(arm="A1", train_data="isarcasm", budget=10),            # ... and budget 100 only
+    dict(arm="A3", train_data="isarcasm", budget=100),           # isarcasm is A1 (and A20 from an encoder) only
 ])
 def test_bad_combinations_are_rejected(kw):
     with pytest.raises(ValueError):

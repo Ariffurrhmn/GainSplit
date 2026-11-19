@@ -145,7 +145,60 @@ def load_splits(data_dir: Path, budget: int, seed: int) -> Splits:
                   read("isarcasm_test.csv"))
 
 
-def load_isarcasm_splits(data_dir: Path) -> Splits:
+ISARC_BUDGETS_ENV = "GAINSPLIT_ISARC_BUDGETS"   # path of the label-count budgets file for iSarcasmEval (Pass 11 E1)
+
+
+def isarc_budget_ids(budget: int, seed: int) -> list:
+    """Ids of the iSarcasmEval training tweets that keep their label at label count `budget` (read from the file named
+    by GAINSPLIT_ISARC_BUDGETS, made by make_isarc_budgets)."""
+    path = os.environ.get(ISARC_BUDGETS_ENV)
+    if not path:
+        raise KeyError(f"iSarcasmEval budget {budget} needs {ISARC_BUDGETS_ENV} (a file made by make_isarc_budgets)")
+    eb = json.loads(Path(path).read_text())
+    try:
+        return eb[str(seed)][str(budget)]
+    except KeyError:
+        raise KeyError(f"iSarcasmEval budget {budget}, seed {seed} is not in {path}") from None
+
+
+def make_isarc_budgets(data_dir: Path, budgets=(228, 780, 3120), seeds=tuple(range(10))) -> dict:
+    """Nested label sets for iSarcasmEval, as label COUNTS, drawn from the non-dev training tweets.
+
+    Same idea as the Headlines budgets (experiments/01_preprocess.ipynb 3.7): per class, one permutation of the ids per
+    seed; a budget of N takes the first round(N * class share) of the positive class and the rest from the negative
+    class, so the class share stays that of the pool and the sets are nested. The largest budget may be the whole pool.
+    Checks: nested, inside the non-dev pool (never the dev split), exact sizes. Returns {seed: {budget: sorted ids}}."""
+    pool = load_isarcasm_splits(data_dir).labeled
+    pos = pool.loc[pool["label"] == 1, "id"].to_numpy()
+    neg = pool.loc[pool["label"] == 0, "id"].to_numpy()
+    share = len(pos) / len(pool)
+    out = {}
+    for s in seeds:
+        rng = np.random.default_rng(s)
+        perm_pos, perm_neg = rng.permutation(pos), rng.permutation(neg)
+        by_n = {}
+        for n in sorted(budgets):
+            if n > len(pool):
+                raise ValueError(f"budget {n} is larger than the pool of {len(pool)} tweets")
+            k_pos = min(len(pos), int(round(n * share)))
+            k_neg = n - k_pos
+            if k_neg > len(neg):
+                raise ValueError(f"budget {n} needs {k_neg} negatives, the pool has {len(neg)}")
+            ids = sorted(int(i) for i in np.concatenate([perm_pos[:k_pos], perm_neg[:k_neg]]))
+            if len(ids) != n or len(set(ids)) != n:
+                raise ValueError(f"seed {s}: budget {n} has {len(ids)} distinct ids")
+            by_n[str(n)] = ids
+        ns = sorted(by_n, key=int)
+        for small, big in zip(ns, ns[1:]):
+            if not set(by_n[small]) <= set(by_n[big]):
+                raise ValueError(f"seed {s}: budget {small} is not inside budget {big}")
+        if not set().union(*map(set, by_n.values())) <= set(pool["id"]):
+            raise ValueError(f"seed {s}: ids outside the non-dev pool")
+        out[str(s)] = by_n
+    return out
+
+
+def load_isarcasm_splits(data_dir: Path, budget: int | None = None, seed: int = 0) -> Splits:
     """Pass 3, train_data="isarcasm": L is the iSarcasmEval training set minus a held-out dev split.
 
     The dev split is 10% of each class (stratified), drawn with a fixed seed that does not
@@ -165,6 +218,11 @@ def load_isarcasm_splits(data_dir: Path) -> Splits:
     is_dev[dev_rows] = True
     labeled = train[~is_dev].reset_index(drop=True)
     dev = train[is_dev].reset_index(drop=True)
+    if budget is not None:   # Pass 11 E1: only `budget` labeled tweets (their ids come from make_isarc_budgets)
+        ids = set(isarc_budget_ids(budget, seed))
+        labeled = labeled[labeled["id"].isin(ids)].reset_index(drop=True)
+        if len(labeled) != len(ids):
+            raise ValueError("the iSarcasmEval budget file lists ids that are not non-dev training tweets")
     unlabeled = labeled.iloc[0:0].drop(columns=["label"])
     return Splits(labeled, unlabeled, dev, read("headlines_test.csv"), read("isarcasm_test.csv"))
 
