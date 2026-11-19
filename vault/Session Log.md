@@ -1,11 +1,33 @@
 ---
 tags: [log]
-updated: 2026-11-15
+updated: 2026-11-16
 ---
 
 # Session Log
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
+
+## 2026-11-19 - Review triage, Pass 11 planned, coded and run (notebook 22)
+- Done: read both Draft v2 reviews (Google, Consensus) and checked each claim against code, configs and results; wrote `PLAN.md` (triage table, experiments, session schedule, risks) and froze `vault/Pass 11 Predictions.md` (commit c1c2a18). Read the seed paper PDF in full (kept outside the repo, licensed copy). Pass 11 coded (70% budget support, arm A37, plans, `analysis_pass11.py`, tests, notebook `22_pass11_core.ipynb`; commit cd14168; 289 tests pass). Owner ran notebook 22: 70/70 runs, 4.5 h. Results filed in `results/pass11/`, note [[Pass 11 Results]].
+- Review triage ([[Review - Draft v2]], `PLAN.md` section A): helper heads on L + U (A3) was already run and is missing from the paper; Google's "200:1 synthetic mix" refuted (1:1 per step); "200 words per outlet" in the paper is wrong (100 per class); Holm was post hoc for Passes 1-3; Consensus's ULMFiT "10x" is wrong (100x); Li et al. 2021 author list in the Google review is wrong; outlet-balanced evaluation is a no-op.
+- Findings ([[Pass 11 Results]]): A36 beats the seed recipe (A5) by +10.7 / +4.0 / +3.2 / +1.6 at 1 / 5 / 10 / 30%; the seed recipe never beats BERT (1%: -2.3); GAN with 35x steps is 7.9 points worse than BERT at matched steps; MLM gain grows with pretraining steps (0 at 100 steps, +7.4 at 10,000); the seed recipe on the MLM encoder hurts (-1.2 at 1%); at 70% labels no arm reaches 93.88 (best A7 93.40); FGM reaches 93.90 only with all labels. Two predictions failed (H11.16, numeric part of H11.20).
+- Seed paper (VERIFIED from the PDF): Table II support is 28,619 for every model (whole dataset), their BERT baseline is 92.04, GAN-BERT ran about 25 epochs vs about 10 for BERT, no ablation separating the GAN from the helper heads; their architecture has three generator-discriminator pairs and drops the neutral sentiment class (ours differs; re-implementation limit).
+- Open: iSarcasmEval in-domain run (E1, decides how strongly "dataset-specific" can be said), RoBERTa (E4), JEPA seeds (E5), seed-aware bootstrap and polarity analyses (CPU), exact-match re-run check of Passes 1 and 8a after the data-loading change, paper rewrite, instructor's view on the framing.
+- Next: decide framing with the owner (see hub), then E1 and the CPU analyses; paper edits per `PLAN.md` section C.
+
+## 2026-11-16 - Deep review for Draft v2 received and filed
+- Done: received Google deep review on paper Draft v2 (`paper/v2/main.tex`, 5-page IEEEtran manuscript); saved full text in `paper/v2/review.md` and [[Review - Draft v2]].
+- Vault changes: [[Review - Draft v2]] (new note with full review), [[Paper Draft]] (updated with review summary and action items), [[00 - Project Context]] (vault map and current state updated).
+- Findings ([[Review - Draft v2]]):
+  - Verification: fully compliant with double-blind review requirements; 25/25 citations verified by Citation Checker V2 (0 hallucinated, 0 unresolved).
+  - Validations: affirms experimental rigor of 10-route controlled ablation under deterministic multi-seed protocol with Holm correction, mechanistic deconstruction of helper heads (shuffled labels retain 72%, affect probe AUC 0.546), and exemplary claim calibration/bounding via outlet-cue masking and zero-shot transfer.
+  - Action items to address: (1) data exposure / step budget asymmetry between single-stage joint baselines (<28.4% of 1 pass over $U$) and two-stage pretraining (~28 full passes); (2) helper-head supervision scope (clarify A5 on $U$ vs $L$, explain why A2 restricted to $L$); (3) title calibration vs single testbed; (4) TAPT + self-training positioning relative to Li et al. (EMNLP 2021) and latent diffusion vs text UDA distinction; (5) statistical protocol details (Holm family sizes $m$, Table II s.d., pretraining seed/warm-start parity); (6) bibliography initials/page numbers; (7) difference-in-differences interaction test for the Section IV-D polarity-flip placeholder.
+- Next: run polarity-flip CPU analysis using difference-in-differences to complete Section IV-D; update `paper/v2/main.tex` and `paper/v2/refs.bib` to address review suggestions.
+
+## 2026-11-16 - Review context drafted for the Google deep review
+- Owner asked whether to add custom context to the Google deep review of the paper (venue, sections to focus on). Drafted it from `paper/v2/main.tex` and [[Audit - Venues]]: venue and format, claim scope, statistics, the helper-task section, venue fit, reproducibility, limitations, and known open items (red PENDING polarity-flip paragraph, CHECK items in `refs.bib`). Shared in chat only; nothing sent or saved to the repo.
+- No paper, result or code file changed. Not committed.
+- Next: owner pastes the context and sends the v2 PDF; polarity-flip check still open (CPU analysis on existing predictions).
 
 ## 2026-11-15 - Paper draft v2 ("Just Keep Pretraining")
 - Owner picked the title "Just Keep Pretraining: Unlabeled Headlines Beat GANs, Helper Tasks and LLM Data for Low-Label Sarcasm Detection" and asked for a full draft beside the first one. Written in `paper/v2/` ([[Paper Draft]] "Version 2"); `paper/main.tex` and its files untouched.

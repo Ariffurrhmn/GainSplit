@@ -1,6 +1,6 @@
 ---
 tags: [questions]
-updated: 2026-11-09
+updated: 2026-11-16
 ---
 
 # Open Questions
@@ -8,6 +8,8 @@ updated: 2026-11-09
 Hub: [[00 - Project Context]]. Risks: [[Risks]].
 
 ## Do first
+- [ ] **Pass 11 follow-ups** ([[Pass 11 Results]], `PLAN.md`): E1 in-domain run on iSarcasmEval with size-matched control; seed-aware bootstrap and polarity-flip difference-in-differences (CPU); exact-match re-run of A1/A20 at 1% seed 0 after the data-loading change; RoBERTa (E4); JEPA seeds (E5); does the instructor accept a paper that says the seed recipe's GAN and helper heads add nothing in our re-implementation (wording: "which part helps when"); author lists of references [3] and [16].
+- [ ] **Address Draft v2 paper review** ([[Review - Draft v2]], `paper/v2/review.md`): execute the review checklist (run polarity-flip CPU analysis to resolve Section IV-D red PENDING placeholder, clarify data exposure asymmetry, clarify helper head L vs U scope, calibrate title/Intro scope, position TAPT+self-training absorption vs Li 2021, specify Holm contrast family sizes, and clean bibliography initials/accents).
 - [x] Get full text of [[Chen 2022]]. Done 2026-11-08: lexicon-BoW soft target, LSTM, supervised only.
 - [x] Get full text of [[Zihan 2026]]. Done 2026-11-09: GAN-BERT numbers copied from Lora 2023; fractions 3/30/40/50/100%; no MTL arm; no FGM-off ablation.
 - [x] Supervisor meant the seed paper ([[Seed Paper - Irfan 2025]]) for the unavailable setup (owner, 2026-11-09). Zihan 2026 authorship still unknown.

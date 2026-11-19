@@ -1,7 +1,7 @@
 ---
 tags: [paper]
 created: 2026-11-11
-updated: 2026-11-15
+updated: 2026-11-16
 ---
 
 # Paper Draft
@@ -39,3 +39,15 @@ Open items:
 - Bibliography items marked CHECK in `refs.bib` (entered from memory or secondary sources), incl. the seed paper's authors and its 70% labeled share (comment in `main.tex`).
 - The 5-page length leaves room for a model figure or a JEPA/MLM pretraining table if the instructor wants one.
 - Similarity check not run; instructor feedback pending.
+
+### Deep Review Received (2026-11-16)
+Full review text: [[Review - Draft v2]] (and `paper/v2/review.md`).
+- **Verdict / Summary**: Validates paper rigor, controlled ablation of 10 routes, mechanistic deconstruction of affect helper heads, and exemplary claim calibration / diagnostic bounding. Confirmed fully double-blind compliant; all 25 citations verified (0 hallucinated).
+- **Key action items identified**:
+  1. *Title & claim calibration*: Consider narrowing the title slightly (e.g. *"...for Low-Label Headline Sarcasm Detection"*) or explicitly stating in Intro/Limitations that *News Headlines* was chosen specifically to audit published semi-supervised claims.
+  2. *Data exposure & step budget asymmetry*: Note that single-stage semi-supervised baselines (GAN-BERT, consistency) see <28.4% of 1 pass over $U$ at 1% labels under the 200-step budget, whereas MLM/JEPA receive 10k dedicated pretraining steps (~28 passes); frame as two-stage pretraining beating fixed-step joint fine-tuning.
+  3. *Helper heads on $L$ vs $U$*: Clarify whether A5 applies helper losses to $U$ as well as $L$, and explain why A2 was restricted to $L$ rather than $L \cup U$ when teacher pseudo-labels are cost-free.
+  4. *TAPT + Self-Training positioning*: Contrast the absorption finding with Li et al. (EMNLP 2021) complementarity, noting that on this closed pool TAPT already pushes teacher accuracy to 92-96%. Distinguish latent diffusion consistency from text-level UDA.
+  5. *Statistical protocol details*: State family sizes $m$ for Holm's correction; report s.d. in Table II; clarify warm-start vs cold-start head initialization and seed parity (3 seeds for MLM vs 1 for JEPA).
+  6. *Bibliography polish*: Fix author initials for Irfan [3] and Zihan [16], LaTeX diacritic in Marasović [4], duplicate year in [5], missing page numbers.
+  7. *Polarity-flip analysis guidance*: When resolving the PENDING placeholder in IV-D, use a difference-in-differences interaction test to separate polarity sensitivity from overall recall differences.
