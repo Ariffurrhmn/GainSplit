@@ -7,6 +7,11 @@ updated: 2026-11-16
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-20 (later) - Draft v3 written (`paper/v3/`)
+- Done: new manuscript `paper/v3/main.tex` (compiles with tectonic, 5 pages incl. references; preview `draft_v3_preview.pdf`), written results first and then method, discussion, introduction, abstract and title, with a background-problem-solution narrative, a title that states the finding and scope, plain words, no hype words. Reframed around one question (where the seed recipe's gain comes from) per `PLAN.md` section F. All numbers taken from [[Pass 11 Results]] and earlier results notes; A3 means (80.29, 88.64) recomputed from `results/pass1/summary.csv`. Added Li et al. 2021 to `paper/v3/refs.bib` (pages and DOI still CHECK).
+- Left out of the main text by design: GAN dev-check, diffusion/LLM-pair details beyond one row each, the 2x2x2 table (one sentence), the figure of methods (fig_methods dropped; fig_curve kept).
+- Open: owner reads every number against the results notes; confirm author lists for refs [3] and [16]; instructor's view on saying the recipe adds nothing (wording kept to the re-implementation); E4 RoBERTa and E5 JEPA seeds not run (limitations).
+
 ## 2026-11-20 - Pass 11 E1: iSarcasmEval in-domain results (notebook 25)
 - Done: owner ran notebook 25 (`arifurrhmn/notebook639a3cfda1`, commit 8110f91, 302 tests, 120/120 runs, 87.5 min) and downloaded the output. Receipt checked: commit matches HEAD, run grid matches the plan (30 + 30 + 30 + 20 + 10), no errors, no missing values. Filed in `results/pass11_isarc/` (zip, `notebook_25_pass11_isarc.log`, runs, analysis); results in [[Pass 11 Results]]. New encoders left in `results/pass11/e1_receipt/ckpt/` (git-ignored).
 - Findings: in-domain MLM gain on iSarcasmEval is not robust (AUC -1.33 at N=228, +2.45 at N=780, p_holm 0.45; +1.95 at 3,120); BERT is near chance at 228 labels (52.6). Domain-matched encoder is level with the Headlines encoder at 228 and 780. 100 passes = 28.7 passes. Size-matched control keeps about 40% of the gain (+3.00 vs +7.4), so pool size explains a large part of the smaller gain on small pools. H11.8, H11.9, H11.11 not supported; H11.12 supported; H11.10 mixed.
