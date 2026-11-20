@@ -23,7 +23,7 @@
 \maketitle
 
 \begin{abstract}
-Labeled sarcasm data are expensive, so many detectors learn from unlabeled text as well. A recent model for the News Headlines dataset combines GAN-BERT with sentiment and emotion helper tasks and reports 93.88\% accuracy, but it never shows which part of the recipe does the work. Teams that copy the recipe may spend their effort on parts that give nothing. We take the recipe apart and compare each part with the same encoder, the same test set and label budgets from 1\% to 100\%. Neither the GAN nor the helper tasks beat plain BERT at any budget, and the full recipe is 2.3 points worse with 1\% of the labels. A much simpler step wins: continuing BERT's masked-word pretraining on the unlabeled training headlines raises macro-F1 by 7.4 points at 1\% labels and 2.8 points at 10\%, matches BERT trained on ten times more labels, and combined with three cheap add-ons it beats the recipe by 10.7 points at 1\% labels. The gain is specific to this dataset: on tweets labeled by their authors it is small and not reliable. With 70\% of the labels, no tested method reaches the reported 93.88\%, and that figure is not comparable to a held-out score.
+Labeled sarcasm data are expensive, so many detectors also learn from unlabeled text. A recent model for the News Headlines dataset combines GAN-BERT, a generator-and-discriminator method, with sentiment and emotion helper tasks and reports 93.88\% accuracy, but it does not show which part of the recipe does the work. Teams that copy it may build parts that give nothing. We take the recipe apart and test each part against plain BERT, with the same test set and label budgets from 1\% to 100\%. Used as the recipe uses them, neither the GAN nor the helper tasks beat BERT at any budget. A simpler step wins: continuing BERT's masked-word pretraining on the unlabeled training headlines. With 1\% of the labels it adds 7.4 points of macro-F1, the effect of about ten times more labels, and with three cheap add-ons it beats the recipe by 10.7 points. The advantage fades as labels grow, and on tweets labeled by their authors it is small and unreliable, so it is a finding about News Headlines. With 70\% of the labels no tested method reaches 93.88\% on a held-out test set.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -37,10 +37,10 @@ Sarcasm says the opposite of what it means, so systems that read surface sentime
 
 The problem is that such a result credits the whole recipe and no part of it. The original report compares the recipe with BERT, LSTM and CNN models, but not with the recipe minus the GAN or minus the helper tasks. A group that wants to use unlabeled text can therefore not tell what to build. Building a generator, a pair of teacher models and a multi-task loss is slow, and if only one piece matters, the rest is wasted work. A simpler alternative is also on the table: continue BERT's own pretraining on the unlabeled text of the task before fine-tuning~\cite{gururangan2020dont}. It has been compared with self-training on topic and sentiment tasks~\cite{shi2023rethinking}, but not with the recipe above and not for sarcasm.
 
-We take the recipe apart and put every piece, plus the simple alternative, into one controlled test. Only the method under test changes: the encoder, the step budget, the test set and the statistics stay fixed. We ask: (Q1) does the GAN or any helper task carry the recipe's gain, and what does? (Q2) How large is that gain, how stable, and how many labels does it save? (Q3) Does it hold at the label budget of the original report, and on sarcasm labeled by people other than the headline's outlet?
+We take the recipe apart and put every piece, plus the simple alternative, into one controlled test. Only the method under test changes: the encoder, the step budget, the test set and the statistics stay fixed. Throughout, quality is macro-F1, the average of the F1 scores of the sarcastic and the serious class. We ask: (Q1) does the GAN or any helper task carry the recipe's gain, and what does? (Q2) How large is that gain, how stable, and how many labels does it save? (Q3) Does it hold at the label budget of the original report, and on sarcasm labeled by people other than the headline's outlet?
 
 Our findings are:
-(i) neither the GAN nor the helper tasks beat plain BERT at any tested budget, even when the GAN is given 35 times more training steps;
+(i) used as the recipe uses them (on labeled and unlabeled headlines), neither the GAN nor the helper tasks beat plain BERT at any tested budget, even when the GAN is given 35 times more training steps; helper heads on the labeled headlines alone help by 1.6 points at 1\% labels;
 (ii) continued pretraining on the unlabeled training headlines adds 7.4 macro-F1 points at 1\% labels, matches BERT with ten times the labels, and with three cheap add-ons beats the recipe by 10.7 points at 1\% and 1.6 at 30\%;
 (iii) the claim has limits: at 70\% labels all methods tie within one point, the reported 93.88\% cannot be reproduced on a held-out test set, and the gain does not appear reliably on author-labeled tweets.
 
@@ -70,14 +70,15 @@ Every run fine-tunes bert-base-uncased~\cite{devlin2019bert} with a linear sarca
 Settings tuned on development data at 10\% labels (learning rate $5{\times}10^{-5}$, helper weight, FGM size $\epsilon{=}0.5$) were frozen before any test score was computed; nothing else was tuned.
 
 \subsection{Training and statistics}
-All runs use AdamW, batch size 32, maximum length 48 and the same step budget, $\max(200, 10 \text{ passes over } L)$, with no early stopping, and training is deterministic: a re-run of 16 earlier runs reproduced their predictions exactly. Single-stage routes with a $U$ batch per step, such as the GAN, read only 28\% of one pass over $U$ at 1\% labels (200 steps $\times$ 32 of 22,572 headlines), while MLM reads about 28 passes. We therefore also test the GAN with 35 times more steps and MLM with fewer. Seeds 0--4 change the labeled subset, initialization and batch order. We report test macro-F1 (mean $\pm$ s.d.\ over seeds) and compare two methods with a paired bootstrap over test headlines~\cite{berg2012empirical} (10,000 resamples, difference of seed-averaged scores, 95\% interval); a second bootstrap that also resamples seeds is used for the main contrasts. Holm's correction~\cite{holm1979simple} is applied inside each table of contrasts; for Passes~1--3 it was computed after the fact over 38 contrasts, and the earlier uncorrected test was the planned one. Directional hypotheses were written before each pass.
+All runs use AdamW, batch size 32, maximum length 48 and the same step budget, $\max(200, 10 \text{ passes over } L)$, with no early stopping, and training is deterministic: a re-run of 16 earlier runs reproduced their predictions exactly. Single-stage routes with a $U$ batch per step, such as the GAN, read only 28\% of one pass over $U$ at 1\% labels (200 steps $\times$ 32 of 22,572 headlines), while MLM reads about 28 passes. We therefore also test the GAN with 35 times more steps and MLM with fewer. Seeds 0--4 change the labeled subset, initialization and batch order. We report test macro-F1 (mean $\pm$ s.d.\ over seeds) and compare two methods with a paired bootstrap over test headlines~\cite{berg2012empirical} (10,000 resamples, difference of seed-averaged scores, 95\% interval); a second bootstrap that also resamples seeds is used for the main contrasts. Holm's correction~\cite{holm1979simple} is applied inside each table of contrasts; for the earliest comparisons it was computed after the fact over all 38 contrasts, and the uncorrected test was the planned one. Directional hypotheses were written before each round of experiments. Runs used one T4 GPU each (PyTorch 2.11, Transformers 5.20, Python 3.13); every run stores its code commit and library versions, and run-level predictions are released with the code.
 
 % ======================================================================
 \section{Results}
+Q1 is answered by Tables~\ref{tab:main} and~\ref{tab:ours}, Q2 by Fig.~\ref{fig:curve}, and Q3 by Tables~\ref{tab:seven} and~\ref{tab:isarc}.
 
 \begin{table}[t]
 \centering
-\caption{Q1: test macro-F1 (\%, mean $\pm$ s.d.\ over 5 seeds). $U$: reads the unlabeled pool. Bold: best per budget. The seed recipe is \A{A5}.}
+\caption{Q1: test macro-F1 (\%, mean $\pm$ s.d.\ over 5 seeds). $U$: reads the unlabeled pool. Bold: best per budget. The published recipe, re-implemented, is \A{A5}.}
 \label{tab:main}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -92,22 +93,21 @@ Arm & Method & 1\% (228) & 10\% (2,280) \\
 \A{A5} & GAN-BERT + helper heads ($U$) & 78.1\pmsd{2.7} & 88.4\pmsd{0.3} \\
 \A{A24} & Diffusion fakes ($U$) & 80.3\pmsd{2.8} & 88.0\pmsd{0.6} \\
 \A{A25} & Diffusion consistency ($U$) & 75.6\pmsd{4.8} & 87.4\pmsd{0.5} \\
-\A{A10} & LLM-written pairs & 64.0\pmsd{0.9} & 73.4\pmsd{0.7} \\
+\A{A10} & LLM-written pairs & 63.9\pmsd{0.8} & 73.4\pmsd{0.7} \\
 \midrule
 \A{A2} & Helper heads on $L$ only (H) & 82.1\pmsd{0.6} & 88.4\pmsd{0.4} \\
-\A{A7} & FGM (F) & 82.0\pmsd{0.6} & 89.8\pmsd{0.2} \\
-\A{A6} & Self-training (S, $U$) & 82.0\pmsd{0.8} & 88.8\pmsd{0.3} \\
+\A{A7} & FGM (F) & 82.0\pmsd{0.6} & 89.8\pmsd{0.1} \\
+\A{A6} & Self-training (S, $U$) & 82.0\pmsd{0.7} & 88.8\pmsd{0.3} \\
 \A{A30} & H + F + S ($U$) & 84.6\pmsd{0.9} & 89.9\pmsd{0.4} \\
 \midrule
-\A{A22} & JEPA pretraining ($U$) & 86.1\pmsd{0.3} & 89.9\pmsd{0.2} \\
-\A{A20} & MLM pretraining ($U$) & 87.8\pmsd{0.6} & 91.0\pmsd{0.3} \\
+\A{A22} & JEPA pretraining ($U$) & 86.1\pmsd{0.3} & 89.8\pmsd{0.2} \\
+\A{A20} & MLM pretraining ($U$) & 87.8\pmsd{0.5} & 91.0\pmsd{0.3} \\
 \A{A36} & MLM + H + F + S ($U$) & \textbf{88.8}\pmsd{0.3} & \textbf{91.6}\pmsd{0.3} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Q1: The GAN and the helper tasks carry no gain}
-Table~\ref{tab:main} gives the numbers.
+\subsection{Q1: The GAN and the recipe's helper tasks carry no gain}
 
 \textbf{The GAN does nothing.} GAN-BERT is level with BERT at 1, 5 and 10\% ($+0.10$, $-0.11$, $-0.13$ points, all $p > 0.5$) and slightly worse at 30\% ($-0.55$, $p_{\mathrm{Holm}} = 0.053$). Giving it 35 times more steps (about 10 passes over $U$) makes it worse, not better: at 1\% it scores 7.9 points below BERT trained for the same number of steps (73.5 against 81.4, with a large seed spread), and 7.1 below itself at the normal length. The short training is therefore not the reason for its null result. Diffusion samples in place of the GAN's fakes change nothing ($-0.15$ at 1\%).
 
@@ -148,7 +148,7 @@ Table~\ref{tab:ours} puts our best recipe against the original one: the gap is 1
 
 \textbf{Stability.} We pretrained twice more with other seeds. The three encoders give $+7.42$, $+7.72$ and $+6.89$ points over BERT at 1\% and $+2.80$, $+2.68$ and $+2.26$ at 10\%, all with every fine-tuning seed ahead (Fig.~\ref{fig:curve}).
 
-\textbf{Label efficiency.} The gain shrinks as labels grow: $+3.49$ at 5\%, $+1.04$ at 30\% and $+0.09$ with every label (not significant). With 1\% of the labels the pretrained model is level with BERT trained on 10\% ($-0.38$ [$-1.15$, 0.41]), so it saves about a factor of ten in labels there; the same F1 would need 4.4, 3.3 and 1.7 times more labels for BERT at 5, 10 and 30\%. These are ``no significant difference'' results, not proofs of equality.
+\textbf{Label efficiency.} The gain shrinks as labels grow: $+3.49$ at 5\%, $+1.04$ at 30\% and $+0.09$ with every label (not significant). With 1\% of the labels the pretrained model is level with BERT trained on 10\% ($-0.38$ [$-1.15$, 0.41]), so it saves roughly a factor of eight to ten in labels there. Reading BERT's own curve (straight lines between budgets on a log scale), BERT would need 4.4, 3.3 and 1.7 times more labels to match the pretrained model at 5, 10 and 30\%. These are ``no significant difference'' results, not proofs of equality.
 
 \textbf{More pretraining, more gain.} At 1\% labels the gain over BERT is $-0.36$ after 100 steps (the GAN's exposure to $U$, 6,400 headlines), $+1.66$ after 350, $+3.08$ after 1,000, $+5.24$ after 3,000 and $+7.42$ after 10,000 steps. Exposure matters for MLM, but it does not rescue the GAN, which gets worse with more steps (Q1).
 
@@ -193,21 +193,21 @@ $N$ & \A{A1} & \A{A20} & difference [95\% CI] \\
 \end{tabular}
 \end{table}
 
-\textbf{Author-labeled tweets.} Headlines carry the outlet as label, so we repeated the test on iSarcasmEval, whose tweets are labeled by their authors: MLM on the unlabeled training tweets, BERT and MLM fine-tuned on $N$ = 228, 780 and 3,120 labeled tweets (Table~\ref{tab:isarc}). The gain is not reliable. It is negative at 228 labels, where BERT is near chance (AUC 52.6) and a gain could not be seen anyway, and $+2.45$ at 780, whose interval just excludes zero but does not survive correction ($p_{\mathrm{Holm}} = 0.45$). The Headlines encoder is level with the in-domain one at 228 and 780 labels (differences $+0.08$ and $+0.20$). More pretraining (100 instead of 28.7 passes) changes nothing ($+0.38$, $-0.10$). A control with an encoder pretrained on a random 3,120-headline subset, the size of the tweet pool, keeps $+3.00$ of the full pool's $+7.4$ at 1\% labels: a small pool explains a large part of the smaller gain, though not all. Models pretrained on headlines also stay near chance on iSarcasmEval without any tweet labels (AUC 47.8 to 57.3), below a rule that scores each tweet by its word count alone (68.7).
+\textbf{Author-labeled tweets.} Headlines carry the outlet as label, so we repeated the test on iSarcasmEval, whose tweets are labeled by their authors: MLM on the unlabeled training tweets, BERT and MLM fine-tuned on $N$ = 228, 780 and 3,120 labeled tweets (Table~\ref{tab:isarc}; AUC is the area under the ROC curve, 50 is chance). The gain is not reliable. It is negative at 228 labels, where BERT is near chance (AUC 52.6) and a gain could not be seen anyway, and $+2.45$ at 780, whose interval just excludes zero but does not survive correction ($p_{\mathrm{Holm}} = 0.45$). The Headlines encoder is level with the in-domain one at 228 and 780 labels (differences $+0.08$ and $+0.20$). More pretraining (100 instead of 28.7 passes) changes nothing ($+0.38$, $-0.10$). A control with an encoder pretrained on a random 3,120-headline subset, the size of the tweet pool, keeps $+3.00$ of the full pool's $+7.4$ at 1\% labels: a small pool explains a large part of the smaller gain, though not all. Models pretrained on headlines also stay near chance on iSarcasmEval without any tweet labels (AUC 47.8 to 57.3), below a rule that scores each tweet by its word count alone (68.7).
 
 % ======================================================================
 \section{Discussion}
 
-\textbf{What to use when labels are scarce.} Before building generators or helper tasks, continue pretraining the encoder on the unlabeled text already at hand. In our tests this took about 35 minutes of one GPU, needed no extra model or data, and gave the largest gain at every budget up to 30\%. The recipe's GAN and helper tasks add nothing over BERT in our re-implementation; pretraining is the piece that matters. This agrees with results on topic and sentiment tasks~\cite{gururangan2020dont,shi2023rethinking,li2021tapt}; what we add is that it holds for sarcasm, against the parts of a published sarcasm recipe.
+\textbf{What to use when labels are scarce.} Before building generators or helper tasks, continue pretraining the encoder on the unlabeled text already at hand. In our tests this took about 35 minutes of one GPU, needed no extra model or data, and gave the largest gain at every budget up to 30\%. The recipe's GAN and helper tasks, as used there, add nothing over BERT in our re-implementation; pretraining is the piece that matters. This agrees with results on topic and sentiment tasks~\cite{gururangan2020dont,shi2023rethinking,li2021tapt}; what we add is that it holds for sarcasm, against the parts of a published sarcasm recipe.
 
 \textbf{What the gain means.} The gain is label efficiency on News Headlines. The pretrained model learns the dataset faster, outlet vocabulary included, and it does not transfer. A two-outlet corpus is the ideal case for continued pretraining, because outlet style is exactly what masked-word prediction learns from the unlabeled text. The weak result on iSarcasmEval fits that reading, though it also fits a small pool and a noisy, hard test set, and we cannot separate the two. High scores on this dataset should not be read as sarcasm understanding.
 
-\textbf{Limitations.} (i) One encoder size, one main dataset and one author-labeled check with low ceiling; JEPA used one pretraining seed. (ii) Our recipe is a re-implementation from the paper's description, with one generator instead of three and three sentiment classes instead of two. Our statements concern that re-implementation. They say nothing about the original code, and the original numbers are not comparable with ours (different split, different scoring). (iii) The GAN with long training was tried with one schedule and one learning rate; its instability was not diagnosed. (iv) The bootstrap resamples test headlines (and, for the main contrasts, seeds); cross-budget comparisons pair different labeled subsets. (v) The sentiment audit used a single annotator.
+\textbf{Limitations and threats to validity.} (i) One encoder size, one main dataset and one author-labeled check with low ceiling; JEPA used one pretraining seed. (ii) Our recipe is a re-implementation from the paper's description, with one generator instead of three and three sentiment classes instead of two. Our statements concern that re-implementation. They say nothing about the original code, and the original numbers are not comparable with ours (different split, different scoring). (iii) The GAN with long training was tried with one schedule and one learning rate; its instability was not diagnosed. (iv) The bootstrap resamples test headlines (and, for the main contrasts, seeds); cross-budget comparisons pair different labeled subsets. (v) The sentiment audit used a single annotator.
 
 % ======================================================================
 \section{Conclusion}
 
-The part of a published sarcasm recipe that was supposed to help, the GAN and the helper tasks, gives nothing over plain BERT in our re-implementation at any tested budget, even with 35 times more steps for the GAN. Continuing BERT's masked-word pretraining on the unlabeled training headlines gives much more: 7.4 macro-F1 points at 1\% labels, the effect of ten times more labels, and with three cheap add-ons 10.7 points over the recipe. The advantage shrinks to a tie at 70\% labels, and on author-labeled tweets it is not reliable, so it is a statement about News Headlines. Future semi-supervised sarcasm work should report continued pretraining as a baseline, ablate each part of a combined recipe, and score on held-out data.
+In our re-implementation of a published sarcasm recipe, the GAN and the helper tasks, used as the recipe uses them, give nothing over plain BERT at any tested budget. Continuing BERT's masked-word pretraining on the unlabeled training headlines gives far more: 7.4 macro-F1 points with 1\% of the labels, and 10.7 points over the recipe once three cheap add-ons are included. The gap closes as labels grow and does not carry reliably to author-labeled tweets. For practitioners with few labels and plenty of unlabeled text: pretrain on that text first, and test any extra component against that baseline. Future work should ablate each part of a combined recipe and score on held-out data.
 
 \bibliographystyle{IEEEtran}
 \bibliography{refs}
