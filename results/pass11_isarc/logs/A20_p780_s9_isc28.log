@@ -1,0 +1,6 @@
+A20_p780_s9_isc28: |L|=780 |U|=0 steps=250 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2841.22it/s]
+  step 100/250  loss_sarc 0.3757  loss 0.3757
+  step 200/250  loss_sarc 0.01665  loss 0.01665
+  step 250/250  loss_sarc 0.00712  loss 0.00712
+A20_p780_s9_isc28: done in 0.54 min; dev macro-F1 0.5749, test macro-F1 0.4762, isarc_test macro-F1 0.5556

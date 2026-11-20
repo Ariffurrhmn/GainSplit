@@ -7,6 +7,11 @@ updated: 2026-11-16
 
 Newest first. Hub: [[00 - Project Context]]. Format: [[Templates/Session Entry]].
 
+## 2026-11-20 - Pass 11 E1: iSarcasmEval in-domain results (notebook 25)
+- Done: owner ran notebook 25 (`arifurrhmn/notebook639a3cfda1`, commit 8110f91, 302 tests, 120/120 runs, 87.5 min) and downloaded the output. Receipt checked: commit matches HEAD, run grid matches the plan (30 + 30 + 30 + 20 + 10), no errors, no missing values. Filed in `results/pass11_isarc/` (zip, `notebook_25_pass11_isarc.log`, runs, analysis); results in [[Pass 11 Results]]. New encoders left in `results/pass11/e1_receipt/ckpt/` (git-ignored).
+- Findings: in-domain MLM gain on iSarcasmEval is not robust (AUC -1.33 at N=228, +2.45 at N=780, p_holm 0.45; +1.95 at 3,120); BERT is near chance at 228 labels (52.6). Domain-matched encoder is level with the Headlines encoder at 228 and 780. 100 passes = 28.7 passes. Size-matched control keeps about 40% of the gain (+3.00 vs +7.4), so pool size explains a large part of the smaller gain on small pools. H11.8, H11.9, H11.11 not supported; H11.12 supported; H11.10 mixed.
+- Next: paper rewrite per `PLAN.md` section C, with the in-domain claim scoped to Headlines; E4 (RoBERTa) and E5 (JEPA seeds) optional.
+
 ## 2026-11-19 (later still) - Pass 11c: CPU analyses (notebook 24)
 - Done: `analysis_pass11_cpu.py` (polarity difference-in-differences, seed-aware bootstrap), tests, notebook `24_pass11_cpu.ipynb` (commit e277a55); pushed to Kaggle as a private CPU notebook (`arifurrhmn/notebook-24`), ran in 0.8 min. Receipts in `results/pass11_cpu/`; results in [[Pass 11 Results]].
 - Findings: A20 - A1 keeps its interval above 0 when seeds are resampled (1%: +7.42 [6.18, 8.68]); A36 - A5 excludes 0 at 1, 5, 10 and 30% (1%: +10.68 [8.57, 13.36]); single-route +1.6 gains stay positive (FGM ahead on 4 of 5 seeds); JEPA below MLM on every seed. Polarity DiD: A2 vs A1 +2.6 and +2.8 points (positive, raw intervals just exclude 0, not significant after Holm); no DiD on the MLM encoder. H11.4 not supported (intervals not 2x wider for all three, none includes 0).

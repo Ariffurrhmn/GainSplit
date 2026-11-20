@@ -1,0 +1,13 @@
+A20_p3120_s7_isc28: |L|=3120 |U|=0 steps=980 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2613.95it/s]
+  step 100/980  loss_sarc 0.5684  loss 0.5684
+  step 200/980  loss_sarc 0.4793  loss 0.4793
+  step 300/980  loss_sarc 0.2017  loss 0.2017
+  step 400/980  loss_sarc 0.05771  loss 0.05771
+  step 500/980  loss_sarc 0.02483  loss 0.02483
+  step 600/980  loss_sarc 0.01387  loss 0.01387
+  step 700/980  loss_sarc 0.01498  loss 0.01498
+  step 800/980  loss_sarc 0.00755  loss 0.00755
+  step 900/980  loss_sarc 0.00589  loss 0.00589
+  step 980/980  loss_sarc 0.00365  loss 0.00365
+A20_p3120_s7_isc28: done in 1.79 min; dev macro-F1 0.6624, test macro-F1 0.4858, isarc_test macro-F1 0.6001

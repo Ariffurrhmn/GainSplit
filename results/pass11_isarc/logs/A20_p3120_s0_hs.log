@@ -1,0 +1,15 @@
+A20_p3120_s0_hs: |L|=3120 |U|=0 steps=980 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2550.31it/s]
+/tmp/GainSplit/src/gainsplit/train.py:184: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+  step 100/980  loss_sarc 0.5957  loss 0.5957
+  step 200/980  loss_sarc 0.4714  loss 0.4714
+  step 300/980  loss_sarc 0.1881  loss 0.1881
+  step 400/980  loss_sarc 0.06887  loss 0.06887
+  step 500/980  loss_sarc 0.03691  loss 0.03691
+  step 600/980  loss_sarc 0.01113  loss 0.01113
+  step 700/980  loss_sarc 0.00915  loss 0.00915
+  step 800/980  loss_sarc 0.00638  loss 0.00638
+  step 900/980  loss_sarc 0.0036  loss 0.0036
+  step 980/980  loss_sarc 0.00356  loss 0.00356
+A20_p3120_s0_hs: done in 1.76 min; dev macro-F1 0.5904, test macro-F1 0.4278, isarc_test macro-F1 0.6022

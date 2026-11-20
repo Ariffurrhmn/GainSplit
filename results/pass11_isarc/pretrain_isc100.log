@@ -1,0 +1,38 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/202 [00:00<?, ?it/s]Loading weights: 100%|██████████| 202/202 [00:00<00:00, 2752.89it/s]
+[transformers] [1mBertForMaskedLM LOAD REPORT[0m from: bert-base-uncased
+Key                         | Status     |  | 
+----------------------------+------------+--+-
+bert.pooler.dense.bias      | UNEXPECTED |  | 
+bert.pooler.dense.weight    | UNEXPECTED |  | 
+cls.seq_relationship.bias   | UNEXPECTED |  | 
+cls.seq_relationship.weight | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/ssl_pretrain.py:409: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+before pretraining: dev {'loss': 4.85592}
+  step 250/4900  loss 3.645
+  step 500/4900  loss 2.878
+  step 750/4900  loss 2.349
+  step 1000/4900  loss 1.95
+  step 1250/4900  loss 1.626
+  step 1500/4900  loss 1.362
+  step 1750/4900  loss 1.171
+  step 2000/4900  loss 1.048
+  step 2250/4900  loss 0.9059
+  step 2500/4900  loss 0.7933
+  step 2750/4900  loss 0.736
+  step 3000/4900  loss 0.6506
+  step 3250/4900  loss 0.5957
+  step 3500/4900  loss 0.5604
+  step 3750/4900  loss 0.539
+  step 4000/4900  loss 0.4993
+  step 4250/4900  loss 0.4745
+  step 4500/4900  loss 0.4474
+  step 4750/4900  loss 0.4606
+  step 4900/4900  loss 0.4336
+after pretraining: dev {'loss': 4.38913}
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  1.76it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  1.76it/s]
+saved mlm encoder to /kaggle/working/ckpt/mlm_isc100 (16.44 min)

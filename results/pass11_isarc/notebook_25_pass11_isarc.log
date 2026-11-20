@@ -1,0 +1,368 @@
+[{"stream_name":"stderr","time":9.229366505,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.229440066,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.2294477,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.229452046,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":9.868807232,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.868870737,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.868877267,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.868881702,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":11.123186932,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stderr","time":11.325885043,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stderr","time":11.325917371,"data":"\n"}
+,{"stream_name":"stderr","time":11.325924133000001,"data":"Cloning into '/tmp/GainSplit'...\n"}
+,{"stream_name":"stderr","time":27.594851907,"data":"Updating files:  86% (4321/4999)\rUpdating files:  87% (4350/4999)\rUpdating files:  88% (4400/4999)\rUpdating files:  89% (4450/4999)\rUpdating files:  90% (4500/4999)\rUpdating files:  91% (4550/4999)\rUpdating files:  92% (4600/4999)\rUpdating files:  93% (4650/4999)\rUpdating files:  94% (4700/4999)\rUpdating files:  95% (4750/4999)\rUpdating files:  96% (4800/4999)\rUpdating files:  97% (4850/4999)\rUpdating files:  98% (4900/4999)\rUpdating files:  99% (4950/4999)\rUpdating files: 100% (4999/4999)\rUpdating files: 100% (4999/4999), done.\n"}
+,{"stream_name":"stdout","time":27.611120787,"data":"code commit: 8110f91214daa91b09590189d130e631afb9755d\n"}
+,{"stream_name":"stderr","time":27.612332706,"data":"Updating files:  86% (4321/4999)\rUpdating files:  87% (4350/4999)\rUpdating files:  88% (4400/4999)\rUpdating files:  89% (4450/4999)\rUpdating files:  90% (4500/4999)\rUpdating files:  91% (4550/4999)\rUpdating files:  92% (4600/4999)\rUpdating files:  93% (4650/4999)\rUpdating files:  94% (4700/4999)\rUpdating files:  95% (4750/4999)\rUpdating files:  96% (4800/4999)\rUpdating files:  97% (4850/4999)\rUpdating files:  98% (4900/4999)\rUpdating files:  99% (4950/4999)\rUpdating files: 100% (4999/4999)\rUpdating files: 100% (4999/4999), done.\n"}
+,{"stream_name":"stderr","time":27.612368528,"data":"\n"}
+,{"stream_name":"stderr","time":27.612374147,"data":"Updating files:  86% (4321/4999)\rUpdating files:  87% (4350/4999)\rUpdating files:  88% (4400/4999)\rUpdating files:  89% (4450/4999)\rUpdating files:  90% (4500/4999)\rUpdating files:  91% (4550/4999)\rUpdating files:  92% (4600/4999)\rUpdating files:  93% (4650/4999)\rUpdating files:  94% (4700/4999)\rUpdating files:  95% (4750/4999)\rUpdating files:  96% (4800/4999)\rUpdating files:  97% (4850/4999)\rUpdating files:  98% (4900/4999)\rUpdating files:  99% (4950/4999)\rUpdating files: 100% (4999/4999)\rUpdating files: 100% (4999/4999), done.\n"}
+,{"stream_name":"stdout","time":151.869926738,"data":" warnings\n"}
+,{"stream_name":"stdout","time":151.869988616,"data":"tests/test_masking.py: 2 warnings\n"}
+,{"stream_name":"stdout","time":151.870582146,"data":"tests/test_pass4.py: 148 warnings\n"}
+,{"stream_name":"stdout","time":151.870597843,"data":"tests/test_pass4_train.py: 102 warnings\n"}
+,{"stream_name":"stdout","time":151.870602446,"data":"tests/test_pass8.py: 40 warnings\n"}
+,{"stream_name":"stdout","time":151.870618176,"data":"tests/test_tfidf_plans.py: 8 warnings\n"}
+,{"stream_name":"stdout","time":151.870622323,"data":"  /usr/local/lib/python3.13/dist-packages/sklearn/linear_model/_logistic.py:451: DeprecationWarning: scipy.optimize: The `disp` and `iprint` options of the L-BFGS-B solver are deprecated and will be removed in SciPy 1.18.0.\n"}
+,{"stream_name":"stdout","time":151.870627965,"data":"    opt_res = optimize.minimize(\n"}
+,{"stream_name":"stdout","time":151.87063142,"data":"\n"}
+,{"stream_name":"stdout","time":151.870634723,"data":"tests/test_pass4.py::test_pass4_analysis_end_to_end\n"}
+,{"stream_name":"stdout","time":151.870638818,"data":"  /tmp/GainSplit/src/gainsplit/analysis_pass4.py:179: FutureWarning: DataFrameGroupBy.apply operated on the grouping columns. This behavior is deprecated, and in a future version of pandas the grouping columns will be excluded from the operation. Either pass `include_groups=False` to exclude the groupings or explicitly select the grouping columns after groupby to silence this warning.\n"}
+,{"stream_name":"stdout","time":151.870643526,"data":"    \"median_rel_completeness_gap\": g.apply(\n"}
+,{"stream_name":"stdout","time":151.870647228,"data":"\n"}
+,{"stream_name":"stdout","time":151.870650469,"data":"tests/test_pass5_7.py::test_pass5_7_analysis_end_to_end\n"}
+,{"stream_name":"stdout","time":151.870653879,"data":"  /tmp/GainSplit/src/gainsplit/analysis_pass4.py:266: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.\n"}
+,{"stream_name":"stdout","time":151.870658141,"data":"    return pd.concat(out, ignore_index=True)\n"}
+,{"stream_name":"stdout","time":151.870661638,"data":"\n"}
+,{"stream_name":"stdout","time":151.870664741,"data":"-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n"}
+,{"stream_name":"stdout","time":151.870668102,"data":"302 passed, 531 warnings in 118.17s (0:01:58)\n"}
+,{"stream_name":"stdout","time":151.870671523,"data":" \n"}
+,{"stream_name":"stdout","time":151.982475383,"data":"predictions status: ['FROZEN'] | E1 hypotheses present: True\n"}
+,{"stream_name":"stdout","time":156.771581164,"data":"Headlines MLM encoder (seed 0, 10,000 steps): /kaggle/input/notebooks/arifurrhmn/notebook-15/ckpt/mlm - weights match the Pass 8a receipt\n"}
+,{"stream_name":"stdout","time":159.939608791,"data":"data: /kaggle/input/datasets/arifurrhmn/gainsplit-processed - all files match manifest.json and manifest_pass3.json\n"}
+,{"stream_name":"stdout","time":159.939647243,"data":"iSarcasmEval train: 3120 non-dev tweets (0.250 sarcastic), dev 347, test 1400 (0.143 sarcastic)\n"}
+,{"stream_name":"stdout","time":159.939651955,"data":"N=228: seed 0 -\u003e 228 tweets, sarcastic share 0.250\n"}
+,{"stream_name":"stdout","time":159.939656244,"data":"N=780: seed 0 -\u003e 780 tweets, sarcastic share 0.250\n"}
+,{"stream_name":"stdout","time":159.939659824,"data":"N=3120: seed 0 -\u003e 3120 tweets, sarcastic share 0.250\n"}
+,{"stream_name":"stdout","time":160.179980876,"data":"GPUs: ['Tesla T4', 'Tesla T4']\n"}
+,{"stream_name":"stdout","time":160.383082361,"data":"120 runs; [('hs', 'isarcasm'), ('hsub', 'headlines'), ('isc', 'isarcasm'), ('isc100', 'isarcasm'), ('isc28', 'isarcasm')]\n"}
+,{"stream_name":"stdout","time":160.383116131,"data":"A1_p3120_s0_isc            arm=A1  data=isarcasm  labels=3120 seed=0 init=-\n"}
+,{"stream_name":"stdout","time":160.383127226,"data":"A20_p3120_s0_isc28         arm=A20 data=isarcasm  labels=3120 seed=0 init=/kaggle/working/ckpt/mlm_isc28\n"}
+,{"stream_name":"stdout","time":160.383130401,"data":"A20_p3120_s0_hs            arm=A20 data=isarcasm  labels=3120 seed=0 init=/kaggle/input/notebooks/arifurrhmn/notebook-15/ckpt/mlm\n"}
+,{"stream_name":"stdout","time":160.38314381,"data":"A20_p1_s2_hsub             arm=A20 data=headlines labels=1 seed=2 init=/kaggle/working/ckpt/mlm_hsub\n"}
+,{"stream_name":"stdout","time":160.383146353,"data":"A20_p1_s3_hsub             arm=A20 data=headlines labels=1 seed=3 init=/kaggle/working/ckpt/mlm_hsub\n"}
+,{"stream_name":"stdout","time":160.383148794,"data":"A20_p1_s4_hsub             arm=A20 data=headlines labels=1 seed=4 init=/kaggle/working/ckpt/mlm_hsub\n"}
+,{"stream_name":"stdout","time":1160.909488853,"data":"isc28: 4.68 min; 3120 texts (isarc); dev MLM loss 4.85592 -\u003e 3.56617\n"}
+,{"stream_name":"stdout","time":1160.909553115,"data":"isc100: 16.44 min; 3120 texts (isarc); dev MLM loss 4.85592 -\u003e 4.38913\n"}
+,{"stream_name":"stdout","time":1160.909559954,"data":"hsub: 5.37 min; 3120 texts (headlines_subset); dev MLM loss 5.85272 -\u003e 4.20398\n"}
+,{"stream_name":"stdout","time":1160.909564932,"data":"pretraining: 16.6 min\n"}
+,{"stream_name":"stdout","time":1161.129120429,"data":"120 runs, 0 already done, 120 to run on GPU [0, 1]\n"}
+,{"stream_name":"stdout","time":1161.129153527,"data":"start  A1_p3120_s0_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":1161.129158704,"data":"start  A20_p3120_s0_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":1275.14023844,"data":"done   A1_p3120_s0_isc  (1.9 min)\n"}
+,{"stream_name":"stdout","time":1278.147709906,"data":"start  A20_p3120_s0_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":1281.137871092,"data":"done   A20_p3120_s0_isc28  (2.0 min)\n"}
+,{"stream_name":"stdout","time":1284.140178594,"data":"start  A1_p3120_s1_isc  on GPU 1\n"}
+,{"stream_name":"stdout","time":1395.150185026,"data":"done   A20_p3120_s0_hs  (2.0 min)\n"}
+,{"stream_name":"stdout","time":1398.149549758,"data":"start  A20_p3120_s1_isc28  on GPU 0\n"}
+,{"stream_name":"stdout","time":1404.147362889,"data":"done   A1_p3120_s1_isc  (2.0 min)\n"}
+,{"stream_name":"stdout","time":1407.15312639,"data":"start  A20_p3120_s1_hs  on GPU 1\n"}
+,{"stream_name":"stdout","time":1515.159066122,"data":"done   A20_p3120_s1_isc28  (2.0 min)\n"}
+,{"stream_name":"stdout","time":1518.157458848,"data":"start  A1_p3120_s2_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":1527.155495862,"data":"done   A20_p3120_s1_hs  (2.0 min)\n"}
+,{"stream_name":"stdout","time":1530.163140848,"data":"start  A20_p3120_s2_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":1635.165226986,"data":"done   A1_p3120_s2_isc  (2.0 min)\n"}
+,{"stream_name":"stdout","time":1638.166668765,"data":"start  A20_p3120_s2_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":1650.164155152,"data":"done   A20_p3120_s2_isc28  (2.0 min)\n"}
+,{"stream_name":"stdout","time":1653.167161594,"data":"start  A1_p3120_s3_isc  on GPU 1\n"}
+,{"stream_name":"stdout","time":1755.176890205,"data":"done   A20_p3120_s2_hs  (2.0 min)\n"}
+,{"stream_name":"stdout","time":1758.175603621,"data":"start  A20_p3120_s3_isc28  on GPU 0\n"}
+,{"stream_name":"stdout","time":1773.173055354,"data":"done   A1_p3120_s3_isc  (2.0 min)\n"}
+,{"stream_name":"stdout","time":1776.17612781,"data":"start  A20_p3120_s3_hs  on GPU 1\n"}
+,{"stream_name":"stdout","time":1875.182141168,"data":"done   A20_p3120_s3_isc28  (2.0 min)\n"}
+,{"stream_name":"stdout","time":1878.182234868,"data":"start  A1_p3120_s4_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":1896.180964561,"data":"done   A20_p3120_s3_hs  (2.0 min)\n"}
+,{"stream_name":"stdout","time":1899.188627195,"data":"start  A20_p3120_s4_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":1998.193579315,"data":"done   A1_p3120_s4_isc  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2001.192756458,"data":"start  A20_p3120_s4_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":2019.190572776,"data":"done   A20_p3120_s4_isc28  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2022.196129877,"data":"start  A1_p3120_s5_isc  on GPU 1\n"}
+,{"stream_name":"stdout","time":2118.201927548,"data":"done   A20_p3120_s4_hs  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2121.199352029,"data":"start  A20_p3120_s5_isc28  on GPU 0\n"}
+,{"stream_name":"stdout","time":2142.199420926,"data":"done   A1_p3120_s5_isc  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2145.203124463,"data":"start  A20_p3120_s5_hs  on GPU 1\n"}
+,{"stream_name":"stdout","time":2238.21071821,"data":"done   A20_p3120_s5_isc28  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2241.216128589,"data":"start  A1_p3120_s6_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":2265.2079126,"data":"done   A20_p3120_s5_hs  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2268.226189019,"data":"start  A20_p3120_s6_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":2361.220122708,"data":"done   A1_p3120_s6_isc  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2364.218134124,"data":"start  A20_p3120_s6_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":2388.216655249,"data":"done   A20_p3120_s6_isc28  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2391.219383474,"data":"start  A1_p3120_s7_isc  on GPU 1\n"}
+,{"stream_name":"stdout","time":2481.226085062,"data":"done   A20_p3120_s6_hs  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2484.228097284,"data":"start  A20_p3120_s7_isc28  on GPU 0\n"}
+,{"stream_name":"stdout","time":2511.224949153,"data":"done   A1_p3120_s7_isc  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2514.236575948,"data":"start  A20_p3120_s7_hs  on GPU 1\n"}
+,{"stream_name":"stdout","time":2601.237669995,"data":"done   A20_p3120_s7_isc28  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2604.234167676,"data":"start  A1_p3120_s8_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":2634.240445348,"data":"done   A20_p3120_s7_hs  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2637.239567784,"data":"start  A20_p3120_s8_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":2724.246649957,"data":"done   A1_p3120_s8_isc  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2727.243398964,"data":"start  A20_p3120_s8_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":2757.246687477,"data":"done   A20_p3120_s8_isc28  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2760.24811907,"data":"start  A1_p3120_s9_isc  on GPU 1\n"}
+,{"stream_name":"stdout","time":2847.252662976,"data":"done   A20_p3120_s8_hs  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2850.254138401,"data":"start  A20_p3120_s9_isc28  on GPU 0\n"}
+,{"stream_name":"stdout","time":2883.255455129,"data":"done   A1_p3120_s9_isc  (2.1 min)\n"}
+,{"stream_name":"stdout","time":2886.253156736,"data":"start  A20_p3120_s9_hs  on GPU 1\n"}
+,{"stream_name":"stdout","time":2970.264679702,"data":"done   A20_p3120_s9_isc28  (2.0 min)\n"}
+,{"stream_name":"stdout","time":2973.264526733,"data":"start  A1_p780_s0_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":3006.264569637,"data":"done   A20_p3120_s9_hs  (2.0 min)\n"}
+,{"stream_name":"stdout","time":3009.264721102,"data":"start  A20_p780_s0_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":3015.262915564,"data":"done   A1_p780_s0_isc  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3018.267129358,"data":"start  A20_p780_s0_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":3054.269450491,"data":"done   A20_p780_s0_isc28  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3057.270580981,"data":"start  A20_p780_s0_isc100  on GPU 1\n"}
+,{"stream_name":"stdout","time":3060.267612075,"data":"done   A20_p780_s0_hs  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3063.273122818,"data":"start  A1_p780_s1_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":3102.277364409,"data":"done   A20_p780_s0_isc100  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3105.275875757,"data":"start  A20_p780_s1_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":3105.275909626,"data":"done   A1_p780_s1_isc  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3108.275619712,"data":"start  A20_p780_s1_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":3150.280203293,"data":"done   A20_p780_s1_isc28  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3150.280238195,"data":"done   A20_p780_s1_hs  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3153.291128502,"data":"start  A20_p780_s1_isc100  on GPU 0\n"}
+,{"stream_name":"stdout","time":3153.291160022,"data":"start  A1_p780_s2_isc  on GPU 1\n"}
+,{"stream_name":"stdout","time":3195.28580038,"data":"done   A20_p780_s1_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3198.284405843,"data":"start  A20_p780_s2_isc28  on GPU 0\n"}
+,{"stream_name":"stdout","time":3198.284438493,"data":"done   A1_p780_s2_isc  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3201.287689865,"data":"start  A20_p780_s2_hs  on GPU 1\n"}
+,{"stream_name":"stdout","time":3240.293112293,"data":"done   A20_p780_s2_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3243.291134071,"data":"start  A20_p780_s2_isc100  on GPU 0\n"}
+,{"stream_name":"stdout","time":3246.287510258,"data":"done   A20_p780_s2_hs  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3249.293123662,"data":"start  A1_p780_s3_isc  on GPU 1\n"}
+,{"stream_name":"stdout","time":3285.298651619,"data":"done   A20_p780_s2_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3288.296407488,"data":"start  A20_p780_s3_isc28  on GPU 0\n"}
+,{"stream_name":"stdout","time":3294.29406803,"data":"done   A1_p780_s3_isc  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3297.297376721,"data":"start  A20_p780_s3_hs  on GPU 1\n"}
+,{"stream_name":"stdout","time":3330.302605294,"data":"done   A20_p780_s3_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3333.29995996,"data":"start  A20_p780_s3_isc100  on GPU 0\n"}
+,{"stream_name":"stdout","time":3342.299920557,"data":"done   A20_p780_s3_hs  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3345.305547973,"data":"start  A1_p780_s4_isc  on GPU 1\n"}
+,{"stream_name":"stdout","time":3375.307413782,"data":"done   A20_p780_s3_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3378.307185868,"data":"start  A20_p780_s4_isc28  on GPU 0\n"}
+,{"stream_name":"stdout","time":3390.305670578,"data":"done   A1_p780_s4_isc  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3393.310178267,"data":"start  A20_p780_s4_hs  on GPU 1\n"}
+,{"stream_name":"stdout","time":3420.31295753,"data":"done   A20_p780_s4_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3423.314573083,"data":"start  A20_p780_s4_isc100  on GPU 0\n"}
+,{"stream_name":"stdout","time":3438.310881189,"data":"done   A20_p780_s4_hs  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3441.31261419,"data":"start  A1_p780_s5_isc  on GPU 1\n"}
+,{"stream_name":"stdout","time":3465.319271574,"data":"done   A20_p780_s4_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3468.317163959,"data":"start  A20_p780_s5_isc28  on GPU 0\n"}
+,{"stream_name":"stdout","time":3486.31566542,"data":"done   A1_p780_s5_isc  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3489.319612361,"data":"start  A20_p780_s5_hs  on GPU 1\n"}
+,{"stream_name":"stdout","time":3510.323116051,"data":"done   A20_p780_s5_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3513.323187857,"data":"start  A20_p780_s5_isc100  on GPU 0\n"}
+,{"stream_name":"stdout","time":3534.320499191,"data":"done   A20_p780_s5_hs  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3537.326855875,"data":"start  A1_p780_s6_isc  on GPU 1\n"}
+,{"stream_name":"stdout","time":3555.32805719,"data":"done   A20_p780_s5_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3558.329735394,"data":"start  A20_p780_s6_isc28  on GPU 0\n"}
+,{"stream_name":"stdout","time":3582.325815417,"data":"done   A1_p780_s6_isc  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3585.350127735,"data":"start  A20_p780_s6_hs  on GPU 1\n"}
+,{"stream_name":"stdout","time":3600.328437429,"data":"done   A20_p780_s6_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3603.330599311,"data":"start  A20_p780_s6_isc100  on GPU 0\n"}
+,{"stream_name":"stdout","time":3630.339655608,"data":"done   A20_p780_s6_hs  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3633.33813166,"data":"start  A1_p780_s7_isc  on GPU 1\n"}
+,{"stream_name":"stdout","time":3645.33352319,"data":"done   A20_p780_s6_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3648.337319674,"data":"start  A20_p780_s7_isc28  on GPU 0\n"}
+,{"stream_name":"stdout","time":3678.341272018,"data":"done   A1_p780_s7_isc  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3681.339174515,"data":"start  A20_p780_s7_hs  on GPU 1\n"}
+,{"stream_name":"stdout","time":3690.338210674,"data":"done   A20_p780_s7_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3693.341444815,"data":"start  A20_p780_s7_isc100  on GPU 0\n"}
+,{"stream_name":"stdout","time":3726.346306278,"data":"done   A20_p780_s7_hs  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3729.349137784,"data":"start  A1_p780_s8_isc  on GPU 1\n"}
+,{"stream_name":"stdout","time":3735.343012023,"data":"done   A20_p780_s7_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3738.346236657,"data":"start  A20_p780_s8_isc28  on GPU 0\n"}
+,{"stream_name":"stdout","time":3774.351937063,"data":"done   A1_p780_s8_isc  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3777.356182109,"data":"start  A20_p780_s8_hs  on GPU 1\n"}
+,{"stream_name":"stdout","time":3780.348487999,"data":"done   A20_p780_s8_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3783.350679586,"data":"start  A20_p780_s8_isc100  on GPU 0\n"}
+,{"stream_name":"stdout","time":3822.369889841,"data":"done   A20_p780_s8_hs  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3825.353350928,"data":"start  A1_p780_s9_isc  on GPU 1\n"}
+,{"stream_name":"stdout","time":3825.353381864,"data":"done   A20_p780_s8_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3828.35708697,"data":"start  A20_p780_s9_isc28  on GPU 0\n"}
+,{"stream_name":"stdout","time":3870.362629052,"data":"done   A1_p780_s9_isc  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3870.362662739,"data":"done   A20_p780_s9_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3873.365665063,"data":"start  A20_p780_s9_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":3873.365694906,"data":"start  A20_p780_s9_isc100  on GPU 1\n"}
+,{"stream_name":"stdout","time":3915.367020894,"data":"done   A20_p780_s9_hs  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3918.363643399,"data":"start  A1_p228_s0_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":3918.363675301,"data":"done   A20_p780_s9_isc100  (0.8 min)\n"}
+,{"stream_name":"stdout","time":3921.364074807,"data":"start  A20_p228_s0_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":3957.371506904,"data":"done   A1_p228_s0_isc  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3960.369457742,"data":"start  A20_p228_s0_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":3960.369497874,"data":"done   A20_p228_s0_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":3963.36947587,"data":"start  A20_p228_s0_isc100  on GPU 1\n"}
+,{"stream_name":"stdout","time":3999.382760128,"data":"done   A20_p228_s0_hs  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4002.375122868,"data":"start  A1_p228_s1_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":4002.375151836,"data":"done   A20_p228_s0_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4005.374786311,"data":"start  A20_p228_s1_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":4041.382037736,"data":"done   A1_p228_s1_isc  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4044.381482795,"data":"start  A20_p228_s1_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":4044.381515079,"data":"done   A20_p228_s1_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4047.379597622,"data":"start  A20_p228_s1_isc100  on GPU 1\n"}
+,{"stream_name":"stdout","time":4080.386423702,"data":"done   A20_p228_s1_hs  (0.6 min)\n"}
+,{"stream_name":"stdout","time":4083.387641425,"data":"start  A1_p228_s2_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":4086.382744576,"data":"done   A20_p228_s1_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4089.384857494,"data":"start  A20_p228_s2_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":4122.392888817,"data":"done   A1_p228_s2_isc  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4125.388555168,"data":"start  A20_p228_s2_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":4128.38774604,"data":"done   A20_p228_s2_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4131.39112608,"data":"start  A20_p228_s2_isc100  on GPU 1\n"}
+,{"stream_name":"stdout","time":4164.396769084,"data":"done   A20_p228_s2_hs  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4167.394700448,"data":"start  A1_p228_s3_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":4170.392509926,"data":"done   A20_p228_s2_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4173.399631654,"data":"start  A20_p228_s3_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":4206.401573861,"data":"done   A1_p228_s3_isc  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4209.397697262,"data":"start  A20_p228_s3_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":4212.397252703,"data":"done   A20_p228_s3_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4215.401691631,"data":"start  A20_p228_s3_isc100  on GPU 1\n"}
+,{"stream_name":"stdout","time":4248.407089726,"data":"done   A20_p228_s3_hs  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4251.405495138,"data":"start  A1_p228_s4_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":4254.401994751,"data":"done   A20_p228_s3_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4257.404794909,"data":"start  A20_p228_s4_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":4290.411475781,"data":"done   A1_p228_s4_isc  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4293.407331783,"data":"start  A20_p228_s4_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":4296.406757907,"data":"done   A20_p228_s4_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4299.408425078,"data":"start  A20_p228_s4_isc100  on GPU 1\n"}
+,{"stream_name":"stdout","time":4329.420871755,"data":"done   A20_p228_s4_hs  (0.6 min)\n"}
+,{"stream_name":"stdout","time":4332.415158605,"data":"start  A1_p228_s5_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":4338.411488851,"data":"done   A20_p228_s4_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4341.415170737,"data":"start  A20_p228_s5_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":4371.426447161,"data":"done   A1_p228_s5_isc  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4374.418532964,"data":"start  A20_p228_s5_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":4380.416528147,"data":"done   A20_p228_s5_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4383.418123029,"data":"start  A20_p228_s5_isc100  on GPU 1\n"}
+,{"stream_name":"stdout","time":4410.425707788,"data":"done   A20_p228_s5_hs  (0.6 min)\n"}
+,{"stream_name":"stdout","time":4413.423126764,"data":"start  A1_p228_s6_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":4422.421090348,"data":"done   A20_p228_s5_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4425.423708186,"data":"start  A20_p228_s6_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":4452.435818539,"data":"done   A1_p228_s6_isc  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4455.427535261,"data":"start  A20_p228_s6_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":4464.425451762,"data":"done   A20_p228_s6_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4467.430654177,"data":"start  A20_p228_s6_isc100  on GPU 1\n"}
+,{"stream_name":"stdout","time":4494.43723672,"data":"done   A20_p228_s6_hs  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4497.433133016,"data":"start  A1_p228_s7_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":4506.431994038,"data":"done   A20_p228_s6_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4509.436878014,"data":"start  A20_p228_s7_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":4536.442175049,"data":"done   A1_p228_s7_isc  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4539.439131143,"data":"start  A20_p228_s7_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":4548.43633073,"data":"done   A20_p228_s7_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4551.441503975,"data":"start  A20_p228_s7_isc100  on GPU 1\n"}
+,{"stream_name":"stdout","time":4578.44611579,"data":"done   A20_p228_s7_hs  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4581.442307518,"data":"start  A1_p228_s8_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":4590.440839024,"data":"done   A20_p228_s7_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4593.448110765,"data":"start  A20_p228_s8_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":4620.450626921,"data":"done   A1_p228_s8_isc  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4623.447539777,"data":"start  A20_p228_s8_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":4632.444831971,"data":"done   A20_p228_s8_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4635.448915856,"data":"start  A20_p228_s8_isc100  on GPU 1\n"}
+,{"stream_name":"stdout","time":4662.460222007,"data":"done   A20_p228_s8_hs  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4665.453218332,"data":"start  A1_p228_s9_isc  on GPU 0\n"}
+,{"stream_name":"stdout","time":4674.449550057,"data":"done   A20_p228_s8_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4677.454652414,"data":"start  A20_p228_s9_isc28  on GPU 1\n"}
+,{"stream_name":"stdout","time":4704.465121019,"data":"done   A1_p228_s9_isc  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4707.461075067,"data":"start  A20_p228_s9_hs  on GPU 0\n"}
+,{"stream_name":"stdout","time":4716.454654348,"data":"done   A20_p228_s9_isc28  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4719.458417817,"data":"start  A20_p228_s9_isc100  on GPU 1\n"}
+,{"stream_name":"stdout","time":4743.464856954,"data":"done   A20_p228_s9_hs  (0.6 min)\n"}
+,{"stream_name":"stdout","time":4746.459596664,"data":"start  A20_p10_s0_hsub  on GPU 0\n"}
+,{"stream_name":"stdout","time":4758.459609329,"data":"done   A20_p228_s9_isc100  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4761.464731767,"data":"start  A20_p10_s1_hsub  on GPU 1\n"}
+,{"stream_name":"stdout","time":4839.477405824,"data":"done   A20_p10_s0_hsub  (1.6 min)\n"}
+,{"stream_name":"stdout","time":4842.468343337,"data":"start  A20_p10_s2_hsub  on GPU 0\n"}
+,{"stream_name":"stdout","time":4857.467133392,"data":"done   A20_p10_s1_hsub  (1.6 min)\n"}
+,{"stream_name":"stdout","time":4860.470174648,"data":"start  A20_p10_s3_hsub  on GPU 1\n"}
+,{"stream_name":"stdout","time":4935.479715687,"data":"done   A20_p10_s2_hsub  (1.6 min)\n"}
+,{"stream_name":"stdout","time":4938.474118178,"data":"start  A20_p10_s4_hsub  on GPU 0\n"}
+,{"stream_name":"stdout","time":4953.474108266,"data":"done   A20_p10_s3_hsub  (1.6 min)\n"}
+,{"stream_name":"stdout","time":4956.479196185,"data":"start  A20_p1_s0_hsub  on GPU 1\n"}
+,{"stream_name":"stdout","time":4995.491760314,"data":"done   A20_p1_s0_hsub  (0.7 min)\n"}
+,{"stream_name":"stdout","time":4998.480560943,"data":"start  A20_p1_s1_hsub  on GPU 1\n"}
+,{"stream_name":"stdout","time":5031.48877072,"data":"done   A20_p10_s4_hsub  (1.6 min)\n"}
+,{"stream_name":"stdout","time":5034.483289677,"data":"start  A20_p1_s2_hsub  on GPU 0\n"}
+,{"stream_name":"stdout","time":5037.482406048,"data":"done   A20_p1_s1_hsub  (0.7 min)\n"}
+,{"stream_name":"stdout","time":5040.486653633,"data":"start  A20_p1_s3_hsub  on GPU 1\n"}
+,{"stream_name":"stdout","time":5073.494343164,"data":"done   A20_p1_s2_hsub  (0.7 min)\n"}
+,{"stream_name":"stdout","time":5076.491682842,"data":"start  A20_p1_s4_hsub  on GPU 0\n"}
+,{"stream_name":"stdout","time":5079.4874139,"data":"done   A20_p1_s3_hsub  (0.7 min)\n"}
+,{"stream_name":"stdout","time":5115.49846886,"data":"done   A20_p1_s4_hsub  (0.7 min)\n"}
+,{"stream_name":"stdout","time":5118.31206884,"data":"total so far: 85.1 min\n"}
+,{"stream_name":"stdout","time":5118.512753642,"data":"results folders: ['/tmp/GainSplit/results/pass1', '/tmp/GainSplit/results/pass8_mlm', '/kaggle/working/results/pass11_isarc']\n"}
+,{"stream_name":"stdout","time":5259.529944736,"data":"\n"}
+,{"stream_name":"stdout","time":5259.529973363,"data":"=== summary\n"}
+,{"stream_name":"stdout","time":5259.529978223,"data":"    arm     tag  budget  isarc_test_roc_auc  isarc_test_macro_f1  isarc_test_f1_sarcastic  isarc_test_roc_auc_sd  isarc_test_macro_f1_sd  isarc_test_f1_sarcastic_sd  n_seeds\n"}
+,{"stream_name":"stdout","time":5259.529982991,"data":"0   A20      hs     228               51.19                51.18                    15.71                   6.37                    2.91                        5.76       10\n"}
+,{"stream_name":"stdout","time":5259.529987544,"data":"1    A1     isc     228               52.61                51.94                    17.49                   3.93                    1.88                        2.89       10\n"}
+,{"stream_name":"stdout","time":5259.529992066,"data":"2   A20  isc100     228               51.65                51.55                    16.22                   5.59                    3.46                        5.80       10\n"}
+,{"stream_name":"stdout","time":5259.529996533,"data":"3   A20   isc28     228               51.27                51.73                    16.40                   5.91                    3.48                        5.97       10\n"}
+,{"stream_name":"stdout","time":5259.530001068,"data":"4   A20      hs     780               57.73                54.68                    23.32                   3.04                    2.06                        3.58       10\n"}
+,{"stream_name":"stdout","time":5259.530005553,"data":"5    A1     isc     780               55.48                54.29                    22.64                   4.12                    1.58                        3.98       10\n"}
+,{"stream_name":"stdout","time":5259.530010701,"data":"6   A20  isc100     780               57.83                55.43                    26.23                   4.74                    2.66                        3.91       10\n"}
+,{"stream_name":"stdout","time":5259.530026044,"data":"7   A20   isc28     780               57.93                55.31                    25.84                   4.56                    2.94                        3.62       10\n"}
+,{"stream_name":"stdout","time":5259.5300301,"data":"8   A20      hs    3120               64.81                59.96                    33.43                   1.95                    1.69                        2.58       10\n"}
+,{"stream_name":"stdout","time":5259.530033828,"data":"9    A1     isc    3120               65.99                61.36                    35.17                   1.60                    1.70                        2.56       10\n"}
+,{"stream_name":"stdout","time":5259.530038483,"data":"10  A20   isc28    3120               67.94                60.70                    36.11                   2.00                    1.49                        1.66       10\n"}
+,{"stream_name":"stdout","time":5259.530085571,"data":"\n"}
+,{"stream_name":"stdout","time":5259.530089593,"data":"=== isarc_auc\n"}
+,{"stream_name":"stdout","time":5259.530092829,"data":"                        contrast  budget  mean_diff    ci_low   ci_high       p  n_seeds  p_holm\n"}
+,{"stream_name":"stdout","time":5259.530096323,"data":"0       AUC A20[isc28] - A1[isc]     228  -1.328687 -3.706045  1.066074  0.2782       10  1.0000\n"}
+,{"stream_name":"stdout","time":5259.530099711,"data":"1       AUC A20[isc28] - A1[isc]     780   2.453813  0.055098  4.865051  0.0450       10  0.4500\n"}
+,{"stream_name":"stdout","time":5259.530103139,"data":"2       AUC A20[isc28] - A1[isc]    3120   1.945083 -0.232238  4.182292  0.0778       10  0.6224\n"}
+,{"stream_name":"stdout","time":5259.530106531,"data":"3          AUC A20[hs] - A1[isc]     228  -1.407083 -3.872508  1.154924  0.2808       10  1.0000\n"}
+,{"stream_name":"stdout","time":5259.530109981,"data":"4          AUC A20[hs] - A1[isc]     780   2.254583 -0.163385  4.754763  0.0678       10  0.6102\n"}
+,{"stream_name":"stdout","time":5259.530113373,"data":"5          AUC A20[hs] - A1[isc]    3120  -1.174146 -3.887104  1.435530  0.3784       10  1.0000\n"}
+,{"stream_name":"stdout","time":5259.530116833,"data":"6       AUC A20[isc28] - A20[hs]     228   0.078396 -1.882067  2.024163  0.9366       10  1.0000\n"}
+,{"stream_name":"stdout","time":5259.530120238,"data":"7       AUC A20[isc28] - A20[hs]     780   0.199229 -1.924661  2.345805  0.8526       10  1.0000\n"}
+,{"stream_name":"stdout","time":5259.530124018,"data":"8       AUC A20[isc28] - A20[hs]    3120   3.119229  0.533594  5.729389  0.0176       10  0.1936\n"}
+,{"stream_name":"stdout","time":5259.530127763,"data":"9   AUC A20[isc100] - A20[isc28]     228   0.377333 -0.776515  1.535758  0.5212       10  1.0000\n"}
+,{"stream_name":"stdout","time":5259.530131583,"data":"10  AUC A20[isc100] - A20[isc28]     780  -0.097083 -1.540518  1.313109  0.8960       10  1.0000\n"}
+,{"stream_name":"stdout","time":5259.530135656,"data":"\n"}
+,{"stream_name":"stdout","time":5259.530157261,"data":"=== isarc_f1\n"}
+,{"stream_name":"stdout","time":5259.530160614,"data":"                                           contrast  budget  mean_diff    ci_low   ci_high       p  n_seeds  p_holm\n"}
+,{"stream_name":"stdout","time":5259.530164129,"data":"0  A20[isc28]-A1[isc] (macro-F1, iSarcasmEval test)     228  -0.207186 -1.370572  0.969606  0.7358       10  1.0000\n"}
+,{"stream_name":"stdout","time":5259.53016795,"data":"1  A20[isc28]-A1[isc] (macro-F1, iSarcasmEval test)     780   1.014556 -0.376096  2.413698  0.1518       10  0.7656\n"}
+,{"stream_name":"stdout","time":5259.530171434,"data":"2  A20[isc28]-A1[isc] (macro-F1, iSarcasmEval test)    3120  -0.661755 -2.297670  1.026918  0.4404       10  1.0000\n"}
+,{"stream_name":"stdout","time":5259.530174989,"data":"3     A20[hs]-A1[isc] (macro-F1, iSarcasmEval test)     228  -0.761759 -2.083876  0.480573  0.2348       10  0.9392\n"}
+,{"stream_name":"stdout","time":5259.530182123,"data":"4     A20[hs]-A1[isc] (macro-F1, iSarcasmEval test)     780   0.386211 -1.129899  1.882415  0.6198       10  1.0000\n"}
+,{"stream_name":"stdout","time":5259.530186204,"data":"5     A20[hs]-A1[isc] (macro-F1, iSarcasmEval test)    3120  -1.395822 -3.256269  0.443450  0.1276       10  0.7656\n"}
+,{"stream_name":"stdout","time":5259.530189726,"data":"\n"}
+,{"stream_name":"stdout","time":5259.530192818,"data":"=== size_control\n"}
+,{"stream_name":"stdout","time":5259.530196017,"data":"                                           contrast  budget  mean_diff    ci_low   ci_high    p  n_seeds  p_holm\n"}
+,{"stream_name":"stdout","time":5259.530199528,"data":"0        A20[hsub]-A1 (3,120-headline pool vs BERT)       1   3.001565  2.160641  3.867387  0.0        5     0.0\n"}
+,{"stream_name":"stdout","time":5259.530202985,"data":"1  A20[hsub]-A20 (3,120-headline pool vs full pool)       1  -4.413996 -5.161415 -3.691404  0.0        5     0.0\n"}
+,{"stream_name":"stdout","time":5259.530206453,"data":"2        A20[hsub]-A1 (3,120-headline pool vs BERT)      10   1.178589  0.521633  1.854430  0.0        5     0.0\n"}
+,{"stream_name":"stdout","time":5259.530209879,"data":"3  A20[hsub]-A20 (3,120-headline pool vs full pool)      10  -1.624562 -2.190229 -1.074472  0.0        5     0.0\n"}
+,{"stream_name":"stdout","time":5259.530213838,"data":"\n"}
+,{"stream_name":"stdout","time":5259.530217571,"data":"=== verdicts\n"}
+,{"stream_name":"stdout","time":5259.53023806,"data":"      hypothesis                                                                                                            check                               value                              verdict\n"}
+,{"stream_name":"stdout","time":5259.530249854,"data":"0          H11.8                                     AUC gain of A20[isc28] over A1 at N=228 is between +1 and +5 and significant  -1.33 [-3.71, +1.07], p_holm 1.000                        not supported\n"}
+,{"stream_name":"stdout","time":5259.530253714,"data":"1          H11.8                                     AUC gain of A20[isc28] over A1 at N=780 is between +1 and +5 and significant  +2.45 [+0.06, +4.87], p_holm 0.450                        not supported\n"}
+,{"stream_name":"stdout","time":5259.53025747,"data":"2          H11.8                                                                                 AUC gain at N=3120 is at most +2  +1.95 [-0.23, +4.18], p_holm 0.622                            SUPPORTED\n"}
+,{"stream_name":"stdout","time":5259.530261233,"data":"3          H11.9                                                 macro-F1 gain of A20[isc28] over A1 at N=228 is between 0 and +4  -0.21 [-1.37, +0.97], p_holm 1.000                        not supported\n"}
+,{"stream_name":"stdout","time":5259.53026498,"data":"4         H11.10                                             A20[hs] vs A1 at N=228: AUC difference within +-2 and p_holm \u003e= 0.05  -1.41 [-3.87, +1.15], p_holm 1.000                            SUPPORTED\n"}
+,{"stream_name":"stdout","time":5259.530269151,"data":"5         H11.10                                             A20[hs] vs A1 at N=780: AUC difference within +-2 and p_holm \u003e= 0.05  +2.25 [-0.16, +4.75], p_holm 0.610                        not supported\n"}
+,{"stream_name":"stdout","time":5259.530273393,"data":"6         H11.10                                            A20[hs] vs A1 at N=3120: AUC difference within +-2 and p_holm \u003e= 0.05  -1.17 [-3.89, +1.44], p_holm 1.000                            SUPPORTED\n"}
+,{"stream_name":"stdout","time":5259.530277224,"data":"7         H11.11                                        size-matched control: A20[hsub] gains at least +4 over A1 at Headlines 1%  +3.00 [+2.16, +3.87], p_holm 0.000                        not supported\n"}
+,{"stream_name":"stdout","time":5259.530284099,"data":"8         H11.12                                            100-pass encoder within 1 AUC point of the 28.7-pass encoder at N=228  +0.38 [-0.78, +1.54], p_holm 1.000                            SUPPORTED\n"}
+,{"stream_name":"stdout","time":5259.530287932,"data":"9         H11.12                                            100-pass encoder within 1 AUC point of the 28.7-pass encoder at N=780  -0.10 [-1.54, +1.31], p_holm 1.000                            SUPPORTED\n"}
+,{"stream_name":"stdout","time":5259.530291661,"data":"10  reading rule  in-domain gain replicates (\u003e= +3 AUC, robust, N=228 and 780) or collapses (\u003c +1 or interval includes 0 at both)            N=228 -1.33, N=780 +2.45  in between (smaller and/or noisier)\n"}
+,{"stream_name":"stdout","time":5260.138435352,"data":"/kaggle/working/results_pass11_isarc.zip\n"}
+,{"stream_name":"stdout","time":5260.138463562,"data":"notebook time: 87.5 min\n"}
+,{"stream_name":"stderr","time":5263.302836976,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":5263.302864274,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":5263.473314361,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":5263.473340446,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":5264.290426683,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":5264.396112722,"data":"[NbConvertApp] Writing 46464 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":5266.879482709,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":5267.419109441,"data":"[NbConvertApp] Writing 345000 bytes to __results__.html\n"}
+]

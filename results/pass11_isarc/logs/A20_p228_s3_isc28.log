@@ -1,0 +1,5 @@
+A20_p228_s3_isc28: |L|=228 |U|=0 steps=200 device=cuda
+Loading weights:   0%|          | 0/197 [00:00<?, ?it/s]Loading weights: 100%|██████████| 197/197 [00:00<00:00, 2711.82it/s]
+  step 100/200  loss_sarc 0.1583  loss 0.1583
+  step 200/200  loss_sarc 0.00016  loss 0.00016
+A20_p228_s3_isc28: done in 0.46 min; dev macro-F1 0.4473, test macro-F1 0.3637, isarc_test macro-F1 0.5178

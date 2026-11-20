@@ -1,0 +1,208 @@
+{
+  "run_id": "A20_p3120_s1_hs",
+  "config": {
+    "arm": "A20",
+    "budget": 3120,
+    "seed": 1,
+    "lr": 5e-05,
+    "batch_size": 32,
+    "passes": 10,
+    "min_steps": 200,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_len": 48,
+    "model_name": "bert-base-uncased",
+    "helper_weight": 0.0,
+    "fp16": true,
+    "eval_test": true,
+    "fgm_epsilon": 0.0,
+    "tag": "hs",
+    "helper_variant": "",
+    "eval_masked": false,
+    "train_data": "isarcasm",
+    "gen_lr": 0.0,
+    "step_mult": 1,
+    "pair_batch": 32,
+    "explain": false,
+    "pair_weight": 1.0,
+    "cleaned_drop_pct": 0.0,
+    "pretrain_steps": 0,
+    "init_dir": "/kaggle/input/notebooks/arifurrhmn/notebook-15/ckpt/mlm",
+    "cons_weight": 0.0,
+    "eval_train": false
+  },
+  "n_labeled": 3120,
+  "n_unlabeled": 0,
+  "uses_u": false,
+  "pairs": null,
+  "explain": null,
+  "pretrain": null,
+  "init": {
+    "objective": "mlm",
+    "minutes": 35.15,
+    "dev_before": {
+      "loss": 5.85272
+    },
+    "dev_after": {
+      "loss": 3.6836
+    },
+    "probe_before": {
+      "p1": {
+        "dev_macro_f1_mean": 76.158,
+        "dev_macro_f1_sd": 0.687,
+        "per_seed": [
+          76.407,
+          76.211,
+          74.965,
+          76.616,
+          76.591
+        ]
+      },
+      "p10": {
+        "dev_macro_f1_mean": 80.627,
+        "dev_macro_f1_sd": 0.616,
+        "per_seed": [
+          81.226,
+          80.734,
+          80.224,
+          79.789,
+          81.161
+        ]
+      }
+    },
+    "probe_after": {
+      "p1": {
+        "dev_macro_f1_mean": 86.388,
+        "dev_macro_f1_sd": 0.462,
+        "per_seed": [
+          87.032,
+          86.463,
+          85.87,
+          86.557,
+          86.016
+        ]
+      },
+      "p10": {
+        "dev_macro_f1_mean": 87.231,
+        "dev_macro_f1_sd": 0.454,
+        "per_seed": [
+          86.524,
+          87.401,
+          87.756,
+          87.334,
+          87.141
+        ]
+      }
+    },
+    "collapsed": null,
+    "weights_sha256": {
+      "config.json": "df52e357acc71cccfbf75f2d4083c1c1e564d2abafdcf22dbfe57debb3bc8441",
+      "model.safetensors": "05c6d20022af96d63a09c54a2cb3cc922eed86ff22fe74ae5db34fa1e5260ded",
+      "tokenizer.json": "11ba3839d32ab3fcdba2614768990d23a89fd9023d2f1f70ee913efeb02237aa",
+      "tokenizer_config.json": "e1c2a61a99bda00f6c55303a210b30e2f92dcf8b555e215812e2eb583e177ffd"
+    },
+    "commit": "563c450355b452af9041e08aad2501f4f6db993f",
+    "steps": 10000
+  },
+  "diffusion": null,
+  "steps": 980,
+  "minutes": 1.83,
+  "scores": {
+    "dev": {
+      "accuracy": 0.7665706051873199,
+      "macro_f1": 0.5998035111699629,
+      "f1_sarcastic": 0.34146341463414637,
+      "roc_auc": 0.7076702033598585,
+      "n": 347
+    },
+    "test": {
+      "accuracy": 0.6338126972991933,
+      "macro_f1": 0.6119304207423539,
+      "f1_sarcastic": 0.5197792088316467,
+      "roc_auc": 0.7332349981253823,
+      "n": 2851
+    },
+    "isarc_test": {
+      "accuracy": 0.7885714285714286,
+      "macro_f1": 0.5994416928614787,
+      "f1_sarcastic": 0.3242009132420091,
+      "roc_auc": 0.6201583333333334,
+      "n": 1400
+    }
+  },
+  "train_log": [
+    {
+      "step": 100,
+      "loss_sarc": 0.57416,
+      "loss": 0.57416
+    },
+    {
+      "step": 200,
+      "loss_sarc": 0.45464,
+      "loss": 0.45464
+    },
+    {
+      "step": 300,
+      "loss_sarc": 0.19235,
+      "loss": 0.19235
+    },
+    {
+      "step": 400,
+      "loss_sarc": 0.04916,
+      "loss": 0.04916
+    },
+    {
+      "step": 500,
+      "loss_sarc": 0.02165,
+      "loss": 0.02165
+    },
+    {
+      "step": 600,
+      "loss_sarc": 0.01089,
+      "loss": 0.01089
+    },
+    {
+      "step": 700,
+      "loss_sarc": 0.00592,
+      "loss": 0.00592
+    },
+    {
+      "step": 800,
+      "loss_sarc": 0.00461,
+      "loss": 0.00461
+    },
+    {
+      "step": 900,
+      "loss_sarc": 0.00356,
+      "loss": 0.00356
+    },
+    {
+      "step": 980,
+      "loss_sarc": 0.00345,
+      "loss": 0.00345
+    }
+  ],
+  "pseudo": null,
+  "helper_label_counts": null,
+  "commit": "8110f91214daa91b09590189d130e631afb9755d",
+  "data_manifest_sha256": {
+    "budgets.json": "0ec69789969f373fb06eaf32b59e4395c1b33da5b0360d4f970e914c5fc31788",
+    "headlines_dev.csv": "79fc0cd5368a209f50dc1d328aec0c289f7723dddb3a62583539a3b4cdb898e7",
+    "headlines_test.csv": "687b09c53e772d1bbaf04a698e284088c6e78921ea6df4c4f475738791a0f047",
+    "headlines_train.csv": "8c54a3fbcea89547989fc74ce91831b0ba872f5f3a7b1b4cf8679eb07025ff77",
+    "helper_emotion28.csv": "397e5843ea10a375b487f2f761618428ac56208170854673ba838c64037b6884",
+    "helper_labels.csv": "d7ecc48e5c458ebd8ea5583cb89c1a048e0cd3f091021f8a20c04db2130a90a3",
+    "isarcasm_test.csv": "e4ae7749d66adfa56f6d1eafa0767de0fc55337682515e3dc10f9be6d9e55117",
+    "isarcasm_train.csv": "dae8d1eb69f6f876de38e96428157ebad80d44b4eb360e2628d59fe92abac351",
+    "helper_sent_alt.csv": "51fe4d278fe0580deeb9a742f3e1b94fb88e5c4dc69b7b2cc996725259709cd7",
+    "cue_words.json": "79d355bb2c288b59385113de31a2d5227c0c189be8a14a288fe1a9f754f91fb6",
+    "headlines_test_cuemask.csv": "7502bb2ec444c83fb87d4ab020d89a7823c28d51978203ef280464f6b1b787bc",
+    "headlines_test_randmask.csv": "dc4396f80d655aa9b3657edc1e9701964718f0f393b8f05531ef77c41a58982b"
+  },
+  "device": "Tesla T4",
+  "versions": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "transformers": "5.20.2"
+  }
+}

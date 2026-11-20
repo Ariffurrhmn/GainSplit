@@ -1,7 +1,7 @@
 ---
 tags: [results]
 created: 2026-11-19
-updated: 2026-11-19
+updated: 2026-11-20
 ---
 
 # Pass 11 Results
@@ -100,6 +100,25 @@ Pushed to Kaggle as a private CPU notebook (`arifurrhmn/notebook-24`, code commi
 - **H11.23 SUPPORTED:** A36 - A5 excludes 0 at every budget, 1% to 30% (+10.68 [8.57, 13.36] at 1%; one seed gives +15.2).
 - **H11.4 not supported:** the cluster intervals of the three single routes are 1.6-2.1 times as wide as the test-only ones (predicted at least 2 for all three: 1.89, 1.57, 2.12), and none of them includes 0 (predicted at least one would). The +1.6 gains stay positive when training splits are resampled; FGM (A7) is ahead on 4 of 5 seeds (seed 2: -0.01).
 - JEPA stays below MLM on every seed at both budgets; MLM at 1% vs BERT at 10% stays level (-0.38 [-1.43, 0.65]).
+
+## Notebook 25: E1, in-domain iSarcasmEval (2026-11-20)
+Run by the owner on Kaggle (`arifurrhmn/notebook639a3cfda1`, code commit `8110f91` = HEAD at the time, 302 tests passed, 120/120 runs plus three short pretrainings, 87.5 min). Receipts in `results/pass11_isarc/` (zip, notebook log `notebook_25_pass11_isarc.log`, runs, pretraining logs and info, budgets, analysis). The three new encoders (`mlm_isc28`, `mlm_isc100`, `mlm_hsub`) were also downloaded into `results/pass11/e1_receipt/ckpt/` (git-ignored, not committed). Numbers VERIFIED from `results/pass11_isarc/analysis/`; paired bootstrap over test items, 10,000 resamples, Holm within each table.
+
+Mean iSarcasmEval test ROC-AUC (SD over 10 seeds):
+| N labeled | A1 (BERT) | A20 isc28 | A20 isc100 | A20 hs (Headlines encoder) |
+|---|---|---|---|---|
+| 228 | 52.61 (3.93) | 51.27 (5.91) | 51.65 (5.59) | 51.19 (6.37) |
+| 780 | 55.48 (4.12) | 57.93 (4.56) | 57.83 (4.74) | 57.73 (3.04) |
+| 3,120 | 65.99 (1.60) | 67.94 (2.00) | - | 64.81 (1.95) |
+Macro-F1 contrasts (A20 isc28 - A1): -0.21 / +1.01 / -0.66 at 228 / 780 / 3,120, all n.s. (p_holm 0.77-1.00).
+
+- **H11.8 not supported** at N = 228 (-1.33 [-3.71, 1.07], p_holm 1.00) and N = 780 (+2.45 [0.06, 4.87], raw p 0.045, p_holm 0.45: in the predicted range but not robust); the N = 3,120 half is SUPPORTED (+1.95 [-0.23, 4.18]).
+- **H11.9 not supported:** macro-F1 gain at N = 228 is -0.21 [-1.37, 0.97], below the predicted 0 to +4.
+- **H11.10 mixed:** SUPPORTED at 228 and 3,120, not at 780 (+2.25 [-0.16, 4.75], p_holm 0.61, but the point estimate is outside +-2).
+- **H11.11 not supported:** the 3,120-headline encoder gains +3.00 [2.16, 3.87] over BERT at Headlines 1% (predicted at least +4 and at least half of the full-pool +7.4; it keeps about 40%) and +1.18 [0.52, 1.85] at 10%. It is below the full-pool encoder by -4.41 and -1.62 (all p_holm < 0.001). The pool size explains a large part, though not all, of the smaller gain on a small pool (INFERRED).
+- **H11.12 SUPPORTED:** 100 passes vs 28.7 passes: +0.38 and -0.10 AUC (both intervals inside +-1.6); no overfitting collapse.
+- **Reading rule:** the in-domain gain neither replicates (N = 228: -1.33) nor collapses cleanly (N = 780: +2.45 with an interval just above 0, not robust). "In between, smaller and noisier." Domain-matched pretraining (isc28) is level with the Headlines encoder at 228 and 780 (+0.08, +0.20), and ahead only at N = 3,120 (+3.12, raw p 0.018, p_holm 0.19), so no robust evidence that in-domain text helps more than out-of-domain text.
+- **Caveat:** with 228 labels BERT is near chance (AUC 52.6, SD 3.9); a comparison at the floor can neither show nor exclude a gain. The 14.3% base rate and noisy author labels make iSarcasmEval a weak test bed here; what can be said (INFERRED): MLM pretraining does not give a reliable gain on iSarcasmEval at these budgets, so the claim in the paper must stay scoped to Headlines.
 
 ## Gaps
 - The byte-identical re-run check is closed by notebook 23 (see above).

@@ -1,0 +1,13 @@
+| hypothesis | check | value | verdict |
+|---|---|---|---|
+| H11.8 | AUC gain of A20[isc28] over A1 at N=228 is between +1 and +5 and significant | -1.33 [-3.71, +1.07], p_holm 1.000 | not supported |
+| H11.8 | AUC gain of A20[isc28] over A1 at N=780 is between +1 and +5 and significant | +2.45 [+0.06, +4.87], p_holm 0.450 | not supported |
+| H11.8 | AUC gain at N=3120 is at most +2 | +1.95 [-0.23, +4.18], p_holm 0.622 | SUPPORTED |
+| H11.9 | macro-F1 gain of A20[isc28] over A1 at N=228 is between 0 and +4 | -0.21 [-1.37, +0.97], p_holm 1.000 | not supported |
+| H11.10 | A20[hs] vs A1 at N=228: AUC difference within +-2 and p_holm >= 0.05 | -1.41 [-3.87, +1.15], p_holm 1.000 | SUPPORTED |
+| H11.10 | A20[hs] vs A1 at N=780: AUC difference within +-2 and p_holm >= 0.05 | +2.25 [-0.16, +4.75], p_holm 0.610 | not supported |
+| H11.10 | A20[hs] vs A1 at N=3120: AUC difference within +-2 and p_holm >= 0.05 | -1.17 [-3.89, +1.44], p_holm 1.000 | SUPPORTED |
+| H11.11 | size-matched control: A20[hsub] gains at least +4 over A1 at Headlines 1% | +3.00 [+2.16, +3.87], p_holm 0.000 | not supported |
+| H11.12 | 100-pass encoder within 1 AUC point of the 28.7-pass encoder at N=228 | +0.38 [-0.78, +1.54], p_holm 1.000 | SUPPORTED |
+| H11.12 | 100-pass encoder within 1 AUC point of the 28.7-pass encoder at N=780 | -0.10 [-1.54, +1.31], p_holm 1.000 | SUPPORTED |
+| reading rule | in-domain gain replicates (>= +3 AUC, robust, N=228 and 780) or collapses (< +1 or interval includes 0 at both) | N=228 -1.33, N=780 +2.45 | in between (smaller and/or noisier) |

@@ -1,0 +1,23 @@
+Loading weights:   0%|          | 0/202 [00:00<?, ?it/s]Loading weights: 100%|██████████| 202/202 [00:00<00:00, 2836.35it/s]
+[transformers] [1mBertForMaskedLM LOAD REPORT[0m from: bert-base-uncased
+Key                         | Status     |  | 
+----------------------------+------------+--+-
+bert.pooler.dense.bias      | UNEXPECTED |  | 
+bert.pooler.dense.weight    | UNEXPECTED |  | 
+cls.seq_relationship.weight | UNEXPECTED |  | 
+cls.seq_relationship.bias   | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/tmp/GainSplit/src/gainsplit/ssl_pretrain.py:409: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  sched.step()
+before pretraining: dev {'loss': 5.85272}; probe {'p1': {'dev_macro_f1_mean': 76.158, 'dev_macro_f1_sd': 0.687, 'per_seed': [76.407, 76.211, 74.965, 76.616, 76.591]}, 'p10': {'dev_macro_f1_mean': 80.627, 'dev_macro_f1_sd': 0.616, 'per_seed': [81.226, 80.734, 80.224, 79.789, 81.161]}}
+  step 250/1400  loss 3.77
+  step 500/1400  loss 2.658
+  step 750/1400  loss 2.101
+  step 1000/1400  loss 1.634
+  step 1250/1400  loss 1.392
+  step 1400/1400  loss 1.295
+after pretraining: dev {'loss': 4.20398}; probe {'p1': {'dev_macro_f1_mean': 79.876, 'dev_macro_f1_sd': 0.389, 'per_seed': [79.897, 79.576, 79.643, 79.724, 80.539]}, 'p10': {'dev_macro_f1_mean': 81.79, 'dev_macro_f1_sd': 0.504, 'per_seed': [81.31, 81.238, 82.387, 81.887, 82.13]}}
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  2.18it/s]Writing model shards: 100%|██████████| 1/1 [00:00<00:00,  2.18it/s]
+saved mlm encoder to /kaggle/working/ckpt/mlm_hsub (5.37 min)
